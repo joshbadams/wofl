@@ -1,0 +1,516 @@
+{"frames": [
+
+{
+	"filename": "Arcade.png",
+	"frame": {"x":512,"y":128,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Attic.png",
+	"frame": {"x":256,"y":128,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Background.png",
+	"frame": {"x":217,"y":958,"w":1024,"h":1024},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1024,"h":1024},
+	"sourceSize": {"w":1024,"h":1024},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bait.jpg",
+	"frame": {"x":0,"y":958,"w":217,"h":232},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":217,"h":232},
+	"sourceSize": {"w":217,"h":232},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Basement.png",
+	"frame": {"x":768,"y":128,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Bedroom.png",
+	"frame": {"x":1024,"y":128,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Bonusroom.png",
+	"frame": {"x":1536,"y":64,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bullseye.jpg",
+	"frame": {"x":798,"y":192,"w":188,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":188,"h":128},
+	"sourceSize": {"w":188,"h":128},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Candyroom.png",
+	"frame": {"x":1792,"y":64,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Closet.png",
+	"frame": {"x":1280,"y":128,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "ClownFish.jpg",
+	"frame": {"x":626,"y":351,"w":284,"h":177},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":284,"h":177},
+	"sourceSize": {"w":284,"h":177},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "cobia.jpg",
+	"frame": {"x":600,"y":192,"w":198,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":198,"h":120},
+	"sourceSize": {"w":198,"h":120},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Coin1.jpg",
+	"frame": {"x":240,"y":728,"w":251,"h":201},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":251,"h":201},
+	"sourceSize": {"w":251,"h":201},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Coin2.jpg",
+	"frame": {"x":731,"y":728,"w":204,"h":204},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":204,"h":204},
+	"sourceSize": {"w":204,"h":204},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Construct.jpg",
+	"frame": {"x":0,"y":351,"w":318,"h":159},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":318,"h":159},
+	"sourceSize": {"w":318,"h":159},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "CrabRoom.png",
+	"frame": {"x":0,"y":128,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Craftroom.png",
+	"frame": {"x":256,"y":0,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Diningroom.png",
+	"frame": {"x":1024,"y":0,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Disco.png",
+	"frame": {"x":1280,"y":64,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Dogfish.jpg",
+	"frame": {"x":275,"y":534,"w":275,"h":183},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":275,"h":183},
+	"sourceSize": {"w":275,"h":183},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Fangtooth.jpg",
+	"frame": {"x":986,"y":192,"w":240,"h":156},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":240,"h":156},
+	"sourceSize": {"w":240,"h":156},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "fishbowl1.jpg",
+	"frame": {"x":1175,"y":728,"w":225,"h":225},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":225,"h":225},
+	"sourceSize": {"w":225,"h":225},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "fishbowl2.jpg",
+	"frame": {"x":1400,"y":728,"w":225,"h":225},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":225,"h":225},
+	"sourceSize": {"w":225,"h":225},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "fishbowl3.jpg",
+	"frame": {"x":1625,"y":728,"w":219,"h":230},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":219,"h":230},
+	"sourceSize": {"w":219,"h":230},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Fishpalace.png",
+	"frame": {"x":512,"y":0,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "flutemouth.jpg",
+	"frame": {"x":0,"y":192,"w":153,"h":86},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":153,"h":86},
+	"sourceSize": {"w":153,"h":86},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "flying fish.jpg",
+	"frame": {"x":935,"y":728,"w":240,"h":210},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":240,"h":210},
+	"sourceSize": {"w":240,"h":210},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "food.jpg",
+	"frame": {"x":1096,"y":534,"w":259,"h":194},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":259,"h":194},
+	"sourceSize": {"w":259,"h":194},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "gems.png",
+	"frame": {"x":491,"y":728,"w":240,"h":204},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":240,"h":204},
+	"sourceSize": {"w":240,"h":204},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "glowfish.jpg",
+	"frame": {"x":1355,"y":534,"w":259,"h":194},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":259,"h":194},
+	"sourceSize": {"w":259,"h":194},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Goosefish.jpg",
+	"frame": {"x":910,"y":351,"w":284,"h":177},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":284,"h":177},
+	"sourceSize": {"w":284,"h":177},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "jellyfish.jpg",
+	"frame": {"x":318,"y":351,"w":308,"h":164},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":308,"h":164},
+	"sourceSize": {"w":308,"h":164},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Kitchen.png",
+	"frame": {"x":1536,"y":0,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Laundryroom.png",
+	"frame": {"x":0,"y":64,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Library.png",
+	"frame": {"x":768,"y":64,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Livingroom.png",
+	"frame": {"x":512,"y":64,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "lobby1.jpg",
+	"frame": {"x":1754,"y":351,"w":275,"h":183},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":275,"h":183},
+	"sourceSize": {"w":275,"h":183},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Louvar.jpg",
+	"frame": {"x":153,"y":192,"w":292,"h":108},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":292,"h":108},
+	"sourceSize": {"w":292,"h":108},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "minnow.jpg",
+	"frame": {"x":1477,"y":351,"w":277,"h":182},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":277,"h":182},
+	"sourceSize": {"w":277,"h":182},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Mulletfish.jpg",
+	"frame": {"x":445,"y":192,"w":155,"h":116},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":155,"h":116},
+	"sourceSize": {"w":155,"h":116},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "octopus.jpg",
+	"frame": {"x":0,"y":534,"w":275,"h":183},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":275,"h":183},
+	"sourceSize": {"w":275,"h":183},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Office.png",
+	"frame": {"x":1024,"y":64,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Orangeroughy.jpg",
+	"frame": {"x":1194,"y":351,"w":283,"h":178},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":283,"h":178},
+	"sourceSize": {"w":283,"h":178},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Orca.jpg",
+	"frame": {"x":1466,"y":192,"w":318,"h":159},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":318,"h":159},
+	"sourceSize": {"w":318,"h":159},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "OrcaExhibit.png",
+	"frame": {"x":1792,"y":0,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "OrcaRoom.png",
+	"frame": {"x":768,"y":0,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Oreo fish.jpg",
+	"frame": {"x":1226,"y":192,"w":240,"h":156},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":240,"h":156},
+	"sourceSize": {"w":240,"h":156},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Pineapplefish.jpg",
+	"frame": {"x":825,"y":534,"w":271,"h":186},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":271,"h":186},
+	"sourceSize": {"w":271,"h":186},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Playground.png",
+	"frame": {"x":256,"y":64,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Plaza.png",
+	"frame": {"x":0,"y":0,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Porch.png",
+	"frame": {"x":1280,"y":0,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "pufferfish.jpg",
+	"frame": {"x":0,"y":728,"w":240,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":240,"h":200},
+	"sourceSize": {"w":240,"h":200},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "shark.jpg",
+	"frame": {"x":1614,"y":534,"w":259,"h":194},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":259,"h":194},
+	"sourceSize": {"w":259,"h":194},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Startinghotel.png",
+	"frame": {"x":1536,"y":128,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "SwordfishRoom.png",
+	"frame": {"x":1792,"y":128,"w":256,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":64},
+	"sourceSize": {"w":256,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "whale.jpg",
+	"frame": {"x":550,"y":534,"w":275,"h":183},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":275,"h":183},
+	"sourceSize": {"w":275,"h":183},
+	"pivot": {"x":0.5,"y":0.5}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "FishAtlas.png",
+	"format": "RGBA8888",
+	"size": {"w":2048,"h":2048},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:41cf29d300095304d476803713ea8b47:c0836760ea69739c38a757964a63bb16:e5c7a5ca31e62d810fac57d284e40f11$"
+}
+}

@@ -1,0 +1,7 @@
+t,1391486882000
+i,/Users/joshbadams/Documents/dev/Android/android-ndk-r9c/sources/cxx-stl/stlport/stlport
+i,/Users/joshbadams/Documents/dev/Android/android-ndk-r9c/sources/cxx-stl/gabi++/include
+i,../../..
+i,/Users/joshbadams/Documents/dev/Android/android-ndk-r9c/toolchains/arm-linux-androideabi-4.6/prebuilt/darwin-x86_64/lib/gcc/arm-linux-androideabi/4.6/include
+i,/Users/joshbadams/Documents/dev/Android/android-ndk-r9c/toolchains/arm-linux-androideabi-4.6/prebuilt/darwin-x86_64/lib/gcc/arm-linux-androideabi/4.6/include-fixed
+i,/Users/joshbadams/Documents/dev/Android/android-ndk-r9c/platforms/android-9/arch-arm/usr/include

@@ -33,7 +33,9 @@
 	
 	View.delegate = self;
 
-	
+	WLOG("Window size: %f, %f - View size: %f, %f\n", self.view.bounds.size.width, self.view.bounds.size.height,
+		 self.view.window.frame.size.width, self.view.window.frame.size.height);
+
 	// for landscape view, swap the width and height
 //	UIDevice* Dev = [UIDevice currentDevice];
 //	[Dev beginGeneratingDeviceOrientationNotifications];
@@ -96,6 +98,24 @@
 }
 
 #if TARGET_OS_MAC
+
+-(void)mouseDown:(NSEvent *)event
+{
+	NSPoint Loc = [event locationInWindow];
+	Loc.y = self.view.window.frame.size.height - Loc.y;
+	Loc = [self.view.window convertPointToBacking:Loc];
+	
+	Utils::Input->AddTouch(0, Loc.x, Loc.y, TouchType::Begin);
+}
+
+-(void)mouseUp:(NSEvent *)event
+{
+	NSPoint Loc = [event locationInWindow];
+	Loc.y = self.view.window.frame.size.height - Loc.y;
+	Loc = [self.view.window convertPointToBacking:Loc];
+
+	Utils::Input->AddTouch(0, Loc.x, Loc.y, TouchType::End);
+}
 
 #else
 

@@ -205,7 +205,7 @@ void WoflRenderer::MakeViewMatrix()
 void WoflRenderer::DrawSprite(WoflSprite* Sprite)
 {
 	// allow the sprite to render itself
-	if (Sprite->CustomRender())
+	if (Sprite->CustomPreRender())
 	{
 		return;
 	}
@@ -225,6 +225,11 @@ void WoflRenderer::DrawSprite(WoflSprite* Sprite)
 		GLCHECK(glUniform4fv(ColorUniform, 1, (float*)&Sprite->GetColor()));
 		GLCHECK(glUniformMatrix4fv(SpriteMatrixUniform, 1, 0, (GLfloat*)SpriteMatrix));
 		GLCHECK(glDrawArrays(GL_TRIANGLES, 0, 6));
+	}
+
+	if (Sprite->CustomRender())
+	{
+		return;
 	}
 }
 

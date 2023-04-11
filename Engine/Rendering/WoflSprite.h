@@ -144,13 +144,20 @@ public:
 	// gets the current image to render
 	virtual WoflImage* GetImage() const;
 
-	// allow a subclass to perform any custom rendering
+	// allow a subclass to perform any custom rendering before normal rendering
 	// return true if the sprite is rendered and default rendering should not occur
+	virtual bool CustomPreRender()
+	{
+		return false;
+	}
+
+	// allow a subclass to perform any custom rendering
+	// return value is ignored
 	virtual bool CustomRender()
 	{
 		return false;
 	}
-	
+
 	
 	// allow the sprite to do per-frame processing
 	virtual void Tick(float DeltaTime);

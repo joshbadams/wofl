@@ -263,7 +263,13 @@ bool WoflSprite::HitTest(const Vector& HitLoc)
 	// get rect
 	Vector TopLeft = GetPosition();
 	Vector BottomRight = TopLeft + GetSize();
+
+	WLOG("Testing [%f,%f], against [%f,%f %f,%f]\n",
+		 HitLoc.X, HitLoc.Y,
+		 TopLeft.X, TopLeft.Y,
+		 BottomRight.X, BottomRight.Y);
 	
+
 	// simple box test
 	return (HitLoc.X >= TopLeft.X && HitLoc.X <= BottomRight.X &&
 			HitLoc.Y >= TopLeft.Y && HitLoc.Y <= BottomRight.Y);

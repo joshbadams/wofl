@@ -25,7 +25,7 @@ public:
 	void SetValue(float Value);
 	void SetLabel(const char* LabelText);
 
-	virtual bool CustomRender() override;
+	virtual bool CustomPreRender() override;
 
 protected:
 	WoflSprite* Background;

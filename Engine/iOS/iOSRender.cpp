@@ -24,13 +24,13 @@ static inline matrix_float4x4 MakeOrthoViewMatrix(Vector Offset, Vector Scale, V
 	}};
 }
 
-static inline matrix_float4x4 MakeSpriteMatrix(Vector Pos, Vector Size)
+static inline matrix_float4x4 MakeSpriteMatrix(Vector Pos, Vector Size, float ViewHeight)
 {
 	return (matrix_float4x4) {{
 		{ Size.X,   0,  0,  0 },
-		{ 0,   Size.Y,  0,  0 },
+		{ 0,   -Size.Y,  0,  0 },
 		{ 0,   0,  1,  0 },
-		{ Pos.X,   Pos.Y,  0,  1 }
+		{ Pos.X,   ViewHeight - Pos.Y,  0,  1 }
 	}};
 }
 
@@ -60,19 +60,19 @@ static inline matrix_float4x4 MakeSpriteMatrix(Vector Pos, Vector Size)
 //	}};
 //}
 
-matrix_float4x4 matrix_perspective_right_hand(float fovyRadians, float aspect, float nearZ, float farZ)
-{
-	float ys = 1 / tanf(fovyRadians * 0.5);
-	float xs = ys / aspect;
-	float zs = farZ / (nearZ - farZ);
-	
-	return (matrix_float4x4) {{
-		{ xs,   0,          0,  0 },
-		{  0,  ys,          0,  0 },
-		{  0,   0,         zs, -1 },
-		{  0,   0, nearZ * zs,  0 }
-	}};
-}
+//matrix_float4x4 matrix_perspective_right_hand(float fovyRadians, float aspect, float nearZ, float farZ)
+//{
+//	float ys = 1 / tanf(fovyRadians * 0.5);
+//	float xs = ys / aspect;
+//	float zs = farZ / (nearZ - farZ);
+//
+//	return (matrix_float4x4) {{
+//		{ xs,   0,          0,  0 },
+//		{  0,  ys,          0,  0 },
+//		{  0,   0,         zs,  -1 },
+//		{  0,   0, nearZ * zs,  0 }
+//	}};
+//}
 
 #pragma mark iOSRenderer
 
@@ -96,7 +96,7 @@ iOSRenderer::iOSRenderer(MTKView* InView)
 	
 	
 	View.depthStencilPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
-	View.colorPixelFormat = MTLPixelFormatBGRA8Unorm_sRGB;
+	View.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
 	View.sampleCount = 1;
 	
 	mtlVertexDescriptor = [[MTLVertexDescriptor alloc] init];
@@ -248,7 +248,7 @@ void iOSRenderer::BeginFrame()
 		renderEncoder.label = @"MyRenderEncoder";
 
 		[renderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
-		[renderEncoder setCullMode:MTLCullModeBack];
+		[renderEncoder setCullMode:MTLCullModeNone];
 		[renderEncoder setRenderPipelineState:pipelineState];
 		[renderEncoder setDepthStencilState:depthState];
 
@@ -299,7 +299,7 @@ void iOSRenderer::DrawScene(class WoflSprite* RootSprite)
 void iOSRenderer::DrawSprite(WoflSprite* Sprite)
 {
 	// allow the sprite to render itself
-	if (Sprite->CustomRender())
+	if (Sprite->CustomPreRender())
 	{
 		return;
 	}
@@ -313,22 +313,24 @@ void iOSRenderer::DrawSprite(WoflSprite* Sprite)
 		// set uniforms
 		unsigned int BufferOffset;
 		ModelUniforms* Uniform = (ModelUniforms*)modelBuffers.GetNext(&BufferOffset);
-		Uniform->modelMatrix = MakeSpriteMatrix(Sprite->GetPosition(), Sprite->GetSize());
+		Uniform->modelMatrix = MakeSpriteMatrix(Sprite->GetPosition(), Sprite->GetSize(), ViewSize.Y);
 		Uniform->color = (simd::float4&)Sprite->GetColor();
 		Uniform->uvScaleBias = (simd::float4&)Image->UVScaleBias;
-
+		
 		[renderEncoder setVertexBuffer:modelBuffers.uniformBuffer
 								offset:BufferOffset
 							   atIndex:BufferIndexModelUniforms];
 		[renderEncoder setFragmentBuffer:modelBuffers.uniformBuffer
-								offset:BufferOffset
-							   atIndex:BufferIndexModelUniforms];
-					
+								  offset:BufferOffset
+								 atIndex:BufferIndexModelUniforms];
+		
 		[renderEncoder setFragmentTexture:GTextures[Image->Texture]
 								  atIndex:TextureIndexColor];
-
+		
 		[renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6];
 	}
+	
+	Sprite->CustomRender();
 }
 
 
@@ -377,7 +379,6 @@ void iOSRenderer::DrawString(const char* String, Vector Location, float Scale, W
 			if (String_Chars[i] == *String)
 			{
 				CharIndexX = i % String_NumCharsX;
-				// this +1 is there because the textue is upside down (I think)
 				CharIndexY = (i / String_NumCharsX);
 			}
 		}
@@ -387,7 +388,7 @@ void iOSRenderer::DrawString(const char* String, Vector Location, float Scale, W
 							String_CharX * String_InvTexSize, String_CharY * String_InvTexSize);
 
 		
-		Uniform->modelMatrix = MakeSpriteMatrix(Location, SpriteSize);
+		Uniform->modelMatrix = MakeSpriteMatrix(Location, SpriteSize, ViewSize.Y);
 		Uniform->color = SimdColor;
 		Uniform->uvScaleBias = (simd::float4&)CharImage.UVScaleBias;
 
@@ -420,17 +421,6 @@ void iOSRenderer::DrawString(const char* String, Vector Location, float Scale, W
 
 		[renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6 instanceCount:NumChars-NumInstances1];
 	}
-		
-		
-//		GLCHECK(glUniform4fv(UVScaleBiasUniform, 1, CharImage.UVScaleBias));
-//		GLCHECK(glBindTexture(GL_TEXTURE_2D, CharImage.Texture));
-//		GLCHECK(glUniform1i(SpriteTextureUniform, 0));
-//
-//		MakeSpriteMatrix(&CharSprite);
-//		GLCHECK(glUniformMatrix4fv(SpriteMatrixUniform, 1, 0, (GLfloat*)SpriteMatrix));
-//		GLCHECK(glDrawArrays(GL_TRIANGLES, 0, 6));
-//
-
 }
 
 

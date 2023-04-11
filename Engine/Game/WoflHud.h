@@ -6,6 +6,8 @@
 //  Copyright © 2016 Josh. All rights reserved.
 //
 
+#pragma once
+
 #include WOFL_INC(Sprite)
 
 class WoflHud : public WoflSprite

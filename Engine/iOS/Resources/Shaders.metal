@@ -34,9 +34,10 @@ vertex ColorInOut vertexShader(Vertex in [[stage_in]],
 {
     ColorInOut out;
 
-    float4 position = float4(in.position, 0.0, 1.0);
+    float4 position = float4(in.position.x, in.position.y, 0.0, 1.0);
     out.position = viewUniforms.viewMatrix * modelUniforms[iid].modelMatrix * position;
-    out.texCoord = float2(in.position.x, 1.0 - in.position.y) * modelUniforms[iid].uvScaleBias.xy + modelUniforms[iid].uvScaleBias.zw;
+//	out.position.y = -out.position.y;
+    out.texCoord = float2(in.position.x, in.position.y) * modelUniforms[iid].uvScaleBias.xy + modelUniforms[iid].uvScaleBias.zw;
 
 //	gl_Position = ViewMatrix * SpriteMatrix * vec4(Corner.x, Corner.y, 0.0, 1.0);
 //	//	gl_Position = SpriteMatrix * ViewMatrix * vec4(Corner.x, Corner.y, 0.0, 1.0);

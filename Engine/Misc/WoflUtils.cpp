@@ -15,3 +15,6 @@ WoflPlatform* Utils::Platform = nullptr;
 
 WColor WColor::Black(0, 0, 0, 1);
 WColor WColor::White(1, 1, 1, 1);
+WColor WColor::Red(1, 0, 0, 1);
+WColor WColor::Green(0, 1, 0, 1);
+WColor WColor::Blue(0, 0, 1, 1);

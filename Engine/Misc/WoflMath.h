@@ -145,5 +145,8 @@ struct WColor
 	
 	static WColor Black;
 	static WColor White;
+	static WColor Red;
+	static WColor Green;
+	static WColor Blue;
 };
 

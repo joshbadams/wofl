@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "45"
             endingLineNumber = "45"
-            landmarkName = "IdProgress::CustomRender()"
+            landmarkName = "IdProgress::CustomPreRender()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

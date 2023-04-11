@@ -41,7 +41,7 @@ void IdProgress::SetLabel(const char* LabelText)
 	Label->SetText(LabelText);
 }
 
-bool IdProgress::CustomRender()
+bool IdProgress::CustomPreRender()
 {
 	// use this function to update value if a value ref is set
 	if (ValueReference != nullptr)

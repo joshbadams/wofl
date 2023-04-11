@@ -80,7 +80,7 @@ Num& Num::Normalize()
 		Units++;
 	}
 	
-	while (Value < Threshold)
+	while (Value < Threshold && Units > 0)
 	{
 		Value *= 1000;
 		Units--;
@@ -252,10 +252,22 @@ bool Num::operator<(Num Other) const
 	
 }
 
+bool Num::operator<=(Num Other) const
+{
+	Operator_Match();
+	return A == B || A.Units < B.Units || (A.Units == B.Units && A.Value < B.Value);
+}
+
 bool Num::operator>(Num Other) const
 {
 	Operator_Match();
 	return A.Units > B.Units || (A.Units == B.Units && A.Value > B.Value);
+}
+
+bool Num::operator>=(Num Other) const
+{
+	Operator_Match();
+	return A == B || A.Units > B.Units || (A.Units == B.Units && A.Value > B.Value);
 }
 
 bool Num::operator==(Num Other) const

@@ -6,31 +6,34 @@
 //  Copyright (c) 2013 Josh. All rights reserved.
 //
 
-#include "WoflPch.h"
 #include "WoflApp.h"
 #include "WoflRenderer.h"
 #include "WoflWorld.h"
 
+#if !IS_WOFL_LIBRARY
 void WoflApplication::Initialize()
 {
-	// always make a world object (singleton which registers itself)
-	WoflWorld* World = new WoflWorld();
-	
-	// now let the game start itself
-	WoflGame* Game = GlobalGameInitialization();
-	World->SetGame(Game);
-	
+	Initialize(GlobalGameInitialization());
+}
+#endif
+
+void WoflApplication::Initialize(WoflGame* Game)
+{
 	// check assumptions
 	assert(Game != NULL);
+
+	// hook everything up
+	WoflWorld::Get()->SetGame(Game);
+	
 	assert(WoflRenderer::Renderer != NULL);
 }
 
 void WoflApplication::Tick()
 {
-	WoflWorld::World->Tick();
+	WoflWorld::Get()->Tick();
 }
 
 void WoflApplication::Render()
 {
-	WoflWorld::World->Render();
+	WoflWorld::Get()->Render();
 }

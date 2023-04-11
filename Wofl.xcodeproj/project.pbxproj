@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,7 +22,7 @@
 		77C8938827CC257600827146 /* WoflInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9B31DD7E75100FC5A9F /* WoflInput.cpp */; };
 		77C8938927CC257600827146 /* WoflHud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9B11DD7E75100FC5A9F /* WoflHud.cpp */; };
 		77C8938A27CC257600827146 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9C31DD7E75100FC5A9F /* ViewController.mm */; };
-		77C8938B27CC257600827146 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* Utils.cpp */; };
+		77C8938B27CC257600827146 /* WoflUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */; };
 		77C8938D27CC257600827146 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77C8937827C150BB00827146 /* jsoncpp.cpp */; };
 		77C8938E27CC257600827146 /* WoflRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9E71DD7E75100FC5A9F /* WoflRenderer.cpp */; };
 		77C8938F27CC257600827146 /* iOSSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9BD1DD7E75100FC5A9F /* iOSSupport.cpp */; };
@@ -53,6 +53,56 @@
 		77C893B027CC257600827146 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9C51DD7E75100FC5A9F /* Default-568h@2x.png */; };
 		77C893B127CC257600827146 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9DF1DD7E75100FC5A9F /* Shader.vsh */; };
 		77C893B227CC257600827146 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9C61DD7E75100FC5A9F /* Default.png */; };
+		7C9E065329E36F3800A88DE7 /* WoflButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9AD1DD7E75100FC5A9F /* WoflButton.cpp */; };
+		7C9E065429E36F3800A88DE7 /* WoflHud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9B11DD7E75100FC5A9F /* WoflHud.cpp */; };
+		7C9E065529E36F3800A88DE7 /* WoflHud.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9B21DD7E75100FC5A9F /* WoflHud.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E065629E36F3800A88DE7 /* WoflApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9AB1DD7E75100FC5A9F /* WoflApp.cpp */; };
+		7C9E065729E36F3800A88DE7 /* WoflButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9AE1DD7E75100FC5A9F /* WoflButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E065829E36F3800A88DE7 /* WoflWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9B51DD7E75100FC5A9F /* WoflWorld.cpp */; };
+		7C9E065929E36F3800A88DE7 /* WoflGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9AF1DD7E75100FC5A9F /* WoflGame.cpp */; };
+		7C9E065A29E36F3800A88DE7 /* WoflInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9B31DD7E75100FC5A9F /* WoflInput.cpp */; };
+		7C9E065B29E36F3800A88DE7 /* WoflApp.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9AC1DD7E75100FC5A9F /* WoflApp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E065C29E36F3800A88DE7 /* WoflInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9B41DD7E75100FC5A9F /* WoflInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E065D29E36F3800A88DE7 /* WoflWorld.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9B61DD7E75100FC5A9F /* WoflWorld.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E065E29E36F3800A88DE7 /* WoflGame.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9B01DD7E75100FC5A9F /* WoflGame.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E065F29E36FD300A88DE7 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 77C8937F27C1656600827146 /* Shaders.metal */; };
+		7C9E066029E36FD800A88DE7 /* iOSPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9BB1DD7E75100FC5A9F /* iOSPlatform.h */; };
+		7C9E066129E36FD800A88DE7 /* iOSSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9BD1DD7E75100FC5A9F /* iOSSupport.cpp */; };
+		7C9E066229E36FD800A88DE7 /* ShaderTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 77C8938127C1659400827146 /* ShaderTypes.h */; };
+		7C9E066329E36FD800A88DE7 /* iOSInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9BA1DD7E75100FC5A9F /* iOSInput.h */; };
+		7C9E066429E36FD800A88DE7 /* iOSFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9B81DD7E75100FC5A9F /* iOSFile.h */; };
+		7C9E066529E36FD800A88DE7 /* iOSGLSetup.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9B91DD7E75100FC5A9F /* iOSGLSetup.h */; };
+		7C9E066629E36FD800A88DE7 /* iOSRender.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9BC1DD7E75100FC5A9F /* iOSRender.h */; };
+		7C9E066729E36FD800A88DE7 /* iOSRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77C8936E27C131C900827146 /* iOSRender.cpp */; };
+		7C9E066829E36FE200A88DE7 /* json-forwards.h in Headers */ = {isa = PBXBuildFile; fileRef = 77C8937627C150BB00827146 /* json-forwards.h */; };
+		7C9E066929E36FE200A88DE7 /* json.h in Headers */ = {isa = PBXBuildFile; fileRef = 77C8937727C150BB00827146 /* json.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E066A29E36FE200A88DE7 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77C8937827C150BB00827146 /* jsoncpp.cpp */; };
+		7C9E066B29E36FE900A88DE7 /* WoflPrefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 77C8937A27C1515D00827146 /* WoflPrefix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E066C29E36FE900A88DE7 /* WoflFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9D61DD7E75100FC5A9F /* WoflFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E066D29E36FE900A88DE7 /* WoflMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9D71DD7E75100FC5A9F /* WoflMath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E066E29E36FE900A88DE7 /* WoflPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9D81DD7E75100FC5A9F /* WoflPlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E066F29E36FE900A88DE7 /* WoflUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9D41DD7E75100FC5A9F /* WoflUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E067029E36FE900A88DE7 /* WoflUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */; };
+		7C9E067129E3700B00A88DE7 /* WoflImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9E31DD7E75100FC5A9F /* WoflImage.cpp */; };
+		7C9E067229E3700B00A88DE7 /* WoflRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9E71DD7E75100FC5A9F /* WoflRenderer.cpp */; };
+		7C9E067329E3700B00A88DE7 /* WoflSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9E91DD7E75100FC5A9F /* WoflSprite.cpp */; };
+		7C9E067429E3700B00A88DE7 /* WoflAtlases.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9E11DD7E75100FC5A9F /* WoflAtlases.cpp */; };
+		7C9E067529E3700B00A88DE7 /* WoflLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9E51DD7E75100FC5A9F /* WoflLabel.cpp */; };
+		7C9E067629E3700B00A88DE7 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9DF1DD7E75100FC5A9F /* Shader.vsh */; };
+		7C9E067729E3700B00A88DE7 /* WoflLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9E61DD7E75100FC5A9F /* WoflLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E067829E3700B00A88DE7 /* WoflRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9E81DD7E75100FC5A9F /* WoflRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E067929E3700B00A88DE7 /* WoflAtlases.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9E21DD7E75100FC5A9F /* WoflAtlases.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E067A29E3700B00A88DE7 /* White.png in Resources */ = {isa = PBXBuildFile; fileRef = 9D3EFA3A280FAAFC00E289CB /* White.png */; };
+		7C9E067B29E3700B00A88DE7 /* WoflSprite.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9EA1DD7E75100FC5A9F /* WoflSprite.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E067C29E3700B00A88DE7 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9DE1DD7E75100FC5A9F /* Shader.fsh */; };
+		7C9E067D29E3700B00A88DE7 /* Font.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9DB1DD7E75100FC5A9F /* Font.png */; };
+		7C9E067E29E3700B00A88DE7 /* WoflImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9E41DD7E75100FC5A9F /* WoflImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C9E068029E37AF900A88DE7 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9E067F29E37AF900A88DE7 /* AppKit.framework */; };
+		7C9E068229E37B1200A88DE7 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9E068129E37B1200A88DE7 /* MetalKit.framework */; };
+		7C9E068429E37B3300A88DE7 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C9E068329E37B3300A88DE7 /* Metal.framework */; };
+		7CA3605B29E39B52009B40DA /* Wofl.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CA3605A29E39B52009B40DA /* Wofl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CD063F729E3ACCE00457B3E /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9C31DD7E75100FC5A9F /* ViewController.mm */; };
+		7CD063F829E3ACD100457B3E /* ViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DFCE9C21DD7E75100FC5A9F /* ViewController.h */; };
 		9D26292F189DDB0400A6830D /* Ground.png in Resources */ = {isa = PBXBuildFile; fileRef = 9D26292A189DDB0400A6830D /* Ground.png */; };
 		9D262931189DDB0400A6830D /* ScrollyGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D26292D189DDB0400A6830D /* ScrollyGame.cpp */; };
 		9D32BEA51F12C805001E88CA /* BTGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D32BE9C1F12C805001E88CA /* BTGame.cpp */; };
@@ -200,11 +250,11 @@
 		9DFCEA291DD7E75200FC5A9F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9C71DD7E75100FC5A9F /* Default@2x.png */; };
 		9DFCEA2A1DD7E75200FC5A9F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9C71DD7E75100FC5A9F /* Default@2x.png */; };
 		9DFCEA2B1DD7E75200FC5A9F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9C71DD7E75100FC5A9F /* Default@2x.png */; };
-		9DFCEA401DD7E75200FC5A9F /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* Utils.cpp */; };
-		9DFCEA411DD7E75200FC5A9F /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* Utils.cpp */; };
-		9DFCEA421DD7E75200FC5A9F /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* Utils.cpp */; };
-		9DFCEA431DD7E75200FC5A9F /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* Utils.cpp */; };
-		9DFCEA441DD7E75200FC5A9F /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* Utils.cpp */; };
+		9DFCEA401DD7E75200FC5A9F /* WoflUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */; };
+		9DFCEA411DD7E75200FC5A9F /* WoflUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */; };
+		9DFCEA421DD7E75200FC5A9F /* WoflUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */; };
+		9DFCEA431DD7E75200FC5A9F /* WoflUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */; };
+		9DFCEA441DD7E75200FC5A9F /* WoflUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */; };
 		9DFCEA451DD7E75200FC5A9F /* Font.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9DB1DD7E75100FC5A9F /* Font.png */; };
 		9DFCEA461DD7E75200FC5A9F /* Font.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9DB1DD7E75100FC5A9F /* Font.png */; };
 		9DFCEA471DD7E75200FC5A9F /* Font.png in Resources */ = {isa = PBXBuildFile; fileRef = 9DFCE9DB1DD7E75100FC5A9F /* Font.png */; };
@@ -262,12 +312,17 @@
 		77C8937627C150BB00827146 /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
 		77C8937727C150BB00827146 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
 		77C8937827C150BB00827146 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsoncpp.cpp; sourceTree = "<group>"; };
-		77C8937A27C1515D00827146 /* WoflPch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WoflPch.h; sourceTree = "<group>"; };
+		77C8937A27C1515D00827146 /* WoflPrefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WoflPrefix.h; sourceTree = "<group>"; };
 		77C8937B27C1590600827146 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		77C8937C27C1590700827146 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		77C8937F27C1656600827146 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		77C8938127C1659400827146 /* ShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		77C893B627CC257600827146 /* Idler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Idler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C9E064C29E36E9600A88DE7 /* Wofl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wofl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C9E067F29E37AF900A88DE7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/AppKit.framework; sourceTree = DEVELOPER_DIR; };
+		7C9E068129E37B1200A88DE7 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = DEVELOPER_DIR; };
+		7C9E068329E37B3300A88DE7 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
+		7CA3605A29E39B52009B40DA /* Wofl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wofl.h; sourceTree = "<group>"; };
 		9D262923189DDAB200A6830D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D262925189DDAD100A6830D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D262927189DDAE200A6830D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -365,8 +420,8 @@
 		9DFCE9C51DD7E75100FC5A9F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		9DFCE9C61DD7E75100FC5A9F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		9DFCE9C71DD7E75100FC5A9F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		9DFCE9D31DD7E75100FC5A9F /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
-		9DFCE9D41DD7E75100FC5A9F /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WoflUtils.cpp; sourceTree = "<group>"; };
+		9DFCE9D41DD7E75100FC5A9F /* WoflUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WoflUtils.h; sourceTree = "<group>"; };
 		9DFCE9D61DD7E75100FC5A9F /* WoflFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WoflFile.h; sourceTree = "<group>"; };
 		9DFCE9D71DD7E75100FC5A9F /* WoflMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WoflMath.h; sourceTree = "<group>"; };
 		9DFCE9D81DD7E75100FC5A9F /* WoflPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WoflPlatform.h; sourceTree = "<group>"; };
@@ -404,6 +459,16 @@
 				77C893A327CC257600827146 /* Metal.framework in Frameworks */,
 				77C893A427CC257600827146 /* MetalKit.framework in Frameworks */,
 				77C893A527CC257600827146 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C9E064929E36E9600A88DE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C9E068029E37AF900A88DE7 /* AppKit.framework in Frameworks */,
+				7C9E068429E37B3300A88DE7 /* Metal.framework in Frameworks */,
+				7C9E068229E37B1200A88DE7 /* MetalKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +531,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7CA3605929E39B52009B40DA /* Wofl */ = {
+			isa = PBXGroup;
+			children = (
+				7CA3605A29E39B52009B40DA /* Wofl.h */,
+			);
+			name = Wofl;
+			path = Engine/Wofl;
+			sourceTree = "<group>";
+		};
 		9D262922189DDAB200A6830D /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -658,6 +732,7 @@
 				9DFCEA7D1DD7E8B700FC5A9F /* Scrolly.app */,
 				9D920F7A1ED2795300F4C463 /* BurgerThyme.app */,
 				77C893B627CC257600827146 /* Idler.app */,
+				7C9E064C29E36E9600A88DE7 /* Wofl.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -701,6 +776,7 @@
 		9DFCE9881DD7E11300FC5A9F /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				7CA3605929E39B52009B40DA /* Wofl */,
 				9DFCE9AA1DD7E75100FC5A9F /* Game */,
 				9DFCE9B71DD7E75100FC5A9F /* iOS */,
 				9DFCE9CE1DD7E75100FC5A9F /* json */,
@@ -788,9 +864,9 @@
 		9DFCE9D21DD7E75100FC5A9F /* Misc */ = {
 			isa = PBXGroup;
 			children = (
-				77C8937A27C1515D00827146 /* WoflPch.h */,
-				9DFCE9D31DD7E75100FC5A9F /* Utils.cpp */,
-				9DFCE9D41DD7E75100FC5A9F /* Utils.h */,
+				77C8937A27C1515D00827146 /* WoflPrefix.h */,
+				9DFCE9D31DD7E75100FC5A9F /* WoflUtils.cpp */,
+				9DFCE9D41DD7E75100FC5A9F /* WoflUtils.h */,
 				9DFCE9D61DD7E75100FC5A9F /* WoflFile.h */,
 				9DFCE9D71DD7E75100FC5A9F /* WoflMath.h */,
 				9DFCE9D81DD7E75100FC5A9F /* WoflPlatform.h */,
@@ -841,6 +917,9 @@
 		9DFCEA771DD7E88300FC5A9F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7C9E068329E37B3300A88DE7 /* Metal.framework */,
+				7C9E068129E37B1200A88DE7 /* MetalKit.framework */,
+				7C9E067F29E37AF900A88DE7 /* AppKit.framework */,
 				77C8937C27C1590700827146 /* Metal.framework */,
 				77C8937B27C1590600827146 /* MetalKit.framework */,
 				9D920F7D1ED27A7900F4C463 /* Foundation.framework */,
@@ -853,6 +932,42 @@
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7C9E064729E36E9600A88DE7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C9E067729E3700B00A88DE7 /* WoflLabel.h in Headers */,
+				7C9E067B29E3700B00A88DE7 /* WoflSprite.h in Headers */,
+				7C9E066D29E36FE900A88DE7 /* WoflMath.h in Headers */,
+				7C9E067929E3700B00A88DE7 /* WoflAtlases.h in Headers */,
+				7C9E066B29E36FE900A88DE7 /* WoflPrefix.h in Headers */,
+				7C9E065B29E36F3800A88DE7 /* WoflApp.h in Headers */,
+				7C9E065C29E36F3800A88DE7 /* WoflInput.h in Headers */,
+				7C9E067E29E3700B00A88DE7 /* WoflImage.h in Headers */,
+				7C9E066E29E36FE900A88DE7 /* WoflPlatform.h in Headers */,
+				7C9E065529E36F3800A88DE7 /* WoflHud.h in Headers */,
+				7C9E067829E3700B00A88DE7 /* WoflRenderer.h in Headers */,
+				7C9E065D29E36F3800A88DE7 /* WoflWorld.h in Headers */,
+				7CA3605B29E39B52009B40DA /* Wofl.h in Headers */,
+				7C9E066C29E36FE900A88DE7 /* WoflFile.h in Headers */,
+				7C9E065729E36F3800A88DE7 /* WoflButton.h in Headers */,
+				7C9E065E29E36F3800A88DE7 /* WoflGame.h in Headers */,
+				7C9E066F29E36FE900A88DE7 /* WoflUtils.h in Headers */,
+				7C9E066929E36FE200A88DE7 /* json.h in Headers */,
+				7C9E066329E36FD800A88DE7 /* iOSInput.h in Headers */,
+				7C9E066229E36FD800A88DE7 /* ShaderTypes.h in Headers */,
+				7C9E066429E36FD800A88DE7 /* iOSFile.h in Headers */,
+				7C9E066629E36FD800A88DE7 /* iOSRender.h in Headers */,
+				7C9E066029E36FD800A88DE7 /* iOSPlatform.h in Headers */,
+				7C9E066529E36FD800A88DE7 /* iOSGLSetup.h in Headers */,
+				7C9E066829E36FE200A88DE7 /* json-forwards.h in Headers */,
+				7CD063F829E3ACD100457B3E /* ViewController.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		77C8938627CC257600827146 /* Idler */ = {
@@ -871,6 +986,24 @@
 			productName = Wofl;
 			productReference = 77C893B627CC257600827146 /* Idler.app */;
 			productType = "com.apple.product-type.application";
+		};
+		7C9E064B29E36E9600A88DE7 /* Wofl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C9E065029E36E9600A88DE7 /* Build configuration list for PBXNativeTarget "Wofl" */;
+			buildPhases = (
+				7C9E064729E36E9600A88DE7 /* Headers */,
+				7C9E064829E36E9600A88DE7 /* Sources */,
+				7C9E064929E36E9600A88DE7 /* Frameworks */,
+				7C9E064A29E36E9600A88DE7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Wofl;
+			productName = Wofl;
+			productReference = 7C9E064C29E36E9600A88DE7 /* Wofl.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		9D2628FA189DD97C00A6830D /* Scrolly */ = {
 			isa = PBXNativeTarget;
@@ -963,11 +1096,15 @@
 		9DA4AE6A16C0AF600019FDAA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1320;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = Josh;
 				TargetAttributes = {
 					77C8938627CC257600827146 = {
 						DevelopmentTeam = T6M4F9S7EL;
+					};
+					7C9E064B29E36E9600A88DE7 = {
+						CreatedOnToolsVersion = 14.3;
 					};
 					9D2628FA189DD97C00A6830D = {
 						DevelopmentTeam = T6M4F9S7EL;
@@ -1005,6 +1142,7 @@
 				9D2628FA189DD97C00A6830D /* Scrolly */,
 				9DF2A8351D485898008B18B4 /* BurgerThyme */,
 				77C8938627CC257600827146 /* Idler */,
+				7C9E064B29E36E9600A88DE7 /* Wofl */,
 			);
 		};
 /* End PBXProject section */
@@ -1026,6 +1164,17 @@
 				9D3EFA40280FAAFC00E289CB /* White.png in Resources */,
 				77C893B127CC257600827146 /* Shader.vsh in Resources */,
 				77C893B227CC257600827146 /* Default.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C9E064A29E36E9600A88DE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C9E067C29E3700B00A88DE7 /* Shader.fsh in Resources */,
+				7C9E067629E3700B00A88DE7 /* Shader.vsh in Resources */,
+				7C9E067D29E3700B00A88DE7 /* Font.png in Resources */,
+				7C9E067A29E3700B00A88DE7 /* White.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1146,7 +1295,7 @@
 				77C8938927CC257600827146 /* WoflHud.cpp in Sources */,
 				77C8938A27CC257600827146 /* ViewController.mm in Sources */,
 				9DE5041A280E36B000DE368C /* IdlerMonster.cpp in Sources */,
-				77C8938B27CC257600827146 /* Utils.cpp in Sources */,
+				77C8938B27CC257600827146 /* WoflUtils.cpp in Sources */,
 				9DD9C6BD280CC8A0006F48C7 /* IdlerGame.cpp in Sources */,
 				77C8938D27CC257600827146 /* jsoncpp.cpp in Sources */,
 				77C8938E27CC257600827146 /* WoflRenderer.cpp in Sources */,
@@ -1169,6 +1318,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7C9E064829E36E9600A88DE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C9E066729E36FD800A88DE7 /* iOSRender.cpp in Sources */,
+				7C9E065A29E36F3800A88DE7 /* WoflInput.cpp in Sources */,
+				7C9E065F29E36FD300A88DE7 /* Shaders.metal in Sources */,
+				7C9E065629E36F3800A88DE7 /* WoflApp.cpp in Sources */,
+				7C9E067429E3700B00A88DE7 /* WoflAtlases.cpp in Sources */,
+				7CD063F729E3ACCE00457B3E /* ViewController.mm in Sources */,
+				7C9E067329E3700B00A88DE7 /* WoflSprite.cpp in Sources */,
+				7C9E067529E3700B00A88DE7 /* WoflLabel.cpp in Sources */,
+				7C9E065329E36F3800A88DE7 /* WoflButton.cpp in Sources */,
+				7C9E066A29E36FE200A88DE7 /* jsoncpp.cpp in Sources */,
+				7C9E065829E36F3800A88DE7 /* WoflWorld.cpp in Sources */,
+				7C9E065429E36F3800A88DE7 /* WoflHud.cpp in Sources */,
+				7C9E067229E3700B00A88DE7 /* WoflRenderer.cpp in Sources */,
+				7C9E067029E36FE900A88DE7 /* WoflUtils.cpp in Sources */,
+				7C9E067129E3700B00A88DE7 /* WoflImage.cpp in Sources */,
+				7C9E065929E36F3800A88DE7 /* WoflGame.cpp in Sources */,
+				7C9E066129E36FD800A88DE7 /* iOSSupport.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9D2628FB189DD97C00A6830D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1188,7 +1361,7 @@
 				9DFCE9F31DD7E75100FC5A9F /* WoflButton.cpp in Sources */,
 				9DFCEA661DD7E75200FC5A9F /* WoflImage.cpp in Sources */,
 				9DFCEA1B1DD7E75100FC5A9F /* ViewController.mm in Sources */,
-				9DFCEA431DD7E75200FC5A9F /* Utils.cpp in Sources */,
+				9DFCEA431DD7E75200FC5A9F /* WoflUtils.cpp in Sources */,
 				9DFCEA071DD7E75100FC5A9F /* WoflWorld.cpp in Sources */,
 				9DFCEA701DD7E75200FC5A9F /* WoflRenderer.cpp in Sources */,
 				9DFCEA161DD7E75100FC5A9F /* main.m in Sources */,
@@ -1216,7 +1389,7 @@
 				9DFCE9F21DD7E75100FC5A9F /* WoflButton.cpp in Sources */,
 				9DFCEA651DD7E75200FC5A9F /* WoflImage.cpp in Sources */,
 				9DFCEA1A1DD7E75100FC5A9F /* ViewController.mm in Sources */,
-				9DFCEA421DD7E75200FC5A9F /* Utils.cpp in Sources */,
+				9DFCEA421DD7E75200FC5A9F /* WoflUtils.cpp in Sources */,
 				9DFCEA061DD7E75100FC5A9F /* WoflWorld.cpp in Sources */,
 				9DFCEA6F1DD7E75200FC5A9F /* WoflRenderer.cpp in Sources */,
 				9DFCEA151DD7E75100FC5A9F /* main.m in Sources */,
@@ -1232,7 +1405,7 @@
 				9DFCEA001DD7E75100FC5A9F /* WoflInput.cpp in Sources */,
 				9DFCE9FB1DD7E75100FC5A9F /* WoflHud.cpp in Sources */,
 				9DFCEA191DD7E75100FC5A9F /* ViewController.mm in Sources */,
-				9DFCEA411DD7E75200FC5A9F /* Utils.cpp in Sources */,
+				9DFCEA411DD7E75200FC5A9F /* WoflUtils.cpp in Sources */,
 				9D891C7B1D16F71700C48518 /* FHGame.cpp in Sources */,
 				9DA7796627C2F9DF0006F851 /* jsoncpp.cpp in Sources */,
 				9DFCEA6E1DD7E75200FC5A9F /* WoflRenderer.cpp in Sources */,
@@ -1281,7 +1454,7 @@
 				9DFCEA131DD7E75100FC5A9F /* main.m in Sources */,
 				9DFCE9FA1DD7E75100FC5A9F /* WoflHud.cpp in Sources */,
 				9DFCEA181DD7E75100FC5A9F /* ViewController.mm in Sources */,
-				9DFCEA401DD7E75200FC5A9F /* Utils.cpp in Sources */,
+				9DFCEA401DD7E75200FC5A9F /* WoflUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1302,7 +1475,7 @@
 				77C8938527C1659C00827146 /* Shaders.metal in Sources */,
 				9DFCEA121DD7E75100FC5A9F /* AppDelegate.m in Sources */,
 				9DFCEA081DD7E75100FC5A9F /* WoflWorld.cpp in Sources */,
-				9DFCEA441DD7E75200FC5A9F /* Utils.cpp in Sources */,
+				9DFCEA441DD7E75200FC5A9F /* WoflUtils.cpp in Sources */,
 				9D32BEC51F13B6FA001E88CA /* BTFood.cpp in Sources */,
 				9DFCEA671DD7E75200FC5A9F /* WoflImage.cpp in Sources */,
 				9DFCEA6C1DD7E75200FC5A9F /* WoflLabel.cpp in Sources */,
@@ -1340,6 +1513,124 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.moshpit.Idler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		7C9E065129E36E9600A88DE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULE_DEBUGGING = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_MODULES_DISABLE_PRIVATE_WARNING = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = WWA43RPJ5U;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"IS_WOFL_LIBRARY=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Josh. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu++20";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mosh.Wofl;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7C9E065229E36E9600A88DE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULE_DEBUGGING = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_MODULES_DISABLE_PRIVATE_WARNING = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = WWA43RPJ5U;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"IS_WOFL_LIBRARY=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Josh. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu++20";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mosh.Wofl;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -1402,7 +1693,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -1432,7 +1723,8 @@
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = Engine/Misc/WoflPch.h;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Engine/Misc/WoflPrefix.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1446,7 +1738,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/$(PRODUCT_NAME)/Resources/iOS/Info.plist";
+				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1460,7 +1752,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -1487,7 +1779,8 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREFIX_HEADER = Engine/Misc/WoflPch.h;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Engine/Misc/WoflPrefix.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "IOS=1";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1496,7 +1789,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/$(PRODUCT_NAME)/Resources/iOS/Info.plist";
+				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -1552,6 +1845,15 @@
 			buildConfigurations = (
 				77C893B427CC257600827146 /* Debug */,
 				77C893B527CC257600827146 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C9E065029E36E9600A88DE7 /* Build configuration list for PBXNativeTarget "Wofl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C9E065129E36E9600A88DE7 /* Debug */,
+				7C9E065229E36E9600A88DE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

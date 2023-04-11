@@ -15,11 +15,11 @@ MonsterRegistry::MonsterRegistry()
 	MonsterState M;
 	M.Name = "Slime";
 	M.BaseHP = 6;
-	M.BaseXP = 1;
+	M.BaseXP = 10;
 	M.BaseGold = 1;
-	M.PerRankHP = 1.1;
-	M.PerRankXP = 1.05;
-	M.PerRankGold = 1.09;
+	M.PerRankHP = 5;
+	M.PerRankXP = 4.2;
+	M.PerRankGold = 8;
 	
 	M.Caught = 0;
 	M.Rank = 1;
@@ -27,8 +27,31 @@ MonsterRegistry::MonsterRegistry()
 	M.XP = M.BaseXP;
 	M.Gold = M.BaseGold;
 	
+	M.RankUpCount = { 0, 2, 4, 8, 16 };
+	
 	Data.push_back(M);
 }
+
+int MonsterRegistry::GetRandomMonsterID()
+{
+	return rand() % (int)Data.size();
+}
+
+void MonsterRegistry::IncreaseCaught(int Amount, int ID)
+{
+	MonsterState& State = Data[ID];
+	
+	State.Caught = State.Caught + Amount;
+	
+	while (State.Caught >= State.RankUpCount[State.Rank])
+	{
+		State.Rank++;
+		State.HP = State.HP * State.PerRankHP;
+		State.XP = State.XP * State.PerRankXP;
+		State.Gold = State.Gold * State.PerRankGold;
+	}
+}
+
 
 
 IdlerMonster::IdlerMonster()
@@ -43,9 +66,11 @@ IdlerMonster::IdlerMonster()
 	SubtractHP(0);
 }
 
-void IdlerMonster::InitFromState(const MonsterState& State)
+void IdlerMonster::InitFromState(const MonsterState& State, int RegID)
 {
+	RegistryID = RegID;
 	CurHP = MaxHP = State.HP;
+	SubtractHP(0);
 }
 
 void IdlerMonster::SubtractHP(Num Change)

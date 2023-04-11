@@ -26,6 +26,7 @@ protected:
 	WoflLabel* MoneyLabel;
 	WoflLabel* LevelLabel;
 	WoflLabel* XPLabel;
-	
+	WoflLabel* InfoLabel;
+
 	WoflButton* BuyLevelButton;
 };

@@ -7,8 +7,10 @@
 //
 
 #include "WoflSprite.h"
-#include "Utils.h"
+#include "WoflUtils.h"
 #include "WoflWorld.h"
+#include "WoflRenderer.h"
+#include "WoflImage.h"
 
 
 
@@ -138,7 +140,7 @@ void WoflSprite::RemoveFromWorld()
 	{
 		Parent->Child = Next;
 	}
-	else if (WoflWorld::World->GetRootSprite() == this)
+	else if (WoflWorld::Get()->GetRootSprite() == this)
 	{
 		// @todo, Set Next to be the Root sprite
 		printf("Deleting the root sprite, but this isn't supported yet!");
@@ -146,7 +148,7 @@ void WoflSprite::RemoveFromWorld()
 	// otherwise, look for our previous (simple if doubly-linked!)
 	else
 	{
-		WoflSprite* Travel = Parent ? Parent->Child : WoflWorld::World->GetRootSprite();
+		WoflSprite* Travel = Parent ? Parent->Child : WoflWorld::Get()->GetRootSprite();
 		while (Travel->Next)
 		{
 			if (Travel->Next == this)

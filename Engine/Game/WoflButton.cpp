@@ -7,6 +7,7 @@
 //
 
 #include "WoflButton.h"
+#include "WoflImage.h"
 
 WoflButton::WoflButton(const char* BackgroundImage, const char* LabelText, float X, float Y, float SizeX, float SizeY, int Tag,  SpriteCaptureType InCaptureType)
 	: WoflSprite(X, Y, SizeX, SizeY)

@@ -29,19 +29,19 @@ IdlerHud::IdlerHud(class IdlerGame* InGame)
 	AddChild(XPLabel);
 	XOffset += XPLabel->GetSize().X + PADDING;
 
-	YOffset = BUTTON_SIZE;
-	XOffset = 0;
-	
-	BuyLevelButton = new WoflButton(nullptr, "+", XOffset, YOffset, BUTTON_SIZE, BUTTON_SIZE, 0,
-									[this](WoflButton* Button) { Game->BuyLevel(Button); });
-	AddChild(BuyLevelButton);
-	XOffset += BuyLevelButton->GetSize().X + PADDING;
-	
-	LevelLabel = new WoflLabel("lvl", false, false, XOffset, YOffset, LABEL_WIDTH, BUTTON_SIZE);
+	LevelLabel = new WoflLabel("lvl", false, true, XOffset, YOffset, LABEL_WIDTH, BUTTON_SIZE);
 	LevelLabel->SetTextColor(WColor(1,0,0,1));
 	AddChild(LevelLabel);
 	XOffset += LevelLabel->GetSize().X + PADDING;
 
+	YOffset = BUTTON_SIZE;
+	XOffset = 0;
+	
+//	BuyLevelButton = new WoflButton(nullptr, "+", XOffset, YOffset, BUTTON_SIZE, BUTTON_SIZE, 0,
+//									[this](WoflButton* Button) { Game->BuyLevel(Button); });
+//	AddChild(BuyLevelButton);
+//	XOffset += BuyLevelButton->GetSize().X + PADDING;
+	
 	
 	WoflButton* AttackButton = new WoflButton(nullptr, "Attack", XOffset, YOffset, BUTTON_SIZE, BUTTON_SIZE, 0,
 									SpriteCaptureType::RepeatCancelOnLeave,
@@ -54,6 +54,11 @@ IdlerHud::IdlerHud(class IdlerGame* InGame)
 	AddChild(CatchButton);
 	XOffset += CatchButton->GetSize().X + PADDING;
 	
+	InfoLabel = new WoflLabel("lvl", false, true, XOffset, YOffset, LABEL_WIDTH, BUTTON_SIZE);
+	InfoLabel->SetTextColor(WColor(1,0,0,1));
+	AddChild(InfoLabel);
+	XOffset += InfoLabel->GetSize().X + PADDING;
+
 
 	
 	
@@ -68,5 +73,11 @@ void IdlerHud::Tick(float DeltaTime)
 	LevelLabel->SetText(string("Lvl: ") + Game->Level.ToString());
 	XPLabel->SetText(string("XP: ") + Game->XP.ToString());
 	
-	BuyLevelButton->SetText("-100");
+	const MonsterState& State = Game->Reg.Data[Game->Monster->RegistryID];
+	stringstream Format;
+	Format << "Rank: " << State.Rank << " XP: " << State.XP.ToString() << " HP: " << State.HP.ToString() << " Gold: " << State.Gold.ToString();
+	InfoLabel->SetText(Format.str());
+	
+	
+//	BuyLevelButton->SetText("-100");
 }

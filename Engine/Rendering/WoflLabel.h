@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "WoflSprite.h"
+#include WOFL_INC(Sprite)
 
 
 class WoflLabel : public WoflSprite

@@ -17,12 +17,12 @@ public:
 		return (class WoflHud*)Hud;
 	}
 
-	void DoAttack(WoflButton* Button);
+//	void DoAttack(WoflButton* Button);
 	void HoldAttack(int RepeatCount);
 	void DoCatch(WoflButton* Button);
 	void BuyLevel(WoflButton* Button);
 	
-//private:
+private:
 	Num Money;
 	Num XP;
 	Num XPTarget;
@@ -32,12 +32,16 @@ public:
 	float* GetMonsterHealthRef();
 	
 private:
+	friend class IdlerHud;
+	
 	class IdlerHud* Hud;
 	class IdlerMonster* Monster;
 	
 	MonsterRegistry Reg;
 
 	void StartNewMonster();
+	void KillMonster();
+	void CatchMonster();
 
 };
 

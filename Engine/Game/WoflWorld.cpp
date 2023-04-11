@@ -12,9 +12,19 @@
 #include "WoflRenderer.h"
 #include "WoflButton.h"
 #include "WoflHud.h"
+#include "WoflImage.h"
 
 // singleton world
-WoflWorld* WoflWorld::World = NULL;
+WoflWorld* WoflWorld::World = nullptr;
+
+WoflWorld* WoflWorld::Get()
+{
+	if (World == nullptr)
+	{
+		World = new WoflWorld();
+	}
+	return World;
+}
 
 WoflWorld::WoflWorld()
 	: RootSprite(NULL)
@@ -38,10 +48,10 @@ void WoflWorld::Tick()
 
 	Utils::Input->PreWorldTick(DeltaTime);
 	
-	if (WoflWorld::World)
+	if (WoflWorld::Get())
 	{
 		// tick everything in the world
-		WoflWorld::World->Visit(true, true, false,
+		WoflWorld::Get()->Visit(true, true, false,
 								[=](WoflSprite* Sprite)
 								{
 									Sprite->Tick(DeltaTime);
@@ -170,7 +180,7 @@ WoflSprite* WoflWorld::HitTest(Vector ScreenLocation)
 	for (int Index = 0; HitSprite == nullptr && Index < ARRAY_COUNT(Roots); Index++)
 	{
 		// first try the Hud for clicks
-		WoflWorld::World->Visit(false, true, false,
+		WoflWorld::Get()->Visit(false, true, false,
 								[&](WoflSprite* Sprite)
 								{
 									if (Sprite->IsClickEnabled() && Sprite->HitTest(Loc))
@@ -184,4 +194,17 @@ WoflSprite* WoflWorld::HitTest(Vector ScreenLocation)
 	}
 
 	return HitSprite;
+}
+
+
+
+void WoflWorld::DumpWorld()
+{
+	Visit(true, true, false,
+		[](WoflSprite* Sprite)
+		{
+			printf("%s (parent = %s\n", Sprite->GetImage() ? Sprite->GetImage()->_Name.c_str() : "none",
+				   Sprite->GetParent() && Sprite->GetParent()->GetImage() ? Sprite->GetParent()->GetImage()->_Name.c_str() : "none");
+			return true;
+		});
 }

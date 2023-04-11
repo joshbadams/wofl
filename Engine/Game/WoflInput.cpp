@@ -8,6 +8,7 @@
 
 #include "WoflInput.h"
 #include "WoflWorld.h"
+#include "WoflSprite.h"
 
 void WoflInput::PreWorldTick(float DeltaTime)
 {
@@ -20,7 +21,7 @@ void WoflInput::PreWorldTick(float DeltaTime)
 		Capture.Location = Vector(Touch.X, Touch.Y);
 		if (Touch.Type == TouchType::Begin)
 		{
-			WoflSprite* HitSprite = WoflWorld::World->HitTest(Capture.Location);
+			WoflSprite* HitSprite = WoflWorld::Get()->HitTest(Capture.Location);
 			Capture.Sprite = HitSprite;
 			Capture.LastRepeatTime = 0.0;
 			Capture.RepeatCount = 0;

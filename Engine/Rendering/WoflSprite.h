@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "WoflRenderer.h"
-#include "WoflImage.h"
+class WoflRenderer;
+class WoflImage;
 
 enum class SpriteCaptureType
 {

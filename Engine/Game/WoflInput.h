@@ -8,8 +8,9 @@
 
 
 #pragma once
+#pragma clang system_header
 
-#include "WoflMath.h"
+#include WOFL_INC(Math)
 
 #define WOFL_MAX_FINGERS 5
 

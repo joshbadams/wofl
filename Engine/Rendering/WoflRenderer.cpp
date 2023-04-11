@@ -7,7 +7,7 @@
 //
 
 #include "WoflRenderer.h"
-#include "Utils.h"
+#include "WoflUtils.h"
 #include "WoflSprite.h"
 #include "WoflWorld.h"
 
@@ -191,8 +191,8 @@ void WoflRenderer::MakeSpriteMatrix(const WoflSprite* Sprite)
 
 void WoflRenderer::MakeViewMatrix()
 {
-	Vector ViewOffset = WoflWorld::World->GetViewOffset();
-	Vector ViewScale = WoflWorld::World->GetViewScale();
+	Vector ViewOffset = WoflWorld::Get()->GetViewOffset();
+	Vector ViewScale = WoflWorld::Get()->GetViewScale();
 
 	ViewMatrix[3][0] = (ViewOffset.X * 2.0f / (GLfloat)ViewSize.X) - 1.0f;
 //	ViewMatrix[3][1] = (-ViewOffset.Y * 2.0f / (GLfloat)ViewSize.Y) - 1.0f;
@@ -255,7 +255,7 @@ void WoflRenderer::DrawScene(WoflSprite* RootSprite)
 	MakeViewMatrix();
 	GLCHECK(glUniformMatrix4fv(ViewMatrixUniform, 1, 0, (GLfloat*)ViewMatrix));
 
-	WoflWorld::World->Visit(true, true, false,
+	WoflWorld::Get()->Visit(true, true, false,
 							[this](WoflSprite* Sprite)
 							{
 								DrawSprite(Sprite);

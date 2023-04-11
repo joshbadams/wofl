@@ -26,12 +26,12 @@ BTGame::BTGame()
 
 	// level is root object
 	BTLevel* Level = new BTLevel();
-	WoflWorld::World->SetRootSprite(Level);
+	WoflWorld::Get()->SetRootSprite(Level);
 	
 	// scale the view to make the level take the whole screen
 	Vector ViewSize = WoflRenderer::Renderer->GetViewSize();
 	float Scale = ViewSize.Y / Level->GetSize().Y;
-	WoflWorld::World->SetViewScale(Vector(Scale, Scale));
+	WoflWorld::Get()->SetViewScale(Vector(Scale, Scale));
 }
 
 void BTGame::Tick(float DeltaTime)
@@ -43,8 +43,8 @@ void BTGame::Tick(float DeltaTime)
 //	{
 //		if (Layers[LayerIndex]->GetChild() != NULL)
 //		{
-//			WoflWorld::World->Visit(true, true, , <#bool bDepthFirst#>, <#bool bForCollision#>, <#const function<bool (WoflSprite *)> &VisitFunction#>)
-//			for (WoflWorld::Iterator It = WoflWorld::World->GetIterator(Layers[LayerIndex]->GetChild()); It; ++It)
+//			WoflWorld::Get()->Visit(true, true, , <#bool bDepthFirst#>, <#bool bForCollision#>, <#const function<bool (WoflSprite *)> &VisitFunction#>)
+//			for (WoflWorld::Iterator It = WoflWorld::Get()->GetIterator(Layers[LayerIndex]->GetChild()); It; ++It)
 //			{
 //				WoflSprite* Sprite = It.Sprite;
 //				Sprite->SetPosition(Sprite->GetPosition() + Vector(-Layers[LayerIndex]->ScrollSpeed, 0));

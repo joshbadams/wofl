@@ -662,7 +662,6 @@ private:
     bool operator<(CZString const& other) const;
     bool operator==(CZString const& other) const;
     ArrayIndex index() const;
-    //const char* c_str() const; ///< \deprecated
     char const* data() const;
     unsigned length() const;
     bool isStaticString() const;
@@ -927,11 +926,9 @@ Json::Value obj_value(Json::objectValue); // {}
   /// \return the removed Value, or null.
   /// \pre type() is objectValue or nullValue
   /// \post type() is unchanged
-  /// \deprecated
   Value removeMember(const char* key);
   /// Same as removeMember(const char*)
   /// \param key may contain embedded nulls.
-  /// \deprecated
   Value removeMember(const JSONCPP_STRING& key);
   /// Same as removeMember(const char* begin, const char* end, Value* removed),
   /// but 'key' is null-terminated.
@@ -978,7 +975,6 @@ Json::Value obj_value(Json::objectValue); // {}
   //      EnumValues enumValues() const;
   //# endif
 
-  /// \deprecated Always pass len.
   JSONCPP_DEPRECATED("Use setComment(JSONCPP_STRING const&) instead.")
   void setComment(const char* comment, CommentPlacement placement);
   /// Comments must be //... or /* ... */
@@ -1142,7 +1138,6 @@ public:
 
   /// Return the member name of the referenced Value. "" if it is not an
   /// objectValue.
-  /// \deprecated This cannot be used for UTF-8 strings, since there can be embedded nulls.
   JSONCPP_DEPRECATED("Use `key = name();` instead.")
   char const* memberName() const;
   /// Return the member name of the referenced Value, or NULL if it is not an
@@ -1336,7 +1331,6 @@ namespace Json {
 /** \brief Unserialize a <a HREF="http://www.json.org">JSON</a> document into a
  *Value.
  *
- * \deprecated Use CharReader and CharReaderBuilder.
  */
 class JSON_API Reader {
 public:
@@ -1416,7 +1410,6 @@ public:
    *         the parsed document. An empty string is returned if no error
    * occurred
    *         during parsing.
-   * \deprecated Use getFormattedErrorMessages() instead (typo fix).
    */
   JSONCPP_DEPRECATED("Use getFormattedErrorMessages() instead.")
   JSONCPP_STRING getFormatedErrorMessages() const;
@@ -1862,7 +1855,6 @@ public:
 };
 
 /** \brief Abstract class for writers.
- * \deprecated Use StreamWriter. (And really, this is an implementation detail.)
  */
 class JSON_API Writer {
 public:
@@ -1878,7 +1870,6 @@ public:
  *consumption,
  * but may be usefull to support feature such as RPC where bandwith is limited.
  * \sa Reader, Value
- * \deprecated Use StreamWriterBuilder.
  */
 class JSON_API FastWriter : public Writer {
 
@@ -1931,7 +1922,6 @@ private:
  *#CommentPlacement.
  *
  * \sa Reader, Value, Value::setComment()
- * \deprecated Use StreamWriterBuilder.
  */
 class JSON_API StyledWriter : public Writer {
 public:
@@ -1991,9 +1981,7 @@ private:
  * If the Value have comments then they are outputed according to their
  #CommentPlacement.
  *
- * \param indentation Each level will be indented by this amount extra.
  * \sa Reader, Value, Value::setComment()
- * \deprecated Use StreamWriterBuilder.
  */
 class JSON_API StyledStreamWriter {
 public:

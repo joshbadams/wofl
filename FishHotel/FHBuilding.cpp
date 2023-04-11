@@ -43,9 +43,9 @@ void FHBuilding::AddFloor(ERoomType Type)
 	Rooms.push_back(Room);
 
 //	printf("Before\n");
-//	WoflWorld::World->DumpWorld();
+//	WoflWorld::Get()->DumpWorld();
 	AddChild(Room);
 //	printf("\nAfter\n");
-//	WoflWorld::World->DumpWorld();
+//	WoflWorld::Get()->DumpWorld();
 }
 

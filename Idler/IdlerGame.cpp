@@ -74,7 +74,7 @@ IdlerGame::IdlerGame()
 	Level = 1;
 		
 	Monster = new IdlerMonster();
-	WoflWorld::World->SetRootSprite(Monster);
+	WoflWorld::Get()->SetRootSprite(Monster);
 
 	StartNewMonster();
 	
@@ -86,22 +86,38 @@ void IdlerGame::Tick(float DeltaTime)
 //	Money = Money * 1.05;
 }
 
-void IdlerGame::StartNewMonster()
+void IdlerGame::KillMonster()
 {
-	int Index = rand() % (int)Reg.Data.size();
-	const MonsterState& State = Reg.Data[Index];
-	
-	Monster->InitFromState(State);
+	XP = XP + Reg.Data[Monster->RegistryID].XP;
+	XP.Print();
+	Level.Print();
+	(Level * 100).Print();
+	if (XP >= Level * 100)
+	{
+		Level = Level + 1;
+	}
+	StartNewMonster();
 }
 
-void IdlerGame::DoAttack(WoflButton* Button)
+void IdlerGame::CatchMonster()
 {
-	Monster->SubtractHP(Level);
-//	if (Monster->CurHP == 0)
-	{
-//		XP = XP + Monster->XP;
-	}
+	StartNewMonster();
 }
+
+void IdlerGame::StartNewMonster()
+{
+	int ID = Reg.GetRandomMonsterID();
+	Monster->InitFromState(Reg.Data[ID], ID);
+}
+
+//void IdlerGame::DoAttack(WoflButton* Button)
+//{
+//	Monster->SubtractHP(Level);
+////	if (Monster->CurHP == 0)
+//	{
+////		XP = XP + Monster->XP;
+//	}
+//}
 
 void IdlerGame::HoldAttack(int RepeatCount)
 {
@@ -110,15 +126,19 @@ void IdlerGame::HoldAttack(int RepeatCount)
 		Monster->SubtractHP(Level);
 		if (Monster->CurHP == 0)
 		{
-			XP = XP + 5;
-			StartNewMonster();
+			KillMonster();
 		}
 	}
 }
 
 void IdlerGame::DoCatch(WoflButton* Button)
 {
-	Money = Money + 20;
+	if (((float)rand() / 0xFFFFFFFF) < 1.0 - Monster->HPRatio)
+	{
+		Money = Money + 20;
+		Reg.IncreaseCaught(1, Monster->RegistryID);
+	}
+	StartNewMonster();
 }
 
 void IdlerGame::BuyLevel(WoflButton* Button)

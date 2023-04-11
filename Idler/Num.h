@@ -32,7 +32,9 @@ public:
 	double Ratio(Num Other) const;
 	
 	bool operator<(Num Other) const;
+	bool operator<=(Num Other) const;
 	bool operator>(Num Other) const;
+	bool operator>=(Num Other) const;
 	bool operator==(Num Other) const;
 	
 	bool ToInt(uint64_t& Out) const;

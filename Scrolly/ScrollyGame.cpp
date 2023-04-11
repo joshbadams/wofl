@@ -28,7 +28,7 @@ ScrollyGame::ScrollyGame()
 //	//WoflImage* Hex = new WoflImage("Font", 0, 0, 1, 1);
 //	Background->AddImage(Hex);
 //	Background->SetColor(0.7f, 0.2f, 0.2f);
-	WoflWorld::World->SetRootSprite(Root);
+	WoflWorld::Get()->SetRootSprite(Root);
 	
 
 	for (int LayerIndex = 0; LayerIndex < NumLayers; LayerIndex++)
@@ -96,8 +96,8 @@ void ScrollyGame::Tick(float DeltaTime)
 	{
 		if (Layers[LayerIndex]->GetChild() != NULL)
 		{
-			WoflWorld::World->Visit(true, true, , <#bool bDepthFirst#>, <#bool bForCollision#>, <#const function<bool (WoflSprite *)> &VisitFunction#>)
-			for (WoflWorld::Iterator It = WoflWorld::World->GetIterator(Layers[LayerIndex]->GetChild()); It; ++It)
+			WoflWorld::Get()->Visit(true, true, , <#bool bDepthFirst#>, <#bool bForCollision#>, <#const function<bool (WoflSprite *)> &VisitFunction#>)
+			for (WoflWorld::Iterator It = WoflWorld::Get()->GetIterator(Layers[LayerIndex]->GetChild()); It; ++It)
 			{
 				WoflSprite* Sprite = It.Sprite;
 				Sprite->SetPosition(Sprite->GetPosition() + Vector(-Layers[LayerIndex]->ScrollSpeed, 0));

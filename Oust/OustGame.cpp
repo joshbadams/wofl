@@ -26,7 +26,7 @@ OustGame::OustGame()
 	//WoflImage* Hex = new WoflImage("Font", 0, 0, 1, 1);
 	Background->AddImage(Hex);
 	Background->SetColor(WColor(0.7f, 0.2f, 0.2f, 1.0f));
-	WoflWorld::World->SetRootSprite(Background);
+	WoflWorld::Get()->SetRootSprite(Background);
 	
 	// @todo: Make a real board frame sprite
 	BoardSprite = Background;
@@ -86,7 +86,7 @@ void OustGame::Tick(float DeltaTime)
 	{
 		if (Touches[Index].Type != TouchType::End)
 		{
-			WoflSprite* HitCell = WoflWorld::World->HitTest(Vector(Touches[Index].X, Touches[Index].Y));
+			WoflSprite* HitCell = WoflWorld::Get()->HitTest(Vector(Touches[Index].X, Touches[Index].Y));
 			if (HitCell != NULL && HitCell->GetTag() == Tag_Cell)
 			{
 				// this is a safe typecast, for now! maybe add tag or something for casting?

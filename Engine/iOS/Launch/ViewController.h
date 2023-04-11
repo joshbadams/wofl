@@ -6,10 +6,15 @@
 //  Copyright (c) 2013 Josh. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <MetalKit/MetalKit.h>
 
-@interface ViewController : UIViewController <MTKViewDelegate>
+#if TARGET_OS_MAC
+	#import <AppKit/AppKit.h>
+@interface WoflViewController : NSViewController <MTKViewDelegate>
+#else
+	#import <UIKit/UIKit.h>
+@interface WoflViewController : UIViewController <MTKViewDelegate>
+#endif
 {
 	class WoflWorld* TheWorld;
 }

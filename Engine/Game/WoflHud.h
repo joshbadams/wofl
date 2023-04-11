@@ -6,7 +6,7 @@
 //  Copyright © 2016 Josh. All rights reserved.
 //
 
-#include "WoflSprite.h"
+#include WOFL_INC(Sprite)
 
 class WoflHud : public WoflSprite
 {

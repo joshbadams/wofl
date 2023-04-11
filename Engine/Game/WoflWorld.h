@@ -9,17 +9,16 @@
 #ifndef __Wofl__WoflWorld__
 #define __Wofl__WoflWorld__
 
-#include "WoflSprite.h"
-#include <vector>
 #include <functional>
+
+class WoflSprite;
 
 class WoflWorld
 {
 public:
-	static WoflWorld* World;
-	
-	WoflWorld();
-	
+
+	static WoflWorld* Get();
+
 	void SetGame(class WoflGame* InGame)
 	{
 		Game = InGame;
@@ -158,20 +157,13 @@ public:
 		return Iterator(InitialSprite ? InitialSprite : RootSprite, true);
 	}
 */
-	void DumpWorld()
-	{
-		WoflWorld::World->Visit(true, true, false,
-								[](WoflSprite* Sprite)
-								{
-									printf("%s (parent = %s\n", Sprite->GetImage() ? Sprite->GetImage()->_Name.c_str() : "none",
-										   Sprite->GetParent() && Sprite->GetParent()->GetImage() ? Sprite->GetParent()->GetImage()->_Name.c_str() : "none");
-									return true;
-								});
-	}
-	
+	void DumpWorld();
 	
 protected:
 	
+	static WoflWorld* World;
+	WoflWorld();
+
 	void VisitInner(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision,
 					const function<bool(WoflSprite*)>& VisitFunction,
 					WoflSprite* CurrentSprite, bool& bAbortedVisiting);

@@ -27,7 +27,7 @@ MGame::MGame()
 	WoflSprite* Background = new WoflSprite(0, 0, 1000, 1000);
 	WoflImage* Tree = new WoflImage("Tree", 0.0, 0.0, 1.0, 1.0);
 	Background->AddImage(Tree);
-	WoflWorld::World->SetRootSprite(Background);
+	WoflWorld::Get()->SetRootSprite(Background);
 	
 	// make the pegs
 	for (int Y = 0; Y < 5; Y++)
@@ -76,10 +76,10 @@ void MGame::Tick(float DeltaTime)
 //		Alpha -= 1.0f;
 //	}
 //	
-//	WoflWorld::World->SetViewScale(Vector(Alpha, Alpha));
-//	WoflWorld::World->SetViewOffset(Vector(Alpha * 300, Alpha * 300));
+//	WoflWorld::Get()->SetViewScale(Vector(Alpha, Alpha));
+//	WoflWorld::Get()->SetViewOffset(Vector(Alpha * 300, Alpha * 300));
 	
-//	WoflWorld::World->SetViewOffset(-(Player->GetPosition() - WoflRenderer::Renderer->GetViewSize() * 0.5f));
+//	WoflWorld::Get()->SetViewOffset(-(Player->GetPosition() - WoflRenderer::Renderer->GetViewSize() * 0.5f));
 	
 		
 	//	// get recent touches

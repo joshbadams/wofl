@@ -26,8 +26,8 @@ MPeg::MPeg(float CenterX, float CenterY)
 
 void MPeg::OnCollision(WoflSprite* Collider)
 {
-	WoflWorld::World->DeleteSprite(this);
+	WoflWorld::Get()->DeleteSprite(this);
 	
-	MGame* Game = (MGame*)WoflWorld::World->GetGame();
+	MGame* Game = (MGame*)WoflWorld::Get()->GetGame();
 	Game->IncScore();
 }

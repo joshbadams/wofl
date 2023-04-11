@@ -12,12 +12,14 @@
 
 // now let the platform extend
 #if IOS
-#include "iOSGLSetup.h"
+//#include "iOSGLSetup.h"
 #elif ANDROID
 #include "Android/AndroidGLSetup.h"
 #else
 #error New platforms here. Hah!
 #endif
+
+//#include "WoflMath.h"
 
 class WoflRenderer
 {

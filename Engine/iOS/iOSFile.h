@@ -18,16 +18,24 @@ public:
 	iOSFile()
 		: WoflFile()
 	{
-	
+		MainBundle = [NSBundle mainBundle];
+		WoflBundle = [NSBundle bundleForClass:NSClassFromString(@"WoflViewController")];
 	}
 	
 	virtual string GetResourcePath(const char* Filename) override
 	{
 		NSString* FilenameStr = [NSString stringWithCString:Filename encoding:NSUTF8StringEncoding];
-		NSString* Path = [[NSBundle mainBundle]
+		NSString* Path = [MainBundle
 						  pathForResource:[FilenameStr stringByDeletingPathExtension]
-						  ofType:[FilenameStr pathExtension]
-						  ];
+						  ofType:[FilenameStr pathExtension]];
+		
+		if (Path == nil)
+		{
+			Path = [WoflBundle
+					pathForResource:[FilenameStr stringByDeletingPathExtension]
+					ofType:[FilenameStr pathExtension]];
+		}
+		
 		
 		return [Path UTF8String];
 	}
@@ -79,7 +87,17 @@ public:
 	virtual void* LoadPNGToAllocatedBuffer(const char* ImageName, unsigned int& Width, unsigned int& Height) override
 	{
 		// load PNG
-		UIImage* Image = [UIImage imageNamed:[NSString stringWithCString:ImageName encoding:NSUTF8StringEncoding]];
+		NSString* ImageNameStr = [NSString stringWithCString:ImageName encoding:NSUTF8StringEncoding];
+		NSString* ImagePath = [MainBundle pathForResource:ImageNameStr ofType:@"png"];
+		if (ImagePath == nil)
+		{
+			ImagePath = [WoflBundle pathForResource:ImageNameStr ofType:@"png"];
+		}
+#if TARGET_OS_MAC
+		NSImage* Image = [[NSImage alloc] initWithContentsOfFile:ImagePath];
+#else
+		UIImage* Image = [UIImage imageWithContentsOfFile:ImagePath];
+#endif
 		if (Image == nullptr)
 		{
 			return nullptr;
@@ -93,15 +111,22 @@ public:
 		void* ImageData = malloc(Width * Height * 4);
 		memset(ImageData, 0, Width * Height * 4);
 		
+#if TARGET_OS_MAC
+		NSRect ImageRect = NSMakeRect(0, 0, Width, Height);
+		CGImageRef CGImage = [Image CGImageForProposedRect:&ImageRect context:NULL hints:nil];
+#else
+		CGImageRef CGImage = Image.CGImage;
+#endif
+
 		// draw the UIImage into the memory block
 		CGContextRef SpriteContext = CGBitmapContextCreate(ImageData, Width, Height, 8, Width * 4,
-														   CGImageGetColorSpace(Image.CGImage),
+														   CGImageGetColorSpace(CGImage),
 														   kCGImageAlphaPremultipliedLast);
 		// After you create the context, you can draw the sprite image to the context.
-		CGContextDrawImage(SpriteContext, CGRectMake(0.0, 0.0, (CGFloat)Width, (CGFloat)Height), Image.CGImage);
+		CGContextDrawImage(SpriteContext, CGRectMake(0.0, 0.0, (CGFloat)Width, (CGFloat)Height), CGImage);
 		// You don't need the context at this point, so you need to release it to avoid memory leaks.
 		CGContextRelease(SpriteContext);
-		
+
 		return ImageData;
 	}
 	
@@ -139,6 +164,9 @@ public:
 		return true;
 	}
 
+protected:
+	NSBundle* WoflBundle;
+	NSBundle* MainBundle;
 
 };
 

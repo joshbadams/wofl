@@ -20,9 +20,14 @@ extern class WoflGame* GlobalGameInitialization();
 class WoflApplication
 {
 public:
+#if !IS_WOFL_LIBRARY
 	// initialize the whole thing
-	static void Initialize();
-	
+	static void InitializeAndCreateGame();
+#endif
+
+	// initialize with a game already created, useful for wofl as a lib
+	static void Initialize(WoflGame* Game);
+
 	// called by platform to tick the world
 	static void Tick();
 	

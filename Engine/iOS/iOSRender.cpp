@@ -1,11 +1,18 @@
 #include "iOSRender.h"
 #include "WoflWorld.h"
+#include "WoflSprite.h"
+#include "WoflImage.h"
 #include "ShaderTypes.h"
 
 static const NSUInteger kMaxBuffersInFlight = 3;
 static const NSUInteger kMaxSpritesPerFrame = 500;
 #pragma mark Matrix Math Utilities
 
+@interface TestClass : NSObject
+@end
+
+@implementation TestClass
+@end
 
 static inline matrix_float4x4 MakeOrthoViewMatrix(Vector Offset, Vector Scale, Vector Size)
 {
@@ -72,8 +79,13 @@ matrix_float4x4 matrix_perspective_right_hand(float fovyRadians, float aspect, f
 iOSRenderer::iOSRenderer(MTKView* InView)
 	: View(InView)
 {
+#if TARGET_OS_MAC
+	ViewSize.X = [InView.window convertRectToBacking:View.frame].size.width;
+	ViewSize.Y = [InView.window convertRectToBacking:View.frame].size.height;
+#else
 	ViewSize.X = View.frame.size.width * View.contentScaleFactor;
 	ViewSize.Y = View.frame.size.height * View.contentScaleFactor;
+#endif
 	
 	
 	device = View.device;
@@ -105,7 +117,9 @@ iOSRenderer::iOSRenderer(MTKView* InView)
 //	mtlVertexDescriptor.layouts[BufferIndexMeshGenerics].stepRate = 1;
 //	mtlVertexDescriptor.layouts[BufferIndexMeshGenerics].stepFunction = MTLVertexStepFunctionPerVertex;
 	
-	id<MTLLibrary> defaultLibrary = [device newDefaultLibrary];
+//	id<MTLLibrary> defaultLibrary = [device newDefaultLibrary];
+	NSError* Error;
+	id<MTLLibrary> defaultLibrary = [device newDefaultLibraryWithBundle:[NSBundle bundleForClass:NSClassFromString(@"TestClass")] error: &Error];
 	
 	id <MTLFunction> vertexFunction = [defaultLibrary newFunctionWithName:@"vertexShader"];
 	id <MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"fragmentShader"];
@@ -270,7 +284,7 @@ void iOSRenderer::DrawScene(class WoflSprite* RootSprite)
 		
 	// walk over the sprites and draw em!
 	// this could be done earlier to set up a flat list of sprites to render much faster
-	WoflWorld::World->Visit(true, true, false,
+	WoflWorld::Get()->Visit(true, true, false,
 		[this](WoflSprite* Sprite)
 		{
 			DrawSprite(Sprite);
@@ -425,8 +439,8 @@ void iOSRenderer::DrawString(const char* String, Vector Location, float Scale, W
 
 unsigned int iOSRenderer::SetupViewUniforms()
 {
-	Vector ViewOffset = WoflWorld::World->GetViewOffset();
-	Vector ViewScale = WoflWorld::World->GetViewScale();
+	Vector ViewOffset = WoflWorld::Get()->GetViewOffset();
+	Vector ViewScale = WoflWorld::Get()->GetViewScale();
 
 	unsigned int BufferOffset;
 	ViewUniforms* Uniform = (ViewUniforms*)viewBuffers.GetNext(&BufferOffset);

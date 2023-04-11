@@ -18,6 +18,8 @@ struct MonsterData
 	Num BaseXP;
 	Num BaseGold;
 	
+	vector<int> RankUpCount;
+	
 	float PerRankHP;
 	float PerRankXP;
 	float PerRankGold;
@@ -39,6 +41,9 @@ public:
 	vector<MonsterState> Data;
 	
 	MonsterRegistry();
+	
+	int GetRandomMonsterID();
+	void IncreaseCaught(int Amount, int ID);
 };
 
 class IdlerMonster : public WoflSprite
@@ -48,10 +53,11 @@ public:
 	
 	Num CurHP;
 	Num MaxHP;
+	int RegistryID;
 	float HPRatio;
 
 
-	void InitFromState(const MonsterState& Data);
+	void InitFromState(const MonsterState& Data, int RegID);
 	void SubtractHP(Num Change);
 
 };

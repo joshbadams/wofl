@@ -7,7 +7,7 @@
 //
 
 #include "WoflHud.h"
-
+#include "WoflRenderer.h"
 
 WoflHud::WoflHud()
 	: WoflSprite(0, 0, WoflRenderer::Renderer->GetViewSize().X, WoflRenderer::Renderer->GetViewSize().Y)

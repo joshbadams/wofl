@@ -7,6 +7,7 @@
 //
 
 #include "WoflLabel.h"
+#include "WoflRenderer.h"
 #include <string>
 
 WoflLabel::WoflLabel(const char* InText, bool bInCenteredHorizontal, bool bInCenteredVertical, float X, float Y, float SizeX, float SizeY)

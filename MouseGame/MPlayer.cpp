@@ -59,7 +59,7 @@ void MPlayer::Tick(float DeltaTime)
 	Position += Velocity * DeltaTime;
 		
 	// run collisions
-	WoflWorld::World->Visit(true, true, true,
+	WoflWorld::Get()->Visit(true, true, true,
 							[=](WoflSprite* Sprite)
 							{
 								Vector OutPosition, OutDirection;

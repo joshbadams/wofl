@@ -37,7 +37,7 @@ FHGame::FHGame()
 	WoflSprite* Background = new WoflSprite(0, 0, ViewSize.X, ViewSize.Y);
 	WoflImage* BackgroundImage = new WoflImage("Background");
 	Background->AddImage(BackgroundImage);
-	WoflWorld::World->SetRootSprite(Background);
+	WoflWorld::Get()->SetRootSprite(Background);
 	
 	if (Load() == false)
 	{
@@ -74,7 +74,7 @@ void FHGame::FromJsonObject(const Json::Value& GameObj)
 	GetArrayFromObject<FHBuilding>(Buildings, GameObj, "Buildings",
 					   [](FHBuilding* Building)
 					   {
-						   WoflWorld::World->GetRootSprite()->AddChild(Building);
+						   WoflWorld::Get()->GetRootSprite()->AddChild(Building);
 					   });
 	CurrentBuilding = Buildings[0];
 	

@@ -11,21 +11,22 @@
 #include "WoflWorld.h"
 #include "WoflApp.h"
 
-@interface ViewController () {
+@interface WoflViewController () {
 	
 	WoflRenderer* Renderer;
 }
 
 @end
 
-@implementation ViewController
+@implementation WoflViewController
 
-- (void)viewDidLoad
+- (void)viewDidAppear
 {
-    [super viewDidLoad];
+    [super viewDidAppear];
     
 	// set up Metal view
 	MTKView* View = (MTKView *)self.view;
+
 	View.device = MTLCreateSystemDefaultDevice();
 	
 	Renderer = new iOSRenderer(View);
@@ -44,10 +45,11 @@
 //	}
 //	[Dev endGeneratingDeviceOrientationNotifications];
 	
-	
+#if !IS_WOFL_LIBRARY
 	// let the application startup
 	WoflApplication::Initialize();
-
+#endif
+	
 }
 
 - (void)dealloc
@@ -62,8 +64,10 @@
 
 - (void)didReceiveMemoryWarning
 {
+#if !TARGET_OS_MAC
     [super didReceiveMemoryWarning];
-
+#endif
+	
 //    if ([self isViewLoaded] && ([[self view] window] == nil)) {
 //        self.view = nil;
 //
@@ -90,6 +94,10 @@
 {
 	
 }
+
+#if TARGET_OS_MAC
+
+#else
 
 static UITouch* Fingers[10];
 
@@ -155,6 +163,8 @@ static UITouch* Fingers[10];
 {
 	[self touchesEnded:touches withEvent:event];
 }
+
+#endif
 
 
 @end

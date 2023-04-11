@@ -18,9 +18,9 @@ public:
 };
 
 // now that the Utils class is defined, we can include the classes it uses that may use it
-#include "WoflFile.h"
-#include "WoflInput.h"
-#include "WoflPlatform.h"
+#include WOFL_INC(File)
+#include WOFL_INC(Input)
+#include WOFL_INC(Platform)
 
 
 

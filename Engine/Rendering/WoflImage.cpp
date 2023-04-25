@@ -12,40 +12,54 @@
 
 map<string, WoflImage::Info> WoflImage::LoadedTextures;
 
-WoflImage::WoflImage(const char* TextureName, float U, float V, float SizeX, float SizeY)
+WoflImage::WoflImage(const string& TextureName, float U, float V, float SizeX, float SizeY)
+	: TileX(1.0f)
+	, TileY(1.0f)
 {
 _Name = TextureName;
 	Initialize(TextureName, U, V, SizeX, SizeY);
 }
 
-
-WoflImage::WoflImage(const char* AtlasTextureName)
+WoflImage::WoflImage(const string& AtlasTextureName)
+	: TileX(1.0f)
+	, TileY(1.0f)
 {
 _Name = AtlasTextureName;
 	string AtlasName = WoflAtlases::SubImageToAtlasMap[AtlasTextureName];
 	WoflAtlases::SubImageInfo Info = WoflAtlases::SubImageToInfoMap[AtlasTextureName];
 	
-	Initialize(AtlasName.c_str(), Info.U, Info.V, Info.SizeX, Info.SizeY);
-	
+	Initialize(AtlasName, Info.U, Info.V, Info.SizeX, Info.SizeY);
 }
 
-void WoflImage::Initialize(const char* TextureName, float U, float V, float SizeX, float SizeY)
+void WoflImage::TileImage(float InTileX, float InTileY)
+{
+	UVScaleBias[0] /= TileX;
+	UVScaleBias[1] /= TileY;
+
+	TileX = InTileX;
+	TileY = InTileY;
+
+	UVScaleBias[0] *= TileX;
+	UVScaleBias[1] *= TileY;
+}
+
+void WoflImage::Initialize(const string& TextureName, float U, float V, float SizeX, float SizeY)
 {
 	// look for texture already loaded
-	string TextureNameStr(TextureName);
-	
-	map<string, WoflImage::Info>::iterator ExistingIterator = LoadedTextures.find(TextureNameStr);
+	map<string, WoflImage::Info>::iterator ExistingIterator = LoadedTextures.find(TextureName);
 	
 	// did it fail to find?
 	WoflImage::Info Info;
 	if (ExistingIterator == LoadedTextures.end())
 	{
 		// load in the texture!
-		void* ImageContents = Utils::File->LoadPNGToAllocatedBuffer(TextureName, Info.Width, Info.Height);
+		string FinalTextureName = TextureName + ".png";
+		FinalTextureName = Utils::File->GetResourcePath(FinalTextureName.c_str());
+		void* ImageContents = Utils::File->LoadPNGToAllocatedBuffer(FinalTextureName.c_str(), Info.Width, Info.Height);
 		
 		if (ImageContents == NULL)
 		{
-			WLOG("Failed to find texture '%s'\n", TextureName);
+			WLOG("Failed to find texture '%s'\n", TextureName.c_str());
 			Texture = 0;
 			return;
 		}
@@ -56,7 +70,7 @@ void WoflImage::Initialize(const char* TextureName, float U, float V, float Size
 		free(ImageContents);
 		
 		// store the texture info to get later
-		LoadedTextures[TextureNameStr] = Info;
+		LoadedTextures[TextureName] = Info;
 	}
 	else
 	{

@@ -5,7 +5,7 @@
 #include "ShaderTypes.h"
 
 static const NSUInteger kMaxBuffersInFlight = 3;
-static const NSUInteger kMaxSpritesPerFrame = 500;
+static const NSUInteger kMaxSpritesPerFrame = 1000;
 #pragma mark Matrix Math Utilities
 
 @interface TestClass : NSObject
@@ -149,6 +149,14 @@ iOSRenderer::iOSRenderer(MTKView* InView)
 	depthStateDesc.depthWriteEnabled = NO;
 	depthState = [device newDepthStencilStateWithDescriptor:depthStateDesc];
 	
+	MTLSamplerDescriptor* samplerDesc = [[MTLSamplerDescriptor alloc] init];
+	samplerDesc.sAddressMode = MTLSamplerAddressModeClampToZero;
+	samplerDesc.tAddressMode = MTLSamplerAddressModeClampToZero;
+	samplerDesc.minFilter = MTLSamplerMinMagFilterLinear;
+	samplerDesc.magFilter = MTLSamplerMinMagFilterLinear;
+	samplerDesc.mipFilter = MTLSamplerMipFilterLinear;
+	samplerDesc.compareFunction = MTLCompareFunctionNever;
+	samplerState = [device newSamplerStateWithDescriptor:samplerDesc];
 
 	commandQueue = [device newCommandQueue];
 	
@@ -218,6 +226,11 @@ int iOSRenderer::CreateUncompressedTexture(unsigned int Width, unsigned int Heig
 	return (int)GTextures.size() - 1;
 }
 
+Vector iOSRenderer::GetTextureSize(unsigned int Texture)
+{
+	return { (float)GTextures[Texture].width, (float)GTextures[Texture].height };
+}
+
 void iOSRenderer::BeginFrame()
 {
 	// start the frame
@@ -275,8 +288,7 @@ void iOSRenderer::DrawScene(class WoflSprite* RootSprite)
 	{
 		return;
 	}
-	[renderEncoder pushDebugGroup:@"DrawBox"];
-
+	[renderEncoder pushDebugGroup:@"DrawScene"];
 
 	[renderEncoder setVertexBuffer:vertexBuffer
 							offset:0
@@ -323,7 +335,9 @@ void iOSRenderer::DrawSprite(WoflSprite* Sprite)
 		[renderEncoder setFragmentBuffer:modelBuffers.uniformBuffer
 								  offset:BufferOffset
 								 atIndex:BufferIndexModelUniforms];
-		
+
+		[renderEncoder setFragmentSamplerState:samplerState atIndex:TextureIndexColor];
+
 		[renderEncoder setFragmentTexture:GTextures[Image->Texture]
 								  atIndex:TextureIndexColor];
 		

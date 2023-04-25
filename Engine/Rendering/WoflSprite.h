@@ -48,6 +48,7 @@ public:
 
 	void AddSibling(WoflSprite* NewSprite);
 	void AddChild(WoflSprite* NewSprite, bool bAddAsFirstChild=false);
+	void RemoveFromParent();
 	void RemoveFromWorld();
 
 	

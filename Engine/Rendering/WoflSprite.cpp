@@ -94,6 +94,7 @@ void WoflSprite::AddSibling(WoflSprite* NewSprite)
 void WoflSprite::AddChild(WoflSprite* NewSprite, bool bAddAsFirstChild)
 {
 	NewSprite->Parent = this;
+	
 	if (Child == NULL)
 	{
 		Child = NewSprite;
@@ -119,6 +120,34 @@ void WoflSprite::AddChild(WoflSprite* NewSprite, bool bAddAsFirstChild)
 	NewSprite->bIsAddedToWorld = true;
 }
 
+void WoflSprite::RemoveFromParent()
+{
+	// if we are first in the child list, then just make next the child
+	if (Parent && Parent->Child == this)
+	{
+		Parent->Child = Next;
+	}
+	else if (WoflWorld::Get()->GetRootSprite() == this)
+	{
+		// @todo, Set Next to be the Root sprite
+		printf("Deleting the root sprite, but this isn't supported yet!");
+	}
+	// otherwise, look for our previous (simple if doubly-linked!)
+	else
+	{
+		WoflSprite* Travel = Parent ? Parent->Child : WoflWorld::Get()->GetRootSprite();
+		while (Travel && Travel->Next)
+		{
+			if (Travel->Next == this)
+			{
+				Travel->Next = Next;
+				break;
+			}
+			Travel = Travel->Next;
+		}
+	}
+}
+
 void WoflSprite::RemoveFromWorld()
 {
 	if (!bIsAddedToWorld)
@@ -135,30 +164,7 @@ void WoflSprite::RemoveFromWorld()
 		Child->RemoveFromWorld();
 	}
 
-	// if we are first in the child list, then just make next the child
-	if (Parent && Parent->Child == this)
-	{
-		Parent->Child = Next;
-	}
-	else if (WoflWorld::Get()->GetRootSprite() == this)
-	{
-		// @todo, Set Next to be the Root sprite
-		printf("Deleting the root sprite, but this isn't supported yet!");
-	}
-	// otherwise, look for our previous (simple if doubly-linked!)
-	else
-	{
-		WoflSprite* Travel = Parent ? Parent->Child : WoflWorld::Get()->GetRootSprite();
-		while (Travel->Next)
-		{
-			if (Travel->Next == this)
-			{
-				Travel->Next = Next;
-				break;
-			}
-			Travel = Travel->Next;
-		}
-	}
+	RemoveFromParent();
 }
 
 // allow the sprite to do per-frame processing
@@ -264,10 +270,10 @@ bool WoflSprite::HitTest(const Vector& HitLoc)
 	Vector TopLeft = GetPosition();
 	Vector BottomRight = TopLeft + GetSize();
 
-	WLOG("Testing [%f,%f], against [%f,%f %f,%f]\n",
-		 HitLoc.X, HitLoc.Y,
-		 TopLeft.X, TopLeft.Y,
-		 BottomRight.X, BottomRight.Y);
+//	WLOG("Testing [%f,%f], against [%f,%f %f,%f]\n",
+//		 HitLoc.X, HitLoc.Y,
+//		 TopLeft.X, TopLeft.Y,
+//		 BottomRight.X, BottomRight.Y);
 	
 
 	// simple box test

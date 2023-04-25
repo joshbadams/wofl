@@ -24,7 +24,7 @@ public:
 	
 	virtual string GetResourcePath(const char* Filename) override
 	{
-		NSString* FilenameStr = [NSString stringWithCString:Filename encoding:NSUTF8StringEncoding];
+		NSString* FilenameStr = [NSString stringWithFormat:@"Resources/%s", Filename];
 		NSString* Path = [MainBundle
 						  pathForResource:[FilenameStr stringByDeletingPathExtension]
 						  ofType:[FilenameStr pathExtension]];
@@ -87,12 +87,7 @@ public:
 	virtual void* LoadPNGToAllocatedBuffer(const char* ImageName, unsigned int& Width, unsigned int& Height) override
 	{
 		// load PNG
-		NSString* ImageNameStr = [NSString stringWithCString:ImageName encoding:NSUTF8StringEncoding];
-		NSString* ImagePath = [MainBundle pathForResource:ImageNameStr ofType:@"png"];
-		if (ImagePath == nil)
-		{
-			ImagePath = [WoflBundle pathForResource:ImageNameStr ofType:@"png"];
-		}
+		NSString* ImagePath = [NSString stringWithCString:ImageName encoding:NSUTF8StringEncoding];
 #if TARGET_OS_MAC
 		NSImage* Image = [[NSImage alloc] initWithContentsOfFile:ImagePath];
 #else

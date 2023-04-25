@@ -25,7 +25,9 @@ public:
 	void EndFrame() override;
 
 	void DrawString(const char* String, Vector Location, float Scale, WColor& Color) override;
-	
+
+	virtual Vector GetTextureSize(unsigned int Texture) override;
+
 	
 protected:
 	
@@ -44,6 +46,7 @@ protected:
 	
 	id <MTLRenderPipelineState> pipelineState;
 	id <MTLDepthStencilState> depthState;
+	id <MTLSamplerState> samplerState;
 	id <MTLTexture> colorMap;
 
 	id <MTLBuffer> vertexBuffer;

@@ -51,14 +51,14 @@ vertex ColorInOut vertexShader(Vertex in [[stage_in]],
 fragment float4 fragmentShader(ColorInOut in [[stage_in]],
 							   constant ViewUniforms & viewUniforms [[ buffer(BufferIndexViewUniforms) ]],
 							   constant ModelUniforms & modelUniforms [[ buffer(BufferIndexModelUniforms) ]],
-                               texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
+							   sampler textureSampler [[sampler(TextureIndexColor)]],
+							   texture2d<half> colorMap     [[ texture(TextureIndexColor) ]]
+							   )
 {
-	
-    constexpr sampler colorSampler(mip_filter::linear,
-                                   mag_filter::linear,
-                                   min_filter::linear);
-
-    half4 colorSample   = (half4)modelUniforms.color * colorMap.sample(colorSampler, in.texCoord.xy);
+	constexpr sampler mySampler (mag_filter::linear,
+								 address::repeat,
+								 min_filter::linear);
+    half4 colorSample   = (half4)modelUniforms.color * colorMap.sample(mySampler, in.texCoord.xy);
 
 //    return float4(in.texCoord.xy, (float2)colorSample.zw);
 	return float4(colorSample);

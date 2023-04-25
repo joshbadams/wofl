@@ -40,7 +40,7 @@ public:
 
 	virtual int CreateUncompressedTexture(unsigned int Width, unsigned int Height, void* Contents) = 0;
 
-	
+	virtual Vector GetTextureSize(unsigned int Texture) = 0;
 	
 	virtual Vector GetStringSize(const char* String, float Scale=1.0f);
 	virtual void DrawCenteredString(const char* String, float Y, float Scale=1.0f, WColor& Color=WColor::White);

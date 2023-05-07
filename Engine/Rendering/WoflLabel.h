@@ -16,7 +16,7 @@ class WoflLabel : public WoflSprite
 public:
 	WoflLabel(const char* InText, bool bCenteredHorizontal, bool bCenteredVertical, float X, float Y, float SizeX=0.0, float SizeY=0.0);
 
-	virtual bool CustomRender() override;
+	virtual void CustomRender() override;
 
 	void SetText(const char* InText)
 	{

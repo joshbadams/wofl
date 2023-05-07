@@ -23,12 +23,22 @@ public:
 
 	virtual void OnClick() override;
 	virtual void OnInput(const Vector& ScreenLocation, int RepeatCount) override;
+	virtual bool OnKey(const KeyEvent& Event) override;
 
 	void SetText(string Str)
 	{
 		Label->SetText(Str);
 	}
 	
+	void SetCharShortcut(char Char)
+	{
+		CharShortcut = Char;
+	}
+	void SetKeycodeShortcut(int Keycode)
+	{
+		KeycodeShortcut = Keycode;
+	}
+
 	
 protected:
 	WoflLabel* Label;
@@ -38,4 +48,6 @@ protected:
 	function<void (WoflButton*, const Vector&, int)> OnInputFunc;
 	
 	SpriteCaptureType CaptureType;
+	char CharShortcut;
+	int KeycodeShortcut;
 };

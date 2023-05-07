@@ -260,10 +260,15 @@ void WoflRenderer::DrawScene(WoflSprite* RootSprite)
 	MakeViewMatrix();
 	GLCHECK(glUniformMatrix4fv(ViewMatrixUniform, 1, 0, (GLfloat*)ViewMatrix));
 
-	WoflWorld::Get()->Visit(true, true, false,
+	WoflWorld::Get()->Visit(true, false,
 							[this](WoflSprite* Sprite)
 							{
 								DrawSprite(Sprite);
+								return true;
+							},
+							[this](WoflSprite* Sprite)
+							{
+								Sprite->CustomPostChildrenRender();
 								return true;
 							},
 							RootSprite);

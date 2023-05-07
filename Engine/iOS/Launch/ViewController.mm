@@ -32,6 +32,7 @@
 	Renderer = new iOSRenderer(View);
 	
 	View.delegate = self;
+	[View.window makeFirstResponder:View];
 
 	WLOG("Window size: %f, %f - View size: %f, %f\n", self.view.bounds.size.width, self.view.bounds.size.height,
 		 self.view.window.frame.size.width, self.view.window.frame.size.height);
@@ -115,6 +116,18 @@
 	Loc = [self.view.window convertPointToBacking:Loc];
 
 	Utils::Input->AddTouch(0, Loc.x, Loc.y, TouchType::End);
+}
+
+-(void)keyDown:(NSEvent *)event
+{
+	Utils::Input->AddKey([event keyCode], [[event characters] characterAtIndex:0], [event isARepeat] ? KeyType::Repeat : KeyType::Down);
+	NSLog(@"keydown %d\n", [event keyCode]);
+}
+
+-(void)keyUp:(NSEvent *)event
+{
+	Utils::Input->AddKey([event keyCode], [[event characters] characterAtIndex:0], KeyType::Up);
+	NSLog(@"keyup %d\n", [event keyCode]);
 }
 
 #else

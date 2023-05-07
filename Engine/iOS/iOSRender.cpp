@@ -5,7 +5,7 @@
 #include "ShaderTypes.h"
 
 static const NSUInteger kMaxBuffersInFlight = 3;
-static const NSUInteger kMaxSpritesPerFrame = 1000;
+static const NSUInteger kMaxSpritesPerFrame = 1500;
 #pragma mark Matrix Math Utilities
 
 @interface TestClass : NSObject
@@ -296,10 +296,15 @@ void iOSRenderer::DrawScene(class WoflSprite* RootSprite)
 		
 	// walk over the sprites and draw em!
 	// this could be done earlier to set up a flat list of sprites to render much faster
-	WoflWorld::Get()->Visit(true, true, false,
+	WoflWorld::Get()->VisitEx(true, false,
 		[this](WoflSprite* Sprite)
 		{
 			DrawSprite(Sprite);
+			return true;
+		},
+		[](WoflSprite* Sprite)
+		{
+			Sprite->CustomPostChildrenRender();
 			return true;
 		},
 		RootSprite);
@@ -361,6 +366,11 @@ void iOSRenderer::EndFrame()
 
 void iOSRenderer::DrawString(const char* String, Vector Location, float Scale, WColor& Color)
 {
+	if (String[0] == 0)
+	{
+		return;
+	}
+	
 	assert(renderEncoder != nullptr);
 	
 	simd_float4 SimdColor = { Color.R, Color.G, Color.B, Color.A };

@@ -19,8 +19,7 @@
 			"continue":"chatsubo=1",
   			"lines":
   			[
-  				"I don't care if you eat that spaghetti or sleep in it, you still gotta pay for it. 46 credits.",
-				"TEst line2"
+  				"I don't care if you eat that spaghetti or sleep in it, you still gotta pay for it. 46 credits."
   			]
   		},
   		{
@@ -34,7 +33,7 @@
   			]
   		},
   		{
-  			"condition":"receive<$46",
+  			"action":"receive<$46",
 			"message":"Ratz refuses to take your credits.",
 			"inventory":"give=%receive%",
   			"lines":
@@ -43,7 +42,7 @@
   			]
   		},
   		{
-  			"condition":"receive>$45",
+  			"action":"receive>$45",
   			"lines":
   			[
   				"Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck."
@@ -77,4 +76,60 @@
   		}
   	] 
   }
-]}
+],
+"strings":
+{
+	"paxfirsttime":"PAX, the Public Access System, was first implemented as a result of the Gibson Mandate of 2036. PAX allows general access to the Central Database Interlink (CDI) with Friendly Interface System Hardware (FISH) designed for Limited Free Access (LFA) to the Multi-Phased Public Information Library Core (MPPILC) in conjunction with the Swiss Orbital Banking (SOB) network, which is regulated by the Chiba City Public Database Regulating Agency (CCPDRA) in concordance with the World Holographic Organizational Obligation for Electronic Eavesdropped (WHOOPEE) Guidlines established by the Balfour Act. With the institution of WHOOPEE protocol, LFA became possible with the MPPILC system and the SOB network. The FISH, contained within the PAX Booth, was ergonomically designed for Optimal Ease of Use (OEU) within the specifications of the agencies involved, primarily CCPDRA and the SOB network. OEU makes operation of the PAX system a simple task for both the First Time User (FTU) and the Experienced Adept (EA) through implementation of menus and Simple Directions (SD) available in Lucid Help Files (LHF) such as this one, in which Simplified Grammatical Syntax (SGS) and Simple Word Choice (SWC) algorithms have been employed to benefit User Understanding (UU)."
+},
+"news":
+[
+	{
+		"date":111658,
+		"title":"BAR FOOD DECLARED FATAL",
+		"message":"BAR FOOD DECLARED FATAL\nThe Chatsubo bar will be permanentoy closed today, according to the Chiba Health Department. Contaminated food and toxic beer are the main reasons for the closure, although there have been other health violations. So far, 87 fatalities have been reported in connection with this investigation.\n\nMost of the fatalities occurred with Chatsubo patrons who drank more than 3 glasses of beer and ate the synth-spaghetti, which is based on a home recipe. The spaghetti and beer combined in the bodies of the victims to create an explosive chemical which was ignited by stomach acids."
+	},
+	{
+		"date":111658,
+		"title":"COWBOY DISAPPEARS",
+		"message":"COWBOY DISAPPEARS\nRumors are flying among the elite cyberspace cowboy community. Well-known logic gate crasher, Jonathan E, has mysteriously vanished, causing speculation that he was killed in cyberspace by \"black ice,\" an illegal form of base protection."
+	},
+	{
+		"date":111658,
+		"title":"News In Brief",
+		"message":"**** News In Brief ****\n\nFARM ANIMALS KIDNAP UFO\nSheep says, \"We were just hoyriding!\"\nMAN EATS HIS OWN HEAD\n\"He thought it was just a donut,\"says the owner of Donut World, where the incident occurred.\n\nSON OF FUJI PREZ MISSING\nMother wails, \"He's gone!\" Prez of Fuji Electric denies any connection with rumored corporate takeover."
+	},
+	{
+		"date":111758,
+		"title":"NASA AND FUJI DO BUSINESS",
+		"message":"NASA AND FUJI DO BUSINESS\nAnticipating increased space activity, NASA has signed a multi-million dollar contract with Fuji Electric to provide ROMcards for future spacecraft. Fuji President Harry Watkins, recently in the news when his son was kidnapped, said, \"This is great. I'm thrilled.\" Watkins expects to be hiring hundreds of new employees as a result of the contract."
+	},
+	{
+		"date":111758,
+		"title":"News In Brief",
+		"message":"**** News In Brief ****\n\nSAVAGE NIGHT OF TORTURE\nStrange Chatsubo patron spends night sleeping in synth-spaghetti. Customers shocked.\n\nSON RETURNED TO FUJI PREZ\nChoked with emotion, Fuji Prez says, \"We must have misplaced him.\" As to his son's condition, the Prez reports, \"He's in one piece, more or less.\""
+	},
+	{
+		"condition":"justice>0",
+		"date":110058,
+		"title":"CRIMINAL HITS CHIBA CITY",
+		"message":"CRIMINAL HITS CHIBA CITY\n%name%, a notorious criminal who recently arrived in Chiba City, has been arrested and taken to the Justice Booth. This comes as no surprise to police, who have been watching this criminal ever since he arrived. \"We knew he'd break the law eventually,\" said Officer Watanabe. \"These habitual criminals can't go a whole day without committing a crime.\""
+	},
+	{
+		"condition":"hotel>100",
+		"date":110058,
+		"title":"VAGRANT PAYS HOTEL BILL",
+		"message":"VAGRANT PAYS HOTEL BILL\nPaul Stack, owner of Cheap Hotel, called a news conference this morning to report that Cowboy %name% has finally paid his hotel bill. Stack is referring to this payment as \"a momentous event in my life. Being the kind-hearted kind of guy that I am, I let that blll accumulate far too long before demanding payment. Imagine my surprise when the scum finally paid it. I was ready to call the Tactical Police.\""
+	},
+	{
+		"condition":"chatsubo>1",
+		"date":110058,
+		"title":"CHATSUBO DEBT",
+		"message":"Thisis a story that will appear when chatsubo is paid off but not before."
+	}
+],
+"items":
+{
+	"1" : { "name":"pawn ticket" }
+}
+}
+	

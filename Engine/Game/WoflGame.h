@@ -26,6 +26,28 @@ protected:
 		return "";
 	}
 	
+	int GetInt(const Json::Value& Obj, const char* Key)
+	{
+		if (Obj.isMember(Key))
+		{
+			return Obj[Key].asInt();
+		}
+		return 0;
+	}
+	
+	void AddIntArrayToObject(const vector<int>& Array, Json::Value& Obj, const char* ArrayName)
+	{
+		// make a new array
+		Json::Value ArrayObj(Json::arrayValue);
+		// walk over the input array
+		for (int Entry : Array)
+		{
+			ArrayObj.append(Json::Value(Entry));
+		}
+		
+		Obj[ArrayName] = ArrayObj;
+	}
+	
 	template<class T>
 	void AddArrayToObject(const vector<T*>& Array, Json::Value& Obj, const char* ArrayName)
 	{
@@ -42,7 +64,19 @@ protected:
 		Obj[ArrayName] = ArrayObj;
 	}
 	
-	void GetStringArray(vector<string>& Array, const Json::Value& Obj, const char* ArrayName)
+	void GetIntArrayFromObject(vector<int>& Array, const Json::Value& Obj, const char* ArrayName)
+	{
+		Array.clear();
+		// pull out the array
+		Json::Value ArrayObj = Obj[ArrayName];
+		// create objects from the array
+		for (const Json::Value& Obj : ArrayObj)
+		{
+			Array.push_back(Obj.asInt());
+		}
+	}
+	
+	void GetStringArrayFromObject(vector<string>& Array, const Json::Value& Obj, const char* ArrayName)
 	{
 		Array.clear();
 		// pull out the array
@@ -74,6 +108,35 @@ protected:
 			NewEntry->FromJsonObject(Obj);
 			Array.push_back(NewEntry);
 			
+			// call a function on each object
+			if (OnAddFunc)
+			{
+				OnAddFunc(NewEntry);
+			}
+		}
+	}
+	
+	template<class T>
+	void GetIntMapFromObject(map<int, T*>& Map, const Json::Value& Obj, const char* MapName, const function<void(T*)>& OnAddFunc=nullptr)
+	{
+		// toss any old entries
+		for (auto Pair : Map)
+		{
+			delete Pair.second;
+		}
+		Map.clear();
+		
+		// pull out the map
+		Json::Value MapObj = Obj[MapName];
+		
+		// create objects from the object keys
+		for (auto Name : MapObj.getMemberNames())
+		{
+			int Key = stoi(Name);
+			T* NewEntry = new T;
+			NewEntry->FromJsonObject(MapObj[Name]);
+			Map[Key] = NewEntry;
+
 			// call a function on each object
 			if (OnAddFunc)
 			{

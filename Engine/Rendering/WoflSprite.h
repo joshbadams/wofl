@@ -154,9 +154,14 @@ public:
 
 	// allow a subclass to perform any custom rendering
 	// return value is ignored
-	virtual bool CustomRender()
+	virtual void CustomRender()
 	{
-		return false;
+	}
+
+	// allow a subclass to perform any custom rendering after its children were rendererd
+	// return value is ignored
+	virtual void CustomPostChildrenRender()
+	{
 	}
 
 	
@@ -177,7 +182,14 @@ public:
 	virtual void OnInput(const Vector& ScreenLocation, int RepeatIndex)
 	{
 	}
+
+	// called when key events happen, if this returns true, then it won't go up the sprite hierarchy
+	virtual bool OnKey(const KeyEvent& Event)
+	{
+		return false;
+	}
 	
+
 	virtual SpriteCaptureType GetCaptureType()
 	{
 		// default to just single click

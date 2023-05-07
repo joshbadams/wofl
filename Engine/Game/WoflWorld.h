@@ -58,7 +58,9 @@ public:
 	{
 		return ViewScale;
 	}
-	
+
+	Vector ConvertToLocalSpace(Vector ScreenLocation);
+
 	
 	
 	// process the world
@@ -69,7 +71,10 @@ public:
 	
 	// perform hit test (returns the childmost sprite)
 	WoflSprite* HitTest(Vector ScreenLocation);
-	
+
+	// hunt down a sprite with the given tag
+	static WoflSprite* FindSpriteWithTag(int Tag);
+
 	// delay delete a sprite
 	void DeleteSprite(WoflSprite* Sprite)
 	{
@@ -78,6 +83,9 @@ public:
 	
 	
 	void Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision, const function<bool(WoflSprite*)>& VisitFunction, WoflSprite* CurrentSprite=nullptr);
+	void VisitEx(bool bDepthFirst, bool bForCollision, const function<bool(WoflSprite*)>& PremoveVisitFunction, const function<bool(WoflSprite*)>& PostmoveVisitFunction, WoflSprite* CurrentSprite=nullptr);
+
+	
 /*
 	class Iterator
 	{
@@ -164,8 +172,9 @@ protected:
 	static WoflWorld* World;
 	WoflWorld();
 
-	void VisitInner(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision,
-					const function<bool(WoflSprite*)>& VisitFunction,
+	void VisitInner(bool bDepthFirst, bool bForCollision,
+					const function<bool(WoflSprite*)>& PremoveVisitFunction,
+					const function<bool(WoflSprite*)>& PostmoveVisitFunction,
 					WoflSprite* CurrentSprite, bool& bAbortedVisiting);
 
 	

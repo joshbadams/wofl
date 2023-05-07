@@ -99,6 +99,21 @@ void WoflWorld::Render()
 
 void WoflWorld::Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision, const function<bool(WoflSprite*)>& VisitFunction, WoflSprite* CurrentSprite)
 {
+	if (bVisitBeforeMoving)
+	{
+		VisitEx(bDepthFirst, bForCollision, VisitFunction, nullptr, CurrentSprite);
+	}
+	else
+	{
+		VisitEx(bDepthFirst, bForCollision, nullptr, VisitFunction, CurrentSprite);
+	}
+}
+
+void WoflWorld::VisitEx(bool bDepthFirst, bool bForCollision,
+					  const function<bool(WoflSprite*)>& PremoveVisitFunction,
+					  const function<bool(WoflSprite*)>& PostmoveVisitFunction,
+					  WoflSprite* CurrentSprite)
+{
 	bool bAbortedVisiting = false;
 	
 	// start at root
@@ -109,21 +124,22 @@ void WoflWorld::Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollis
 	
 	if (CurrentSprite != nullptr)
 	{
-		VisitInner(bVisitBeforeMoving, bDepthFirst, bForCollision, VisitFunction, CurrentSprite, bAbortedVisiting);
+		VisitInner(bDepthFirst, bForCollision, PremoveVisitFunction, PostmoveVisitFunction, CurrentSprite, bAbortedVisiting);
 	}
 }
 
-void WoflWorld::VisitInner(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision,
-						   const function<bool(WoflSprite*)>& VisitFunction,
+void WoflWorld::VisitInner(bool bDepthFirst, bool bForCollision,
+						   const function<bool(WoflSprite*)>& PremoveVisitFunction,
+						   const function<bool(WoflSprite*)>& PostmoveVisitFunction,
 						   WoflSprite* CurrentSprite, bool& bAbortedVisiting)
 {
 	// should we call the visitor function on this node
 	bool bShouldVisit = !bForCollision || CurrentSprite->HasCollision();
 	
-	if (bVisitBeforeMoving && bShouldVisit && !bAbortedVisiting)
+	if (PremoveVisitFunction && bShouldVisit && !bAbortedVisiting)
 	{
 		// visit and stop if requested
-		if (VisitFunction(CurrentSprite) == false)
+		if (PremoveVisitFunction(CurrentSprite) == false)
 		{
 			bAbortedVisiting = true;
 		}
@@ -136,40 +152,46 @@ void WoflWorld::VisitInner(bool bVisitBeforeMoving, bool bDepthFirst, bool bForC
 		{
 			if (CurrentSprite->GetChild())
 			{
-				VisitInner(bVisitBeforeMoving, bDepthFirst, bForCollision, VisitFunction, CurrentSprite->GetChild(), bAbortedVisiting);
+				VisitInner(bDepthFirst, bForCollision, PremoveVisitFunction, PostmoveVisitFunction, CurrentSprite->GetChild(), bAbortedVisiting);
 			}
 			if (CurrentSprite->GetNext())
 			{
-				VisitInner(bVisitBeforeMoving, bDepthFirst, bForCollision, VisitFunction, CurrentSprite->GetNext(), bAbortedVisiting);
+				VisitInner(bDepthFirst, bForCollision, PremoveVisitFunction, PostmoveVisitFunction, CurrentSprite->GetNext(), bAbortedVisiting);
 			}
 		}
-		else if (bDepthFirst)
+		else
 		{
 			if (CurrentSprite->GetNext())
 			{
-				VisitInner(bVisitBeforeMoving, bDepthFirst, bForCollision, VisitFunction, CurrentSprite->GetNext(), bAbortedVisiting);
+				VisitInner(bDepthFirst, bForCollision, PremoveVisitFunction, PostmoveVisitFunction, CurrentSprite->GetNext(), bAbortedVisiting);
 			}
 			if (CurrentSprite->GetChild())
 			{
-				VisitInner(bVisitBeforeMoving, bDepthFirst, bForCollision, VisitFunction, CurrentSprite->GetChild(), bAbortedVisiting);
+				VisitInner(bDepthFirst, bForCollision, PremoveVisitFunction, PostmoveVisitFunction, CurrentSprite->GetChild(), bAbortedVisiting);
 			}
 		}
 	}
 
-	if (!bVisitBeforeMoving && bShouldVisit && !bAbortedVisiting)
+	if (PostmoveVisitFunction && bShouldVisit && !bAbortedVisiting)
 	{
 		// visit and stop if requested
-		if (VisitFunction(CurrentSprite) == false)
+		if (PostmoveVisitFunction(CurrentSprite) == false)
 		{
 			bAbortedVisiting = true;
 		}
 	}
 }
 
+Vector WoflWorld::ConvertToLocalSpace(Vector ScreenLocation)
+{
+	return (ScreenLocation - ViewOffset) / ViewScale;
+}
+
 WoflSprite* WoflWorld::HitTest(Vector ScreenLocation)
 {
 	// convert screenspace to local
-	Vector Loc = (ScreenLocation - ViewOffset) / ViewScale;
+	Vector Loc = ConvertToLocalSpace(ScreenLocation);
+	
 	// printf("ScreenLoc = [%.2f, %.2f], Local = [%.2f, %2.f]\n", ScreenLocation.X, ScreenLocation.Y, Loc.X, Loc.Y);
 	
 	WoflSprite* HitSprite = NULL;
@@ -194,6 +216,24 @@ WoflSprite* WoflWorld::HitTest(Vector ScreenLocation)
 	}
 
 	return HitSprite;
+}
+
+WoflSprite* WoflWorld::FindSpriteWithTag(int Tag)
+{
+	// first try the Hud for clicks
+	WoflSprite* TagSprite = nullptr;
+	WoflWorld::Get()->Visit(true, false, false,
+		[Tag, &TagSprite](WoflSprite* Sprite)
+		{
+			if (Sprite->GetTag() == Tag)
+			{
+				TagSprite = Sprite;
+				return false;
+			}
+			return true;
+		});
+	
+	return TagSprite;
 }
 
 

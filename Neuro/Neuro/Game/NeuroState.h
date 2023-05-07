@@ -5,6 +5,8 @@
 //  Created by Josh Adams on 4/16/23.
 //
 
+#pragma once
+
 #include <string>
 #include <vector>
 #include <map>
@@ -19,8 +21,11 @@ enum class ZoneType : int
 	Dialog		= 2,
 	Computer	= 4,
 	Room		= 8,
-	All			= 0xFF,
+	Inventory	= 16,
+	PAX			= 32,
 };
+
+
 
 enum class State : int
 {
@@ -30,75 +35,116 @@ enum class State : int
 	LeavingRoom,
 	
 	ActivateConversation,
+	ShowPostMessage,
 	EndedConversation,
 	
 	InDialog,
 	InOptions,
 	InMessage,
+	
+	InInventory,
+	InPAX,
+	InSkill,
+	InChip,
+	InSystem,
 };
 
-template<typename E>
-struct enable_bitmask_operators{
-	static constexpr bool enable=false;
+enum class InvAction : int
+{
+	Cancel,
+	Use,
+	Give,
+	Discard,
 };
 
-template<typename E>
-typename std::enable_if<enable_bitmask_operators<E>::enable,E>::type
-operator|(E lhs,E rhs)
-{
-  typedef typename std::underlying_type<E>::type underlying;
-  return static_cast<E>(static_cast<underlying>(lhs) | static_cast<underlying>(rhs));
-}
+ENABLE_ENUM_OPS(ZoneType)
 
-template<typename E>
-typename std::enable_if<enable_bitmask_operators<E>::enable,E>::type
-operator|=(E& lhs,E rhs)
-{
-  typedef typename std::underlying_type<E>::type underlying;
-  lhs = static_cast<E>(static_cast<underlying>(lhs) | static_cast<underlying>(rhs));
-  return lhs;
-}
-
-template<typename E>
-typename std::enable_if<enable_bitmask_operators<E>::enable,E>::type
-operator&(E lhs,E rhs)
-{
-  typedef typename std::underlying_type<E>::type underlying;
-  return static_cast<E>(static_cast<underlying>(lhs) & static_cast<underlying>(rhs));
-}
-
-template<>
-struct enable_bitmask_operators<ZoneType>{ static constexpr bool enable=true; };
-
-class IStateDelegate
+class IStateChangedDelegate
 {
 public:
 	virtual void Invalidate(ZoneType Zone) = 0;
 };
 
-class IInterfaceDelegate
+class IInterfaceChangingStateDelegate
 {
 public:
 	virtual void MessageComplete() = 0;
-//	virtual void DialogChosen() = 0;
+	//	virtual void DialogChosen() = 0;
+		
+	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) = 0;
+	virtual void SetIntVariable(string Name, int Value) = 0;
 };
 
-class NeuroState
+class ITextboxDelegate : public IInterfaceChangingStateDelegate
+{
+public:
+	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) { assert(0); }
+	virtual void SetIntVariable(string Name, int Value) { assert(0); }
+};
+
+class IQueryStateDelegate
+{
+public:
+	virtual const vector<int>& GetInventory() = 0;
+	virtual int GetMoney() = 0;
+	virtual int GetIntVariable(string Name) = 0;
+	virtual string GetStringVariable(string Name) = 0;
+	virtual const vector<int>& GetUnlockedNewsItems() = 0;
+
+
+};
+
+class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, public IQueryStateDelegate
 {
 public:
 	Room* CurrentRoom;
-
+	
 	map<string, int> IntValues;
-	int Money;
-	vector<int> Inventory;
-		
-	NeuroState(NeuroConfig* InConfig, IStateDelegate* InStateDelegate);
+	map<string, string> Variables;
+	
+	NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate);
 	virtual ~NeuroState() { }
+	
+	// IJsonObj
+	virtual Json::Value ToJsonObject() override;
+	virtual void FromJsonObject(const Json::Value& Object) override;
+	
+	
+	// IInterfaceChangingStateDelegate
+	virtual void MessageComplete() override;
+	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override;
+	virtual void SetIntVariable(string Name, int Value) override;
+
+	
+	// IQueryStateDelegate
+	virtual const vector<int>& GetInventory() override
+	{
+		return Inventory;
+	}
+	virtual int GetMoney() override
+	{
+		return Money;
+	}
+	virtual int GetIntVariable(string Name) override
+	{
+		return IntValues[Name];
+	}
+	virtual string GetStringVariable(string Name) override
+	{
+		return Variables[Name];
+	}
+	virtual const vector<int>& GetUnlockedNewsItems() override
+	{
+		return UnlockedNewsItems;
+	}
+
+
+	
 	
 	void Tick();
 	
-	void HandleSceneClick();
-	void MessageComplete();
+	void HandleSceneClick(ZoneType Zone);
+
 
 	// returns -1 if not existant
 	int GetIntValue(const char* Key)
@@ -112,6 +158,19 @@ public:
 	string GetCurrentDialogLine();
 	string GetCurrentMessage();
 
+	void ClickInventory();
+	void ClickPAX();
+	void ClickTalk();
+	void ClickSkill();
+	void ClickChip();
+	void ClickSystem();
+
+	bool IsShowingInventory() { return CurrentState == State::InInventory; }
+	bool IsShowingPAX() { return CurrentState == State::InPAX; }
+	bool IsShowingSkill() { return CurrentState == State::InSkill; }
+	bool IsShowingChip() { return CurrentState == State::InChip; }
+	bool IsShowingSystem() { return CurrentState == State::InSystem; }
+
 	
 
 private:
@@ -119,15 +178,23 @@ private:
 	void ActivateRoom(Room* OldRoom, Room* NewRoom);
 	void ActivateConversation(Conversation* Convo);
 
+	bool TestCondition(const string& Condition, bool bEmptyConditionIsSuccess, const string* Action=nullptr, const string* Value=nullptr);
+	
 	Conversation* FindConversationWithTag(const char* Tag);
 	Conversation* FindActiveConversation();
+	Conversation* FindConversationForAction(const string& Action, const string& Value);
 
 	void UpdateVariablesFromString(const string& Command);
 	bool CheckVariablesFromString(const string& Query);
 
+	const Item* GetItemForID(int ID);
+
+	int Money;
+	vector<int> Inventory;
+	vector<int> UnlockedNewsItems;
 	
 	NeuroConfig* Config;
-	IStateDelegate* StateDelegate;
+	IStateChangedDelegate* StateDelegate;
 	
 	Conversation* CurrentConversation;
 	int DialogIndex;

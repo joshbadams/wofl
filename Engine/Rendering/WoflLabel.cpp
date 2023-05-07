@@ -19,8 +19,13 @@ WoflLabel::WoflLabel(const char* InText, bool bInCenteredHorizontal, bool bInCen
 {
 }
 
-bool WoflLabel::CustomRender()
+void WoflLabel::CustomRender()
 {
+	if (Text == "")
+	{
+		return;
+	}
+	
 	Vector RenderPos = GetPosition();
 	
 	// handle centering
@@ -47,6 +52,4 @@ bool WoflLabel::CustomRender()
 	}
 	
 	WoflRenderer::Renderer->DrawString(Text.c_str(), RenderPos, 1.0f, TextColor);
-	
-	return true;
 }

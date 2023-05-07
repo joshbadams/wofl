@@ -10,10 +10,17 @@
 #include <Wofl/Wofl.h>
 #include "NeuroState.h"
 
-class NeuroGame : public WoflGame, public IStateDelegate, IInterfaceDelegate
+const int Tag_Dialog = 1;
+
+class NeuroGame : public WoflGame, public IStateChangedDelegate
 {
 public:
 	NeuroGame();
+
+	NeuroConfig& GetConfig()
+	{
+		return Config;
+	}
 	
 	virtual void Tick(float DeltaTime) override
 	{
@@ -21,20 +28,19 @@ public:
 	}
 
 	virtual void Invalidate(ZoneType Zone) override;
-	virtual void MessageComplete() override
-	{
-		State.MessageComplete();
-	}
-	
+
 private:
 	
 	NeuroConfig Config;
 	NeuroState State;
 		
 	WoflSprite* ScreenSprite;
+	WoflSprite* Background;
 	class Textbox* MessageBox;
 	class Ninebox* DialogBox;
-	
+	class InvBox* Inventory;
+	class PAXBox* PAX;
+
 	void LoadConfig();
 
 	void OnRoomChange(Room* Room);

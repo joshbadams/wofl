@@ -12,6 +12,15 @@
 
 void WoflInput::PreWorldTick(float DeltaTime)
 {
+	for (const KeyEvent& KeyEvent : QueuedKeys)
+	{
+		WoflWorld::Get()->VisitEx(true, false, nullptr, [&KeyEvent](WoflSprite* Sprite)
+			{
+				return !Sprite->OnKey(KeyEvent);
+			});
+	}
+	QueuedKeys.clear();
+	
 	// process each one
 	for (const TouchEvent& Touch : QueuedTouches)
 	{

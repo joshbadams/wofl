@@ -16,6 +16,20 @@
 
 class WoflSprite;
 
+enum class KeyType
+{
+	Down,
+	Repeat,
+	Up,
+};
+
+struct KeyEvent
+{
+	int KeyCode;
+	char Char;
+	KeyType Type;
+};
+
 enum class TouchType
 {
 	Begin,
@@ -45,6 +59,11 @@ public:
 		QueuedTouches.push_back(Event);
 	}
 	
+	virtual void AddKey(int KeyCode, char Char, KeyType Type)
+	{
+		QueuedKeys.push_back({KeyCode, Char, Type});
+	}
+	
 	virtual void PreWorldTick(float DeltaTime);
 	virtual void PostWorldTick()
 	{
@@ -57,7 +76,8 @@ protected:
 	
 	// touches pushed from platform
 	vector<TouchEvent> QueuedTouches;
-	
+	vector<KeyEvent> QueuedKeys;
+
 	enum class CapturedTouchPhase
 	{
 		None,

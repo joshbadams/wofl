@@ -8,9 +8,15 @@
 #pragma once
 
 #include <Wofl/Wofl.h>
+#
 
+class NeuroConfigObj : public LoadJsonObj
+{
+protected:
+	virtual string PostProcessString(const string& String) override;
+};
 
-class Option : public LoadJsonObj
+class Option : public NeuroConfigObj
 {
 public:
 	string Line;
@@ -20,15 +26,14 @@ public:
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
 
-class Conversation : public LoadJsonObj
+class Conversation : public NeuroConfigObj
 {
 public:
 	string Tag;
 	string Condition;
 	string Action;
 	string Message;
-	string Continue;
-	string Inventory;
+	string Set;
 
 	vector<string> Lines;
 	vector<Option*> Options;
@@ -37,7 +42,7 @@ public:
 };
 
 
-class Room : public LoadJsonObj
+class Room : public NeuroConfigObj
 {
 public:
 	string ID;
@@ -48,16 +53,17 @@ public:
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
 
-class Item : public LoadJsonObj
+class Item : public NeuroConfigObj
 {
 public:
 	int ID;
 	string Name;
+	string Type;
 
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
 
-class NewsItem : public LoadJsonObj
+class NewsItem : public NeuroConfigObj
 {
 public:
 	int Date;
@@ -68,17 +74,52 @@ public:
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
 
-class NeuroConfig : public LoadJsonObj
+class Message : public NeuroConfigObj
+{
+public:
+	int Date;
+	string To;
+	string From;
+	string Message;
+	string Condition;
+
+	virtual void FromJsonObject(const Json::Value& Object) override;
+};
+
+class MailActions : public NeuroConfigObj
+{
+public:
+	map<string, string> Actions;
+	
+	virtual void FromJsonObject(const Json::Value& Object) override;
+};
+
+class Site : public NeuroConfigObj
+{
+public:
+	vector<string> Passwords;
+	string Title;
+//	vector<SitePage> Pages;
+	
+	virtual void FromJsonObject(const Json::Value& Object) override;
+};
+
+class NeuroConfig : public NeuroConfigObj
 {
 public:
 	vector<Room*> Rooms;
-	map<int, Item*> Items;
 	vector<NewsItem*> NewsItems;
+
+	map<int, Item*> Items;
+	map<string, Site*> Sites;
+	map<string, MailActions*> MailServer;
 	map<string, string> Strings;
 
+	map<string, vector<Message*>> AllMessages;
+
 	NeuroConfig();
-	
-	virtual void FromJsonObject(const Json::Value& Object) override;
+	void Initialize();
 
 	
+	virtual void FromJsonObject(const Json::Value& Object) override;	
 };

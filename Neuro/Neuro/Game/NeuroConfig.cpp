@@ -6,8 +6,23 @@
 //
 
 #include "NeuroConfig.h"
+#include "NeuroGame.h"
+
+
+string NeuroConfigObj::PostProcessString(const string& String)
+{
+	const NeuroState& State = ((NeuroGame*)WoflGame::TheGame)->State;
+	string NewString = String;
+	State.StringReplacement(NewString, '%');
+	return NewString;
+}
+
 
 NeuroConfig::NeuroConfig()
+{
+}
+
+void NeuroConfig::Initialize()
 {
 	LoadFromFile(Utils::File->GetResourcePath("data.json").c_str());
 }
@@ -16,16 +31,22 @@ void NeuroConfig::FromJsonObject(const Json::Value& Object)
 {
 	GetArrayFromObject(Rooms, Object, "rooms");
 	GetArrayFromObject(NewsItems, Object, "news");
-
-	//Items.push_back(new Item { 1, "pawn ticket" });
-	
+	GetIntMapFromObject(Items, Object, "items");
+	GetStringMapFromObject(MailServer, Object, "mailserver");
+	GetStringMapFromObject(Sites, Object, "sites");
+		
 	Json::Value StringList = Object["strings"];
 	for (auto Name : StringList.getMemberNames())
 	{
 		Strings[Name] = StringList[Name].asString();
 	}
 
-	GetIntMapFromObject(Items, Object, "items");
+	// get map of message arrays
+	Json::Value MessagesList = Object["allmessages"];
+	for (auto Name : MessagesList.getMemberNames())
+	{
+		GetArrayFromObject(AllMessages[Name], MessagesList[Name], "messages");
+	}
 }
 
 void Room::FromJsonObject(const Json::Value& Object)
@@ -41,8 +62,7 @@ void Conversation::FromJsonObject(const Json::Value& Object)
 	Condition = GetString(Object, "condition");
 	Action = GetString(Object, "action");
 	Message = GetString(Object, "message");
-	Continue = GetString(Object, "continue");
-	Inventory = GetString(Object, "inventory");
+	Set = GetString(Object, "set");
 	
 	GetStringArrayFromObject(Lines, Object, "lines");
 	GetArrayFromObject(Options, Object, "options");
@@ -68,6 +88,7 @@ void Item::FromJsonObject(const Json::Value &Object)
 {
 	ID = GetInt(Object, "id");
 	Name = GetString(Object, "name");
+	Type =GetString(Object, "type");
 }
 
 void NewsItem::FromJsonObject(const Json::Value &Object)
@@ -76,4 +97,27 @@ void NewsItem::FromJsonObject(const Json::Value &Object)
 	Title = GetString(Object, "title");
 	Message = GetString(Object, "message");
 	Condition = GetString(Object, "condition");
+}
+
+void Message::FromJsonObject(const Json::Value& Object)
+{
+	Date = GetInt(Object, "date");
+	To = GetString(Object, "to");
+	From = GetString(Object, "from");
+	Message = GetString(Object, "message");
+	Condition = GetString(Object, "condition");
+}
+
+void MailActions::FromJsonObject(const Json::Value& Object)
+{
+	for (auto Match : Object.getMemberNames())
+	{
+		Actions[PostProcessString(Match)] = PostProcessString(Object[Match].asString());
+	}
+}
+
+void Site::FromJsonObject(const Json::Value& Object)
+{
+	Title = GetString(Object, "title");
+	GetStringArrayFromObject(Passwords, Object, "passwords");
 }

@@ -17,11 +17,16 @@ public:
 	
 protected:
 	
+	virtual string PostProcessString(const string& String)
+	{
+		return String;
+	}
+	
 	string GetString(const Json::Value& Obj, const char* Key)
 	{
 		if (Obj.isMember(Key))
 		{
-			return Obj[Key].asString();
+			return PostProcessString(Obj[Key].asString());
 		}
 		return "";
 	}
@@ -84,7 +89,7 @@ protected:
 		// create objects from the array
 		for (const Json::Value& Obj : ArrayObj)
 		{
-			Array.push_back(Obj.asString());
+			Array.push_back(PostProcessString(Obj.asString()));
 		}
 	}
 	
@@ -136,6 +141,34 @@ protected:
 			T* NewEntry = new T;
 			NewEntry->FromJsonObject(MapObj[Name]);
 			Map[Key] = NewEntry;
+
+			// call a function on each object
+			if (OnAddFunc)
+			{
+				OnAddFunc(NewEntry);
+			}
+		}
+	}
+	
+	template<class T>
+	void GetStringMapFromObject(map<string, T*>& Map, const Json::Value& Obj, const char* MapName, const function<void(T*)>& OnAddFunc=nullptr)
+	{
+		// toss any old entries
+		for (auto Pair : Map)
+		{
+			delete Pair.second;
+		}
+		Map.clear();
+		
+		// pull out the map
+		Json::Value MapObj = Obj[MapName];
+		
+		// create objects from the object keys
+		for (auto Name : MapObj.getMemberNames())
+		{
+			T* NewEntry = new T;
+			NewEntry->FromJsonObject(MapObj[Name]);
+			Map[PostProcessString(Name)] = NewEntry;
 
 			// call a function on each object
 			if (OnAddFunc)

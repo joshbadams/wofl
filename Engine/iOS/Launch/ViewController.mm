@@ -120,13 +120,17 @@
 
 -(void)keyDown:(NSEvent *)event
 {
-	Utils::Input->AddKey([event keyCode], [[event characters] characterAtIndex:0], [event isARepeat] ? KeyType::Repeat : KeyType::Down);
+	char Char = [[event characters] characterAtIndex:0];
+	if (Char == 0x7f) Char = 0;
+	Utils::Input->AddKey([event keyCode], Char, [event isARepeat] ? KeyType::Repeat : KeyType::Down);
 	NSLog(@"keydown %d\n", [event keyCode]);
 }
 
 -(void)keyUp:(NSEvent *)event
 {
-	Utils::Input->AddKey([event keyCode], [[event characters] characterAtIndex:0], KeyType::Up);
+	char Char = [[event characters] characterAtIndex:0];
+	if (Char == 0x7f) Char = 0;
+	Utils::Input->AddKey([event keyCode], Char, KeyType::Up);
 	NSLog(@"keyup %d\n", [event keyCode]);
 }
 

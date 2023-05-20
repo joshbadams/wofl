@@ -32,6 +32,7 @@ public:
 private:
 	
 	NeuroConfig Config;
+	friend class NeuroConfigObj;
 	NeuroState State;
 		
 	WoflSprite* ScreenSprite;
@@ -40,6 +41,7 @@ private:
 	class Ninebox* DialogBox;
 	class InvBox* Inventory;
 	class PAXBox* PAX;
+	class SiteBox* Site;
 
 	void LoadConfig();
 

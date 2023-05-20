@@ -87,6 +87,10 @@ public:
 	
 	// get final position and size, including the parents
 	virtual Vector GetPosition() const;
+	virtual Vector GetRelativePosition() const
+	{
+		return Position;
+	}
 	virtual Vector GetSize() const
 	{
 		return Size;

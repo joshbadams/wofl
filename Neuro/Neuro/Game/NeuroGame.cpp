@@ -11,6 +11,7 @@
 #include "Gridbox.h"
 #include "InvBox.h"
 #include "PAXBox.h"
+#include "SiteBox.h"
 #include "NeuroConfig.h"
 #include "NeuroScene.h"
 
@@ -38,8 +39,11 @@ NeuroGame::NeuroGame()
 	Inventory = new InvBox(150, 480, 500, 280);
 	Inventory->SetDelegates(&State, &State);
 	
-	PAX = new PAXBox(100, 40, 1000, 400);
+	PAX = new PAXBox(100, 40, 1000, 424);
 	PAX->SetDelegates(&State, &State);
+	
+	Site = new SiteBox(100, 40, 1000, 800);
+	Site->SetDelegates(&State, &State);
 	
 	int Top = 580;
 	int Left = 58;
@@ -113,6 +117,16 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		{
 			PAX->Open();
 			Background->AddChild(PAX);
+		}
+	}
+
+	if ((Zone & ZoneType::Site) != ZoneType::None)
+	{
+		Site->RemoveFromParent();
+		if (State.IsShowingSite())
+		{
+			Site->Open();
+			Background->AddChild(Site);
 		}
 	}
 }

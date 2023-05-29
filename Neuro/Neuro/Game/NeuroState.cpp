@@ -47,8 +47,13 @@ Json::Value NeuroState::ToJsonObject()
 	StateObj["settings"] = SettingsObj;
 	StateObj["money"] = Json::Value(Money);
 	AddIntArrayToObject(Inventory, StateObj, "inventory");
-	AddIntArrayToObject(UnlockedNewsItems, StateObj, "unlockednews");
+//	AddIntArrayToObject(UnlockedNewsItems, StateObj, "unlockednews");
 
+	for (auto& Pair : UnlockedMessages)
+	{
+		AddIntArrayToObject(Pair.second, SettingsObj["unlockedmessages"][Pair.first], "unlockedmessages");
+	}
+	
 	return StateObj;
 
 }
@@ -62,14 +67,20 @@ void NeuroState::FromJsonObject(const Json::Value& Object)
 		{
 			IntValues[Name] = SettingsObject[Name].asInt();
 		}
-		else
+		else if (SettingsObject[Name].isString())
 		{
 			Variables[Name] = SettingsObject[Name].asString();
 		}
 	}
+
+	Json::Value UnlockedMessageObject = Object["unlockedmessages"];
+	for (auto Name : UnlockedMessageObject.getMemberNames())
+	{
+		GetIntArrayFromObject(UnlockedMessages[Name], UnlockedMessageObject[Name], "unlockedmessages");
+	}
+
 	Money = Object["money"].asInt();
 	GetIntArrayFromObject(Inventory, Object, "inventory");
-	GetIntArrayFromObject(UnlockedNewsItems, Object, "unlockednews");
 }
 
 void NeuroState::Tick()
@@ -141,7 +152,7 @@ void NeuroState::ClickInventory()
 }
 
 template<typename T>
-void CheckNewsItemsForActivation(NeuroState* State, vector<T*>& Items, vector<int>& UnlockedItems)
+void CheckMessagesForActivation(NeuroState* State, vector<T*>& Items, vector<int>& UnlockedItems)
 {
 	int CurrentData = 111758;
 
@@ -165,8 +176,8 @@ void NeuroState::ClickPAX()
 {
 	if (CurrentState == State::Idle)
 	{
-		CheckNewsItemsForActivation(this, Config->NewsItems, UnlockedNewsItems);
-//		CheckNewsItemsForActivation(this, Config->BoardItems, UnlockedBoardItems);
+		CheckMessagesForActivation(this, Config->NewsItems, UnlockedMessages["news"]);
+//		CheckMessagesForActivation(this, Config->AllMessages["news"], UnlockedMessages["board"]);
 		
 		CurrentState = State::InPAX;
 		PendingInvalidation |= ZoneType::PAX;
@@ -184,6 +195,7 @@ void NeuroState::ClickTalk()
 void NeuroState::ClickSkill()
 {
 	CurrentState = State::InSite;
+	Variables["currentsite"] = "irs";
 	PendingInvalidation |= ZoneType::Site;
 }
 
@@ -399,6 +411,11 @@ void NeuroState::GridboxClosed()
 		CurrentState = State::Idle;
 		PendingInvalidation |= ZoneType::Inventory;
 	}
+	else if (CurrentState == State::InSite)
+	{
+		CurrentState = State::Idle;
+		PendingInvalidation |= ZoneType::Site;
+	}
 }
 
 void NeuroState::SetIntVariable(string Name, int Value)
@@ -423,6 +440,19 @@ void NeuroState::SendMessage(const string& Recipient, const string& Message)
 			UpdateVariablesFromString(MailActions->Actions[Message]);
 		}
 	}
+}
+
+bool NeuroState::ConnectToSite(const string& SiteName, int ComLinkLevel)
+{
+	if (Config->Sites.contains(SiteName))
+	{
+		Variables["currentsite"] = SiteName;
+		CurrentState = State::InSite;
+		PendingInvalidation |= ZoneType::Inventory | ZoneType::Site;
+		return true;
+	}
+	
+	return false;
 }
 
 
@@ -469,12 +499,23 @@ bool NeuroState::TestCondition(const string& Condition, bool bEmptyConditionIsSu
 		int A = (Value != nullptr) ? stoi(Value->substr(FirstIndex)) : GetIntValue(FirstHalf);
 		int B = stoi(SecondHalf.substr(FirstIndex));
 		
-		return (Op == '<' && A < B) || (Op == '>' && A > B) || (Op == '=' && A == B);
+		bool bResult = (Op == '<' && A < B) || (Op == '>' && A > B) || (Op == '=' && A == B);
+		
+		if (bResult)
+		{
+			WLOG("Condition: %s, was met!\n", Condition.c_str());
+		}
+		return bResult;
 	}
 	
 	// string comparison
 	string A = (Value != nullptr) ? *Value : GetStringVariable(FirstHalf);
-	return A == SecondHalf;
+	bool bResult = A == SecondHalf;
+	if (bResult)
+	{
+		WLOG("Condition: %s, was met!\n", Condition.c_str());
+	}
+	return bResult;
 }
 
 Conversation* NeuroState::FindConversationWithTag(const char* Tag)
@@ -550,6 +591,8 @@ void NeuroState::UpdateVariablesFromString(const string& Commands)
 		
 		StringReplacement(Variable, '@');
 		StringReplacement(Value, '@');
+	
+		WLOG("Setting variable from string: %s = %s\n", Variable.c_str(), Value.c_str());
 
 		if (Variable.starts_with('_'))
 		{
@@ -624,8 +667,16 @@ bool NeuroState::CheckVariablesFromString(const string& Query)
 
 
 
-vector<Message*> NeuroState::GetUnlockedMessages(string ID) const
+vector<Message*> NeuroState::GetUnlockedMessages(string ID)
 {
-	return Config->AllMessages[ID];
+	// check for new unlocks
+	CheckMessagesForActivation(this, Config->AllMessages[ID], UnlockedMessages[ID]);
+
+	vector<Message*> Messages;
+	for (int MessageIndex : UnlockedMessages.at(ID))
+	{
+		Messages.push_back(Config->AllMessages[ID][MessageIndex]);
+	}
+	return Messages;
 }
 

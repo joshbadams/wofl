@@ -62,7 +62,7 @@ bool WoflButton::OnKey(const KeyEvent& Event)
 {
 	if (Event.Char == CharShortcut || Event.KeyCode == KeycodeShortcut)
 	{
-		if (Event.Type == KeyType::Up && OnClickFunc)
+		if (Event.Type == KeyType::Down && OnClickFunc)
 		{
 			OnClickFunc(this);
 		}

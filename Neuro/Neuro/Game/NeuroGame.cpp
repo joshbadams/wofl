@@ -42,8 +42,8 @@ NeuroGame::NeuroGame()
 	PAX = new PAXBox(100, 40, 1000, 424);
 	PAX->SetDelegates(&State, &State);
 	
-	Site = new SiteBox(100, 40, 1000, 800);
-	Site->SetDelegates(&State, &State);
+	WebSite = new SiteBox(100, 40, 1000, 600);
+	WebSite->SetDelegates(&State, &State);
 	
 	int Top = 580;
 	int Left = 58;
@@ -122,11 +122,11 @@ void NeuroGame::Invalidate(ZoneType Zone)
 
 	if ((Zone & ZoneType::Site) != ZoneType::None)
 	{
-		Site->RemoveFromParent();
+		WebSite->RemoveFromParent();
 		if (State.IsShowingSite())
 		{
-			Site->Open();
-			Background->AddChild(Site);
+			WebSite->Open(Config.Sites[State.GetStringVariable("currentsite")]);
+			Background->AddChild(WebSite);
 		}
 	}
 }

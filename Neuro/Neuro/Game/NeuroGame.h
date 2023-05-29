@@ -41,7 +41,7 @@ private:
 	class Ninebox* DialogBox;
 	class InvBox* Inventory;
 	class PAXBox* PAX;
-	class SiteBox* Site;
+	class SiteBox* WebSite;
 
 	void LoadConfig();
 

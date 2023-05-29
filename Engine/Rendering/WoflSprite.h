@@ -50,6 +50,8 @@ public:
 	void AddChild(WoflSprite* NewSprite, bool bAddAsFirstChild=false);
 	void RemoveFromParent();
 	void RemoveFromWorld();
+	
+	bool IsRooted();
 
 	
 	// collision functionality

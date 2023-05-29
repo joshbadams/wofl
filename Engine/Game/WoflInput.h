@@ -48,9 +48,16 @@ class WoflInput
 {
 public:
 	WoflInput()
+		: KeyCapturedSprite(nullptr)
+		, CapturedKeysDown(0)
 	{
 		// register ourself
 		Utils::Input = this;
+	}
+	
+	void SetPreInputFunc(const function<bool(const KeyEvent*, const TouchEvent*)>& PreInputFunc)
+	{
+		OnPreInputFunc = PreInputFunc;
 	}
 	
 	virtual void AddTouch(int FingerIndex, float X, float Y, TouchType Type)
@@ -73,7 +80,9 @@ public:
 	virtual void SpriteRemoved(WoflSprite* Sprite);
 
 protected:
-	
+
+	function<bool (const KeyEvent*, const TouchEvent*)> OnPreInputFunc;
+
 	// touches pushed from platform
 	vector<TouchEvent> QueuedTouches;
 	vector<KeyEvent> QueuedKeys;
@@ -95,4 +104,7 @@ protected:
 		int RepeatCount = 0;
 	};
 	CapturedTouch CapturedTouches[WOFL_MAX_FINGERS];
+	
+	class WoflSprite* KeyCapturedSprite;
+	int CapturedKeysDown;
 };

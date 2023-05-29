@@ -167,6 +167,18 @@ void WoflSprite::RemoveFromWorld()
 	RemoveFromParent();
 }
 
+bool WoflSprite::IsRooted()
+{
+	WoflSprite* Travel = this;
+	if (Travel->GetParent())
+	{
+		Travel = Travel->GetParent();
+	}
+	
+	return Travel == WoflWorld::Get()->GetRootSprite();
+}
+
+
 // allow the sprite to do per-frame processing
 void WoflSprite::Tick(float DeltaTime)
 {

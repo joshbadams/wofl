@@ -14,16 +14,56 @@ void WoflInput::PreWorldTick(float DeltaTime)
 {
 	for (const KeyEvent& KeyEvent : QueuedKeys)
 	{
-		WoflWorld::Get()->VisitEx(true, false, nullptr, [&KeyEvent](WoflSprite* Sprite)
+		if (OnPreInputFunc && OnPreInputFunc(&KeyEvent, nullptr) == true)
+		{
+			continue;
+		}
+		
+		if (KeyCapturedSprite != nullptr)
+		{
+			if (KeyCapturedSprite->IsRooted())
 			{
-				return !Sprite->OnKey(KeyEvent);
-			});
+				KeyCapturedSprite->OnKey(KeyEvent);
+			}
+			
+			if (KeyEvent.Type == KeyType::Down)
+			{
+				CapturedKeysDown++;
+			}
+			if (KeyEvent.Type == KeyType::Up)
+			{
+				CapturedKeysDown--;
+			}
+			
+			if (CapturedKeysDown == 0)
+			{
+				KeyCapturedSprite = nullptr;
+			}
+		}
+		else if (KeyEvent.Type == KeyType::Down)
+		{
+			WoflWorld::Get()->VisitEx(true, false, nullptr, [this, &KeyEvent](WoflSprite* Sprite)
+				{
+					bool bWasHandled = Sprite->OnKey(KeyEvent);
+					if (bWasHandled)
+					{
+						KeyCapturedSprite = Sprite;
+						CapturedKeysDown++;
+					}
+					return !bWasHandled;
+				});
+		}
 	}
 	QueuedKeys.clear();
 	
 	// process each one
 	for (const TouchEvent& Touch : QueuedTouches)
 	{
+		if (OnPreInputFunc && OnPreInputFunc(nullptr, &Touch) == true)
+		{
+			continue;
+		}
+		
 		CapturedTouch& Capture = CapturedTouches[Touch.FingerIndex];
 
 		Vector PrevLocation = Capture.Location;

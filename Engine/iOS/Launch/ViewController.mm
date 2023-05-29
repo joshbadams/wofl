@@ -120,18 +120,27 @@
 
 -(void)keyDown:(NSEvent *)event
 {
-	char Char = [[event characters] characterAtIndex:0];
-	if (Char == 0x7f) Char = 0;
+	int Char = [[event characters] characterAtIndex:0];
+	NSLog(@"keydown %d / char %d\n", [event keyCode], Char);
+
+	if (Char >= 0x7f)
+	{
+		// only allow Repeats on char presses
+		if ([event isARepeat])
+		{
+			return;
+		}
+		Char = 0;
+	}
 	Utils::Input->AddKey([event keyCode], Char, [event isARepeat] ? KeyType::Repeat : KeyType::Down);
-	NSLog(@"keydown %d\n", [event keyCode]);
 }
 
 -(void)keyUp:(NSEvent *)event
 {
-	char Char = [[event characters] characterAtIndex:0];
-	if (Char == 0x7f) Char = 0;
+	int Char = [[event characters] characterAtIndex:0];
+	if (Char >= 0x7f) Char = 0;
 	Utils::Input->AddKey([event keyCode], Char, KeyType::Up);
-	NSLog(@"keyup %d\n", [event keyCode]);
+//	NSLog(@"keyup %d\n", [event keyCode]);
 }
 
 #else

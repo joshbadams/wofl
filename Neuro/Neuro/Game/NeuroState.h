@@ -77,6 +77,7 @@ public:
 	virtual void GridboxClosed() = 0;
 	virtual void SetIntVariable(const string Name, int Value) = 0;
 	virtual void SendMessage(const string& Recipient, const string& Message) = 0;
+	virtual bool ConnectToSite(const string& Recipient, int ComLinkLevel) = 0;
 };
 
 class ITextboxDelegate : public IInterfaceChangingStateDelegate
@@ -86,6 +87,7 @@ public:
 	virtual void SetIntVariable(string Name, int Value) { assert(0); }
 	virtual void GridboxClosed() { assert(0); }
 	virtual void SendMessage(const string& Recipient, const string& Message) { assert(0); }
+	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel)  {assert(0); }
 };
 
 class IQueryStateDelegate
@@ -96,7 +98,7 @@ public:
 	virtual int GetIntVariable(string Name) const = 0;
 	virtual string GetStringVariable(string Name) const = 0;
 	virtual const vector<int>& GetUnlockedNewsItems() const = 0;
-	virtual vector<Message*> GetUnlockedMessages(string ID) const = 0;
+	virtual vector<Message*> GetUnlockedMessages(string ID) = 0;
 
 };
 
@@ -122,6 +124,7 @@ public:
 	virtual void GridboxClosed() override;
 	virtual void SetIntVariable(string Name, int Value) override;
 	virtual void SendMessage(const string& Recipient, const string& Message) override;
+	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel) override;
 
 	
 	// IQueryStateDelegate
@@ -143,9 +146,9 @@ public:
 	}
 	virtual const vector<int>& GetUnlockedNewsItems() const override
 	{
-		return UnlockedNewsItems;
+		return UnlockedMessages.at("news");
 	}
-	virtual vector<Message*> GetUnlockedMessages(string ID) const override;
+	virtual vector<Message*> GetUnlockedMessages(string ID) override;
 
 
 	
@@ -201,8 +204,7 @@ private:
 
 	int Money;
 	vector<int> Inventory;
-	vector<int> UnlockedNewsItems;
-	vector<int> UnlockedBoardItems;
+	map<string, vector<int>> UnlockedMessages;
 
 	NeuroConfig* Config;
 	IStateChangedDelegate* StateDelegate;

@@ -94,12 +94,49 @@ public:
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
 
+
+class MenuEntry : public NeuroConfigObj
+{
+public:
+	string Name;
+	string Dest;
+	string Condition;
+	char Key;
+	
+	virtual void FromJsonObject(const Json::Value& Object) override;
+};
+
+class ListEntry : public NeuroConfigObj
+{
+public:
+	vector<string> Fields;
+	string Details;
+	
+	virtual void FromJsonObject(const Json::Value& Object) override;
+};
+
+class SitePage : public NeuroConfigObj
+{
+public:
+	vector<MenuEntry*> MenuEntries;
+	vector<ListEntry*> ListEntries;
+	vector<string> ListColumns;
+	string Type;
+	string MessagesID;
+	string StringID;
+	string ExitDest;
+	string Header;
+	
+	virtual void FromJsonObject(const Json::Value& Object) override;
+};
+
 class Site : public NeuroConfigObj
 {
 public:
 	vector<string> Passwords;
 	string Title;
-//	vector<SitePage> Pages;
+	map<string, SitePage*> Pages;
+	int ComlinkLevel;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };

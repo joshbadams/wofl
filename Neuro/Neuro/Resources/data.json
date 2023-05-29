@@ -81,7 +81,9 @@
 ],
 "strings":
 {
-	"paxfirsttime":"PAX, the Public Access System, was first implemented as a result of the Gibson Mandate of 2036. PAX allows general access to the Central Database Interlink (CDI) with Friendly Interface System Hardware (FISH) designed for Limited Free Access (LFA) to the Multi-Phased Public Information Library Core (MPPILC) in conjunction with the Swiss Orbital Banking (SOB) network, which is regulated by the Chiba City Public Database Regulating Agency (CCPDRA) in concordance with the World Holographic Organizational Obligation for Electronic Eavesdropped (WHOOPEE) Guidlines established by the Balfour Act. With the institution of WHOOPEE protocol, LFA became possible with the MPPILC system and the SOB network. The FISH, contained within the PAX Booth, was ergonomically designed for Optimal Ease of Use (OEU) within the specifications of the agencies involved, primarily CCPDRA and the SOB network. OEU makes operation of the PAX system a simple task for both the First Time User (FTU) and the Experienced Adept (EA) through implementation of menus and Simple Directions (SD) available in Lucid Help Files (LHF) such as this one, in which Simplified Grammatical Syntax (SGS) and Simple Word Choice (SWC) algorithms have been employed to benefit User Understanding (UU)."
+	"paxfirsttime":"PAX, the Public Access System, was first implemented as a result of the Gibson Mandate of 2036. PAX allows general access to the Central Database Interlink (CDI) with Friendly Interface System Hardware (FISH) designed for Limited Free Access (LFA) to the Multi-Phased Public Information Library Core (MPPILC) in conjunction with the Swiss Orbital Banking (SOB) network, which is regulated by the Chiba City Public Database Regulating Agency (CCPDRA) in concordance with the World Holographic Organizational Obligation for Electronic Eavesdropped (WHOOPEE) Guidlines established by the Balfour Act. With the institution of WHOOPEE protocol, LFA became possible with the MPPILC system and the SOB network. The FISH, contained within the PAX Booth, was ergonomically designed for Optimal Ease of Use (OEU) within the specifications of the agencies involved, primarily CCPDRA and the SOB network. OEU makes operation of the PAX system a simple task for both the First Time User (FTU) and the Experienced Adept (EA) through implementation of menus and Simple Directions (SD) available in Lucid Help Files (LHF) such as this one, in which Simplified Grammatical Syntax (SGS) and Simple Word Choice (SWC) algorithms have been employed to benefit User Understanding (UU).",
+	"irsnotice":"IRS Field Supervisors:\n\nField Supervisors should warn IRS Field Examiners under their command that use of the garrote, the Rack, and the Iron Maien by Examiners is unwarranted under most Taxpayer Compliance Program cases. The rubber hose and the insertion of bamboo under the fingernails should be sufficient for Taxpayer compliance in most situations where motivation is required. Use of stronger forms of interrogation by Field Examiners is frowned upon, unless a Field Supervisor qualified in Interrogation is , or the Field Examiner is performing a Special Field Audit. Due to the high number of Taxpayer requests for current information, possibly due to the Public's inability to remain current with the hourly changes in the Tax Code, the IRS Administration has approved the activation of a question-and-answer bulletin board service on this system. The real purpose of this service is to locate and arrest tax offenders who have otherwise managed to be overlooked by our standard procedues. So far, results have been excellent. In two weeks of operation, over four thousand tax offenders have been arrested and sentenced.",
+	"irsaudit":"No report at this time."
 },
 "news":
 [
@@ -233,6 +235,44 @@
 				"message":"Thanks for your response to my ad. The amount of $10,000 has been deposited to your bank account. Please meet me, General Armitage, in the street directly outside the Matrix Restaurant as soon as possible."
 			}
 		]
+	},
+	"irs":
+	{
+		"messages":
+		[
+			{
+				"date":111658,
+				"to":"IRS",
+				"longto":"--",
+				"from":"L. Zone",
+				"headers":"BAMA ID: 1404726431",
+				"message":"I had twenty million credits worth of incoming this year in my black market pituitary extract operation. This is my first year in business. Which forms should I use to report this income? Can my business startup expenses be deducted?"
+			},
+			{
+				"date":111658,
+				"to":"L. Zone",
+				"from":"IRS",
+				"longfrom":"--",
+				"message":"Your business is an illegal operation. We have identified you to the proper law encorcement agencies. Pending further investigation, your total incoming for theyear has been turned over to us."
+			},
+			{
+				"date":111658,
+				"to":"IRS",
+				"longto":"--",
+				"from":"R. Hammer",
+				"longfrom":"Rafaella Hammer",
+				"headers":"BAMA ID: 2776081129",
+				"message":"Due to an oversight on the part of my accountant, I failed to report all of my income for the last year. What form should I file to correct this oversight and how much of a penalty will I have to pay?"
+			},
+			{
+				"date":111658,
+				"to":"R. Hammer",
+				"longto":"Rafaella Hammer",
+				"from":"IRS",
+				"longfrom":"--",
+				"message":"We have given your case careful consideration and have decided that there will be no penalty incurred on the income you failed to report last year. However, you and your tax accountant are you going to jail."
+			}
+		]
 	}
 },
 "items":
@@ -248,9 +288,61 @@
 {
 	"irs":
 	{
-		"passwords":["taxinfo"],
-		"title":"Internal Revenue Service",
-		"pages":""
+		"passwords":["taxinfo", "audit", "_cyberspace"],
+		"comlinklevel":1,
+		"title":"** Internal Revenue Service **",
+		"pages":
+		{
+			"initial" :
+			{
+				"type":"menu",
+				"menuentries":
+				[
+					{ "name":"Exit System", "key":"x", "dest":"exit" },
+					{ "name":"TaxInfo Board", "key":"1", "dest":"irsboard" },
+					{ "name":"Supervisor's Notice", "key":"2", "dest":"notice", "condition":"level=2" },
+					{ "name":"Special Audit Report", "key":"3", "dest":"auditreport", "condition":"level=2" },
+					{ "name":"View Audit List", "key":"4", "dest":"auditlist", "condition":"level=2" }
+				]
+			},
+			"irsboard" :
+			{
+				"type":"messages",
+				"messagesid":"irs",
+				"exit":"initial"
+			},
+			"notice" :
+			{
+				"type":"message",
+				"exit":"initial",
+				"stringid":"irsnotice"
+			},
+			"auditreport" :
+			{
+				"type":"message",
+				"exit":"initial",
+				"stringid":"irsaudit"
+			},
+			"auditlist" :
+			{
+				"type":"list",
+				"exit":"initial",
+				"header":"Field Audit List",
+				"columns":["Name", "BAMA ID"],
+				"listentries":
+				[
+					{ "fields":["%name%", "%bamaid%"], "details":"Reason: Tax evasion." },
+					{ "fields":["FINDLEY MATTHEW", "001131968"], "details":"Reason: Tax evasion." },
+					{ "fields":["CHUNG LO DUC", "471294819"], "details":"Reason: Tax evasion." },
+					{ "fields":["NAKASONE SANDRA", "255885697"], "details":"Reason: Tax evasion." },
+					{ "fields":["MARTINEZ RAUL", "549887110"], "details":"Reason: Tax evasion." }
+				]
+			}
+		}
+	},
+	"cheapo":
+	{
+		"passwords":[""]
 	}
 },
 "mailserver":

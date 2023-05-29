@@ -120,4 +120,31 @@ void Site::FromJsonObject(const Json::Value& Object)
 {
 	Title = GetString(Object, "title");
 	GetStringArrayFromObject(Passwords, Object, "passwords");
+	GetStringMapFromObject(Pages, Object, "pages");
 }
+
+void SitePage::FromJsonObject(const Json::Value& Object)
+{
+	MessagesID = GetString(Object, "messagesid");
+	StringID = GetString(Object, "stringid");
+	Type = GetString(Object, "type");
+	ExitDest = GetString(Object, "exit");
+	Header = GetString(Object, "header");
+	GetArrayFromObject(MenuEntries, Object, "menuentries");
+	GetArrayFromObject(ListEntries, Object, "listentries");
+	GetStringArrayFromObject(ListColumns, Object, "columns");
+}
+
+void MenuEntry::FromJsonObject(const Json::Value& Object)
+{
+	Name = GetString(Object, "name");
+	Key = GetString(Object, "key")[0];
+	Dest = GetString(Object, "dest");
+}
+
+void ListEntry::FromJsonObject(const Json::Value& Object)
+{
+	GetStringArrayFromObject(Fields, Object, "fields");
+	Details = GetString(Object, "details");
+}
+

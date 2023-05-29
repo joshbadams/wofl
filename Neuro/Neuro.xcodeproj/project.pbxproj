@@ -1,0 +1,598 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7C06E60829F5FF4300167332 /* NeuroScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C06E60629F5FF4300167332 /* NeuroScene.cpp */; };
+		7C06E60B29F956C400167332 /* Gridbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C06E60A29F956C400167332 /* Gridbox.cpp */; };
+		7C382AC029ECE71500FD8086 /* NeuroState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C382ABE29ECE71500FD8086 /* NeuroState.cpp */; };
+		7C88AEBB29EB73110011A3B3 /* NeuroGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEB429EB73110011A3B3 /* NeuroGame.cpp */; };
+		7C88AEBC29EB73110011A3B3 /* Ninebox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEB829EB73110011A3B3 /* Ninebox.cpp */; };
+		7C88AEBD29EB73110011A3B3 /* Textbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEBA29EB73110011A3B3 /* Textbox.cpp */; };
+		7C88AEC029EB73EB0011A3B3 /* NeuroConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEBE29EB73EB0011A3B3 /* NeuroConfig.cpp */; };
+		7C9E069329E3855400A88DE7 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7C9E069229E3855400A88DE7 /* AppDelegate.mm */; };
+		7C9E069829E3855500A88DE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C9E069729E3855500A88DE7 /* Assets.xcassets */; };
+		7C9E069B29E3855500A88DE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C9E069929E3855500A88DE7 /* Main.storyboard */; };
+		7C9E069D29E3855500A88DE7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C9E069C29E3855500A88DE7 /* main.m */; };
+		7CA3605D29E3AB58009B40DA /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CA3605C29E3AB57009B40DA /* AppKit.framework */; };
+		7CB134B22A08425F00AF73AB /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7CB134B12A08425F00AF73AB /* Readme.txt */; };
+		7CE8527929FF15D900DD3053 /* InvBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8527029FF15D900DD3053 /* InvBox.cpp */; };
+		7CE8527C29FF666500DD3053 /* PAXBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8527B29FF666500DD3053 /* PAXBox.cpp */; };
+		7CE8F9522A119F8A00B5B327 /* SiteBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8F9512A119F8A00B5B327 /* SiteBox.cpp */; };
+		7CF9A57629E4ECF700FDB4A6 /* Wofl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF9A57329E4DF9400FDB4A6 /* Wofl.framework */; };
+		7CF9A57729E4ECF700FDB4A6 /* Wofl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF9A57329E4DF9400FDB4A6 /* Wofl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7CF9A57929E5177D00FDB4A6 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 7CF9A57829E5177D00FDB4A6 /* Resources */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7C8B218429E638900060C879 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9DFCEA7A1DD7E8B700FC5A9F;
+			remoteInfo = MouseGame;
+		};
+		7C8B218629E638900060C879 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9DFCEA7B1DD7E8B700FC5A9F;
+			remoteInfo = FishHotel;
+		};
+		7C8B218829E638900060C879 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9DFCEA7C1DD7E8B700FC5A9F;
+			remoteInfo = Oust;
+		};
+		7C8B218A29E638900060C879 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9DFCEA7D1DD7E8B700FC5A9F;
+			remoteInfo = Scrolly;
+		};
+		7C8B218C29E638900060C879 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9D920F7A1ED2795300F4C463;
+			remoteInfo = BurgerThyme;
+		};
+		7C8B218E29E638900060C879 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 77C893B627CC257600827146;
+			remoteInfo = Idler;
+		};
+		7C8B219029E638900060C879 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7C9E064C29E36E9600A88DE7;
+			remoteInfo = Wofl;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7CA3605029E38E30009B40DA /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7CF9A57729E4ECF700FDB4A6 /* Wofl.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7C06E60629F5FF4300167332 /* NeuroScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroScene.cpp; sourceTree = "<group>"; };
+		7C06E60729F5FF4300167332 /* NeuroScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeuroScene.h; sourceTree = "<group>"; };
+		7C06E60929F956C400167332 /* Gridbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gridbox.h; sourceTree = "<group>"; };
+		7C06E60A29F956C400167332 /* Gridbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gridbox.cpp; sourceTree = "<group>"; };
+		7C382ABE29ECE71500FD8086 /* NeuroState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroState.cpp; sourceTree = "<group>"; };
+		7C382ABF29ECE71500FD8086 /* NeuroState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeuroState.h; sourceTree = "<group>"; };
+		7C88AEB429EB73110011A3B3 /* NeuroGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroGame.cpp; sourceTree = "<group>"; };
+		7C88AEB529EB73110011A3B3 /* NeuroGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeuroGame.h; sourceTree = "<group>"; };
+		7C88AEB729EB73110011A3B3 /* Textbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Textbox.h; sourceTree = "<group>"; };
+		7C88AEB829EB73110011A3B3 /* Ninebox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ninebox.cpp; sourceTree = "<group>"; };
+		7C88AEB929EB73110011A3B3 /* Ninebox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ninebox.h; sourceTree = "<group>"; };
+		7C88AEBA29EB73110011A3B3 /* Textbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Textbox.cpp; sourceTree = "<group>"; };
+		7C88AEBE29EB73EB0011A3B3 /* NeuroConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroConfig.cpp; sourceTree = "<group>"; };
+		7C88AEBF29EB73EB0011A3B3 /* NeuroConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeuroConfig.h; sourceTree = "<group>"; };
+		7C9E068E29E3855400A88DE7 /* Neuro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Neuro.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C9E069129E3855400A88DE7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		7C9E069229E3855400A88DE7 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		7C9E069729E3855500A88DE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7C9E069A29E3855500A88DE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7C9E069C29E3855500A88DE7 /* main.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = main.m; sourceTree = "<group>"; };
+		7C9E069E29E3855500A88DE7 /* Neuro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Neuro.entitlements; sourceTree = "<group>"; };
+		7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Wofl.xcodeproj; path = ../../Wofl.xcodeproj; sourceTree = "<group>"; };
+		7CA3605C29E3AB57009B40DA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		7CB134B12A08425F00AF73AB /* Readme.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		7CE8527029FF15D900DD3053 /* InvBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InvBox.cpp; sourceTree = "<group>"; };
+		7CE8527129FF15D900DD3053 /* InvBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvBox.h; sourceTree = "<group>"; };
+		7CE8527A29FF666500DD3053 /* PAXBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAXBox.h; sourceTree = "<group>"; };
+		7CE8527B29FF666500DD3053 /* PAXBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PAXBox.cpp; sourceTree = "<group>"; };
+		7CE8F9492A119F8A00B5B327 /* SiteBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SiteBox.h; sourceTree = "<group>"; };
+		7CE8F9512A119F8A00B5B327 /* SiteBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SiteBox.cpp; sourceTree = "<group>"; };
+		7CF9A57329E4DF9400FDB4A6 /* Wofl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wofl.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Wofl-blgmpfhtsadgadetoqyknzhxrvqj/Build/Products/Debug/Wofl.framework"; sourceTree = "<group>"; };
+		7CF9A57829E5177D00FDB4A6 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7C9E068B29E3855400A88DE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CF9A57629E4ECF700FDB4A6 /* Wofl.framework in Frameworks */,
+				7CA3605D29E3AB58009B40DA /* AppKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7C043BA329E3B3390098889C /* AppJunk */ = {
+			isa = PBXGroup;
+			children = (
+				7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */,
+				7C9E06A429E3865200A88DE7 /* Frameworks */,
+				7C9E069129E3855400A88DE7 /* AppDelegate.h */,
+				7C9E069229E3855400A88DE7 /* AppDelegate.mm */,
+				7C9E069729E3855500A88DE7 /* Assets.xcassets */,
+				7C9E069929E3855500A88DE7 /* Main.storyboard */,
+				7C9E069C29E3855500A88DE7 /* main.m */,
+				7C9E069E29E3855500A88DE7 /* Neuro.entitlements */,
+			);
+			name = AppJunk;
+			sourceTree = "<group>";
+		};
+		7C88AEB329EB73110011A3B3 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				7C88AEBE29EB73EB0011A3B3 /* NeuroConfig.cpp */,
+				7C88AEBF29EB73EB0011A3B3 /* NeuroConfig.h */,
+				7C88AEB429EB73110011A3B3 /* NeuroGame.cpp */,
+				7C88AEB529EB73110011A3B3 /* NeuroGame.h */,
+				7C382ABE29ECE71500FD8086 /* NeuroState.cpp */,
+				7C382ABF29ECE71500FD8086 /* NeuroState.h */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		7C88AEB629EB73110011A3B3 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				7CE8526F29FF15D900DD3053 /* Boxes */,
+				7C06E60629F5FF4300167332 /* NeuroScene.cpp */,
+				7C06E60729F5FF4300167332 /* NeuroScene.h */,
+				7C88AEBA29EB73110011A3B3 /* Textbox.cpp */,
+				7C88AEB729EB73110011A3B3 /* Textbox.h */,
+				7C06E60A29F956C400167332 /* Gridbox.cpp */,
+				7C06E60929F956C400167332 /* Gridbox.h */,
+				7C88AEB829EB73110011A3B3 /* Ninebox.cpp */,
+				7C88AEB929EB73110011A3B3 /* Ninebox.h */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		7C8B217B29E638900060C879 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7C8B218529E638900060C879 /* MouseGame.app */,
+				7C8B218729E638900060C879 /* FishHotel.app */,
+				7C8B218929E638900060C879 /* Oust.app */,
+				7C8B218B29E638900060C879 /* Scrolly.app */,
+				7C8B218D29E638900060C879 /* BurgerThyme.app */,
+				7C8B218F29E638900060C879 /* Idler.app */,
+				7C8B219129E638900060C879 /* Wofl.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7C9E068529E3855400A88DE7 = {
+			isa = PBXGroup;
+			children = (
+				7C9E069029E3855400A88DE7 /* Neuro */,
+				7C9E068F29E3855400A88DE7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7C9E068F29E3855400A88DE7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7C9E068E29E3855400A88DE7 /* Neuro.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7C9E069029E3855400A88DE7 /* Neuro */ = {
+			isa = PBXGroup;
+			children = (
+				7CB134B12A08425F00AF73AB /* Readme.txt */,
+				7C88AEB329EB73110011A3B3 /* Game */,
+				7C88AEB629EB73110011A3B3 /* UI */,
+				7CF9A57829E5177D00FDB4A6 /* Resources */,
+				7C043BA329E3B3390098889C /* AppJunk */,
+			);
+			path = Neuro;
+			sourceTree = "<group>";
+		};
+		7C9E06A429E3865200A88DE7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7CA3605C29E3AB57009B40DA /* AppKit.framework */,
+				7CF9A57329E4DF9400FDB4A6 /* Wofl.framework */,
+			);
+			name = Frameworks;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		7CE8526F29FF15D900DD3053 /* Boxes */ = {
+			isa = PBXGroup;
+			children = (
+				7CE8527029FF15D900DD3053 /* InvBox.cpp */,
+				7CE8527129FF15D900DD3053 /* InvBox.h */,
+				7CE8527B29FF666500DD3053 /* PAXBox.cpp */,
+				7CE8527A29FF666500DD3053 /* PAXBox.h */,
+				7CE8F9512A119F8A00B5B327 /* SiteBox.cpp */,
+				7CE8F9492A119F8A00B5B327 /* SiteBox.h */,
+			);
+			path = Boxes;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7C9E068D29E3855400A88DE7 /* Neuro */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C9E06A129E3855500A88DE7 /* Build configuration list for PBXNativeTarget "Neuro" */;
+			buildPhases = (
+				7C9E068A29E3855400A88DE7 /* Sources */,
+				7C9E068B29E3855400A88DE7 /* Frameworks */,
+				7C9E068C29E3855400A88DE7 /* Resources */,
+				7CA3605029E38E30009B40DA /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Neuro;
+			productName = Neuro;
+			productReference = 7C9E068E29E3855400A88DE7 /* Neuro.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7C9E068629E3855400A88DE7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					7C9E068D29E3855400A88DE7 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+				};
+			};
+			buildConfigurationList = 7C9E068929E3855400A88DE7 /* Build configuration list for PBXProject "Neuro" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7C9E068529E3855400A88DE7;
+			productRefGroup = 7C9E068F29E3855400A88DE7 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7C8B217B29E638900060C879 /* Products */;
+					ProjectRef = 7CA3603329E38DBA009B40DA /* Wofl.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				7C9E068D29E3855400A88DE7 /* Neuro */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7C8B218529E638900060C879 /* MouseGame.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = MouseGame.app;
+			remoteRef = 7C8B218429E638900060C879 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7C8B218729E638900060C879 /* FishHotel.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = FishHotel.app;
+			remoteRef = 7C8B218629E638900060C879 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7C8B218929E638900060C879 /* Oust.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Oust.app;
+			remoteRef = 7C8B218829E638900060C879 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7C8B218B29E638900060C879 /* Scrolly.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Scrolly.app;
+			remoteRef = 7C8B218A29E638900060C879 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7C8B218D29E638900060C879 /* BurgerThyme.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = BurgerThyme.app;
+			remoteRef = 7C8B218C29E638900060C879 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7C8B218F29E638900060C879 /* Idler.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Idler.app;
+			remoteRef = 7C8B218E29E638900060C879 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7C8B219129E638900060C879 /* Wofl.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Wofl.framework;
+			remoteRef = 7C8B219029E638900060C879 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7C9E068C29E3855400A88DE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C9E069829E3855500A88DE7 /* Assets.xcassets in Resources */,
+				7C9E069B29E3855500A88DE7 /* Main.storyboard in Resources */,
+				7CB134B22A08425F00AF73AB /* Readme.txt in Resources */,
+				7CF9A57929E5177D00FDB4A6 /* Resources in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7C9E068A29E3855400A88DE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C88AEBB29EB73110011A3B3 /* NeuroGame.cpp in Sources */,
+				7C06E60B29F956C400167332 /* Gridbox.cpp in Sources */,
+				7CE8527C29FF666500DD3053 /* PAXBox.cpp in Sources */,
+				7C9E069D29E3855500A88DE7 /* main.m in Sources */,
+				7C382AC029ECE71500FD8086 /* NeuroState.cpp in Sources */,
+				7C9E069329E3855400A88DE7 /* AppDelegate.mm in Sources */,
+				7CE8F9522A119F8A00B5B327 /* SiteBox.cpp in Sources */,
+				7C88AEC029EB73EB0011A3B3 /* NeuroConfig.cpp in Sources */,
+				7C88AEBD29EB73110011A3B3 /* Textbox.cpp in Sources */,
+				7CE8527929FF15D900DD3053 /* InvBox.cpp in Sources */,
+				7C06E60829F5FF4300167332 /* NeuroScene.cpp in Sources */,
+				7C88AEBC29EB73110011A3B3 /* Ninebox.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		7C9E069929E3855500A88DE7 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7C9E069A29E3855500A88DE7 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7C9E069F29E3855500A88DE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7C9E06A029E3855500A88DE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7C9E06A229E3855500A88DE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Neuro/Neuro.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WWA43RPJ5U;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mosh.Neuro;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		7C9E06A329E3855500A88DE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Neuro/Neuro.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WWA43RPJ5U;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mosh.Neuro;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7C9E068929E3855400A88DE7 /* Build configuration list for PBXProject "Neuro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C9E069F29E3855500A88DE7 /* Debug */,
+				7C9E06A029E3855500A88DE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C9E06A129E3855500A88DE7 /* Build configuration list for PBXNativeTarget "Neuro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C9E06A229E3855500A88DE7 /* Debug */,
+				7C9E06A329E3855500A88DE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7C9E068629E3855400A88DE7 /* Project object */;
+}

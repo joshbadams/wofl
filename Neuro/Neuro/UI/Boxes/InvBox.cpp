@@ -29,7 +29,6 @@ enum Phase
 	Phase_LoginError,
 };
 
-
 InvBox::InvBox(float X, float Y, float SizeX, float SizeY)
 	: Gridbox(X, Y, SizeX, SizeY, 0, WColor::Black)
 {

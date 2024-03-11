@@ -125,7 +125,7 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		WebSite->RemoveFromParent();
 		if (State.IsShowingSite())
 		{
-			WebSite->Open(Config.Sites[State.GetStringVariable("currentsite")]);
+			WebSite->Open(Config.Sites[State.GetStringValue("currentsite")]);
 			Background->AddChild(WebSite);
 		}
 	}

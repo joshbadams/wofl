@@ -13,6 +13,7 @@
 using namespace std;
 
 #include "NeuroConfig.h"
+#include "NeuroLua.h"
 
 enum class ZoneType : int
 {
@@ -75,7 +76,7 @@ public:
 		
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) = 0;
 	virtual void GridboxClosed() = 0;
-	virtual void SetIntVariable(const string Name, int Value) = 0;
+	virtual void SetIntValue(const string& Name, int Value) = 0;
 	virtual void SendMessage(const string& Recipient, const string& Message) = 0;
 	virtual bool ConnectToSite(const string& Recipient, int ComLinkLevel) = 0;
 };
@@ -83,11 +84,11 @@ public:
 class ITextboxDelegate : public IInterfaceChangingStateDelegate
 {
 public:
-	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) { assert(0); }
-	virtual void SetIntVariable(string Name, int Value) { assert(0); }
-	virtual void GridboxClosed() { assert(0); }
-	virtual void SendMessage(const string& Recipient, const string& Message) { assert(0); }
-	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel)  {assert(0); }
+	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override { assert(0); }
+	virtual void SetIntValue(const string& Name, int Value) override  { assert(0); }
+	virtual void GridboxClosed() override  { assert(0); }
+	virtual void SendMessage(const string& Recipient, const string& Message) override  { assert(0); }
+	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel) override  {assert(0); }
 };
 
 class IQueryStateDelegate
@@ -95,8 +96,8 @@ class IQueryStateDelegate
 public:
 	virtual const vector<int>& GetInventory() const = 0;
 	virtual int GetMoney() const = 0;
-	virtual int GetIntVariable(string Name) const = 0;
-	virtual string GetStringVariable(string Name) const = 0;
+	virtual int GetIntValue(const string& Name) const = 0;
+	virtual string GetStringValue(const string& Name) const = 0;
 	virtual const vector<int>& GetUnlockedNewsItems() const = 0;
 	virtual vector<Message*> GetUnlockedMessages(string ID) = 0;
 
@@ -107,8 +108,8 @@ class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, publ
 public:
 	Room* CurrentRoom;
 	
-	map<string, int> IntValues;
-	map<string, string> Variables;
+//	map<string, int> IntValues;
+//	map<string, string> Variables;
 	
 	NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate);
 	virtual ~NeuroState() { }
@@ -122,7 +123,6 @@ public:
 	virtual void MessageComplete() override;
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override;
 	virtual void GridboxClosed() override;
-	virtual void SetIntVariable(string Name, int Value) override;
 	virtual void SendMessage(const string& Recipient, const string& Message) override;
 	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel) override;
 
@@ -135,14 +135,6 @@ public:
 	virtual int GetMoney() const override
 	{
 		return Money;
-	}
-	virtual int GetIntVariable(string Name) const override
-	{
-		return IntValues.at(Name);
-	}
-	virtual string GetStringVariable(string Name) const override
-	{
-		return Variables.at(Name);
 	}
 	virtual const vector<int>& GetUnlockedNewsItems() const override
 	{
@@ -163,10 +155,14 @@ public:
 	{
 		return GetIntValue(string(Key));
 	}
-	int GetIntValue(const string&  Key) const;
-	void SetIntValue(const string& Key, int Value);
+	virtual int GetIntValue(const string&  Key) const override;
+	virtual void SetIntValue(const string& Key, int Value) override;
 	void IncrementIntValue(const string& Key);
-	
+	virtual string GetStringValue(const string&  Key) const override;
+	void SetStringValue(const string& Key, const string& Value);
+
+	void Trigger(const string& Type, const string& Value);
+		
 	void StringReplacement(string& String, char Delimiter) const;
 	
 	string GetCurrentDialogLine();
@@ -189,6 +185,8 @@ public:
 	bool TestCondition(const string& Condition, bool bEmptyConditionIsSuccess, const string* Action=nullptr, const string* Value=nullptr);
 
 private:
+	
+	static int Lua_Trigger(lua_State* L);
 
 	void ActivateRoom(Room* OldRoom, Room* NewRoom);
 	void ActivateConversation(Conversation* Convo);
@@ -216,7 +214,10 @@ private:
 	
 	State CurrentState;
 	Room* PendingRoom;
-	
+	Conversation* PendingConversation;
+
 	ZoneType PendingInvalidation;
+	
+	Lua Lua;
 };
 

@@ -111,8 +111,8 @@ void PAXBox::OnTextEntryComplete(const string& Text)
 				CurrentBank += AmountEntered;
 			}
 		}
-		InterfaceChangingDelegate->SetIntVariable("money", CurrentMoney);
-		InterfaceChangingDelegate->SetIntVariable("bankaccount", CurrentBank);
+		InterfaceChangingDelegate->SetIntValue("money", CurrentMoney);
+		InterfaceChangingDelegate->SetIntValue("bankaccount", CurrentBank);
 		
 		SubPhase = BankPhase_Menu;
 	}
@@ -233,7 +233,7 @@ void PAXBox::Open()
 	Phase = Phase_Menu;
 	
 	CurrentMoney = QueryStateDelegate->GetMoney();
-	CurrentBank = QueryStateDelegate->GetIntVariable("bankaccount");
+	CurrentBank = QueryStateDelegate->GetIntValue("bankaccount");
 	
 	NeuroConfig& Config = ((NeuroGame*)WoflGame::TheGame)->GetConfig();
 	CurrentNewsItems.clear();
@@ -258,7 +258,7 @@ void PAXBox::Update()
 		Entries.push_back({"2. Access Banking Interlink", 0, 2, PAX_Bank, '2'});
 		Entries.push_back({"3. Night City News", 0, 3, PAX_News, '3'});
 		Entries.push_back({"4. Bulletin Board", 0, 4, PAX_Board, '4'});
-		Entries.push_back({"choose a function", 9, 8, PAX_Board, '4'});
+		Entries.push_back({"choose a function", 9, 8});
 	}
 	else if (Phase == Phase_FirstTime)
 	{
@@ -273,13 +273,13 @@ void PAXBox::Update()
 	{
 		char Temp[20];
 		Entries.push_back({"First Orbital Bank of Switzerland", 3, 0});
-		snprintf(Temp, 20, "name: %s", QueryStateDelegate->GetStringVariable("name").c_str());
+		snprintf(Temp, 20, "name: %s", QueryStateDelegate->GetStringValue("name").c_str());
 		Entries.push_back({Temp, 3, 3});
 		snprintf(Temp, 20, "chip = %d", QueryStateDelegate->GetMoney());
 		Entries.push_back({Temp, 3, 4});
-		snprintf(Temp, 20, "BAMA id = %s", QueryStateDelegate->GetStringVariable("bamaid").c_str());
+		snprintf(Temp, 20, "BAMA id = %s", QueryStateDelegate->GetStringValue("bamaid").c_str());
 		Entries.push_back({Temp, 24, 3});
-		snprintf(Temp, 20, "account = %d", QueryStateDelegate->GetIntVariable("bankaccount"));
+		snprintf(Temp, 20, "account = %d", QueryStateDelegate->GetIntValue("bankaccount"));
 		Entries.push_back({Temp, 24, 4});
 		if (SubPhase == BankPhase_Menu)
 		{

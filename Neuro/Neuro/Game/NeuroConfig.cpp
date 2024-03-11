@@ -63,6 +63,7 @@ void Conversation::FromJsonObject(const Json::Value& Object)
 	Action = GetString(Object, "action");
 	Message = GetString(Object, "message");
 	Set = GetString(Object, "set");
+	Lua = GetString(Object, "lua");
 	
 	GetStringArrayFromObject(Lines, Object, "lines");
 	GetArrayFromObject(Options, Object, "options");

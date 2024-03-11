@@ -7,52 +7,50 @@
 
 #include "NeuroState.h"
 
+
+
 NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate)
 	: CurrentRoom(nullptr)
 	, CurrentConversation(nullptr)
 	, Money(6)
 	, Config(InConfig)
 	, StateDelegate(InStateDelegate)
+	, Lua(this)
 {
+//	Lua.RegisterFunction("GetInt", Lua_GetIntValue);
+//	Lua.RegisterFunction("SetInt", Lua_SetIntValue);
+	Lua.RegisterFunction("Trigger", Lua_Trigger);
+
 	if (LoadFromFile(Utils::File->GetSavePath("game.sav").c_str()) == false)
 	{
 		Money = 6;
 		Inventory.push_back(0);
 		Inventory.push_back(1);
 		
-		IntValues["bankaccount"] = 1941;
-		Variables["name"] = "Badams";
-		Variables["bamaid"] = "056306118";
+		SetIntValue("bankaccount", 1941);
+		SetStringValue("name", "Badams");
+		SetStringValue("bamaid", "056306118");
 	}
 	
 	Config->Initialize();
 
+	PendingConversation = nullptr;
 	PendingRoom = Config->Rooms[0];
 	CurrentState = State::EnteredRoom;
 }
 
 Json::Value NeuroState::ToJsonObject()
 {
-	Json::Value SettingsObj(Json::objectValue);
-	for (auto Pair : IntValues)
-	{
-		SettingsObj[Pair.first] = Json::Value(Pair.second);
-	}
-	for (auto Pair : Variables)
-	{
-		SettingsObj[Pair.first] = Json::Value(Pair.second);
-	}
-
 	Json::Value StateObj(Json::objectValue);
-	StateObj["settings"] = SettingsObj;
+	StateObj["lua"] = Lua.ToJsonObject();
 	StateObj["money"] = Json::Value(Money);
 	AddIntArrayToObject(Inventory, StateObj, "inventory");
 //	AddIntArrayToObject(UnlockedNewsItems, StateObj, "unlockednews");
 
-	for (auto& Pair : UnlockedMessages)
-	{
-		AddIntArrayToObject(Pair.second, SettingsObj["unlockedmessages"][Pair.first], "unlockedmessages");
-	}
+//	for (auto& Pair : UnlockedMessages)
+//	{
+//		AddIntArrayToObject(Pair.second, SettingsObj["unlockedmessages"][Pair.first], "unlockedmessages");
+//	}
 	
 	return StateObj;
 
@@ -60,27 +58,15 @@ Json::Value NeuroState::ToJsonObject()
 
 void NeuroState::FromJsonObject(const Json::Value& Object)
 {
-	Json::Value SettingsObject = Object["settings"];
-	for (auto Name : SettingsObject.getMemberNames())
-	{
-		if (SettingsObject[Name].isInt())
-		{
-			IntValues[Name] = SettingsObject[Name].asInt();
-		}
-		else if (SettingsObject[Name].isString())
-		{
-			Variables[Name] = SettingsObject[Name].asString();
-		}
-	}
-
-	Json::Value UnlockedMessageObject = Object["unlockedmessages"];
-	for (auto Name : UnlockedMessageObject.getMemberNames())
-	{
-		GetIntArrayFromObject(UnlockedMessages[Name], UnlockedMessageObject[Name], "unlockedmessages");
-	}
+//	Json::Value UnlockedMessageObject = Object["unlockedmessages"];
+//	for (auto Name : UnlockedMessageObject.getMemberNames())
+//	{
+//		GetIntArrayFromObject(UnlockedMessages[Name], UnlockedMessageObject[Name], "unlockedmessages");
+//	}
 
 	Money = Object["money"].asInt();
 	GetIntArrayFromObject(Inventory, Object, "inventory");
+	Lua.FromJsonObject(Object["lua"]);
 }
 
 void NeuroState::Tick()
@@ -113,8 +99,9 @@ void NeuroState::Tick()
 		case State::EndedConversation:
 		{
 			// set any vars, and maybe trigger another talk
-			string EndedConversationSet = CurrentConversation->Set;
-			
+			string& EndedConversationSet = CurrentConversation->Set;
+			string& EndedConversationLua = CurrentConversation->Lua;
+
 			CurrentState = State::Idle;
 			CurrentConversation = nullptr;
 			
@@ -123,6 +110,10 @@ void NeuroState::Tick()
 			PendingInvalidation |= ZoneType::Dialog;
 			PendingInvalidation |= ZoneType::Message;
 			
+			if (EndedConversationLua != "")
+			{
+				Lua.RunCode(EndedConversationLua);
+			}
 			if (EndedConversationSet != "")
 			{
 				UpdateVariablesFromString(EndedConversationSet);
@@ -195,7 +186,7 @@ void NeuroState::ClickTalk()
 void NeuroState::ClickSkill()
 {
 	CurrentState = State::InSite;
-	Variables["currentsite"] = "irs";
+	SetStringValue("currentsite", "irs");
 	PendingInvalidation |= ZoneType::Site;
 }
 
@@ -280,6 +271,13 @@ string NeuroState::GetCurrentMessage()
 		return "";
 	}
 	
+	if (CurrentConversation->Message.starts_with("lua:"))
+	{
+		string Result;
+		Lua.GetString(CurrentConversation->Message.substr(4), Result);
+		return Result;
+	}
+	
 	return CurrentConversation->Message;
 }
 
@@ -351,36 +349,59 @@ void NeuroState::InventoryUsed(int Index, InvAction Action, int Modifier)
 		return;
 	}
 	
-	if (Action == InvAction::Give)
+	
+	if (Action == InvAction::Give || Action == InvAction::Use)
 	{
-		char ValueStr[20];
-
+		// can only give money, not use it
 		if (Index == 0)
 		{
-			snprintf(ValueStr, 20, "$%d", Modifier);
+			Lua.SetGlobal("action", "give");
+			Lua.SetGlobal("type", "money");
+			Lua.SetGlobal("amount", Modifier);
+
+//			snprintf(ValueStr, 20, "$%d", Modifier);
 
 			Money -= Modifier;
 		}
 		else
 		{
+			char ValueStr[20];
 			snprintf(ValueStr, 20, "id_%d", Inventory[Index]);
+
+			if (Modifier == 0) Modifier = 1;
+			
+			Lua.SetGlobal("action", Action == InvAction::Give ? "give" : "use");
+			Lua.SetGlobal("type", ValueStr);
+			Lua.SetGlobal("amount", Modifier);
 
 			// todo: check if someone wants it
 			Inventory.erase(Inventory.begin() + Index);
 		}
 
-		Variables["receive"] = ValueStr;
+		for (Conversation* Convo : CurrentRoom->Conversations)
+		{
+			if (Convo->Action.starts_with("lua:"))
+			{
+				bool bActivateConversation = false;
+				// check condition, then run action, and if it returns true, then activate (we don't break, just in case other actions
+				// want to do something
+				if (TestCondition(Convo->Condition, true) &&
+					Lua.GetBool(Convo->Action.substr(4), bActivateConversation) &&
+					bActivateConversation)
+				{
+					ActivateConversation(Convo);
+				}
+			}
+		}
+		
+//		Variables["receive"] = ValueStr;
 
 		// now find if someone cares
-		Conversation* Convo = FindConversationForAction("receive", ValueStr);
-		if (Convo != nullptr)
-		{
-			ActivateConversation(Convo);
-		}
-	}
-	else if (Action == InvAction::Use)
-	{
-		
+//		Conversation* Convo = FindConversationForAction("receive", ValueStr);
+//		if (Convo != nullptr)
+//		{
+//			ActivateConversation(Convo);
+//		}
 	}
 	else if (Action == InvAction::Discard)
 	{
@@ -418,18 +439,6 @@ void NeuroState::GridboxClosed()
 	}
 }
 
-void NeuroState::SetIntVariable(string Name, int Value)
-{
-	if (Name == "money")
-	{
-		Money = Value;
-	}
-	else
-	{
-		SetIntValue(Name, Value);
-	}
-}
-
 void NeuroState::SendMessage(const string& Recipient, const string& Message)
 {
 	if (Config->MailServer.contains(Recipient))
@@ -446,7 +455,7 @@ bool NeuroState::ConnectToSite(const string& SiteName, int ComLinkLevel)
 {
 	if (Config->Sites.contains(SiteName))
 	{
-		Variables["currentsite"] = SiteName;
+		SetStringValue("currentsite", SiteName);
 		CurrentState = State::InSite;
 		PendingInvalidation |= ZoneType::Inventory | ZoneType::Site;
 		return true;
@@ -462,6 +471,13 @@ bool NeuroState::TestCondition(const string& Condition, bool bEmptyConditionIsSu
 	if (Condition == "")
 	{
 		return bEmptyConditionIsSuccess;
+	}
+	
+	if (Condition.starts_with("lua:"))
+	{
+		bool Result;
+		Lua.GetBool(Condition.substr(4), Result);
+		return Result;
 	}
 	
 	size_t OpLoc = Condition.find('=');
@@ -509,7 +525,7 @@ bool NeuroState::TestCondition(const string& Condition, bool bEmptyConditionIsSu
 	}
 	
 	// string comparison
-	string A = (Value != nullptr) ? *Value : GetStringVariable(FirstHalf);
+	string A = (Value != nullptr) ? *Value : GetStringValue(FirstHalf);
 	bool bResult = A == SecondHalf;
 	if (bResult)
 	{
@@ -533,6 +549,12 @@ Conversation* NeuroState::FindConversationWithTag(const char* Tag)
 
 Conversation* NeuroState::FindActiveConversation()
 {
+	if (PendingConversation != nullptr)
+	{
+		Conversation* Result = PendingConversation;
+		PendingConversation = nullptr;
+		return Result;
+	}
 	for (Conversation* Convo : CurrentRoom->Conversations)
 	{
 		if (TestCondition(Convo->Condition, false))
@@ -559,22 +581,122 @@ Conversation* NeuroState::FindConversationForAction(const string& Action, const 
 
 int NeuroState::GetIntValue(const string& Key) const
 {
-	if (IntValues.contains(Key))
+	if (Key == "money")
 	{
-		return IntValues.at(Key);
+		return Money;
 	}
-	
+	int Value;
+	if (Lua.GetIntValue(Key, Value))
+	{
+		return Value;
+	}
 	return -1;
 }
 
-void NeuroState::SetIntValue(const string& Key, int Value)
+string NeuroState::GetStringValue(const string& Key) const
 {
-	IntValues[Key] = Value;
+	string Value;
+	if (Lua.GetStringValue(Key, Value))
+	{
+		return Value;
+	}
+	return "";
+}
+
+void NeuroState::SetIntValue(const string& Name, int Value)
+{
+	if (Name == "money")
+	{
+		Money = Value;
+	}
+	else
+	{
+		Lua.SetIntValue(Name, Value);
+	}
+}
+
+void NeuroState::SetStringValue(const string& Name, const string& Value)
+{
+	Lua.SetStringValue(Name, Value);
+}
+
+
+void NeuroState::Trigger(const string& Type, const string& Value)
+{
+	if (Type == "talk")
+	{
+		if (Value == "")
+		{
+			PendingConversation = FindActiveConversation();
+		}
+		else
+		{
+			PendingConversation = FindConversationWithTag(Value.c_str());
+		}
+		CurrentState = State::ActivateConversation;
+	}
 }
 
 void NeuroState::IncrementIntValue(const string& Key)
 {
 	SetIntValue(Key, GetIntValue(Key) + 1);
+}
+
+static NeuroState* State(lua_State* L)
+{
+	lua_getglobal(L, "this");
+	NeuroState* State = (NeuroState*)lua_touserdata(L, -1);
+	lua_pop(L, 1);
+	
+	return State;
+
+}
+
+//int NeuroState::Lua_GetIntValue(lua_State* L)
+//{
+//	if (!lua_isstring(L, 1))
+//	{
+//		return 0;
+//	}
+//	
+//	const char* Key = lua_tostring(L, 1);
+//	int Value = State(L)->GetIntValue(Key);
+//	lua_pushinteger(L, Value);
+//
+//	// return number of results
+//	return 1;
+//}
+//
+//int NeuroState::Lua_SetIntValue(lua_State* L)
+//{
+//	if (!lua_isstring(L, 1) || !lua_isinteger(L, 2))
+//	{
+//		return 0;
+//	}
+//	
+//	const char* Key = lua_tostring(L, 1);
+//	int Value = (int)lua_tointeger(L, 2);
+//
+//	State(L)->SetIntValue(Key, Value);
+//	
+//	// return number of results
+//	return 0;
+//}
+//
+
+int NeuroState::Lua_Trigger(lua_State* L)
+{
+	if (!lua_isstring(L, 1) || !lua_isstring(L, 2))
+	{
+		return 0;
+	}
+
+	const char* Type = lua_tostring(L, 1);
+	const char* Value = lua_tostring(L, 2);
+	
+	State(L)->Trigger(Type, Value);
+
+	return 0;
 }
 
 void NeuroState::UpdateVariablesFromString(const string& Commands)
@@ -598,14 +720,14 @@ void NeuroState::UpdateVariablesFromString(const string& Commands)
 		{
 			if (Variable == "_deposit")
 			{
-				int CurrentBank = IntValues["bankaccount"];
+				int CurrentBank = GetIntValue("bankaccount");
 				int Change = stoi(Value);
 				CurrentBank += Change;
 				if (CurrentBank < 0)
 				{
 					CurrentBank = 0;
 				}
-				IntValues["bankaccount"] = CurrentBank;
+				SetIntValue("bankaccount", CurrentBank);
 			}
 			else if (Variable == "_inventory")
 			{
@@ -643,7 +765,15 @@ void NeuroState::StringReplacement(string& String, char Delimiter) const
 		string Variable = String.substr(FirstPercent + 1, SecondPercent - FirstPercent - 1);
 		
 		// replcae %foo% with GetVar(foo)
-		String.replace(FirstPercent, SecondPercent - FirstPercent + 1, GetStringVariable(Variable));
+		string NewValue;
+		if (Lua.GetStringValue(Variable, NewValue))
+		{
+			String.replace(FirstPercent, SecondPercent - FirstPercent + 1, NewValue);
+		}
+		else
+		{
+			FirstPercent = SecondPercent + 1;
+		}
 		
 		FirstPercent = String.find(Delimiter, FirstPercent);
 	}

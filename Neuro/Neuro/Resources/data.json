@@ -1,29 +1,33 @@
 {"rooms":
 [
   {
+	// first room
 	"id":"chatsubo",
   	"background":"chatsubo",
   	"conversations":
   	[
 		{
 			"tag":"longdescription",
-			"message":"You've just spent the night sleeping face-down in a pile of synth-spaghetti in a bar called Chatsubo. After rubbint the sauce out of your eyes, you can see Chiba sky through the window, the color of television tuned to a dead channel.\nA PAX booth is on the wall. Ratz's prosthetic Russin arm whines as he wipes the bar. His teeth are a webwork of East Eurpoean steel and brown decay.",
-			"set":"chatsubo=0|_trigger=talk"
+			"message":"lua:result = 'This string is coming from embedded Lua. -bankaccount- value is ' .. settings.bankaccount",
+			"XXmessage":"You've just spent the night sleeping face-down in a pile of synth-spaghetti in a bar called Chatsubo. After rubbint the sauce out of your eyes, you can see Chiba sky through the window, the color of television tuned to a dead channel.\nA PAX booth is on the wall. Ratz's prosthetic Russin arm whines as he wipes the bar. His teeth are a webwork of East Eurpoean steel and brown decay.",
+			"XXset":"chatsubo=0|_trigger=talk",
+			"lua":"settings.chatsubo=0; Trigger('talk', '')"
 		},
 		{
 			"tag":"description",
 			"message":"In the Chatsubo bar"
 		},
   		{
-  			"condition":"chatsubo=0",
+  			"condition":"lua:result = (settings.chatsubo == 0)",
   			"lines":
   			[
   				"I don't care if you eat that spaghetti or sleep in it, you still gotta pay for it. 46 credits."
   			],
-			"set":"chatsubo=1|_trigger=talk"
+			"XXset":"chatsubo=1|_trigger=talk",
+			"lua":"settings.chatsubo=1; Trigger('talk', '')"
   		},
   		{
-  			"condition":"chatsubo=1",
+			"condition":"lua:result = (settings.chatsubo == 1)",
   			"options":
   			[
   				{ "line":"Sorry, Ratz. I can't afford it. Want me to give it back?", "response":"Pay up, cyberscum. Use the PAX if you need money." },
@@ -32,24 +36,25 @@
   				{ "line":"I'd like to sleep on it some more, if that's okay with you, Ratz.", "response":"You been sleepin' in that stuff all night. Now pay up or I call a lawbot." }
   			]
   		},
-  		{
+		{
 			"condition":"chatsubo=1",
-  			"action":"receive<$46",
+			"action":"lua:print (\"Received \" .. tostring(amount)); if (GotMoney()) then; if (amount < 46) then SetInt('money', GetInt('money') + amount); Trigger('talk', 'nomoney'); else Trigger('talk', 'enoughmoney'); end; end"
+		},
+  		{
+			"tag":"nomoney",
 			"message":"Ratz refuses to take your credits.",
   			"lines":
   			[
   				"I said 46 credits, buckwheat. Are you deaf?"
-  			],
-			"set":"_inventory=@receive@"
+  			]
   		},
   		{
-			"condition":"chatsubo=1",
-  			"action":"receive>$45",
+			"tag":"enoughmoney",
   			"lines":
   			[
   				"Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck."
   			],
-  			"set":"chatsubo=2|_trigger=talk"
+  			"set":"chatsubo=2"
   		},
   		{
   			"condition":"chatsubo=2",

@@ -8,7 +8,36 @@
 #pragma once
 
 #include <Wofl/Wofl.h>
-#
+
+//class StringOrString
+//{
+//public:
+//	string Get();
+//
+//	void Set(string& Val)
+//	{
+//		Value = Val;
+//	}
+//private:
+//	string Value;
+//	string CachedLuaValue;
+//};
+//
+//class StringOrBool
+//{
+//public:
+//	string Get();
+//
+//	void Set(string& Val)
+//	{
+//		Value = Val;
+//	}
+//private:
+//	string Value;
+//	string CachedLuaValue;
+//};
+#define StringOrString string
+#define StringOrBool string
 
 class NeuroConfigObj : public LoadJsonObj
 {
@@ -19,8 +48,8 @@ protected:
 class Option : public NeuroConfigObj
 {
 public:
-	string Line;
-	string Response;
+	StringOrString Line;
+	StringOrString Response;
 	string Set;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
@@ -30,10 +59,11 @@ class Conversation : public NeuroConfigObj
 {
 public:
 	string Tag;
-	string Condition;
-	string Action;
-	string Message;
+	StringOrBool Condition;
+	StringOrBool Action;
+	StringOrString Message;
 	string Set;
+	string Lua;
 
 	vector<string> Lines;
 	vector<Option*> Options;

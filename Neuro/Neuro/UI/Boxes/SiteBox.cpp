@@ -209,7 +209,7 @@ void SiteBox::Update()
 
 			char EntryText[50];
 			int Column2Widths[] = { (GridsX - 2) * 2 / 3 };
-			int Column3Widths[] = { (GridsX - 2) / 2, GridsX * 3 / 4 };
+			//int Column3Widths[] = { (GridsX - 2) / 2, GridsX * 3 / 4 };
 			if (CurrentPage->ListColumns.size() == 2)
 			{
 				snprintf(EntryText, 50, "   %-*s %s", Column2Widths[0], CurrentPage->ListColumns[0].c_str(), CurrentPage->ListColumns[1].c_str());

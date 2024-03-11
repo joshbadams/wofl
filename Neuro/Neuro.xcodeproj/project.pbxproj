@@ -10,6 +10,11 @@
 		7C06E60829F5FF4300167332 /* NeuroScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C06E60629F5FF4300167332 /* NeuroScene.cpp */; };
 		7C06E60B29F956C400167332 /* Gridbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C06E60A29F956C400167332 /* Gridbox.cpp */; };
 		7C382AC029ECE71500FD8086 /* NeuroState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C382ABE29ECE71500FD8086 /* NeuroState.cpp */; };
+		7C723BB62B811E0300D2369D /* Wofl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C8B219129E638900060C879 /* Wofl.framework */; };
+		7C723BB72B811EBA00D2369D /* Wofl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C8B219129E638900060C879 /* Wofl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7C723BB92B81267000D2369D /* lua in Resources */ = {isa = PBXBuildFile; fileRef = 7C723BB82B81267000D2369D /* lua */; };
+		7C723BBB2B8126D700D2369D /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C723BBA2B8126D700D2369D /* liblua.a */; };
+		7C723BBE2B814D5600D2369D /* NeuroLua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C723BBC2B814D5600D2369D /* NeuroLua.cpp */; };
 		7C88AEBB29EB73110011A3B3 /* NeuroGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEB429EB73110011A3B3 /* NeuroGame.cpp */; };
 		7C88AEBC29EB73110011A3B3 /* Ninebox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEB829EB73110011A3B3 /* Ninebox.cpp */; };
 		7C88AEBD29EB73110011A3B3 /* Textbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEBA29EB73110011A3B3 /* Textbox.cpp */; };
@@ -23,8 +28,6 @@
 		7CE8527929FF15D900DD3053 /* InvBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8527029FF15D900DD3053 /* InvBox.cpp */; };
 		7CE8527C29FF666500DD3053 /* PAXBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8527B29FF666500DD3053 /* PAXBox.cpp */; };
 		7CE8F9522A119F8A00B5B327 /* SiteBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8F9512A119F8A00B5B327 /* SiteBox.cpp */; };
-		7CF9A57629E4ECF700FDB4A6 /* Wofl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF9A57329E4DF9400FDB4A6 /* Wofl.framework */; };
-		7CF9A57729E4ECF700FDB4A6 /* Wofl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF9A57329E4DF9400FDB4A6 /* Wofl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7CF9A57929E5177D00FDB4A6 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 7CF9A57829E5177D00FDB4A6 /* Resources */; };
 /* End PBXBuildFile section */
 
@@ -87,7 +90,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7CF9A57729E4ECF700FDB4A6 /* Wofl.framework in Embed Frameworks */,
+				7C723BB72B811EBA00D2369D /* Wofl.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +104,10 @@
 		7C06E60A29F956C400167332 /* Gridbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gridbox.cpp; sourceTree = "<group>"; };
 		7C382ABE29ECE71500FD8086 /* NeuroState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroState.cpp; sourceTree = "<group>"; };
 		7C382ABF29ECE71500FD8086 /* NeuroState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeuroState.h; sourceTree = "<group>"; };
+		7C723BB82B81267000D2369D /* lua */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lua; sourceTree = "<group>"; };
+		7C723BBA2B8126D700D2369D /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = lua/liblua.a; sourceTree = "<group>"; };
+		7C723BBC2B814D5600D2369D /* NeuroLua.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroLua.cpp; sourceTree = "<group>"; };
+		7C723BBD2B814D5600D2369D /* NeuroLua.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeuroLua.h; sourceTree = "<group>"; };
 		7C88AEB429EB73110011A3B3 /* NeuroGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroGame.cpp; sourceTree = "<group>"; };
 		7C88AEB529EB73110011A3B3 /* NeuroGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeuroGame.h; sourceTree = "<group>"; };
 		7C88AEB729EB73110011A3B3 /* Textbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Textbox.h; sourceTree = "<group>"; };
@@ -134,8 +141,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CF9A57629E4ECF700FDB4A6 /* Wofl.framework in Frameworks */,
 				7CA3605D29E3AB58009B40DA /* AppKit.framework in Frameworks */,
+				7C723BBB2B8126D700D2369D /* liblua.a in Frameworks */,
+				7C723BB62B811E0300D2369D /* Wofl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +165,14 @@
 			name = AppJunk;
 			sourceTree = "<group>";
 		};
+		7C723BAE2B811E0300D2369D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7C723BBA2B8126D700D2369D /* liblua.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7C88AEB329EB73110011A3B3 /* Game */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +182,8 @@
 				7C88AEB529EB73110011A3B3 /* NeuroGame.h */,
 				7C382ABE29ECE71500FD8086 /* NeuroState.cpp */,
 				7C382ABF29ECE71500FD8086 /* NeuroState.h */,
+				7C723BBC2B814D5600D2369D /* NeuroLua.cpp */,
+				7C723BBD2B814D5600D2369D /* NeuroLua.h */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -203,8 +221,10 @@
 		7C9E068529E3855400A88DE7 = {
 			isa = PBXGroup;
 			children = (
+				7C723BB82B81267000D2369D /* lua */,
 				7C9E069029E3855400A88DE7 /* Neuro */,
 				7C9E068F29E3855400A88DE7 /* Products */,
+				7C723BAE2B811E0300D2369D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -370,6 +390,7 @@
 				7C9E069829E3855500A88DE7 /* Assets.xcassets in Resources */,
 				7C9E069B29E3855500A88DE7 /* Main.storyboard in Resources */,
 				7CB134B22A08425F00AF73AB /* Readme.txt in Resources */,
+				7C723BB92B81267000D2369D /* lua in Resources */,
 				7CF9A57929E5177D00FDB4A6 /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,6 +412,7 @@
 				7C88AEC029EB73EB0011A3B3 /* NeuroConfig.cpp in Sources */,
 				7C88AEBD29EB73110011A3B3 /* Textbox.cpp in Sources */,
 				7CE8527929FF15D900DD3053 /* InvBox.cpp in Sources */,
+				7C723BBE2B814D5600D2369D /* NeuroLua.cpp in Sources */,
 				7C06E60829F5FF4300167332 /* NeuroScene.cpp in Sources */,
 				7C88AEBC29EB73110011A3B3 /* Ninebox.cpp in Sources */,
 			);
@@ -460,7 +482,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -512,7 +534,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -537,6 +559,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lua",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mosh.Neuro;
@@ -563,6 +589,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lua",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mosh.Neuro;

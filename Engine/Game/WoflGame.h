@@ -101,6 +101,7 @@ protected:
 		{
 			delete Entry;
 		}
+		
 		Array.clear();
 		
 		// pull out the array
@@ -187,6 +188,8 @@ protected:
 	
 	bool LoadFromFile(const char* Filename)
 	{
+		WLOG("Loading save game %s...\n", Filename);
+		
 		string JsonString = Utils::File->LoadFileToString(Filename);
 
 		if (JsonString.length() == 0)

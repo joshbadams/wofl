@@ -77,6 +77,8 @@ class Room : public NeuroConfigObj
 public:
 	string ID;
 	string BackgroundImage;
+	bool bHasPAX;
+	bool bHasJack;
 
 	vector<Conversation*> Conversations;
 	

@@ -4,7 +4,4 @@
    <FileRef
       location = "group:Wofl.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:Neuro/Neuro.xcodeproj">
-   </FileRef>
 </Workspace>

@@ -30,7 +30,16 @@ protected:
 		}
 		return "";
 	}
-	
+
+	bool GetBool(const Json::Value& Obj, const char* Key)
+	{
+		if (Obj.isMember(Key))
+		{
+			return Obj[Key].asBool();
+		}
+		return false;
+	}
+
 	int GetInt(const Json::Value& Obj, const char* Key)
 	{
 		if (Obj.isMember(Key))

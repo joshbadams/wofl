@@ -53,6 +53,8 @@ void Room::FromJsonObject(const Json::Value& Object)
 {
 	ID = GetString(Object, "id");
 	BackgroundImage = GetString(Object, "background");
+	bHasPAX = GetBool(Object, "haspax");
+	bHasJack = GetBool(Object, "hasjack");
 	GetArrayFromObject(Conversations, Object, "conversations");
 }
 

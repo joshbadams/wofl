@@ -304,6 +304,16 @@
 		9DFCEA8B1DD8AD3500FC5A9F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DFCEA8A1DD8AD3500FC5A9F /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7C2271182C83E032005A04B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C2271142C83E032005A04B6 /* Neuro.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7C9E068E29E3855400A88DE7;
+			remoteInfo = Neuro;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		77C8936E27C131C900827146 /* iOSRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iOSRender.cpp; sourceTree = "<group>"; };
 		77C8937027C13F1600827146 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -318,6 +328,7 @@
 		77C8937F27C1656600827146 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		77C8938127C1659400827146 /* ShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		77C893B627CC257600827146 /* Idler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Idler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C2271142C83E032005A04B6 /* Neuro.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Neuro.xcodeproj; path = Neuro/Neuro.xcodeproj; sourceTree = "<group>"; };
 		7C9E064C29E36E9600A88DE7 /* Wofl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Wofl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C9E067F29E37AF900A88DE7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/AppKit.framework; sourceTree = DEVELOPER_DIR; };
 		7C9E068129E37B1200A88DE7 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -531,6 +542,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7C2271152C83E032005A04B6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7C2271192C83E032005A04B6 /* Neuro.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		7CA3605929E39B52009B40DA /* Wofl */ = {
 			isa = PBXGroup;
 			children = (
@@ -718,21 +737,22 @@
 		9DA4AE6916C0AF600019FDAA = {
 			isa = PBXGroup;
 			children = (
-				9DFCE9881DD7E11300FC5A9F /* Engine */,
-				9D32BE9B1F12C805001E88CA /* BurgerThyme */,
-				9DA48D251780AB4000FE51E5 /* MouseGame */,
-				9DA48D5E1788F3EC00FE51E5 /* FishHotel */,
-				9D558961188F516D003F8807 /* Oust */,
-				9D262928189DDB0400A6830D /* Scrolly */,
-				9DAB7DAD280CC6700054D981 /* Idler */,
-				9DFCEA771DD7E88300FC5A9F /* Frameworks */,
-				9DFCEA7A1DD7E8B700FC5A9F /* MouseGame.app */,
+				7C2271142C83E032005A04B6 /* Neuro.xcodeproj */,
+				9D920F7A1ED2795300F4C463 /* BurgerThyme.app */,
 				9DFCEA7B1DD7E8B700FC5A9F /* FishHotel.app */,
+				77C893B627CC257600827146 /* Idler.app */,
+				9DFCEA7A1DD7E8B700FC5A9F /* MouseGame.app */,
 				9DFCEA7C1DD7E8B700FC5A9F /* Oust.app */,
 				9DFCEA7D1DD7E8B700FC5A9F /* Scrolly.app */,
-				9D920F7A1ED2795300F4C463 /* BurgerThyme.app */,
-				77C893B627CC257600827146 /* Idler.app */,
 				7C9E064C29E36E9600A88DE7 /* Wofl.framework */,
+				9D32BE9B1F12C805001E88CA /* BurgerThyme */,
+				9DFCE9881DD7E11300FC5A9F /* Engine */,
+				9DA48D5E1788F3EC00FE51E5 /* FishHotel */,
+				9DFCEA771DD7E88300FC5A9F /* Frameworks */,
+				9DAB7DAD280CC6700054D981 /* Idler */,
+				9DA48D251780AB4000FE51E5 /* MouseGame */,
+				9D558961188F516D003F8807 /* Oust */,
+				9D262928189DDB0400A6830D /* Scrolly */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1134,6 +1154,12 @@
 			mainGroup = 9DA4AE6916C0AF600019FDAA;
 			productRefGroup = 9DA4AE6916C0AF600019FDAA;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7C2271152C83E032005A04B6 /* Products */;
+					ProjectRef = 7C2271142C83E032005A04B6 /* Neuro.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				9DA4AE7116C0AF600019FDAA /* MouseGame */,
@@ -1146,6 +1172,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7C2271192C83E032005A04B6 /* Neuro.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Neuro.app;
+			remoteRef = 7C2271182C83E032005A04B6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		77C893A627CC257600827146 /* Resources */ = {

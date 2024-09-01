@@ -42,10 +42,12 @@ Lua::Lua(void* Context)
 	lua_pushnil(L);  // first key
 	while (lua_next(L, Table) != 0)
 	{
-		SystemVariables.push_back(lua_tostring(L, -2));
+		SystemVariables.insert(lua_tostring(L, -2));
 		// move to next
 		lua_pop(L, 1);
 	}
+	// never serialize our special communcation variable
+	SystemVariables.insert("result");
 	
 	lua_pushlightuserdata(L, Context);
 	lua_setglobal(L, "this");
@@ -81,23 +83,29 @@ Json::Value Lua::ToJsonObject()
 	
 	Json::Value LuaObject(Json::objectValue);
 	
-	lua_getglobal(L, "settings");
+	lua_pushglobaltable(L);
 	int Table = lua_gettop(L);
 	lua_pushnil(L);  // first key
 	while (lua_next(L, Table) != 0)
 	{
-		const char* Key = lua_tostring(L, -2);
-		if (lua_isinteger(L, -1))
+		string Key = lua_tostring(L, -2);
+		if (SystemVariables.find(Key) == SystemVariables.end())
 		{
-			LuaObject[Key] = Json::Value(lua_tointeger(L, -1));
-		}
-		else if (lua_isstring(L, -1))
-		{
-			LuaObject[Key] = Json::Value(lua_tostring(L, -1));
-		}
-		else
-		{
-			assert(0);
+			if (lua_isinteger(L, -1))
+			{
+				LuaObject[Key] = Json::Value(lua_tointeger(L, -1));
+			}
+			else if (lua_isstring(L, -1))
+			{
+				LuaObject[Key] = Json::Value(lua_tostring(L, -1));
+			}
+			else if (lua_isfunction(L, -1) || lua_islightuserdata(L, -1))
+			{
+			}
+			else
+			{
+				assert(0);
+			}
 		}
 
 		// move to next
@@ -183,13 +191,17 @@ bool Lua::GetBool(const string& Code, bool& Result)
 {
 	SCOPE;
 	
+	int Top1 = lua_gettop(L);
 	SetGlobal("result", nullptr);
-	if (!RunCode(Code))
+	bool bSetsResult = Code.find("result = ") != string::npos || Code.find("result=") != string::npos;
+	if (!RunCode(bSetsResult ? Code : (string("result = ") + Code)))
 	{
 		return false;
 	}
-	
+	int Top2 = lua_gettop(L);
+
 	lua_getglobal(L, "result");
+	int Top3 = lua_gettop(L);
 	// allow no return, treated as false
 	if (lua_isnil(L, -1))
 	{
@@ -244,9 +256,7 @@ bool Lua::GetStringValue(const string& Name, string& Result) const
 {
 	SCOPE;
 	
-	lua_getglobal(L, "settings");
-	lua_pushlstring(L, Name.c_str(), (int)Name.length());
-	lua_gettable(L, -2);
+	lua_getglobal(L, Name.c_str());
 	if (!lua_isstring(L, -1))
 	{
 		return false;
@@ -259,8 +269,6 @@ void Lua::SetStringValue(const string& Name, const string& Value) const
 {
 	SCOPE;
 	
-	lua_getglobal(L, "settings");
-	lua_pushlstring(L, Name.c_str(), (int)Name.length());
 	lua_pushlstring(L, Value.c_str(), (int)Value.length());
-	lua_settable(L, -3);
+	lua_setglobal(L, Name.c_str());
 }

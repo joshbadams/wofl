@@ -11,6 +11,7 @@
 #include "../../lua/lua.hpp"
 
 #include <string>
+#include <set>
 using namespace	 std;
 
 class Lua : public IJsonObj
@@ -40,5 +41,5 @@ public:
 
 private:
 	mutable lua_State* L;
-	vector<string> SystemVariables;
+	set<string> SystemVariables;
 };

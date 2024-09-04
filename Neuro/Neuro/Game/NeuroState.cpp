@@ -11,14 +11,13 @@
 
 NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate)
 	: CurrentRoom(nullptr)
+	, Lua_CurrentRoom(nullptr)
 	, CurrentConversation(nullptr)
 	, Money(6)
 	, Config(InConfig)
 	, StateDelegate(InStateDelegate)
 	, Lua(this)
 {
-//	Lua.RegisterFunction("GetInt", Lua_GetIntValue);
-//	Lua.RegisterFunction("SetInt", Lua_SetIntValue);
 	Lua.RegisterFunction("Trigger", Lua_Trigger);
 
 	if (LoadFromFile(Utils::File->GetSavePath("game.sav").c_str()) == false)
@@ -37,6 +36,57 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 	PendingConversation = nullptr;
 	PendingRoom = Config->Rooms[0];
 	CurrentState = State::EnteredRoom;
+	
+	
+//	int Obj;
+//	Lua.GetObject("Room", Obj);
+//	string Str;
+//	Lua.GetStringValue("Room", "shortDesc", Str);
+	
+//	int Stack = Lua.MarkStack();
+//	LuaRef* RRef;
+//	Lua.GetTableValue("", "chatsubo", RRef);
+//
+//	string foobar;
+//	Lua.GetStringValue("chatsubo", "foobar", foobar);
+//	foobar = "";
+//	Lua.GetStringValue(RRef, "foobar", foobar);
+//	foobar = "";
+//
+//	delete RRef;
+//	LuaRef* TestFunc;
+//	Lua.GetFunctionValue("", "Test", TestFunc);
+//	Lua.CallFunction_NoParam_Return("", TestFunc, RRef);
+//	Lua.GetStringValue(RRef, "foobar", foobar);
+//	foobar = "";
+//	Lua.GetStringValue(RRef, "bar", foobar);
+//	foobar = "";
+//
+//	LuaRef* CRef;
+//	
+//	Lua.CallFunction_OneParam_Return("Chatsubo", "GetNextConversation", "longdescription", CRef);
+//	if (CRef)
+//	{
+//		Lua.GetStringValue(CRef, "foobar", foobar);
+//		Lua.GetStringValue(CRef, "tag", foobar);
+//		Lua.GetStringValue(RRef, "foobar", foobar);
+//		Lua.GetStringValue(RRef, "tag", foobar);
+//
+//		Lua.CallFunction_NoParam_NoReturn(CRef, "onEnd");
+//
+//		Conversation C;
+//		C.FromLuaDeleteRef(Lua, CRef);
+//		
+//		WLOG("Before: %d\n", GetIntValue("chatsubo"));
+//		if (C.Lua_OnEnd)
+//		{
+//			Lua.CallFunction_NoParam_NoReturn("Chatsubo", C.Lua_OnEnd);
+//		}
+//		//		Lua.CallFunction_ReturnsOnStack("Room", C.Lua_OnStart);
+//		WLOG("After: %d\n", GetIntValue("chatsubo"));
+//		WLOG("Line: %s\n", C.Message.c_str());
+//	}
+////	Lua.RestoreStack(Stack);
 }
 
 Json::Value NeuroState::ToJsonObject()
@@ -98,9 +148,10 @@ void NeuroState::Tick()
 			
 		case State::EndedConversation:
 		{
+			LuaRef* OnEndFunction = CurrentConversation->Lua_OnEnd;
 			// set any vars, and maybe trigger another talk
 			string& EndedConversationSet = CurrentConversation->Set;
-			string& EndedConversationLua = CurrentConversation->Lua;
+			string& EndedConversationLua = CurrentConversation->LuaCode;
 
 			CurrentState = State::Idle;
 			CurrentConversation = nullptr;
@@ -109,7 +160,11 @@ void NeuroState::Tick()
 			ChoiceIndex = -1;
 			PendingInvalidation |= ZoneType::Dialog;
 			PendingInvalidation |= ZoneType::Message;
-			
+
+			if (OnEndFunction)
+			{
+				Lua.CallFunction_NoParam_NoReturn(Lua_CurrentRoom, OnEndFunction);
+			}
 			if (EndedConversationLua != "")
 			{
 				Lua.RunCode(EndedConversationLua);
@@ -204,6 +259,9 @@ void NeuroState::ClickSystem()
 void NeuroState::ActivateRoom(Room* OldRoom, Room* NewRoom)
 {
 	CurrentRoom = NewRoom;
+	
+	delete Lua_CurrentRoom;
+	Lua.GetTableValue("",  CurrentRoom->ID.c_str(), Lua_CurrentRoom);
 	
 	PendingInvalidation = ZoneType::Room;
 
@@ -536,6 +594,18 @@ bool NeuroState::TestCondition(const string& Condition, bool bEmptyConditionIsSu
 
 Conversation* NeuroState::FindConversationWithTag(const char* Tag)
 {
+//	LUA_SCOPE;
+	LuaRef* ConvoRef;
+	Lua.CallFunction_OneParam_Return(Lua_CurrentRoom, "GetNextConversation", Tag, ConvoRef);
+	if (ConvoRef)
+	{
+		LuaConversation.FromLua(Lua, ConvoRef);
+		delete ConvoRef;
+		
+		return &LuaConversation;
+	}
+	
+	// if nothing found in Lua, look in json
 	for (Conversation* Convo : CurrentRoom->Conversations)
 	{
 		if (Convo->Tag == Tag)
@@ -555,6 +625,15 @@ Conversation* NeuroState::FindActiveConversation()
 		PendingConversation = nullptr;
 		return Result;
 	}
+
+	LuaRef* ConvoRef;
+	Lua.CallFunction_NoParam_Return(Lua_CurrentRoom, "GetNextConversation", ConvoRef);
+	if (ConvoRef)
+	{
+		LuaConversation.FromLua(Lua, ConvoRef);
+		return &LuaConversation;
+	}
+
 	for (Conversation* Convo : CurrentRoom->Conversations)
 	{
 		if (TestCondition(Convo->Condition, false))
@@ -586,7 +665,7 @@ int NeuroState::GetIntValue(const string& Key) const
 		return Money;
 	}
 	int Value;
-	if (Lua.GetIntValue(Key, Value))
+	if (Lua.GetIntValue("", Key.c_str(), Value))
 	{
 		return Value;
 	}
@@ -596,7 +675,7 @@ int NeuroState::GetIntValue(const string& Key) const
 string NeuroState::GetStringValue(const string& Key) const
 {
 	string Value;
-	if (Lua.GetStringValue(Key, Value))
+	if (Lua.GetStringValue("", Key.c_str(), Value))
 	{
 		return Value;
 	}
@@ -611,13 +690,13 @@ void NeuroState::SetIntValue(const string& Name, int Value)
 	}
 	else
 	{
-		Lua.SetIntValue(Name, Value);
+		Lua.SetIntValue(nullptr, Name.c_str(), Value);
 	}
 }
 
 void NeuroState::SetStringValue(const string& Name, const string& Value)
 {
-	Lua.SetStringValue(Name, Value);
+	Lua.SetStringValue(nullptr, Name.c_str(), Value);
 }
 
 
@@ -633,7 +712,10 @@ void NeuroState::Trigger(const string& Type, const string& Value)
 		{
 			PendingConversation = FindConversationWithTag(Value.c_str());
 		}
-		CurrentState = State::ActivateConversation;
+		if (PendingConversation != nullptr)
+		{
+			CurrentState = State::ActivateConversation;
+		}
 	}
 }
 
@@ -686,13 +768,14 @@ static NeuroState* State(lua_State* L)
 
 int NeuroState::Lua_Trigger(lua_State* L)
 {
-	if (!lua_isstring(L, 1) || !lua_isstring(L, 2))
+	if (!lua_isstring(L, -1) || !lua_isstring(L, -2))
 	{
 		return 0;
 	}
 
-	const char* Type = lua_tostring(L, 1);
-	const char* Value = lua_tostring(L, 2);
+	// Lua: Trigger(type, value)
+	const char* Type = lua_tostring(L, -2);
+	const char* Value = lua_tostring(L, -1);
 	
 	State(L)->Trigger(Type, Value);
 
@@ -766,7 +849,7 @@ void NeuroState::StringReplacement(string& String, char Delimiter) const
 		
 		// replcae %foo% with GetVar(foo)
 		string NewValue;
-		if (Lua.GetStringValue(Variable, NewValue))
+		if (Lua.GetStringValue("", Variable.c_str(), NewValue))
 		{
 			String.replace(FirstPercent, SecondPercent - FirstPercent + 1, NewValue);
 		}

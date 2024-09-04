@@ -7,7 +7,20 @@
 
 #include "NeuroConfig.h"
 #include "NeuroGame.h"
+#include "NeuroLua.h"
 
+
+void NeuroConfigObj::FromLua(class Lua& L, class LuaRef* Object)
+{ 
+	
+}
+
+void NeuroConfigObj::FromLuaDeleteRef(class Lua& L, class LuaRef*& Object)
+{
+	FromLua(L, Object);
+	delete Object;
+	Object = nullptr;
+}
 
 string NeuroConfigObj::PostProcessString(const string& String)
 {
@@ -58,14 +71,21 @@ void Room::FromJsonObject(const Json::Value& Object)
 	GetArrayFromObject(Conversations, Object, "conversations");
 }
 
-void Conversation::FromJsonObject(const Json::Value& Object)
+
+Conversation::~Conversation()
 {
+	delete Lua_OnStart;
+	delete Lua_OnEnd;
+}
+
+void Conversation::FromJsonObject(const Json::Value& Object)
+{	
 	Tag = GetString(Object, "tag");
 	Condition = GetString(Object, "condition");
 	Action = GetString(Object, "action");
 	Message = GetString(Object, "message");
 	Set = GetString(Object, "set");
-	Lua = GetString(Object, "lua");
+	LuaCode = GetString(Object, "lua");
 	
 	GetStringArrayFromObject(Lines, Object, "lines");
 	GetArrayFromObject(Options, Object, "options");
@@ -80,12 +100,42 @@ void Conversation::FromJsonObject(const Json::Value& Object)
 //	}
 }
 
+void Conversation::FromLua(class Lua& L, LuaRef* Object)
+{
+	// we don't need Tag since we've already found it in Lua, but just for completeness
+	L.GetStringValue(Object, "tag", Tag);
+	L.GetStringValue(Object, "message", Message);
+	L.GetFunctionValue(Object, "onStart", Lua_OnStart);
+	L.GetFunctionValue(Object, "onEnd", Lua_OnEnd);
+
+	// get the lines
+	L.GetStringValues(Object, "lines", Lines);
+
+	// get option objects
+	vector<LuaRef*> OptionRefs;
+	L.GetTableValues(Object, "options", OptionRefs);
+	for (LuaRef* OptionRef : OptionRefs)
+	{
+		Option* O = new Option();
+		Options.push_back(O);
+		
+		O->FromLuaDeleteRef(L, OptionRef);
+	}
+}
+
 void Option::FromJsonObject(const Json::Value& Object)
 {
 	Line = GetString(Object, "line");
 	Response = GetString(Object, "response");
 	Set = GetString(Object, "set");
 }
+void Option::FromLua(Lua& L, LuaRef* Object)
+{
+	L.GetStringValue(Object, "line", Line);
+	L.GetStringValue(Object, "response", Response);
+	L.GetStringValue(Object, "set", Set);
+}
+
 
 void Item::FromJsonObject(const Json::Value &Object)
 {

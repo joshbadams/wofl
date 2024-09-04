@@ -39,8 +39,15 @@
 #define StringOrString string
 #define StringOrBool string
 
+class Lua;
+class LuaRef;
+
 class NeuroConfigObj : public LoadJsonObj
 {
+public:
+	virtual void FromLua(Lua& L, LuaRef* Object);
+	virtual void FromLuaDeleteRef(Lua& L, LuaRef*& Object);
+
 protected:
 	virtual string PostProcessString(const string& String) override;
 };
@@ -53,23 +60,32 @@ public:
 	string Set;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
+	virtual void FromLua(Lua& L, LuaRef* Object) override;
 };
 
 class Conversation : public NeuroConfigObj
 {
 public:
+	~Conversation();
+	
 	string Tag;
 	StringOrBool Condition;
 	StringOrBool Action;
 	StringOrString Message;
 	string Set;
-	string Lua;
+	string LuaCode;
+	
+	
+	class LuaRef* Lua_OnStart = nullptr;
+	class LuaRef* Lua_OnEnd = nullptr;
 
 	vector<string> Lines;
 	vector<Option*> Options;
 
 	virtual void FromJsonObject(const Json::Value& Object) override;
+	virtual void FromLua(Lua& L, LuaRef* Object) override;
 };
+
 
 
 class Room : public NeuroConfigObj

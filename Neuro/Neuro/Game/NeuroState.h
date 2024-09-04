@@ -107,6 +107,7 @@ class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, publ
 {
 public:
 	Room* CurrentRoom;
+	LuaRef* Lua_CurrentRoom;
 	
 //	map<string, int> IntValues;
 //	map<string, string> Variables;
@@ -207,6 +208,7 @@ private:
 	NeuroConfig* Config;
 	IStateChangedDelegate* StateDelegate;
 	
+	Conversation LuaConversation;
 	Conversation* CurrentConversation;
 	int DialogIndex;
 	int ChoiceIndex;

@@ -8,28 +8,8 @@
 	"hasjack":false,
   	"conversations":
   	[
-		{
-			"tag":"longdescription",
-			"XXmessage":"lua:result = 'This string is coming from embedded Lua. -bankaccount- value is ' .. bankaccount",
-			"message":"You've just spent the night sleeping face-down in a pile of synth-spaghetti in a bar called Chatsubo. After rubbint the sauce out of your eyes, you can see Chiba sky through the window, the color of television tuned to a dead channel.\nA PAX booth is on the wall. Ratz's prosthetic Russin arm whines as he wipes the bar. His teeth are a webwork of East Eurpoean steel and brown decay.",
-			"XXset":"chatsubo=0|_trigger=talk",
-			"lua":"chatsubo=0; Trigger('talk', '')"
-		},
-		{
-			"tag":"description",
-			"message":"In the Chatsubo bar"
-		},
   		{
-  			"condition":"lua:chatsubo == 0",
-  			"lines":
-  			[
-  				"I don't care if you eat that spaghetti or sleep in it, you still gotta pay for it. 46 credits."
-  			],
-			"XXset":"chatsubo=1|_trigger=talk",
-			"lua":"chatsubo=1; Trigger('talk', '')"
-  		},
-  		{
-			"condition":"lua:chatsubo == 1",
+			"condition":"lua:s_chatsubo == 1",
   			"options":
   			[
   				{ "line":"Sorry, Ratz. I can't afford it. Want me to give it back?", "response":"Pay up, cyberscum. Use the PAX if you need money." },
@@ -39,8 +19,8 @@
   			]
   		},
 		{
-			"condition":"lua:chatsubo == 1",
-			"action":"lua:print (\"Received \" .. tostring(amount)); if (GotMoney()) then; if (amount < 46) then SetInt('money', GetInt('money') + amount); Trigger('talk', 'nomoney'); else Trigger('talk', 'enoughmoney'); end; end"
+			"condition":"lua:s_chatsubo == 1",
+			"action":"lua:print (\"Received \" .. tostring(amount)); if (GotMoney()) then; if (amount < 46) then SavedValues['money'] = , SavedValues['money'] + amount; Trigger('talk', 'nomoney'); else Trigger('talk', 'enoughmoney'); end; end"
 		},
   		{
 			"tag":"nomoney",
@@ -56,31 +36,31 @@
   			[
   				"Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck."
   			],
-  			"lua":"chatsubo = 2"
+  			"lua":"s_chatsubo = 2"
   		},
   		{
-  			"condition":"lua:chatsubo==2",
+  			"condition":"lua:s_chatsubo==2",
   			"options":
   			[
   				{ "line":"What deck does Shin have?", "response":"Your Yamamitsu UXB, Herr %name%. Shin says you pawned it at his shop." },
-  				{ "line":"Anything else come up?", "response":"One of Lonny Zone's girls was looking for you too. You got biz with Zone?", "set":"chatsubo=3" },
+  				{ "line":"Anything else come up?", "response":"One of Lonny Zone's girls was looking for you too. You got biz with Zone?", "set":"s_chatsubo=3" },
   				{ "line":"Who you calling an artiste?", "response":"You are the artiste of the slighly funny deal, Herr %name%." }
   			]
   		},
   		{
-  			"condition":"lua:chatsubo==3",
+  			"condition":"lua:s_chatsubo==3",
   			"options":
   			[
   				{ "line":"Zone's a close friend of mine. Did I hear something about the Health Department closing this place?", "response":"A minor problem, friend artiste. I'll be back in business within the week." },
-  				{ "line":"Anything else you want to tell me?", "response":"Better find a way to pay your bill at Cheap Hotel, or they'll start asking you to sell yout body parts.", "set":"chatsubo=4" }
+  				{ "line":"Anything else you want to tell me?", "response":"Better find a way to pay your bill at Cheap Hotel, or they'll start asking you to sell yout body parts.", "set":"s_chatsubo=4" }
   			]
   		},
   		{
-  			"condition":"lua:chatsubo==4",
+  			"condition":"lua:s_chatsubo==4",
   			"options":
   			[
-  				{ "line":"So I sell a kidney or two. Why don't you get off my case, Ratz?", "response":"You should have fear, artiste. It may be your friend. Now get out of here before the lawbot arrives.", "set":"chatsubo=5" },
-  				{ "line":"That's it. I'm leaving.", "response":"Good luck, artiste. You're going to need it.", "set":"chatsubo=5" }
+  				{ "line":"So I sell a kidney or two. Why don't you get off my case, Ratz?", "response":"You should have fear, artiste. It may be your friend. Now get out of here before the lawbot arrives.", "set":"s_chatsubo=5" },
+  				{ "line":"That's it. I'm leaving.", "response":"Good luck, artiste. You're going to need it.", "set":"s_chatsubo=5" }
   			]
   		}
   	] 

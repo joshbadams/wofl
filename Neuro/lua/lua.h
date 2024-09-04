@@ -259,7 +259,7 @@ LUA_API int   (lua_pushthread) (lua_State *L);
 ** get functions (Lua -> stack)
 */
 LUA_API int (lua_getglobal) (lua_State *L, const char *name);
-LUA_API int (lua_gettable) (lua_State *L, int idx);
+LUA_API int (ggettable) (lua_State *L, int idx);
 LUA_API int (lua_getfield) (lua_State *L, int idx, const char *k);
 LUA_API int (lua_geti) (lua_State *L, int idx, lua_Integer n);
 LUA_API int (lua_rawget) (lua_State *L, int idx);

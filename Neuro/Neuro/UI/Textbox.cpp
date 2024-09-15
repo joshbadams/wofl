@@ -7,6 +7,7 @@
 
 #include "Textbox.h"
 #include "NeuroState.h" // replace with InterfaceDelegate.h or similar
+#include "NeuroGame.h"
 
 
 Textbox::Textbox(const char* BackgroundImage, float X, float Y, float SizeX, float SizeY, int Tag, bool bClickToAdvance, bool bClickToEnd, WColor Color, int InLineHeight)
@@ -36,8 +37,17 @@ void Textbox::SetText(const string& InText)
 	{
 		return;
 	}
-	
-	FullText = InText;
+		
+	if (InText[0] == '@')
+	{
+		NeuroConfig& Config = ((NeuroGame*)WoflGame::TheGame)->GetConfig();
+		FullText = Config.Strings[InText.substr(1)];
+	}
+	else
+	{
+		FullText = InText;
+	}
+
 	UpdateLines();
 	if (this->bPauseOnLastPage)
 	{

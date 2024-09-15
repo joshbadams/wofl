@@ -13,19 +13,18 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 	: CurrentRoom(nullptr)
 	, Lua_CurrentRoom(nullptr)
 	, CurrentConversation(nullptr)
-	, Money(6)
 	, Config(InConfig)
 	, StateDelegate(InStateDelegate)
 	, Lua(this)
 {
 	Lua.RegisterFunction("Trigger", Lua_Trigger);
+	Lua.RegisterFunction("Talk", Lua_Talk);
+	Lua.RegisterFunction("Say", Lua_Say);
+	Lua.RegisterFunction("CloseBox", Lua_CloseBox);
+	Lua.RegisterFunction("ShowMessage", Lua_ShowMessage);
 
 	if (LoadFromFile(Utils::File->GetSavePath("game.sav").c_str()) == false)
 	{
-		Money = 6;
-		Inventory.push_back(0);
-		Inventory.push_back(1);
-		
 		SetIntValue("bankaccount", 1941);
 		SetStringValue("name", "Badams");
 		SetStringValue("bamaid", "056306118");
@@ -33,11 +32,32 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 	
 	Config->Initialize();
 
+	Lua.LoadScript("PAX.lua");
+	for (Room* R : Config->Rooms)
+	{
+		Lua.LoadScript((R->ID + ".lua").c_str());
+	}
+
+
 	PendingConversation = nullptr;
 	PendingRoom = Config->Rooms[0];
 	CurrentState = State::EnteredRoom;
 	
 	
+//	LuaRef* IRS;
+//	Lua.GetTableValue("", "IRS", IRS);
+//	
+//	string Page;
+////	Lua.CallFunction_NoParam_Return(IRS, "GetCurrentPage", Page);
+//	Lua.GetStringValue(IRS, "currentPage", Page);
+//
+//	WLOG("Page: %s\n", Page.c_str());
+//
+//	Lua.CallFunction_OneParam_NoReturn(IRS, "HandleInput", "1");
+//
+//	Lua.GetStringValue(IRS, "currentPage", Page);
+//	WLOG("Page: %s\n", Page.c_str());
+//
 //	int Obj;
 //	Lua.GetObject("Room", Obj);
 //	string Str;
@@ -93,8 +113,10 @@ Json::Value NeuroState::ToJsonObject()
 {
 	Json::Value StateObj(Json::objectValue);
 	StateObj["lua"] = Lua.ToJsonObject();
-	StateObj["money"] = Json::Value(Money);
-	AddIntArrayToObject(Inventory, StateObj, "inventory");
+	
+//	StateObj["money"] = Json::Value(Money);
+//	AddIntArrayToObject(Inventory, StateObj, "inventory");
+
 //	AddIntArrayToObject(UnlockedNewsItems, StateObj, "unlockednews");
 
 //	for (auto& Pair : UnlockedMessages)
@@ -114,8 +136,8 @@ void NeuroState::FromJsonObject(const Json::Value& Object)
 //		GetIntArrayFromObject(UnlockedMessages[Name], UnlockedMessageObject[Name], "unlockedmessages");
 //	}
 
-	Money = Object["money"].asInt();
-	GetIntArrayFromObject(Inventory, Object, "inventory");
+//	Money = Object["money"].asInt();
+//	GetIntArrayFromObject(Inventory, Object, "inventory");
 	Lua.FromJsonObject(Object["lua"]);
 }
 
@@ -135,47 +157,49 @@ void NeuroState::Tick()
 			break;
 			
 		case State::ShowPostMessage:
-			if (CurrentConversation->Message != "")
-			{
-				CurrentState = State::InMessage;
-				PendingInvalidation |= ZoneType::Message;
-			}
-			else
+//			if (CurrentConversation->Message != "")
+//			{
+//				CurrentState = State::InMessage;
+//				PendingInvalidation |= ZoneType::Message;
+//			}
+//			else
 			{
 				CurrentState = State::EndedConversation;
 			}
 			break;
 			
 		case State::EndedConversation:
-		{
-			LuaRef* OnEndFunction = CurrentConversation->Lua_OnEnd;
-			// set any vars, and maybe trigger another talk
-			string& EndedConversationSet = CurrentConversation->Set;
-			string& EndedConversationLua = CurrentConversation->LuaCode;
+			{
+				LuaRef* OnEndFunction = CurrentConversation->Lua_OnEnd;
+	 
+				CurrentState = State::Idle;
+				CurrentConversation = nullptr;
+				
+				DialogIndex = -1;
+				ChoiceIndex = -1;
+				PendingInvalidation |= ZoneType::Dialog;
+				PendingInvalidation |= ZoneType::Message;
 
-			CurrentState = State::Idle;
-			CurrentConversation = nullptr;
-			
-			DialogIndex = -1;
-			ChoiceIndex = -1;
-			PendingInvalidation |= ZoneType::Dialog;
-			PendingInvalidation |= ZoneType::Message;
-
-			if (OnEndFunction)
-			{
-				Lua.CallFunction_NoParam_NoReturn(Lua_CurrentRoom, OnEndFunction);
+				if (OnEndFunction)
+				{
+					Lua.CallFunction_NoReturn(Lua_CurrentRoom, OnEndFunction);
+				}
 			}
-			if (EndedConversationLua != "")
-			{
-				Lua.RunCode(EndedConversationLua);
-			}
-			if (EndedConversationSet != "")
-			{
-				UpdateVariablesFromString(EndedConversationSet);
-			}
-		}
 			break;
-			
+		
+		case State::ShowMessage:
+			PendingInvalidation |= ZoneType::Message;
+			CurrentState = State::InMessage;
+			break;
+
+		case State::EndedMessage:
+			CurrentState = State::Idle;
+			if (Lua_OnMessageComplete != nullptr)
+			{
+				Lua.CallFunction_NoReturn(Lua_CurrentRoom, Lua_OnMessageComplete);
+			}
+			break;
+
 		case State::Idle:
 		default:
 			break;
@@ -241,7 +265,8 @@ void NeuroState::ClickTalk()
 void NeuroState::ClickSkill()
 {
 	CurrentState = State::InSite;
-	SetStringValue("currentsite", "irs");
+	//	SetStringValue("currentsite", "Cheapo");
+	SetStringValue("currentsite", "PAX");
 	PendingInvalidation |= ZoneType::Site;
 }
 
@@ -262,14 +287,15 @@ void NeuroState::ActivateRoom(Room* OldRoom, Room* NewRoom)
 	
 	delete Lua_CurrentRoom;
 	Lua.GetTableValue("",  CurrentRoom->ID.c_str(), Lua_CurrentRoom);
+	assert(Lua_CurrentRoom);
 	
 	PendingInvalidation = ZoneType::Room;
 
 	string FirstVisitKey = string("__") + CurrentRoom->ID;
-	bool bFirstEnter = GetIntValue(FirstVisitKey.c_str()) == -1;
+	bool bFirstEnter = GetIntValue(FirstVisitKey.c_str()) != 1;
 	SetIntValue(FirstVisitKey, 1);
 	
-	ActivateConversation(FindConversationWithTag(bFirstEnter ? "longdescription" : "description"));
+	Lua.CallFunction_NoReturn(Lua_CurrentRoom, bFirstEnter ? "OnFirstEnter" : "OnEnter");
 }
 
 void NeuroState::ActivateConversation(Conversation* Convo)
@@ -296,11 +322,11 @@ void NeuroState::ActivateConversation(Conversation* Convo)
 		CurrentState = State::InOptions;
 		ChoiceIndex = 0;
 	}
-	else if (Convo->Message.length() > 0)
-	{
-		PendingInvalidation |= ZoneType::Message;
-		CurrentState = State::InMessage;
-	}
+//	else if (Convo->Message.length() > 0)
+//	{
+//		PendingInvalidation |= ZoneType::Message;
+//		CurrentState = State::InMessage;
+//	}
 }
 
 string NeuroState::GetCurrentDialogLine()
@@ -324,19 +350,20 @@ string NeuroState::GetCurrentDialogLine()
 
 string NeuroState::GetCurrentMessage()
 {
-	if (CurrentConversation == nullptr)
-	{
-		return "";
-	}
-	
-	if (CurrentConversation->Message.starts_with("lua:"))
-	{
-		string Result;
-		Lua.GetString(CurrentConversation->Message.substr(4), Result);
-		return Result;
-	}
-	
-	return CurrentConversation->Message;
+	return PendingMessage;
+//	if (CurrentConversation == nullptr)
+//	{
+//		return "";
+//	}
+//	
+//	if (CurrentConversation->Message.starts_with("lua:"))
+//	{
+//		string Result;
+//		Lua.GetString(CurrentConversation->Message.substr(4), Result);
+//		return Result;
+//	}
+//	
+//	return CurrentConversation->Message;
 }
 
 void NeuroState::HandleSceneClick(ZoneType Zone)
@@ -356,7 +383,10 @@ void NeuroState::HandleSceneClick(ZoneType Zone)
 		{
 			if (Zone == ZoneType::Dialog)
 			{
-				UpdateVariablesFromString(CurrentConversation->Options[ChoiceIndex]->Set);
+				if (CurrentConversation->Options[ChoiceIndex]->Lua_OnEnd)
+				{
+					Lua.CallFunction_NoReturn(Lua_CurrentRoom, CurrentConversation->Options[ChoiceIndex]->Lua_OnEnd);
+				}
 				if (CurrentConversation->Options[ChoiceIndex]->Response != "")
 				{
 					CurrentState = State::InDialog;
@@ -383,7 +413,8 @@ void NeuroState::MessageComplete()
 {
 	assert(CurrentState == State::InMessage);
 
-	CurrentState = State::EndedConversation;
+	CurrentState = State::EndedMessage;
+	PendingMessage = "";
 }
 
 //void NeuroState::CycleDialog()
@@ -407,24 +438,36 @@ void NeuroState::InventoryUsed(int Index, InvAction Action, int Modifier)
 		return;
 	}
 	
-	
 	if (Action == InvAction::Give || Action == InvAction::Use)
 	{
+		if (Index == 0)
+		{
+			Lua.CallFunction_NoReturn(Lua_CurrentRoom, "GiveMoney", Modifier);
+		}
+//		else
+//		{
+//			char ValueStr[20];
+//			snprintf(ValueStr, 20, "id_%d", Inventory[Index]);
+//
+//			
+//			Lua.CallFunction_OneParam_NoReturn(Lua_CurrentRoom, Action == InvAction::Give ? "GiveItem" : "UseItem", ValueStr);
+//		}
+		
 		// can only give money, not use it
 		if (Index == 0)
 		{
-			Lua.SetGlobal("action", "give");
-			Lua.SetGlobal("type", "money");
-			Lua.SetGlobal("amount", Modifier);
-
-//			snprintf(ValueStr, 20, "$%d", Modifier);
-
-			Money -= Modifier;
+//			Lua.SetGlobal("action", "give");
+//			Lua.SetGlobal("type", "money");
+//			Lua.SetGlobal("amount", Modifier);
+//
+////			snprintf(ValueStr, 20, "$%d", Modifier);
+//
+//			SetIntValue("money", GetIntValue("money") - Modifier);
 		}
 		else
 		{
 			char ValueStr[20];
-			snprintf(ValueStr, 20, "id_%d", Inventory[Index]);
+			snprintf(ValueStr, 20, "id_%d", GetInventory()[Index]);
 
 			if (Modifier == 0) Modifier = 1;
 			
@@ -433,7 +476,7 @@ void NeuroState::InventoryUsed(int Index, InvAction Action, int Modifier)
 			Lua.SetGlobal("amount", Modifier);
 
 			// todo: check if someone wants it
-			Inventory.erase(Inventory.begin() + Index);
+//			Inventory.erase(Inventory.begin() + Index);
 		}
 
 		for (Conversation* Convo : CurrentRoom->Conversations)
@@ -465,15 +508,16 @@ void NeuroState::InventoryUsed(int Index, InvAction Action, int Modifier)
 	{
 		if (Index == 0)
 		{
-			Money -= Modifier;
-			if (Money < 0)
+			int NewMoney = GetIntValue("money") - Modifier;
+			if (NewMoney < 0)
 			{
-				Money = 0;
+				NewMoney = 0;
 			}
+			SetIntValue("money", NewMoney);
 		}
 		else
 		{
-			Inventory.erase(Inventory.begin() + Index);
+//			Inventory.erase(Inventory.begin() + Index);
 		}
 	}
 }
@@ -511,9 +555,16 @@ void NeuroState::SendMessage(const string& Recipient, const string& Message)
 
 bool NeuroState::ConnectToSite(const string& SiteName, int ComLinkLevel)
 {
-	if (Config->Sites.contains(SiteName))
+	string LocalSiteName = SiteName;
+	for (char& c : LocalSiteName) { c = tolower(c); }
+
+	LuaRef* Site = GetTableValue(LocalSiteName);
+
+	if (Site != nullptr)
 	{
-		SetStringValue("currentsite", SiteName);
+		delete Site;
+		
+		SetStringValue("currentsite", LocalSiteName);
 		CurrentState = State::InSite;
 		PendingInvalidation |= ZoneType::Inventory | ZoneType::Site;
 		return true;
@@ -596,7 +647,7 @@ Conversation* NeuroState::FindConversationWithTag(const char* Tag)
 {
 //	LUA_SCOPE;
 	LuaRef* ConvoRef;
-	Lua.CallFunction_OneParam_Return(Lua_CurrentRoom, "GetNextConversation", Tag, ConvoRef);
+	Lua.CallFunction_Return(Lua_CurrentRoom, "GetNextConversation", Tag, ConvoRef);
 	if (ConvoRef)
 	{
 		LuaConversation.FromLua(Lua, ConvoRef);
@@ -627,7 +678,7 @@ Conversation* NeuroState::FindActiveConversation()
 	}
 
 	LuaRef* ConvoRef;
-	Lua.CallFunction_NoParam_Return(Lua_CurrentRoom, "GetNextConversation", ConvoRef);
+	Lua.CallFunction_Return(Lua_CurrentRoom, "GetNextConversation", ConvoRef);
 	if (ConvoRef)
 	{
 		LuaConversation.FromLua(Lua, ConvoRef);
@@ -660,10 +711,6 @@ Conversation* NeuroState::FindConversationForAction(const string& Action, const 
 
 int NeuroState::GetIntValue(const string& Key) const
 {
-	if (Key == "money")
-	{
-		return Money;
-	}
 	int Value;
 	if (Lua.GetIntValue("", Key.c_str(), Value))
 	{
@@ -682,16 +729,20 @@ string NeuroState::GetStringValue(const string& Key) const
 	return "";
 }
 
+LuaRef* NeuroState::GetTableValue(const string& Key) const
+{
+	LuaRef* Value;
+	if (Lua.GetTableValue("", Key.c_str(), Value))
+	{
+		return Value;
+	}
+	return nullptr;
+}
+
+
 void NeuroState::SetIntValue(const string& Name, int Value)
 {
-	if (Name == "money")
-	{
-		Money = Value;
-	}
-	else
-	{
-		Lua.SetIntValue(nullptr, Name.c_str(), Value);
-	}
+	Lua.SetIntValue(nullptr, Name.c_str(), Value);
 }
 
 void NeuroState::SetStringValue(const string& Name, const string& Value)
@@ -726,45 +777,13 @@ void NeuroState::IncrementIntValue(const string& Key)
 
 static NeuroState* State(lua_State* L)
 {
-	lua_getglobal(L, "this");
+	lua_getglobal(L, "__neurostate");
 	NeuroState* State = (NeuroState*)lua_touserdata(L, -1);
 	lua_pop(L, 1);
 	
 	return State;
 
 }
-
-//int NeuroState::Lua_GetIntValue(lua_State* L)
-//{
-//	if (!lua_isstring(L, 1))
-//	{
-//		return 0;
-//	}
-//	
-//	const char* Key = lua_tostring(L, 1);
-//	int Value = State(L)->GetIntValue(Key);
-//	lua_pushinteger(L, Value);
-//
-//	// return number of results
-//	return 1;
-//}
-//
-//int NeuroState::Lua_SetIntValue(lua_State* L)
-//{
-//	if (!lua_isstring(L, 1) || !lua_isinteger(L, 2))
-//	{
-//		return 0;
-//	}
-//	
-//	const char* Key = lua_tostring(L, 1);
-//	int Value = (int)lua_tointeger(L, 2);
-//
-//	State(L)->SetIntValue(Key, Value);
-//	
-//	// return number of results
-//	return 0;
-//}
-//
 
 int NeuroState::Lua_Trigger(lua_State* L)
 {
@@ -780,6 +799,99 @@ int NeuroState::Lua_Trigger(lua_State* L)
 	State(L)->Trigger(Type, Value);
 
 	return 0;
+}
+
+int NeuroState::Lua_Talk(lua_State* L)
+{
+	NeuroState* NS = State(L);
+
+	// optional tag as param
+	if (lua_isstring(L, -1))
+	{
+		NS->PendingConversation = NS->FindConversationWithTag(lua_tostring(L, -1));
+		assert(NS->PendingConversation != nullptr);
+	}
+	else
+	{
+		NS->PendingConversation = NS->FindActiveConversation();
+	}
+	
+	// trigger a talk, with or without tag
+	if (NS->PendingConversation != nullptr)
+	{
+		NS->CurrentState = State::ActivateConversation;
+	}
+
+	return 0;
+}
+
+int NeuroState::Lua_Say(lua_State* L)
+{
+	NeuroState* NS = State(L);
+
+	if (!lua_isstring(L, -1))
+	{
+		return 0;
+	}
+
+	NS->LuaConversation = {};
+	NS->LuaConversation.Lines.push_back(lua_tostring(L, -1));
+	NS->PendingConversation = &NS->LuaConversation;
+	NS->CurrentState = State::ActivateConversation;
+
+	return 0;
+}
+
+int NeuroState::Lua_CloseBox(lua_State* L)
+{
+	NeuroState* NS = State(L);
+
+	NS->GridboxClosed();
+
+	return 0;
+}
+
+int NeuroState::Lua_ShowMessage(lua_State* L)
+{
+	NeuroState* S = State(L);
+	int StackPos = lua_gettop(L);
+	if (lua_isfunction(L, StackPos))
+	{
+		// put it on top for MakeRef() (very annoying)
+		lua_pushvalue(L, StackPos);
+		S->Lua_OnMessageComplete = S->Lua.MakeRef();
+		
+		// move down one to get string
+		StackPos--;
+	}
+	if (!lua_isstring(L, StackPos))
+	{
+		return 0;
+	}
+
+	//
+	S->PendingMessage = lua_tostring(L, StackPos);
+	S->CurrentState = State::ShowMessage;
+	
+	return 0;
+//
+//	// check for optional oncomplete callback
+//	if (lua_isfunction(L, -1))
+//	{
+//		S->Lua_OnMessageComplete
+//	}
+//	if (!lua_isstring(L, -1) || !lua_isstring(L, -2))
+//	{
+//		return 0;
+//	}
+//
+//	// Lua: Trigger(type, value)
+//	const char* Type = lua_tostring(L, -2);
+//	const char* Value = lua_tostring(L, -1);
+//	
+//	State(L)->Trigger(Type, Value);
+//
+//	return 0;
 }
 
 void NeuroState::UpdateVariablesFromString(const string& Commands)
@@ -816,7 +928,7 @@ void NeuroState::UpdateVariablesFromString(const string& Commands)
 			{
 				if (Value[0] == '$')
 				{
-					Money += stoi(Value.substr(1));
+					SetIntValue("money", GetIntValue("money") + stoi(Value.substr(1)));
 				}
 			}
 			else if (Variable == "_trigger")
@@ -879,6 +991,13 @@ bool NeuroState::CheckVariablesFromString(const string& Query)
 }
 
 
+
+vector<int> NeuroState::GetInventory() const
+{
+	vector<int> Inv;
+	Lua.GetIntValues("", "inventory", Inv);
+	return Inv;
+}
 
 vector<Message*> NeuroState::GetUnlockedMessages(string ID)
 {

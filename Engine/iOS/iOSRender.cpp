@@ -5,7 +5,7 @@
 #include "ShaderTypes.h"
 
 static const NSUInteger kMaxBuffersInFlight = 3;
-static const NSUInteger kMaxSpritesPerFrame = 1500;
+static const NSUInteger kMaxSpritesPerFrame = 2000;
 #pragma mark Matrix Math Utilities
 
 @interface TestClass : NSObject

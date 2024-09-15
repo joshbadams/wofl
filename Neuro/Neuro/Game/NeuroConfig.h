@@ -57,8 +57,8 @@ class Option : public NeuroConfigObj
 public:
 	StringOrString Line;
 	StringOrString Response;
-	string Set;
-	
+	class LuaRef* Lua_OnEnd = nullptr;
+
 	virtual void FromJsonObject(const Json::Value& Object) override;
 	virtual void FromLua(Lua& L, LuaRef* Object) override;
 };
@@ -71,10 +71,6 @@ public:
 	string Tag;
 	StringOrBool Condition;
 	StringOrBool Action;
-	StringOrString Message;
-	string Set;
-	string LuaCode;
-	
 	
 	class LuaRef* Lua_OnStart = nullptr;
 	class LuaRef* Lua_OnEnd = nullptr;

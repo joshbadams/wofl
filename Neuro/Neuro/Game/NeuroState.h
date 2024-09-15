@@ -39,6 +39,9 @@ enum class State : int
 	ActivateConversation,
 	ShowPostMessage,
 	EndedConversation,
+
+	ShowMessage,
+	EndedMessage,
 	
 	InDialog,
 	InOptions,
@@ -94,10 +97,11 @@ public:
 class IQueryStateDelegate
 {
 public:
-	virtual const vector<int>& GetInventory() const = 0;
+	virtual	vector<int> GetInventory() const = 0;
 	virtual int GetMoney() const = 0;
 	virtual int GetIntValue(const string& Name) const = 0;
 	virtual string GetStringValue(const string& Name) const = 0;
+	virtual LuaRef* GetTableValue(const string& Name) const = 0;
 	virtual const vector<int>& GetUnlockedNewsItems() const = 0;
 	virtual vector<Message*> GetUnlockedMessages(string ID) = 0;
 
@@ -107,7 +111,6 @@ class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, publ
 {
 public:
 	Room* CurrentRoom;
-	LuaRef* Lua_CurrentRoom;
 	
 //	map<string, int> IntValues;
 //	map<string, string> Variables;
@@ -129,13 +132,10 @@ public:
 
 	
 	// IQueryStateDelegate
-	virtual const vector<int>& GetInventory() const override
-	{
-		return Inventory;
-	}
+	virtual vector<int> GetInventory() const override;
 	virtual int GetMoney() const override
 	{
-		return Money;
+		return GetIntValue("money");
 	}
 	virtual const vector<int>& GetUnlockedNewsItems() const override
 	{
@@ -161,6 +161,7 @@ public:
 	void IncrementIntValue(const string& Key);
 	virtual string GetStringValue(const string&  Key) const override;
 	void SetStringValue(const string& Key, const string& Value);
+	virtual LuaRef* GetTableValue(const string& Key) const override;
 
 	void Trigger(const string& Type, const string& Value);
 		
@@ -188,6 +189,10 @@ public:
 private:
 	
 	static int Lua_Trigger(lua_State* L);
+	static int Lua_Talk(lua_State* L);
+	static int Lua_Say(lua_State* L);
+	static int Lua_ShowMessage(lua_State* L);
+	static int Lua_CloseBox(lua_State* L);
 
 	void ActivateRoom(Room* OldRoom, Room* NewRoom);
 	void ActivateConversation(Conversation* Convo);
@@ -201,8 +206,8 @@ private:
 
 	const Item* GetItemForID(int ID);
 
-	int Money;
-	vector<int> Inventory;
+//	int Money;
+//	vector<int> Inventory;
 	map<string, vector<int>> UnlockedMessages;
 
 	NeuroConfig* Config;
@@ -217,9 +222,13 @@ private:
 	State CurrentState;
 	Room* PendingRoom;
 	Conversation* PendingConversation;
+	string PendingMessage;
 
 	ZoneType PendingInvalidation;
 	
 	Lua Lua;
+	
+	LuaRef* Lua_CurrentRoom;
+	LuaRef* Lua_OnMessageComplete;
 };
 

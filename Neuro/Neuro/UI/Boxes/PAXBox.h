@@ -19,7 +19,7 @@ public:
 	virtual void MessageComplete() override;
 
 	virtual void OnClickEntry(GridEntry& Entry) override;
-	virtual void OnTextEntryComplete(const string& Text) override;
+	virtual void OnTextEntryComplete(const string& Text, const string& Tag) override;
 	virtual void OnTextEntryCancelled() override;
 
 	void Open();

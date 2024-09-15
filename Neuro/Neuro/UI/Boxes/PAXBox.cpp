@@ -89,7 +89,7 @@ void PAXBox::MessageComplete()
 
 }
 
-void PAXBox::OnTextEntryComplete(const string& Text)
+void PAXBox::OnTextEntryComplete(const string& Text, const string& Tag)
 {
 	if (Phase == Phase_Bank)
 	{
@@ -291,7 +291,7 @@ void PAXBox::Update()
 		else if (SubPhase == BankPhase_Download || SubPhase == BankPhase_Upload)
 		{
 			Entries.push_back({"Enter amount : ", 0, 5});
-			SetupTextEntry(15, 5, true, false);
+//			SetupTextEntry({15, 5, true, false});
 		}
 		else if (SubPhase == BankPhase_Record)
 		{
@@ -381,7 +381,7 @@ void PAXBox::Update()
 			Entries.push_back({"Send Message:", 6, 0});
 			Entries.push_back({"date : %datestr%", 0, 4});
 			Entries.push_back({"to : ", 0, 5});
-			SetupTextEntry(5, 5, false, false);
+///			SetupTextEntry(5, 5, false, false);
 		}
 		else if (SubPhase == BoardPhase_SendMessageBody)
 		{
@@ -390,7 +390,7 @@ void PAXBox::Update()
 			Entries.push_back({"date : %datestr%", 0, 4});
 			Entries.push_back({"to : ", 0, 5});
 			Entries.push_back({MailTo, 5, 5});
-			SetupTextEntry(0, 6, false, true);
+///			SetupTextEntry(0, 6, false, true);
 		}
 	}
 }

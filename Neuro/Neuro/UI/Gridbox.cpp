@@ -19,11 +19,31 @@ enum KeyCodes
 	Key_Escape = 53,
 };
 
+void GridEntry::FromLua(shared_ptr<LuaRef> Ref)
+{
+	Lua* L = Ref->LuaSystem;
+	LuaEntry = Ref;
+
+	L->GetIntValue(Ref, "x", X);
+	L->GetIntValue(Ref, "y", Y);
+	L->GetStringValue(Ref, "text", Text);
+	L->GetIntValue(Ref, "clickId", ClickId);
+	string KeyStr;
+	L->GetStringValue(Ref, "key", KeyStr);
+	if (KeyStr.length() == 1)
+	{
+		Key = KeyStr[0];
+	}
+	
+	L->GetStringValue(Ref, "entryTag", EntryTag);
+	L->GetBoolValue(Ref, "numeric", bNumericEntry);
+	L->GetBoolValue(Ref, "multiline", bMultilineEntry);
+}
+
 Gridbox::Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Color)
 	: Ninebox(Ninebox::Basic, X, Y, SizeX, SizeY, Tag, Color)
 	, TextColor(Color)
 	, TextEntryIndex(-1)
-	, bNumericEntry(false)
 	, bIgnoreUntilNextUp(false)
 	, bIsShowingMessageList(false)
 	, bIsShowingMessage(false)
@@ -41,6 +61,13 @@ Gridbox::Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Col
 	Messagebox->SetInterfaceDelegate(this);
 }
 
+void Gridbox::Open(LuaRef* LuaObj)
+{
+	LuaBox = LuaObj;
+	
+	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OpenBox", GridsX, GridsY);
+}
+
 void Gridbox::CustomPostChildrenRender()
 {
 	Vector ClientLocation;
@@ -55,12 +82,10 @@ void Gridbox::CustomPostChildrenRender()
 	}
 }
 
-void Gridbox::SetupTextEntry(int X, int Y, bool bIsNumeric, bool bIsMultiLine, string InitialText)
+void Gridbox::SetupTextEntry(const GridEntry& Entry)
 {
-	bNumericEntry = bIsNumeric;
-	bMultiLineEntry = bIsMultiLine;
 	TextEntryIndex = (int)Entries.size();
-	Entries.push_back({InitialText, X, Y});
+	Entries.push_back(Entry);
 }
 
 
@@ -125,14 +150,16 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 	
 	if (TextEntryIndex != -1)
 	{
-		if ((Event.Char >= '0' && Event.Char <= '9') || (!bNumericEntry && isprint(Event.Char)))
+		GridEntry& TextEntry = Entries[TextEntryIndex];
+		
+		if ((Event.Char >= '0' && Event.Char <= '9') || (!TextEntry.bNumericEntry && isprint(Event.Char)))
 		{
 			Entries[TextEntryIndex].Text += Event.Char;
 		}
 		// enter
 		else if (Event.KeyCode == Key_Enter)
 		{
-			if (bMultiLineEntry)
+			if (TextEntry.bMultilineEntry)
 			{
 			
 			}
@@ -140,7 +167,7 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 			{
 				int Index = TextEntryIndex;
 				TextEntryIndex = -1;
-				OnTextEntryComplete(Entries[Index].Text);
+				OnTextEntryComplete(Entries[Index].Text, Entries[Index].EntryTag);
 				bIgnoreUntilNextUp = true;
 			}
 		}
@@ -183,9 +210,12 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 		}
 	}
 	
-	if (Event.Type == KeyType::Down && (Event.KeyCode == Key_Enter || Event.Char == ' ' || Event.KeyCode == Key_Escape))
+	if (!bIgnoreUntilNextUp)
 	{
-		OnGenericContinueInput();
+		if (Event.Type == KeyType::Down && (Event.KeyCode == Key_Enter || Event.Char == ' ' || Event.KeyCode == Key_Escape))
+		{
+			OnGenericContinueInput();
+		}
 	}
 
 	return true;
@@ -202,20 +232,27 @@ void Gridbox::SetupMessages(string MessageSourceID, string Title)
 	bIsShowingMessageList = true;
 	bIsShowingMessage = false;
 
-	UpdateMessages();
+	Update();
 }
 
 void Gridbox::MessageComplete()
 {
-	bIsShowingMessageList = true;
-	bIsShowingMessage = false;
-	UpdateMessages();
+//	bIsShowingMessageList = true;
+//	bIsShowingMessage = false;
+	
+	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnMessageComplete");
+	
+//	UpdateMessages();
+	Update();
 }
 
-void Gridbox::UpdateMessages()
+void Gridbox::Update()
 {
 	Entries.clear();
 	Messagebox->RemoveFromParent();
+	
+	int DetailsIndex;
+	LuaBox->LuaSystem->GetIntValue(LuaBox, "detailsIndex", DetailsIndex);
 	
 	if (bIsShowingMessageList)
 	{
@@ -242,11 +279,11 @@ void Gridbox::UpdateMessages()
 			Entries.push_back({"more", 18, GridsY - 1, Message_More, 'm'});
 		}
 	}
-	else if (bIsShowingMessage)
+	else if (DetailsIndex > 0)
 	{
-		stringstream Temp;
-		Temp << "TO: " << ChosenMessage->To << "\nFROM: " << ChosenMessage->From << "\n" << ChosenMessage->Message;
-		Messagebox->SetText(Temp.str());
+		string DetailsString;
+		LuaBox->LuaSystem->CallFunction_Return(LuaBox, "GetDetailsString", DetailsString);
+		Messagebox->SetText(DetailsString);
 		AddChild(Messagebox);
 	}
 }
@@ -259,7 +296,7 @@ void Gridbox::OnClickMessageEntry(GridEntry& Entry)
 		
 		bIsShowingMessage = true;
 		bIsShowingMessageList = false;
-		UpdateMessages();
+		Update();
 	}
 	else if (Entry.ClickId == Message_More)
 	{
@@ -269,7 +306,7 @@ void Gridbox::OnClickMessageEntry(GridEntry& Entry)
 			FirstMessage = 0;
 		}
 		
-		UpdateMessages();
+		Update();
 	}
 	else if (Entry.ClickId == Message_Exit)
 	{

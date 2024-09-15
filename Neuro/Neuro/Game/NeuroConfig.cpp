@@ -83,9 +83,6 @@ void Conversation::FromJsonObject(const Json::Value& Object)
 	Tag = GetString(Object, "tag");
 	Condition = GetString(Object, "condition");
 	Action = GetString(Object, "action");
-	Message = GetString(Object, "message");
-	Set = GetString(Object, "set");
-	LuaCode = GetString(Object, "lua");
 	
 	GetStringArrayFromObject(Lines, Object, "lines");
 	GetArrayFromObject(Options, Object, "options");
@@ -102,9 +99,11 @@ void Conversation::FromJsonObject(const Json::Value& Object)
 
 void Conversation::FromLua(class Lua& L, LuaRef* Object)
 {
+	*this = {};
+	
 	// we don't need Tag since we've already found it in Lua, but just for completeness
 	L.GetStringValue(Object, "tag", Tag);
-	L.GetStringValue(Object, "message", Message);
+//	L.GetStringValue(Object, "message", Message);
 	L.GetFunctionValue(Object, "onStart", Lua_OnStart);
 	L.GetFunctionValue(Object, "onEnd", Lua_OnEnd);
 
@@ -127,13 +126,14 @@ void Option::FromJsonObject(const Json::Value& Object)
 {
 	Line = GetString(Object, "line");
 	Response = GetString(Object, "response");
-	Set = GetString(Object, "set");
 }
 void Option::FromLua(Lua& L, LuaRef* Object)
 {
+	*this = {};
+
 	L.GetStringValue(Object, "line", Line);
 	L.GetStringValue(Object, "response", Response);
-	L.GetStringValue(Object, "set", Set);
+	L.GetFunctionValue(Object, "onEnd", Lua_OnEnd);
 }
 
 

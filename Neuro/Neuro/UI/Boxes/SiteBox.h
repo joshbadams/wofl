@@ -19,20 +19,19 @@ public:
 
 	virtual void MessageComplete() override;
 
-
-	void Open(Site* OpenedSite);
+	virtual void Open(LuaRef* OpenedSite) override;
 	
 protected:
 	virtual void OnClickEntry(GridEntry& Entry) override;
-	virtual void OnTextEntryComplete(const string& Text) override;
+	virtual void OnTextEntryComplete(const string& Text, const string& Tag) override;
 	virtual void OnTextEntryCancelled() override;
 	virtual void CloseMessages() override;
 	virtual void OnGenericContinueInput() override;
 
 private:
-	void Update();
+	virtual void Update() override;
 	
-	Site* CurrentSite;
+//	Site* CurrentSite;
 	SitePage* CurrentPage;
 	
 	int Page;

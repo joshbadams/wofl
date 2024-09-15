@@ -2,67 +2,12 @@
 [
   {
 	// first room
-	"id":"chatsubo",
+	"id":"Chatsubo",
   	"background":"chatsubo",
 	"haspax":true,
 	"hasjack":false,
   	"conversations":
   	[
-  		{
-			"condition":"lua:s_chatsubo == 1",
-  			"options":
-  			[
-  				{ "line":"Sorry, Ratz. I can't afford it. Want me to give it back?", "response":"Pay up, cyberscum. Use the PAX if you need money." },
-  				{ "line":"How about if I owe it to you? You can trust me.", "response":"Pay up, cyberscum. Use the PAX if you need money." },
-  				{ "line":"I'm ready for dessert. Have you got any pudding for me to sleep in?", "response":"Pay up, cyberscum. Use the PAX if you need money." },
-  				{ "line":"I'd like to sleep on it some more, if that's okay with you, Ratz.", "response":"You been sleepin' in that stuff all night. Now pay up or I call a lawbot." }
-  			]
-  		},
-		{
-			"condition":"lua:s_chatsubo == 1",
-			"action":"lua:print (\"Received \" .. tostring(amount)); if (GotMoney()) then; if (amount < 46) then SavedValues['money'] = , SavedValues['money'] + amount; Trigger('talk', 'nomoney'); else Trigger('talk', 'enoughmoney'); end; end"
-		},
-  		{
-			"tag":"nomoney",
-			"message":"Ratz refuses to take your credits.",
-  			"lines":
-  			[
-  				"I said 46 credits, buckwheat. Are you deaf?"
-  			]
-  		},
-  		{
-			"tag":"enoughmoney",
-  			"lines":
-  			[
-  				"Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck."
-  			],
-  			"lua":"s_chatsubo = 2"
-  		},
-  		{
-  			"condition":"lua:s_chatsubo==2",
-  			"options":
-  			[
-  				{ "line":"What deck does Shin have?", "response":"Your Yamamitsu UXB, Herr %name%. Shin says you pawned it at his shop." },
-  				{ "line":"Anything else come up?", "response":"One of Lonny Zone's girls was looking for you too. You got biz with Zone?", "set":"s_chatsubo=3" },
-  				{ "line":"Who you calling an artiste?", "response":"You are the artiste of the slighly funny deal, Herr %name%." }
-  			]
-  		},
-  		{
-  			"condition":"lua:s_chatsubo==3",
-  			"options":
-  			[
-  				{ "line":"Zone's a close friend of mine. Did I hear something about the Health Department closing this place?", "response":"A minor problem, friend artiste. I'll be back in business within the week." },
-  				{ "line":"Anything else you want to tell me?", "response":"Better find a way to pay your bill at Cheap Hotel, or they'll start asking you to sell yout body parts.", "set":"s_chatsubo=4" }
-  			]
-  		},
-  		{
-  			"condition":"lua:s_chatsubo==4",
-  			"options":
-  			[
-  				{ "line":"So I sell a kidney or two. Why don't you get off my case, Ratz?", "response":"You should have fear, artiste. It may be your friend. Now get out of here before the lawbot arrives.", "set":"s_chatsubo=5" },
-  				{ "line":"That's it. I'm leaving.", "response":"Good luck, artiste. You're going to need it.", "set":"s_chatsubo=5" }
-  			]
-  		}
   	] 
   }
 ],
@@ -112,7 +57,7 @@
 		"message":"VAGRANT PAYS HOTEL BILL\nPaul Stack, owner of Cheap Hotel, called a news conference this morning to report that Cowboy %name% has finally paid his hotel bill. Stack is referring to this payment as \"a momentous event in my life. Being the kind-hearted kind of guy that I am, I let that blll accumulate far too long before demanding payment. Imagine my surprise when the scum finally paid it. I was ready to call the Tactical Police.\""
 	},
 	{
-		"condition":"chatsubo>1",
+		"condition":"s_chatsubo>1",
 		"date":110058,
 		"title":"CHATSUBO DEBT",
 		"message":"Thisis a story that will appear when chatsubo is paid off but not before."

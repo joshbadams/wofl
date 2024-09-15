@@ -54,14 +54,16 @@ LuaScope::~LuaScope()
 }
 
 
-LuaRef::LuaRef(lua_State* LuaObj, int RefIndex)
-	: L(LuaObj)
-	, Ref(RefIndex)
-{
-}
+//LuaRef::LuaRef(lua_State* LuaObj, int RefIndex)
+//	: L(LuaObj)
+//	, Ref(RefIndex)
+//{
+//}
 
-LuaRef::LuaRef(const Lua* LuaObj, int RefIndex)
-	: LuaRef(LuaObj->L, RefIndex)
+LuaRef::LuaRef(Lua* LuaSys, int RefIndex)
+	: LuaSystem(LuaSys)
+	, L(LuaSys->L)
+	, Ref(RefIndex)
 {
 		
 }
@@ -92,8 +94,11 @@ Lua::Lua(void* Context)
 	SystemVariables.insert("result");
 	
 	lua_pushlightuserdata(L, Context);
-	lua_setglobal(L, "this");
-	
+	lua_setglobal(L, "__neurostate");
+
+	lua_pushlightuserdata(L, this);
+	lua_setglobal(L, "__lua");
+
 	bool bError = luaL_dofile(L, Utils::File->GetResourcePath("Neuro.lua").c_str());
 	if (bError)
 	{
@@ -171,10 +176,12 @@ void Lua::FromJsonObject(const Json::Value& LuaObject)
 	{
 		if (LuaObject[Name].isInt())
 		{
+			WLOG("Looading int value %s = %d\n", Name.c_str(), LuaObject[Name].asInt());
 			SetIntValue(nullptr, Name.c_str(), LuaObject[Name].asInt());
 		}
 		else if (LuaObject[Name].isString())
 		{
+			WLOG("Looading string value %s = %s\n", Name.c_str(), LuaObject[Name].asString().c_str());
 			SetStringValue(nullptr, Name.c_str(), LuaObject[Name].asString());
 		}
 	}
@@ -192,11 +199,25 @@ void Lua::RegisterFunction(const char* Name, lua_CFunction Func)
 	lua_register(L, Name, Func);
 }
 
+void Lua::LoadScript(const char* ScriptName)
+{
+	bool bError = luaL_dofile(L, Utils::File->GetResourcePath(ScriptName).c_str());
+	if (bError)
+	{
+		WLOG("error loading lua file: %s\n", lua_tostring(L, -1));
+	}
+}
+
 LuaRef* Lua::MakeRef() const
 {
-	return new LuaRef(this, luaL_ref(L, LUA_REGISTRYINDEX));
+	return new LuaRef(const_cast<Lua*>(this), luaL_ref(L, LUA_REGISTRYINDEX));
 }
 	
+shared_ptr<LuaRef> Lua::MakeSharedRef() const
+{
+	return make_shared<LuaRef>(const_cast<Lua*>(this), luaL_ref(L, LUA_REGISTRYINDEX));
+}
+
 int Lua::MarkStack()
 {
 	return lua_gettop(L);
@@ -385,6 +406,13 @@ int PushSpec(lua_State* L, LuaRef* TableRef)
 	return lua_gettop(L);
 }
 
+int PushSpec(lua_State* L, shared_ptr<LuaRef> TableRef)
+{
+	// just get the real table from the ref onto the stack
+	lua_rawgeti(L, LUA_REGISTRYINDEX, TableRef->Ref);
+	return lua_gettop(L);
+}
+
 //int PushSpec(lua_State* L, int TableStackLoc)
 //{
 //	lua_pushvalue(L, TableStackLoc);
@@ -448,7 +476,11 @@ bool GetReturn(lua_State* L, LuaRef*& Param)
 		return false;
 	}
 	
-	Param = new LuaRef(L, luaL_ref(L, LUA_REGISTRYINDEX));
+	lua_getglobal(L, "__lua");
+	Lua* This = (Lua*)lua_touserdata(L, -1);
+	lua_pop(L, 1);
+
+	Param = new LuaRef(This, luaL_ref(L, LUA_REGISTRYINDEX));
 	return true;
 }
 

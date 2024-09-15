@@ -35,7 +35,7 @@ InvBox::InvBox(float X, float Y, float SizeX, float SizeY)
 	NumInvPerPage = GridsY - 2;
 }
 
-void InvBox::OnTextEntryComplete(const string& Text)
+void InvBox::OnTextEntryComplete(const string& Text, const string& Tag)
 {
 	if (Phase == Phase_Amount)
 	{
@@ -238,7 +238,7 @@ void InvBox::Update()
 		Entries.push_back({ItemDesc, 0, 0});
 		Entries.push_back({"Give how much?", 0, 1});
 		Entries.push_back({"> ", 0, 2});
-		SetupTextEntry(2, 2, true, false);
+		SetupTextEntry({"", 2, 2, -1, 0, false, "", true, false});
 	}
 	else if (Phase == Phase_Confirm)
 	{
@@ -256,11 +256,11 @@ void InvBox::Update()
 	{
 		Entries.push_back({"ComLink", GridsX / 2 - 3, 0});
 		Entries.push_back({"Enter link code:", 0, 1});
-		SetupTextEntry(0, 2, false, false);
+		SetupTextEntry({"", 0, 2, -1, 0, false, "", false, false});
 	}
 	else if (Phase == Phase_LoginError)
 	{
 		Entries.push_back({"ComLink", GridsX / 2 - 3, 0});
-		Entries.push_back({"Unknown link core", 0, 1});
+		Entries.push_back({"Unknown link code", 0, 1});
 	}
 }

@@ -125,7 +125,9 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		WebSite->RemoveFromParent();
 		if (State.IsShowingSite())
 		{
-			WebSite->Open(Config.Sites[State.GetStringValue("currentsite")]);
+			// need to lowercase to look up an object, there's no case insensitive object lookup :|
+			LuaRef* Site = State.GetTableValue(State.GetStringValue("currentsite"));
+			WebSite->Open(Site);
 			Background->AddChild(WebSite);
 		}
 	}

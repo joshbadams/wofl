@@ -60,7 +60,7 @@ LuaScope::~LuaScope()
 //{
 //}
 
-LuaRef::LuaRef(Lua* LuaSys, int RefIndex)
+LuaObjRef::LuaObjRef(Lua* LuaSys, int RefIndex)
 	: LuaSystem(LuaSys)
 	, L(LuaSys->L)
 	, Ref(RefIndex)
@@ -68,9 +68,9 @@ LuaRef::LuaRef(Lua* LuaSys, int RefIndex)
 		
 }
 
-LuaRef::~LuaRef()
+LuaObjRef::~LuaObjRef()
 {
-//	luaL_unref(L, LUA_REGISTRYINDEX, Ref);
+	luaL_unref(L, LUA_REGISTRYINDEX, Ref);
 }
 
 
@@ -99,12 +99,9 @@ Lua::Lua(void* Context)
 	lua_pushlightuserdata(L, this);
 	lua_setglobal(L, "__lua");
 
-	bool bError = luaL_dofile(L, Utils::File->GetResourcePath("Neuro.lua").c_str());
-	if (bError)
-	{
-		WLOG("error loading lua file: %s\n", lua_tostring(L, -1));
-	}
-	assert(bError == false);
+	// load the main file
+	LoadScript("Neuro.lua");
+	LoadScript("Items.lua");
 
 //	int IntVal;
 //	string StringVal;
@@ -201,22 +198,29 @@ void Lua::RegisterFunction(const char* Name, lua_CFunction Func)
 
 void Lua::LoadScript(const char* ScriptName)
 {
-	bool bError = luaL_dofile(L, Utils::File->GetResourcePath(ScriptName).c_str());
+	string FilePath = "Lua/";
+	FilePath += ScriptName;
+	bool bError = luaL_dofile(L, Utils::File->GetResourcePath(FilePath.c_str()).c_str());
 	if (bError)
 	{
 		WLOG("error loading lua file: %s\n", lua_tostring(L, -1));
 	}
+	assert(!bError);
 }
 
-LuaRef* Lua::MakeRef() const
+LuaRef Lua::MakeRef() const
 {
-	return new LuaRef(const_cast<Lua*>(this), luaL_ref(L, LUA_REGISTRYINDEX));
+	return make_shared<LuaObjRef>(const_cast<Lua*>(this), luaL_ref(L, LUA_REGISTRYINDEX));
 }
+
+LuaRef Lua::GetGlobalTable() const
+{
+	SCOPE;
 	
-shared_ptr<LuaRef> Lua::MakeSharedRef() const
-{
-	return make_shared<LuaRef>(const_cast<Lua*>(this), luaL_ref(L, LUA_REGISTRYINDEX));
+	lua_pushglobaltable(L);
+	return make_shared<LuaObjRef>(const_cast<Lua*>(this), luaL_ref(L, LUA_REGISTRYINDEX));
 }
+
 
 int Lua::MarkStack()
 {
@@ -341,7 +345,7 @@ bool Lua::RunCode(const string& Code)
 //	lua_pushvalue(L, -2);
 //
 //
-//bool Lua::CallFunction(const char* ObjectName, LuaRef* FunctionRef)
+//bool Lua::CallFunction(const char* ObjectName, LuaRef FunctionRef)
 //{
 //	SCOPE;
 //	if (lua_getglobal(L, ObjectName) != LUA_TTABLE) { lua_pop(L, 1); return false; }
@@ -365,7 +369,7 @@ bool Lua::RunCode(const string& Code)
 //	return true;
 //}
 //
-//bool Lua::CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef* FunctionRef)
+//bool Lua::CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef FunctionRef)
 //{
 //	CALL_FUNCTIONREF_NO_SCOPE_PREAMBLE
 //
@@ -388,7 +392,7 @@ bool Lua::RunCode(const string& Code)
 //	return true;
 //}
 //
-//bool Lua::CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef* FunctionRef, const char* Param)
+//bool Lua::CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef FunctionRef, const char* Param)
 //{
 //	CALL_FUNCTIONREF_NO_SCOPE_PREAMBLE
 //
@@ -399,14 +403,7 @@ bool Lua::RunCode(const string& Code)
 //	return true;
 //}
 
-int PushSpec(lua_State* L, LuaRef* TableRef)
-{
-	// just get the real table from the ref onto the stack
-	lua_rawgeti(L, LUA_REGISTRYINDEX, TableRef->Ref);
-	return lua_gettop(L);
-}
-
-int PushSpec(lua_State* L, shared_ptr<LuaRef> TableRef)
+int PushSpec(lua_State* L, LuaRef TableRef)
 {
 	// just get the real table from the ref onto the stack
 	lua_rawgeti(L, LUA_REGISTRYINDEX, TableRef->Ref);
@@ -441,7 +438,7 @@ int PushFuncSpec(lua_State* L, int TableStackLoc, const char* Func)
 	return lua_gettop(L);
 }
 
-int PushFuncSpec(lua_State* L, int TableStackLoc, LuaRef* Func)
+int PushFuncSpec(lua_State* L, int TableStackLoc, LuaRef Func)
 {
 	lua_rawgeti(L, LUA_REGISTRYINDEX, Func->Ref);
 	return lua_gettop(L);
@@ -450,7 +447,7 @@ int PushFuncSpec(lua_State* L, int TableStackLoc, LuaRef* Func)
 
 
 
-int PushParam(lua_State* L, LuaRef* Param)
+int PushParam(lua_State* L, LuaRef Param)
 {
 	lua_rawgeti(L, LUA_REGISTRYINDEX, Param->Ref);
 	return lua_gettop(L);
@@ -468,7 +465,7 @@ int PushParam(lua_State* L, const char* Param)
 	return lua_gettop(L);
 }
 
-bool GetReturn(lua_State* L, LuaRef*& Param)
+bool GetReturn(lua_State* L, LuaRef& Param)
 {
 	if (!lua_istable(L, -1) && !lua_isfunction(L, -1))
 	{
@@ -480,7 +477,7 @@ bool GetReturn(lua_State* L, LuaRef*& Param)
 	Lua* This = (Lua*)lua_touserdata(L, -1);
 	lua_pop(L, 1);
 
-	Param = new LuaRef(This, luaL_ref(L, LUA_REGISTRYINDEX));
+	Param = make_shared<LuaObjRef>(This, luaL_ref(L, LUA_REGISTRYINDEX));
 	return true;
 }
 
@@ -512,14 +509,14 @@ bool GetReturn(lua_State* L, string& Param)
 //#define INSTANTIATE(Func, ResultType) \
 //	template bool Lua::Func<int>(int, const char*, ResultType&) const; \
 //	template bool Lua::Func<const char*>(const char*, const char*, ResultType&) const; \
-//	template bool Lua::Func<LuaRef*>(LuaRef*, const char*, ResultType&) const;
+//	template bool Lua::Func<LuaRef>(LuaRef, const char*, ResultType&) const;
 //
 //INSTANTIATE(GetIntValue, int)
 //INSTANTIATE(GetStringValue, string)
-//INSTANTIATE(GetTableValue, LuaRef*)
-//INSTANTIATE(GetFunctionValue, LuaRef*)
+//INSTANTIATE(GetTableValue, LuaRef)
+//INSTANTIATE(GetFunctionValue, LuaRef)
 //INSTANTIATE(GetStringValues, vector<string>)
-//INSTANTIATE(GetTableValues, vector<LuaRef*>)
+//INSTANTIATE(GetTableValues, vector<LuaRef>)
 
 
 //bool Lua::GetIntValue(const char* Object, const char* Name, int& Result) const
@@ -613,7 +610,7 @@ void Lua::SetStringValue(const char* Object, const char* Name, const string& Val
 //	return true;
 //}
 //
-//bool Lua::GetTableTableValue(const char* Name, LuaRef*& Result, int StackLoc) const
+//bool Lua::GetTableTableValue(const char* Name, LuaRef& Result, int StackLoc) const
 //{
 //	GET_TABLE_VALUE_PREAMBLE(lua_istable, nullptr)
 //
@@ -622,7 +619,7 @@ void Lua::SetStringValue(const char* Object, const char* Name, const string& Val
 //	return true;
 //}
 //
-//bool Lua::GetTableFunctionValue(const char* Name, LuaRef*& Result, int StackLoc) const
+//bool Lua::GetTableFunctionValue(const char* Name, LuaRef& Result, int StackLoc) const
 //{
 //	GET_TABLE_VALUE_PREAMBLE(lua_isfunction, nullptr)
 //

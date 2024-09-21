@@ -14,18 +14,11 @@ class InvBox : public Gridbox
 public:
 	
 	InvBox(float X, float Y, float SizeX, float SizeY);
-
-
-	void Open();
 	
 protected:
-	virtual void OnClickEntry(GridEntry& Entry) override;
-	virtual void OnTextEntryComplete(const string& Text, const string& Tag) override;
-	virtual void OnTextEntryCancelled()  override;
 	virtual void OnGenericContinueInput() override;
 
 private:
-	void Update();
 	void DescribeItem(int Prefix, int ID);
 	char ItemDesc[20];
 	

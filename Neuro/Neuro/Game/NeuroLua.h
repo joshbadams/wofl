@@ -17,17 +17,23 @@ using namespace	 std;
 class Lua;
 struct lua_State;
 
-class LuaRef : public enable_shared_from_this<LuaRef>
+class LuaObjRef : public enable_shared_from_this<LuaObjRef>
 {
 public:
-	~LuaRef();
+	~LuaObjRef();
 	
 	Lua* LuaSystem;
-	LuaRef(Lua* LuaObj, int RefIndex);
+	LuaObjRef(Lua* LuaObj, int RefIndex);
+	
+	bool operator==(const LuaObjRef& Other) { return Ref == Other.Ref; }
 
 	lua_State* L;
 	int Ref;
 };
+
+using LuaRef = shared_ptr<LuaObjRef>;
+
+
 
 struct LuaScope
 {
@@ -39,6 +45,7 @@ private:
 	lua_State* L;
 	int StackDepth;
 };
+
 
 #define LUA_SCOPE LuaScope Scope(&Lua);
 
@@ -57,8 +64,10 @@ public:
 	void RegisterFunction(const char* FunctionName, lua_CFunction Func);
 	void LoadScript(const char* ScriptName);
 	
-	LuaRef* MakeRef() const;
-	shared_ptr<LuaRef> MakeSharedRef() const;
+	LuaRef MakeRef() const;
+	LuaRef MakeSharedRef() const;
+
+	LuaRef GetGlobalTable() const;
 
 	int MarkStack();
 	void RestoreStack(int StackDepth);
@@ -72,11 +81,11 @@ public:
 	
 
 	bool RunCode(const string& Code);
-//	bool CallFunction(const char* ObjectName, LuaRef* FunctionRef);
+//	bool CallFunction(const char* ObjectName, LuaRef FunctionRef);
 //	bool CallFunction_ReturnOnStack(const char* ObjectName, const char* FunctionName);
 //	bool CallFunction_ReturnOnStack(const char* ObjectName, const char* FunctionName, const char* Param);
-//	bool CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef* FunctionRef);
-//	bool CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef* FunctionRef, const char* Param);
+//	bool CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef FunctionRef);
+//	bool CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef FunctionRef, const char* Param);
 	
 
 //	bool GetIntValue(const char* Object, const char* Name, int& Result) const;
@@ -95,10 +104,10 @@ public:
 	bool GetStringValue(TableSpec Table, const char* Name, string& Result) const;
 
 	template<typename TableSpec>
-	bool GetTableValue(TableSpec Table, const char* Name, LuaRef*& Result) const;
+	bool GetTableValue(TableSpec Table, const char* Name, LuaRef& Result) const;
 
 	template<typename TableSpec>
-	bool GetFunctionValue(TableSpec Table, const char* Name, LuaRef*& Result) const;
+	bool GetFunctionValue(TableSpec Table, const char* Name, LuaRef& Result) const;
 
 	template<typename TableSpec>
 	bool GetIntValues(TableSpec Table, const char* Name, vector<int>& Result) const;
@@ -107,10 +116,7 @@ public:
 	bool GetStringValues(TableSpec Table, const char* Name, vector<string>& Result) const;
 
 	template<typename TableSpec>
-	bool GetTableValues(TableSpec Table, const char* Name, vector<LuaRef*>& Result) const;
-
-	template<typename TableSpec>
-	bool GetTableValues(TableSpec Table, const char* Name, vector<shared_ptr<LuaRef>>& Result) const;
+	bool GetTableValues(TableSpec Table, const char* Name, vector<LuaRef>& Result) const;
 
 
 
@@ -135,7 +141,7 @@ public:
 
 private:
 	friend class LuaScope;
-	friend class LuaRef;
+	friend class LuaObjRef;
 	mutable lua_State* L;
 	set<string> SystemVariables;
 };
@@ -143,19 +149,18 @@ private:
 
 
 
-int PushSpec(lua_State* L, LuaRef* TableRef);
-int PushSpec(lua_State* L, shared_ptr<LuaRef> TableRef);
+int PushSpec(lua_State* L, LuaRef TableRef);
 //int PushSpec(lua_State* L, int TableStackLoc);
 int PushSpec(lua_State* L, const char* TableName);
 
-int PushFuncSpec(lua_State* L, int TableStackLoc, LuaRef* TableRef);
+int PushFuncSpec(lua_State* L, int TableStackLoc, LuaRef TableRef);
 int PushFuncSpec(lua_State* L, int TableStackLoc, const char* TableName);
 
-int PushParam(lua_State* L, LuaRef* Param);
+int PushParam(lua_State* L, LuaRef Param);
 int PushParam(lua_State* L, int Param);
 int PushParam(lua_State* L, const char* Param);
 
-bool GetReturn(lua_State* L, LuaRef*& Param);
+bool GetReturn(lua_State* L, LuaRef& Param);
 bool GetReturn(lua_State* L, int& Param);
 bool GetReturn(lua_State* L, string& Param);
 
@@ -231,7 +236,7 @@ bool Lua::GetStringValue(TableSpec Table, const char* Name, string& Result) cons
 }
 
 template<typename TableSpec>
-bool Lua::GetTableValue(TableSpec Table, const char* Name, LuaRef*& Result) const
+bool Lua::GetTableValue(TableSpec Table, const char* Name, LuaRef& Result) const
 {
 	GET_TABLE_VALUE_PREAMBLE(lua_istable, nullptr)
 
@@ -241,7 +246,7 @@ bool Lua::GetTableValue(TableSpec Table, const char* Name, LuaRef*& Result) cons
 }
 
 template<typename TableSpec>
-bool Lua::GetFunctionValue(TableSpec Table, const char* Name, LuaRef*& Result) const
+bool Lua::GetFunctionValue(TableSpec Table, const char* Name, LuaRef& Result) const
 {
 	GET_TABLE_VALUE_PREAMBLE(lua_isfunction, nullptr)
 
@@ -287,7 +292,7 @@ bool Lua::GetStringValues(TableSpec Table, const char* Name, vector<string>& Res
 }
 
 template<typename TableSpec>
-bool Lua::GetTableValues(TableSpec Table, const char* Name, vector<LuaRef*>& Result) const
+bool Lua::GetTableValues(TableSpec Table, const char* Name, vector<LuaRef>& Result) const
 {
 	SCOPE;
 
@@ -316,35 +321,6 @@ bool Lua::GetTableValues(TableSpec Table, const char* Name, vector<LuaRef*>& Res
 	return true;
 }
 
-template<typename TableSpec>
-bool Lua::GetTableValues(TableSpec Table, const char* Name, vector<shared_ptr<LuaRef>>& Result) const
-{
-	SCOPE;
-
-	// if the Name is emnpty, we want the values of the passed in table, instead of values of something in the table
-	// so handle it specially
-	if (Name == nullptr || Name[0] == 0)
-	{
-		PushSpec(L, Table);
-		
-	}
-	else
-	{
-		GET_TABLE_VALUE_PREAMBLE_NO_SCOPE(lua_istable, {})
-	}
-	
-	int TableLoc = lua_gettop(L);
-	lua_pushnil(L);  // first key
-	while (lua_next(L, TableLoc) != 0)
-	{
-		// -2 is key, -1 is value
-		Result.push_back(MakeSharedRef());
-		// move to next
-//		lua_pop(L, 1);
-	}
-
-	return true;
-}
 
 
 template<typename TableSpec, typename FuncSpec>

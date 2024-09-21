@@ -86,17 +86,20 @@ void Textbox::UpdateLines()
 				continue;
 			}
 		}
-		
+				
 		int SpaceIndex = (int)FullText.find(' ', Travel);
-		while (FullText[SpaceIndex + 1] == ' ')
-		{
-			SpaceIndex++;
-		}
 		bool bIsLastWord = false;
 		if (SpaceIndex == string::npos)
 		{
 			SpaceIndex = (int)FullText.length() + 1;
 			bIsLastWord = true;
+		}
+		else
+		{
+			while (FullText[SpaceIndex + 1] == ' ')
+			{
+				SpaceIndex++;
+			}
 		}
 		
 		// check if we are going over the

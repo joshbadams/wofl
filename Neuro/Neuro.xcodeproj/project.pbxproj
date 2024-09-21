@@ -26,7 +26,6 @@
 		7CA3605D29E3AB58009B40DA /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CA3605C29E3AB57009B40DA /* AppKit.framework */; };
 		7CB134B22A08425F00AF73AB /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7CB134B12A08425F00AF73AB /* Readme.txt */; };
 		7CE8527929FF15D900DD3053 /* InvBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8527029FF15D900DD3053 /* InvBox.cpp */; };
-		7CE8527C29FF666500DD3053 /* PAXBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8527B29FF666500DD3053 /* PAXBox.cpp */; };
 		7CE8F9522A119F8A00B5B327 /* SiteBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8F9512A119F8A00B5B327 /* SiteBox.cpp */; };
 		7CF9A57929E5177D00FDB4A6 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 7CF9A57829E5177D00FDB4A6 /* Resources */; };
 /* End PBXBuildFile section */
@@ -128,8 +127,6 @@
 		7CB134B12A08425F00AF73AB /* Readme.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
 		7CE8527029FF15D900DD3053 /* InvBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InvBox.cpp; sourceTree = "<group>"; };
 		7CE8527129FF15D900DD3053 /* InvBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvBox.h; sourceTree = "<group>"; };
-		7CE8527A29FF666500DD3053 /* PAXBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAXBox.h; sourceTree = "<group>"; };
-		7CE8527B29FF666500DD3053 /* PAXBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PAXBox.cpp; sourceTree = "<group>"; };
 		7CE8F9492A119F8A00B5B327 /* SiteBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SiteBox.h; sourceTree = "<group>"; };
 		7CE8F9512A119F8A00B5B327 /* SiteBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SiteBox.cpp; sourceTree = "<group>"; };
 		7CF9A57829E5177D00FDB4A6 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
@@ -261,8 +258,6 @@
 			children = (
 				7CE8527029FF15D900DD3053 /* InvBox.cpp */,
 				7CE8527129FF15D900DD3053 /* InvBox.h */,
-				7CE8527B29FF666500DD3053 /* PAXBox.cpp */,
-				7CE8527A29FF666500DD3053 /* PAXBox.h */,
 				7CE8F9512A119F8A00B5B327 /* SiteBox.cpp */,
 				7CE8F9492A119F8A00B5B327 /* SiteBox.h */,
 			);
@@ -402,7 +397,6 @@
 			files = (
 				7C88AEBB29EB73110011A3B3 /* NeuroGame.cpp in Sources */,
 				7C06E60B29F956C400167332 /* Gridbox.cpp in Sources */,
-				7CE8527C29FF666500DD3053 /* PAXBox.cpp in Sources */,
 				7C9E069D29E3855500A88DE7 /* main.m in Sources */,
 				7C382AC029ECE71500FD8086 /* NeuroState.cpp in Sources */,
 				7C9E069329E3855400A88DE7 /* AppDelegate.mm in Sources */,

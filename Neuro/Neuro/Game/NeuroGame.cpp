@@ -10,7 +10,6 @@
 #include "Ninebox.h"
 #include "Gridbox.h"
 #include "InvBox.h"
-#include "PAXBox.h"
 #include "SiteBox.h"
 #include "NeuroConfig.h"
 #include "NeuroScene.h"
@@ -39,8 +38,8 @@ NeuroGame::NeuroGame()
 	Inventory = new InvBox(150, 480, 500, 280);
 	Inventory->SetDelegates(&State, &State);
 	
-	PAX = new PAXBox(100, 40, 1000, 424);
-	PAX->SetDelegates(&State, &State);
+//	PAX = new PAXBox(100, 40, 1000, 424);
+//	PAX->SetDelegates(&State, &State);
 	
 	WebSite = new SiteBox(100, 40, 1000, 600);
 	WebSite->SetDelegates(&State, &State);
@@ -81,7 +80,10 @@ void NeuroGame::Invalidate(ZoneType Zone)
 	if ((Zone & ZoneType::Room) != ZoneType::None)
 	{
 		ScreenSprite->ClearImages();
-		ScreenSprite->AddImage(new WoflImage(State.CurrentRoom->BackgroundImage));
+		
+		string BackgroundImage;
+		State.CurrentRoom->LuaSystem->GetStringValue(State.CurrentRoom, "background", BackgroundImage);
+		ScreenSprite->AddImage(new WoflImage(BackgroundImage.c_str()));
 	}
 	
 	if ((Zone & ZoneType::Message) != ZoneType::None)
@@ -105,20 +107,20 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		Inventory->RemoveFromParent();
 		if (State.IsShowingInventory())
 		{
-			Inventory->Open();
+			Inventory->Open(State.GetTableValue("InvBox"));
 			Background->AddChild(Inventory);
 		}
 	}
 
-	if ((Zone & ZoneType::PAX) != ZoneType::None)
-	{
-		PAX->RemoveFromParent();
-		if (State.IsShowingPAX())
-		{
-			PAX->Open();
-			Background->AddChild(PAX);
-		}
-	}
+//	if ((Zone & ZoneType::PAX) != ZoneType::None)
+//	{
+//		PAX->RemoveFromParent();
+//		if (State.IsShowingPAX())
+//		{
+//			PAX->Open();
+//			Background->AddChild(PAX);
+//		}
+//	}
 
 	if ((Zone & ZoneType::Site) != ZoneType::None)
 	{
@@ -126,7 +128,7 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		if (State.IsShowingSite())
 		{
 			// need to lowercase to look up an object, there's no case insensitive object lookup :|
-			LuaRef* Site = State.GetTableValue(State.GetStringValue("currentsite"));
+			LuaRef Site = State.GetTableValue(State.GetStringValue("currentsite"));
 			WebSite->Open(Site);
 			Background->AddChild(WebSite);
 		}

@@ -26,8 +26,8 @@ struct GridEntry
 	bool bNumericEntry;
 	bool bMultilineEntry;
 
-	void FromLua(shared_ptr<LuaRef> Ref);
-	shared_ptr<LuaRef> LuaEntry;
+	void FromLua(LuaRef Ref);
+	LuaRef LuaEntry;
 };
 
 class Gridbox : public Ninebox, public ITextboxDelegate
@@ -43,7 +43,7 @@ public:
 		InterfaceChangingDelegate = InInterfaceChangingDelegate;
 	}
 
-	virtual void Open(LuaRef* LuaObj);
+	virtual void Open(LuaRef LuaObj);
 
 	virtual void CustomPostChildrenRender() override;
 	virtual void OnInput(const Vector& ScreenLocation, int RepeatIndex) override;
@@ -54,9 +54,9 @@ public:
 protected:
 
 	virtual void OnGenericContinueInput() { }
-	virtual void OnClickEntry(GridEntry& Entry) { }
-	virtual void OnTextEntryComplete(const string& Text, const string& Tag) { }
-	virtual void OnTextEntryCancelled() { }
+	
+	virtual void OnTextEntryComplete(const string& Text, const string& Tag);
+	virtual void OnTextEntryCancelled(const string& Tag);
 
 
 	void SetupTextEntry(const GridEntry& Entry);
@@ -65,14 +65,16 @@ protected:
 	bool IsInMessagePhase() { return bIsShowingMessageList || bIsShowingMessage; }
 	
 	void OnClickMessageEntry(GridEntry& Entry);
+
 	virtual void Update();
+	virtual void OnClickEntry(GridEntry& Entry);
 	
 	virtual void CloseMessages() {}
 
 	IQueryStateDelegate* QueryStateDelegate;
 	IInterfaceChangingStateDelegate* InterfaceChangingDelegate;
 		
-	LuaRef* LuaBox = nullptr;
+	LuaRef LuaBox;
 	
 	vector<GridEntry> Entries;
 	Textbox* Messagebox;

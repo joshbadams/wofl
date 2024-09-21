@@ -19,7 +19,7 @@ enum KeyCodes
 	Key_Escape = 53,
 };
 
-void GridEntry::FromLua(shared_ptr<LuaRef> Ref)
+void GridEntry::FromLua(LuaRef Ref)
 {
 	Lua* L = Ref->LuaSystem;
 	LuaEntry = Ref;
@@ -61,11 +61,13 @@ Gridbox::Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Col
 	Messagebox->SetInterfaceDelegate(this);
 }
 
-void Gridbox::Open(LuaRef* LuaObj)
+void Gridbox::Open(LuaRef LuaObj)
 {
 	LuaBox = LuaObj;
 	
 	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OpenBox", GridsX, GridsY);
+	
+	Update();
 }
 
 void Gridbox::CustomPostChildrenRender()
@@ -156,21 +158,6 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 		{
 			Entries[TextEntryIndex].Text += Event.Char;
 		}
-		// enter
-		else if (Event.KeyCode == Key_Enter)
-		{
-			if (TextEntry.bMultilineEntry)
-			{
-			
-			}
-			else
-			{
-				int Index = TextEntryIndex;
-				TextEntryIndex = -1;
-				OnTextEntryComplete(Entries[Index].Text, Entries[Index].EntryTag);
-				bIgnoreUntilNextUp = true;
-			}
-		}
 		// delete
 		else if (Event.KeyCode == Key_Delete)
 		{
@@ -179,12 +166,22 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 				Entries[TextEntryIndex].Text = Entries[TextEntryIndex].Text.substr(0, Entries[TextEntryIndex].Text.size() - 1);
 			}
 		}
-		// escape
+		// complete entry (enter for single line, esc for multiline)
+		else if ((Event.KeyCode == Key_Enter && !TextEntry.bMultilineEntry) ||
+				 (Event.KeyCode == Key_Escape && TextEntry.bMultilineEntry))
+		{
+			int Index = TextEntryIndex;
+			TextEntryIndex = -1;
+			OnTextEntryComplete(Entries[Index].Text, Entries[Index].EntryTag);
+			bIgnoreUntilNextUp = true;
+		}
+		// cancel (escape for single line_
 		else if (Event.KeyCode == Key_Escape)
 		{
-			OnTextEntryCancelled();
-			bIgnoreUntilNextUp = true;
+			int Index = TextEntryIndex;
 			TextEntryIndex = -1;
+			OnTextEntryCancelled(Entries[Index].EntryTag);
+			bIgnoreUntilNextUp = true;
 		}
 	}
 	else if (Event.Type == KeyType::Down)
@@ -221,10 +218,21 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 	return true;
 }
 
+void Gridbox::OnTextEntryComplete(const string& Text, const string& Tag)
+{
+	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnTextEntryComplete", Text.c_str(), Tag.c_str());
+	Update();
+}
+
+void Gridbox::OnTextEntryCancelled(const string& Tag)
+{
+	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnTextEntryCancelled", Tag.c_str());
+	Update();
+}
 
 void Gridbox::SetupMessages(string MessageSourceID, string Title)
 {
-	CurrentMessages = QueryStateDelegate->GetUnlockedMessages(MessageSourceID);
+//	CurrentMessages = QueryStateDelegate->GetUnlockedMessages(MessageSourceID);
 	MessagesTitle = Title;
 	
 	FirstMessage = 0;
@@ -250,42 +258,42 @@ void Gridbox::Update()
 {
 	Entries.clear();
 	Messagebox->RemoveFromParent();
-	
+
+	// do we need full screen message?
 	int DetailsIndex;
 	LuaBox->LuaSystem->GetIntValue(LuaBox, "detailsIndex", DetailsIndex);
-	
-	if (bIsShowingMessageList)
-	{
-		Entries.push_back({MessagesTitle, 0, 0});
-		Entries.push_back({"date", 7, 2});
-		Entries.push_back({"to", 12, 2});
-		Entries.push_back({"from", 25, 2});
-
-		char Line[50];
-		for (int Index = FirstMessage; Index < FirstMessage + NumMessagesPerPage && Index < (int)CurrentMessages.size(); Index++)
-		{
-			int LineNumber = Index - FirstMessage;
-			Message* Item = CurrentMessages[Index];
-			int Month = Item->Date / 10000;
-			int Day = (Item->Date / 100) % 100;
-			int Year = Item->Date % 100;
-			snprintf(Line, 50, "%d. %02d/%02d/%02d %-12s %s", LineNumber + 1, Month, Day, Year, Item->To.c_str(), Item->From.c_str());
-			Entries.push_back({Line, 0, LineNumber + 4, Index + 1, (char)('1' + LineNumber)});
-		}
-
-		Entries.push_back({"exit", 13, GridsY - 1, Message_Exit, 'x'});
-		if (CurrentMessages.size() > NumMessagesPerPage)
-		{
-			Entries.push_back({"more", 18, GridsY - 1, Message_More, 'm'});
-		}
-	}
-	else if (DetailsIndex > 0)
+	if (DetailsIndex > 0)
 	{
 		string DetailsString;
 		LuaBox->LuaSystem->CallFunction_Return(LuaBox, "GetDetailsString", DetailsString);
 		Messagebox->SetText(DetailsString);
 		AddChild(Messagebox);
 	}
+	
+	LuaRef EntriesTable;
+	vector<LuaRef> LuaEntries;
+	LuaBox->LuaSystem->CallFunction_Return(LuaBox, "GetEntries", EntriesTable);
+	LuaBox->LuaSystem->GetTableValues(EntriesTable, "", LuaEntries);
+	for (LuaRef& LuaEntry : LuaEntries)
+	{
+		GridEntry Entry;
+		Entry.FromLua(LuaEntry);
+		
+		if (Entry.EntryTag != "")
+		{
+			SetupTextEntry(Entry);
+		}
+		else
+		{
+			Entries.push_back(Entry);
+		}
+	}
+}
+
+void Gridbox::OnClickEntry(GridEntry& Entry)
+{
+	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleClickedEntry", Entry.ClickId);
+	Update();
 }
 
 void Gridbox::OnClickMessageEntry(GridEntry& Entry)

@@ -69,6 +69,7 @@ class IStateChangedDelegate
 {
 public:
 	virtual void Invalidate(ZoneType Zone) = 0;
+	virtual void CloseBoxWithObj(LuaRef BoxObj) = 0;
 };
 
 class IInterfaceChangingStateDelegate
@@ -80,7 +81,7 @@ public:
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) = 0;
 	virtual void GridboxClosed() = 0;
 	virtual void SetIntValue(const string& Name, int Value) = 0;
-	virtual void SendMessage(const string& Recipient, const string& Message) = 0;
+//	virtual void SendMessage(const string& Recipient, const string& Message) = 0;
 	virtual bool ConnectToSite(const string& Recipient, int ComLinkLevel) = 0;
 };
 
@@ -90,7 +91,7 @@ public:
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override { assert(0); }
 	virtual void SetIntValue(const string& Name, int Value) override  { assert(0); }
 	virtual void GridboxClosed() override  { assert(0); }
-	virtual void SendMessage(const string& Recipient, const string& Message) override  { assert(0); }
+//	virtual void SendMessage(const string& Recipient, const string& Message) override  { assert(0); }
 	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel) override  {assert(0); }
 };
 
@@ -101,16 +102,16 @@ public:
 	virtual int GetMoney() const = 0;
 	virtual int GetIntValue(const string& Name) const = 0;
 	virtual string GetStringValue(const string& Name) const = 0;
-	virtual LuaRef* GetTableValue(const string& Name) const = 0;
+	virtual LuaRef GetTableValue(const string& Name) const = 0;
 	virtual const vector<int>& GetUnlockedNewsItems() const = 0;
-	virtual vector<Message*> GetUnlockedMessages(string ID) = 0;
+//	virtual vector<Message*> GetUnlockedMessages(string ID) = 0;
 
 };
 
 class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, public IQueryStateDelegate
 {
 public:
-	Room* CurrentRoom;
+	LuaRef CurrentRoom;
 	
 //	map<string, int> IntValues;
 //	map<string, string> Variables;
@@ -127,7 +128,7 @@ public:
 	virtual void MessageComplete() override;
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override;
 	virtual void GridboxClosed() override;
-	virtual void SendMessage(const string& Recipient, const string& Message) override;
+//	virtual void SendMessage(const string& Recipient, const string& Message) override;
 	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel) override;
 
 	
@@ -141,7 +142,7 @@ public:
 	{
 		return UnlockedMessages.at("news");
 	}
-	virtual vector<Message*> GetUnlockedMessages(string ID) override;
+//	virtual vector<Message*> GetUnlockedMessages(string ID) override;
 
 
 	
@@ -161,7 +162,7 @@ public:
 	void IncrementIntValue(const string& Key);
 	virtual string GetStringValue(const string&  Key) const override;
 	void SetStringValue(const string& Key, const string& Value);
-	virtual LuaRef* GetTableValue(const string& Key) const override;
+	virtual LuaRef GetTableValue(const string& Key) const override;
 
 	void Trigger(const string& Type, const string& Value);
 		
@@ -194,7 +195,7 @@ private:
 	static int Lua_ShowMessage(lua_State* L);
 	static int Lua_CloseBox(lua_State* L);
 
-	void ActivateRoom(Room* OldRoom, Room* NewRoom);
+	void ActivateRoom(LuaRef OldRoom, LuaRef NewRoom);
 	void ActivateConversation(Conversation* Convo);
 	
 	Conversation* FindConversationWithTag(const char* Tag);
@@ -204,7 +205,7 @@ private:
 	void UpdateVariablesFromString(const string& Command);
 	bool CheckVariablesFromString(const string& Query);
 
-	const Item* GetItemForID(int ID);
+//	const Item* GetItemForID(int ID);
 
 //	int Money;
 //	vector<int> Inventory;
@@ -220,7 +221,10 @@ private:
 	
 	
 	State CurrentState;
-	Room* PendingRoom;
+
+	LuaRef PendingRoom;
+	LuaRef Lua_OnMessageComplete;
+
 	Conversation* PendingConversation;
 	string PendingMessage;
 
@@ -228,7 +232,5 @@ private:
 	
 	Lua Lua;
 	
-	LuaRef* Lua_CurrentRoom;
-	LuaRef* Lua_OnMessageComplete;
 };
 

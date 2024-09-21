@@ -6,9 +6,11 @@ inventory = {
 	1, -- pawn ticket
 	2, -- UXB
 }
+date = 111658
 bankaccount = 1941
 name = "Badams"
 bamaid = "056306118"
+
 
 
 function table:removekey(key)
@@ -22,7 +24,7 @@ function table:append(item)
 end
 
 function string:appendPadded(str, width)
-	spaces = width - str:len()
+	local spaces = width - str:len()
 	local res = self .. str
 	for i=1,spaces do
 		res = res .. ' '
@@ -131,7 +133,9 @@ function Gridbox:OnMessageComplete()
 end
 
 function Gridbox:OnTextEntryComplete(tag)
+end
 
+function Gridbox:OnTextEntryCancelled(tag)
 end
 
 
@@ -150,11 +154,16 @@ function Site:GoToPage(pageName)
 	self.currentPage = pageName
 	
 	page = self:GetCurrentPage()
+
+	if (page == nil) then
+		error(string.format("Tried to GotoPage unknown page %s", pageName))
+	end
+
 --	if page.type == "messages" or page.type == "list" then
 
 	self.firstVisibleIndex = 1
 	self.lastShownItem = -1
-	self.bGhowingItemDetails = false
+	self.bShowingItemDetails = false
 end
 
 function Site:GetCurrentPage()
@@ -162,12 +171,11 @@ function Site:GetCurrentPage()
 end
 
 function Site:GetEntries()
-	page = self:GetCurrentPage()
+	local page = self:GetCurrentPage()
+
 	if page.type == "menu" then
 		return self:GetMenuEntries(page)
-	elseif page.type == "messages" or page.type == "bbs" then
-		return self:GetMessagesEntries(page)
-	elseif page.type == "list" then
+	elseif (page.type == "list" or page.type == "store") then
 		return self:GetListEntries(page)
 	end
 
@@ -175,16 +183,16 @@ function Site:GetEntries()
 end
 
 function Site:GetDetailsString()
-print("getting details", self, self.detailsIndex, self.pages)
-	page = self:GetCurrentPage()
-	if page.type == "messages" then
-		return page.items[self.detailsIndex].message
-	elseif page.type == "bbs" then
-		--Temp << "TO: " << ChosenMessage->To << "\nFROM: " << ChosenMessage->From << "\n" << ChosenMessage->Message;
-		return string.format("TO: %s\nFROM: %s\n%s", page.items[self.detailsIndex].from, page.items[self.detailsIndex].to, page.items[self.detailsIndex].message)
-	elseif page.type == "list" then
-		return self:GetListEntries(page)
+	local page = self:GetCurrentPage()
+	local item = page.items[self.detailsIndex]
+
+	if page.formatDetails ~= nil then
+		return page.formatDetails(item)
+	elseif item.message ~= nil then
+		return item.message
 	end
+	
+	return "~~unhandled details~~"
 end
 
 function Site:CenteredX(str)
@@ -196,7 +204,7 @@ function Site:GetPageHeaderFooterEntries(page, entries)
 end
 
 function Site:GetMenuEntries(page)
-	entries = {}
+	local entries = {}
 	for i,v in ipairs(page.items) do
 		table.append(entries, {
 			x = 10, y = 4 + i,
@@ -209,71 +217,117 @@ function Site:GetMenuEntries(page)
 	return entries
 end
 
-function Site:GetMessagesEntries(page)
-	entries = {}
+function Site:IsItemVisible(item)
+	if item.condition ~= nil then
+		local succeeded, cond = pcall(item.condition)
+		if not (succeeded and cond) then
+			-- function asserted, or returned false, skip
+			return false
+		end
+	end
+
+	return true
+end
+
+function Site:GetListEntries(page)
+	local entries = {}
 
 	-- page headers
 	self:GetPageHeaderFooterEntries(page, entries)
 
-
 	if self.detailsIndex > 0 then
 		
 	else
-
+		local curY = 2
 		-- column headers
-		if page.type == "messages" then
-			table.append(entries, {x = 3, y = 2, text = "date"})
-			table.append(entries, {x = 12, y = 2, text = "subject"})
-		else
-			table.append(entries, {x = 4, y = 2, text = "date"})
-			table.append(entries, {x = 12, y = 2, text = "to"})
-			table.append(entries, {x = 25, y = 2, text = "from"})
+		local headers = ""
+		for i,v in ipairs(page.columns) do
+			-- add 1 for space between columns
+			headers = headers:appendPadded(v.field, v.width + 1)
+		end
+		table.append(entries, {x = 3, y = curY, text = headers})
+
+		if (page.type == "store") then
+			table.append(entries, {x = 0, y = curY + 1, text = "--------------------------------------------------------------------------"})
 		end
 
+		-- items
+		curY = curY + 2
+
 		-- init loop counters
-		localIndex = 1
-		listIndex = self.firstVisibleIndex
+		local localIndex = 1
+		local listIndex = self.firstVisibleIndex
+		local label = ""
 		
 		-- go until we are end of page or end of list
 		while listIndex <= #page.items and localIndex <= self.numMessagesPerPage do
 
 			local item = page.items[listIndex]
 
-			if item.condition ~= nil then
-				if item.condition() == false then
-					-- have another go with the next item
-					goto loopend
+			if (not self:IsItemVisible(item)) then
+				goto loopend
+			end
+
+			label = string.format("%d. ", localIndex)
+			for i,v in ipairs(page.columns) do
+				if v.field == 'date' then
+					field = string.fromDate(item[v.field])
+				elseif v.field == 'cost' then
+					field = string.format("$%d", item[v.field])
+				elseif v.field == 'in stock' then
+					local itemVar = string.format("purchased_%s", item.tag)
+					field = tostring(item[v.field] - _G[itemVar])
+				else
+					field = tostring(item[v.field])
 				end
+
+				-- add 1 for space between columns
+				label = label:appendPadded(field, v.width + 1)
 			end
 
-			label = ""
-			if type == "messages" then
-				label = string.format("%d. %-9s%s", localIndex, string.fromDate(item.date), item.subject)
+			-- add the item with a clickId with list index, and '0'+listIndex as a key to press
+			if (page.hasDetails or page.type == "store") then
+				keyPress = string.format(string.format("%c", 48 + localIndex))
+				table.append(entries, {x = 0, y = curY, text = label, clickId = listIndex, key = keyPress})
 			else
-				label = string.format("%d. %-9s %-12s%s", localIndex, string.fromDate(item.date), item.to, item.from)
+				table.append(entries, {x = 0, y = curY, text = label })
 			end
-
-			table.append(entries, {
-				x = 0, y = 3 + localIndex,
-				text = label,
-				clickId = listIndex,
-				key = string.format("%c", 48 + localIndex),
-			})
 
 			-- remember last shown item for <more> option
 			self.lastShownItem = listIndex
 
 			-- move to next on-screen line
 			localIndex = localIndex + 1
+			curY = curY + 1
+
 			::loopend::
 			-- move to next item in list
 			listIndex = listIndex + 1
 		end
 
-		-- exit TODO: SHARE WITH LIST
-		exitmoreCenter = self:CenteredX("exit more")
+		if (page.type == "store") then
+			table.append(entries, {x = 0, y = curY, text = "--------------------------------------------------------------------------"})
+		end
+
+		-- look to see if we need "more" when on the first page
+		local needsMore = false
+		if (self.firstVisibleIndex == 1) then
+			local testItem = self.lastShownItem + 1
+			while (testItem <= #page.items) do
+				if (self:IsItemVisible(page.items[testItem])) then
+					needsMore = true
+					break
+				end
+				testItem = testItem + 1
+			end
+		else
+			needsMore = true
+		end
+
+		-- exit / more buttons
+		local exitmoreCenter = self:CenteredX("exit more")
 		table.append(entries, {x = exitmoreCenter, y = self.sizeY - 1, text = "exit", clickId = -1, key = "x" } )
-		if #page.items > self.numMessagesPerPage then
+		if needsMore then
 			table.append(entries, {x = exitmoreCenter + 5, y = self.sizeY - 1, text = "more", clickId = -2, key = "m" } )
 		end
 	end
@@ -281,49 +335,8 @@ function Site:GetMessagesEntries(page)
 	return entries
 end
 
-function Site:GetListEntries(page)
-
-	entries = {}
-
-	-- page headers
-	self:GetPageHeaderFooterEntries(page, entries)
-
-	if self.detailsIndex > 0 then
-		
-	else
-		-- table header
-		table.append(entries, {x = self:CenteredX(page.header), y = 2, text = page.header} )
-
-		-- column header
-		column2Width = (self.sizeX - 2) * 2 / 3
-		tableHeader = string.format(string.format("   %%-%ds%%s", column2Width), page.columns[1], page.columns[2])
-		table.append(entries, {x = 0, y = 3, text = tableHeader} )
-
-		-- list items
-		for i,v in ipairs(page.items) do
-			label = string.format(string.format("%%d. %%-%ds%%s", column2Width), i, v.fields[1], v.fields[2])
-			table.append(entries, {
-				x = 0, y = 3 + i,
-				text = label,
-				clickId = i,
-				key = string.format("%c", 48 + i), '0' + i
-			})
-		end
-
-		-- exit
-		exitmoreCenter = self:CenteredX("exit more")
-		table.append(entries, {x = exitmoreCenter, y = self.sizeY - 1, text = "exit", clickId = -1, key = "x" } )
-		-- table.append(entries, {x = exitmoreCenter + 5, y = self.sizeY - 1, text = "more", clickId = -1, key = "m" } )
-	end
-
-	return entries
-end
-
-
-
-
 function Site:HandleClickedEntry(id)
-	page = self:GetCurrentPage()
+	local page = self:GetCurrentPage()
 
 print("Handle cliecked entry", self, page.type, id)
 
@@ -332,8 +345,10 @@ print("Handle cliecked entry", self, page.type, id)
 		if page.type == "menu" then
 			-- menu click id is index
 			self:OnItemSelected(page, page.items[id])
-		elseif page.type == "messages" or page.type == "bbs" then
+		elseif page.type == "list" then
 			self.detailsIndex = id
+		elseif page.type == "store" then
+			self:SelectStoreItem(id)
 		end
 
 	-- -1 is always the "exit" option
@@ -345,6 +360,26 @@ print("Handle cliecked entry", self, page.type, id)
 	end
 end
 
+function Site:OnPurchasedStoreItem(item)
+end
+
+function Site:SelectStoreItem(id)
+	local page = self:GetCurrentPage()
+	local item = page.items[id]
+
+	-- by default, we purchas it if able, and then call a function to manage it
+
+	local puchasedVarName = string.format("purchased_%s", item.tag)
+
+	if (money >= item.cost and item['in stock'] - _G[itemVar] > 0) then
+		money = money - item.cost
+
+		-- mark one as purchased
+		_G[itemVar] = _G[itemVar] + 1
+
+		self:OnPurchasedStoreItem(item)
+	end
+end
 
 function Site:OnItemSelected(page, item)
 	if page.type == "menu" then
@@ -361,14 +396,14 @@ function Site:OnItemSelected(page, item)
 end
 
 function Site:HandleClickedExit()
-	page = self:GetCurrentPage()
+	local page = self:GetCurrentPage()
 	self:GoToPage(page.exit)
 end
 
 function Site:HandleClickedMore()
 	assert(self.lastShownItem > 0)
 
-	page = self:GetCurrentPage()
+	local page = self:GetCurrentPage()
 	self.firstVisibleIndex = self.lastShownItem + 1
 	if self.firstVisibleIndex > #page.items then
 		self.firstVisibleIndex = 1
@@ -376,6 +411,9 @@ function Site:HandleClickedMore()
 end
 
 function Site:HandleInput(char)
+
+	error("unimplemented")
+
 	page = self:GetCurrentPage()
 	char = char:lower()
 
@@ -390,66 +428,6 @@ function Site:HandleInput(char)
 	end
 end
 
-
-
-Cheapo = Site:new {
-	title = "* The Cheapo Hotel *",
-	comLinkLevel = 1,
-	
-	pages = {
-		['title'] = {
-			message = "Hey, it's better than sleeping  in the streets!\nJust enter the password \"GUEST\" to enter our system."
-		},
-		
-		['password'] = {
-			type = "password",
-		},
-		
-		['main'] = {
-			type = "menu",
-			items = {
-				{ key = 'x', text = "Exit System", target = "exit" },
-				{ key = '1', text = "Room Service", target = "roomservice" },
-				{ key = '2', text = "Local Things to do", target = "thingstodo" },
-				{ key = '3', text = "Review Bill", target = "reviewbill"  },
-				{ key = '4', text = "Edit Bill [level 2?]", target = "editbill", level = 2 }
-			}
-		},
-		
-		['roomservice'] = {
-			type = "menu",
-		},
-		
-		['thingstodo'] = {
-			type = "messages",
-			exit = "main",
-			items = {
-				{
-					date = 111658,
-					subject = "Donut World",
-					message = "aalskdjaklsjdalksjdklajsdla"
-				},
-				{
-					date = 111658,
-					subject = "Manyusha Wana Massage",
-					message = "aalskdjaklsjdalksjdklajsdla"
-				},
-				{
-					date = 111658,
-					subject = "Psychologist",
-					message = "aalskdjaklsjdalksjdklajsdla"
-				},
-				{
-					date = 111658,
-					subject = "Crazy Edo's",
-					message = "aalskdjaklsjdalksjdklajsdla"
-				},
-			}
-		}
-	}
-}
--- lowercase
-cheapo = Cheapo
 
 IRS = Site:new {
 	
@@ -472,8 +450,10 @@ IRS = Site:new {
 		},
 		
 		['irsboard'] = {
-			type = "bbs",
+			type = "list",
 			exit = "main",
+			hasDetails = true,
+			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
 			items = {
 				{
 					date = 111658,
@@ -515,27 +495,33 @@ IRS = Site:new {
 			type = "list",
 			exit = "main",
 			header = "Field Audit List",
-			columns = { "Name", "BAMA ID" },
+			hasDetails = true,
+			columns = { { field = "Name", width = 15 } , { field = "BAMA ID", width = 0 } },
 			items = {
 				{
-					fields =  { "%name%", "%bamaid%" },
-					details = "Reason: Tax evasion.",
+					Name = "%name%",
+					['BAMA ID'] = "%bamaid%",
+					message = "Reason: Tax evasion."
 				},
 				{
-					fields =  { "FINDLEY MATTHEW", "001131968" },
-					details = "Reason: Tax evasion.",
+					Name = "FINDLEY MATTHEW",
+					['BAMA ID'] = "001131968",
+					message = "Reason: Tax evasion."
 				},
 				{
-					fields =  { "CHUNG LO DUC", "471294819" },
-					details = "Reason: Tax evasion.",
+					Name = "CHUNG LO DUC",
+					['BAMA ID'] = "471294819",
+					message = "Reason: Tax evasion."
 				},
 				{
-					fields =  { "NAKASONE SANDRA", "255885697" },
-					details = "Reason: Tax evasion.",
+					Name = "NAKASONE SANDRA",
+					['BAMA ID'] = "255885697",
+					message = "Reason: Tax evasion."
 				},
 				{
-					fields =  { "MARTINEZ RAUL", "549887110" },
-					details = "Reason: Tax evasion.",
+					Name = "MARTINEZ RAUL",
+					['BAMA ID'] = "549887110",
+					message = "Reason: Tax evasion."
 				},
 			}
 		}

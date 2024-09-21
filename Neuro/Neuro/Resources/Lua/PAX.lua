@@ -39,8 +39,54 @@ PAX = Site:new {
 		},
 
 		['nightcity'] = {
-			type = "messages"
-
+			type = "list",
+			columns = { { field = 'date', width = 8 }, { field = 'subject', width = 0 } },
+			hasDetails = true,
+			items = {
+				{
+					date = 111658,
+					subject = "BAR FOOD DECLARED FATAL",
+					message = "BAR FOOD DECLARED FATAL\nThe Chatsubo bar will be permanentoy closed today, according to the Chiba Health Department. Contaminated food and toxic beer are the main reasons for the closure, although there have been other health violations. So far, 87 fatalities have been reported in connection with this investigation.\n\nMost of the fatalities occurred with Chatsubo patrons who drank more than 3 glasses of beer and ate the synth-spaghetti, which is based on a home recipe. The spaghetti and beer combined in the bodies of the victims to create an explosive chemical which was ignited by stomach acids."
+				},
+				{
+					date = 111658,
+					subject = "COWBOY DISAPPEARS",
+					message = "COWBOY DISAPPEARS\nRumors are flying among the elite cyberspace cowboy community. Well-known logic gate crasher, Jonathan E, has mysteriously vanished, causing speculation that he was killed in cyberspace by \"black ice,\" an illegal form of base protection."
+				},
+				{
+					date = 111658,
+					subject = "News In Brief",
+					message = "**** News In Brief ****\n\nFARM ANIMALS KIDNAP UFO\nSheep says, \"We were just hoyriding!\"\nMAN EATS HIS OWN HEAD\n\"He thought it was just a donut,\"says the owner of Donut World, where the incident occurred.\n\nSON OF FUJI PREZ MISSING\nMother wails, \"He's gone!\" Prez of Fuji Electric denies any connection with rumored corporate takeover."
+				},
+				{
+					date = 111758,
+					subject = "NASA AND FUJI DO BUSINESS",
+					message = "NASA AND FUJI DO BUSINESS\nAnticipating increased space activity, NASA has signed a multi-million dollar contract with Fuji Electric to provide ROMcards for future spacecraft. Fuji President Harry Watkins, recently in the news when his son was kidnapped, said, \"This is great. I'm thrilled.\" Watkins expects to be hiring hundreds of new employees as a result of the contract."
+				},
+				{
+					date = 111758,
+					subject = "News In Brief",
+					message = "**** News In Brief ****\n\nSAVAGE NIGHT OF TORTURE\nStrange Chatsubo patron spends night sleeping in synth-spaghetti. Customers shocked.\n\nSON RETURNED TO FUJI PREZ\nChoked with emotion, Fuji Prez says, \"We must have misplaced him.\" As to his son's condition, the Prez reports, \"He's in one piece, more or less.\""
+				},
+				{
+					condition = function() return justice > 0 end,
+					date = 110058,
+					subject = "CRIMINAL HITS CHIBA CITY",
+					message = "CRIMINAL HITS CHIBA CITY\n%name%, a notorious criminal who recently arrived in Chiba City, has been arrested and taken to the Justice Booth. This comes as no surprise to police, who have been watching this criminal ever since he arrived. \"We knew he'd break the law eventually,\" said Officer Watanabe. \"These habitual criminals can't go a whole day without committing a crime.\""
+				},
+				{
+					condition = function() return hotel > 100 end,
+					date = 110058,
+					subject = "VAGRANT PAYS HOTEL BILL",
+					message = "VAGRANT PAYS HOTEL BILL\nPaul Stack, owner of Cheap Hotel, called a news conference this morning to report that Cowboy %name% has finally paid his hotel bill. Stack is referring to this payment as \"a momentous event in my life. Being the kind-hearted kind of guy that I am, I let that blll accumulate far too long before demanding payment. Imagine my surprise when the scum finally paid it. I was ready to call the Tactical Police.\""
+				},
+				{
+					condition = function() return s_chatsubo > 1 end,
+					date = 110058,
+					subject = "CHATSUBO DEBT",
+					message = "Thisis a story that will appear when chatsubo is paid off but not before."
+				}
+			}
 		},
 		
 		['bbs_menu'] = {
@@ -48,18 +94,20 @@ PAX = Site:new {
 			items = {
 				{ key = 'x', text = "Exit To Main", target = "main" },
 				{ key = 'v', text = "View Messages", target = "bbs_view" },
-				{ key = 's', text = "Send Messages", target = "bbs_send" },
+				{ key = 's', text = "Send Messages", target = "bbs_send_tofield" },
 			}
 		},
 		
 		['bbs_view'] = {
-			type = "bbs",
+			type = "list",
 			title = "Bulletin Board",
+			hasDetails = true,
+			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
+			formatDetails = function(item) return string.format("TO: %s\nFROM: %s\n%s", item.from, item.to, item.message) end,
 			items = {
 				{ date = 111458, to = "All", from = "sysop", message = "Due to a lighting strike on the PAX building, all BBS messages on the system before 11/14/58 were trashed. Sorry for the inconvenience." },
 				{ date = 111458, to = "%name%", from = "Matt Shaw", message = "Take some advice, man. There's a lot of good software showing up on the BBS's. You'll need it to figure out what's going on, so find as much as you can. Upgrade your Comlink warez and your equipment so you can reach the better bases. When you're ready, and you've got enough money together, find us in cyberspace. We need your help bad, but I can't talk about it here. Don't want to start a panic, know what I mean?"	},
 				{ date = 111458, to = "%name%", from = "FFargo", message = "You still own me 2000 credits. Will I have to sell your lungs to get it?" },
-				{ date = 111458, condition = function() return false end, to = "NONO", from = "BAD", message = "Should never see this" },
 				{ date = 111458, to = "%name%", from = "Shin", message = "Better pick up your deck at my pawn shop, otherwise I'll have to sell it." },
 				{ date = 111458, to = "%name%", from = "Crazy Edo", message = "Where's my caviar? I said I'd trade you some software for it, remember?" },
 				{ date = 111558, to = "%name%", from = "Matt Shaw", message = "Since you've been out of touch for a while, and since you're an old friend, I thought I'd help you out with some comlink numbers to get you started. Use them as soon as you get your deck back (yeah, I heard you had to pawn it). The link codes are : CHEAPO for Cheap Hotel, REGFELLOW for the Regular Fellows, CONSUMEREV for Consumer Review, ASANOCOMP for Asano Computing, WORLDCHESS for the World Chess Confederation. These ought to help keep you busy until you can afford a cyberspace-capable deck." },
@@ -76,7 +124,15 @@ PAX = Site:new {
 			}
 		},
 		
-		['bbs_send'] = {
+		['bbs_send_tofield'] = {
+			type = "custom"
+		},
+		
+		['bbs_send_messagefield'] = {
+			type = "custom"
+		},
+		
+		['bbs_send_verify'] = {
 			type = "custom"
 		}
 	}
@@ -95,6 +151,10 @@ function PAX:GetEntries()
 
 	if string.sub(self.currentPage, 1, 7) == "banking" then
 		self:GetBankEntries(entries)
+	end
+
+	if string.sub(self.currentPage, 1, 8) == "bbs_send" then
+		self:GetSendMessageEntries(entries)
 	end
 
 	return entries
@@ -116,8 +176,49 @@ function PAX:GetBankEntries(entries)
 	end
 end
 
+function PAX:GetSendMessageEntries(entries)
+	table.append(entries, { x = 5, y = 0, text = "Send Message" })
+	table.append(entries, { x = 0, y = 4, text = "date: " .. string.fromDate(date) })
+	table.append(entries, { x = 0, y = 5, text = "to:   " })
+
+	if (self.currentPage == "bbs_send_verify") then
+		table.append(entries, { x = 5, y = 2, text = "Send this message (" })
+		table.append(entries, { x = 24, y = 2, text = "Y", clickId = 1, key = "y" })
+		table.append(entries, { x = 25, y = 2, text = "/" })
+		table.append(entries, { x = 26, y = 2, text = "N", clickId = 2, key = "n" })
+		table.append(entries, { x = 27, y = 2, text = ")" })
+		table.append(entries, { x = 1, y = 6, text = self.message, multiline = true })
+	elseif (self.currentPage == "bbs_send_messagefield") then
+		table.append(entries, { x = 5, y = 2, text = "Press ESC when done" })
+		table.append(entries, { x = 0, y = 6, text = ">" })
+		table.append(entries, { x = 1, y = 6, entryTag = "message", multiline = true })
+	end
+
+	if (self.currentPage == "bbs_send_tofield") then
+		table.append(entries, { x = 6, y = 5, entryTag = "to" })
+	else
+		table.append(entries, { x = 6, y = 5, text = self.recipient })
+	end
+end
 
 
+function PAX:HandleClickedEntry(id)
+	if (self.currentPage == "bbs_send_verify") then
+		if id == 1 then
+			self:ProcessMessage()
+		end
+		self:GoToPage("bbs_menu")
+	else
+		Site.HandleClickedEntry(self, id)
+	end
+end
+
+function PAX:ProcessMessage()
+	if (mail_armitage ~= 1 and string.lower(self.recipient) == "armitage" and self.message == bamaid) then
+		mail_armitage = 1
+		bankaccount = bankaccount + 10000
+	end
+end
 
 function PAX:GoToPage(pageName)
 	Site.GoToPage(self, pageName)
@@ -128,7 +229,6 @@ function PAX:GoToPage(pageName)
 end
 
 function PAX:GetDetailsString()
-	print("PAX get details", self)
 	if self.currentPage == "firsttime" and self.detailsIndex == 1 then
 		return "@paxfirsttime"
 	else
@@ -150,15 +250,25 @@ function PAX:OnTextEntryComplete(text, tag)
 	if tag == "banking_withdrawal" and amount <= bankaccount then
 		bankaccount = bankaccount - amount
 		money = money + amount
+		self:GoToPage("banking_menu")
 	end
 
 	if tag == "banking_deposit" and amount <= money then
 		bankaccount = bankaccount + amount
 		money = money - amount
+		self:GoToPage("banking_menu")
 	end
 
-	self:GoToPage("banking_menu")
+print("text done, tag = ", tag)
+	if tag == "to" then
+		self.recipient = text
+		self:GoToPage("bbs_send_messagefield")
+	end
 
+	if tag == "message" then
+		self.message = text
+		self:GoToPage("bbs_send_verify")
+	end
 end
 
 pax = PAX

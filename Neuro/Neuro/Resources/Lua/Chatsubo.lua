@@ -1,3 +1,5 @@
+s_chatsubo = 0
+
 Chatsubo = Room:new {
 	
 	longDescription = "You've just spent the night sleeping face-down in a pile of synth-spaghetti in a bar called Chatsubo. After rubbint the sauce out of your eyes, you can see Chiba sky through the window, the color of television tuned to a dead channel.\nA PAX booth is on the wall. Ratz's prosthetic Russin arm whines as he wipes the bar. His teeth are a webwork of East Eurpoean steel and brown decay.",
@@ -7,7 +9,6 @@ Chatsubo = Room:new {
 	conversations = {
 		{
 			condition = function()
-				print("seting against convo1", s_chatsubo == 0)
 				return s_chatsubo == 0
 			end,
 			lines = {

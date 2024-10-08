@@ -87,7 +87,7 @@ void SiteBox::MessageComplete()
 //	}
 }
 
-void SiteBox::OnTextEntryComplete(const string& Text, const string& Tag)
+void SiteBox::OnTextEntryComplete(const std::string& Text, const std::string& Tag)
 {
 //	if (Phase == Phase_Password)
 //	{
@@ -179,13 +179,13 @@ void SiteBox::Update()
 	int DetailsIndex;
 	LuaBox->LuaSystem->GetIntValue(LuaBox, "detailsIndex", DetailsIndex);
 
-	string SiteTitle;
+	std::string SiteTitle;
 	LuaBox->LuaSystem->GetStringValue(LuaBox, "title", SiteTitle);
 
 	// we assume any details here would be visible
 	if (DetailsIndex > 0)
 	{
-		string DetailsString;
+		std::string DetailsString;
 		LuaBox->LuaSystem->CallFunction_Return(LuaBox, "GetDetailsString", DetailsString);
 		Messagebox->SetText(DetailsString);
 		AddChild(Messagebox);
@@ -195,7 +195,7 @@ void SiteBox::Update()
 
 	
 	LuaRef* EntriesTable;
-	vector<shared_ptr<LuaRef>> LuaEntries;
+	std::vector<shared_ptr<LuaRef>> LuaEntries;
 	LuaBox->LuaSystem->CallFunction_Return(LuaBox, "GetEntries", EntriesTable);
 	LuaBox->LuaSystem->GetTableValues(EntriesTable, "", LuaEntries);
 	for (shared_ptr<LuaRef>& LuaEntry : LuaEntries)
@@ -221,12 +221,12 @@ void SiteBox::Update()
 //
 //	if (Phase == Phase_Title)
 //	{
-//		string Footer = "Click or [space] to continue";
+//		std::string Footer = "Click or [space] to continue";
 //		Entries.push_back({Footer, (GridsX - (int)Footer.length()) / 2, GridsY - 1});
 //	}
 //	else if (Phase == Phase_Password)
 //	{
-//		string Prompt = "Enter password:";
+//		std::string Prompt = "Enter password:";
 //		Entries.push_back({Prompt, (GridsX - (int)Prompt.length()) / 2, 3});
 //		SetupTextEntry(Entries[0].X, 5, false, false);
 //	}

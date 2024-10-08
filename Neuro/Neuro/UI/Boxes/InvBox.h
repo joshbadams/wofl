@@ -20,7 +20,7 @@ public:
 	
 protected:
 	virtual void OnClickEntry(GridEntry& Entry) override;
-	virtual void OnTextEntryComplete(const string& Text, const string& Tag) override;
+	virtual void OnTextEntryComplete(const std::string& Text, const std::string& Tag) override;
 	virtual void OnTextEntryCancelled()  override;
 	virtual void OnGenericContinueInput() override;
 

@@ -10,8 +10,8 @@
 #include "WoflRenderer.h"
 #include "WoflWorld.h"
 
-#if !IS_WOFL_LIBRARY
-void WoflApplication::Initialize()
+#if !IS_WOFL_FRAMEWORK
+void WoflApplication::InitializeAndCreateGame()
 {
 	Initialize(GlobalGameInitialization());
 }

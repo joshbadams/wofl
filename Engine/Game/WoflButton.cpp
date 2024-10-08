@@ -30,13 +30,13 @@ WoflButton::WoflButton(const char* BackgroundImage, const char* LabelText, float
 	SetClickEnabled(true);
 }
 
-WoflButton::WoflButton(const char* BackgroundImage, const char* LabelText, float X, float Y, float SizeX, float SizeY, int Tag, const function<void(WoflButton*)>& OnClick)
+WoflButton::WoflButton(const char* BackgroundImage, const char* LabelText, float X, float Y, float SizeX, float SizeY, int Tag, const std::function<void(WoflButton*)>& OnClick)
 	: WoflButton(BackgroundImage, LabelText, X, Y, SizeX, SizeY, Tag, SpriteCaptureType::SingleClick)
 {
 	OnClickFunc = OnClick;
 }
 
-WoflButton::WoflButton(const char* BackgroundImage, const char* LabelText, float X, float Y, float SizeX, float SizeY, int Tag, SpriteCaptureType CaptureType, const function<void(WoflButton*, const Vector&, int)>& OnInput)
+WoflButton::WoflButton(const char* BackgroundImage, const char* LabelText, float X, float Y, float SizeX, float SizeY, int Tag, SpriteCaptureType CaptureType, const std::function<void(WoflButton*, const Vector&, int)>& OnInput)
 	: WoflButton(BackgroundImage, LabelText, X, Y, SizeX, SizeY, Tag, CaptureType)
 {
 	OnInputFunc = OnInput;

@@ -2,6 +2,8 @@
 // Prefix header for all source files of the 'Wofl' target in the 'Wofl' project
 //
 
+#define IS_WOFL_LIBRARY 1
+#define IS_WOFL_FRAMEWORK IOS
 
 #if IOS
 
@@ -18,6 +20,9 @@
 	#warning "This project uses features only available in iOS SDK 5.0 and later."
 	#endif
 #endif
+
+#define IS_WOFL_LIBRARY 1
+
 #endif
 
 #define WLOG(...) printf(__VA_ARGS__)
@@ -30,14 +35,17 @@
 #define WLOG(...) __android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, __VA_ARGS__)
 #endif
 
+#if WINDOWS
+#define WLOG(...) printf(__VA_ARGS__)
+#endif
+
 #define PREPROCESSOR_TO_STRING(x) PREPROCESSOR_TO_STRING_INNER(x)
 #define PREPROCESSOR_TO_STRING_INNER(x) #x
 
 #define PREPROCESSOR_JOIN(x, y) PREPROCESSOR_JOIN_INNER(x, y)
 #define PREPROCESSOR_JOIN_INNER(x, y) x##y
 
-#define IS_WOFL_LIBRARY 1
-#if IS_WOFL_LIBRARY
+#if IS_WOFL_FRAMEWORK
 #define WOFL_INC(Header) <PREPROCESSOR_JOIN(Wofl/Wofl, Header).h>
 #define WOFL_JSON <Wofl/json.h>
 #else
@@ -50,8 +58,7 @@
 #include <map>
 #include <assert.h>
 #include <math.h>
-
-using namespace std;
+#include <functional>
 
 
 #include WOFL_INC(Utils)

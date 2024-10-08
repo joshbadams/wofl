@@ -22,8 +22,8 @@ protected:
 		float U, V, SizeX, SizeY;
 	};
 
-	static map<string, string> SubImageToAtlasMap;
-	static map<string, SubImageInfo> SubImageToInfoMap;
+	static std::map<std::string, std::string> SubImageToAtlasMap;
+	static std::map<std::string, SubImageInfo> SubImageToInfoMap;
 };
 
 

@@ -22,7 +22,7 @@ public:
 	{
 		Text = InText;
 	}
-	void SetText(const string& InText)
+	void SetText(const std::string& InText)
 	{
 		Text = InText;
 	}
@@ -44,7 +44,7 @@ public:
 
 	
 protected:
-	string Text;
+	std::string Text;
 	bool bCenteredHorizontal;
 	bool bCenteredVertical;
 	WColor TextColor;

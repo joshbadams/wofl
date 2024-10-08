@@ -22,10 +22,10 @@ void NeuroConfigObj::FromLuaDeleteRef(class Lua& L, class LuaRef*& Object)
 	Object = nullptr;
 }
 
-string NeuroConfigObj::PostProcessString(const string& String)
+std::string NeuroConfigObj::PostProcessString(const std::string& String)
 {
 	const NeuroState& State = ((NeuroGame*)WoflGame::TheGame)->State;
-	string NewString = String;
+	std::string NewString = String;
 	State.StringReplacement(NewString, '%');
 	return NewString;
 }
@@ -89,7 +89,7 @@ void Conversation::FromJsonObject(const Json::Value& Object)
 	
 //	for (auto Name : Object.getMemberNames())
 //	{
-//		string NameStr(Name);
+//		std::string NameStr(Name);
 //		if (Object[Name].isString())
 //		{
 //			WLOG("Member %s = %s\n", NameStr.c_str(), Object[Name].asString().c_str());
@@ -111,7 +111,7 @@ void Conversation::FromLua(class Lua& L, LuaRef* Object)
 	L.GetStringValues(Object, "lines", Lines);
 
 	// get option objects
-	vector<LuaRef*> OptionRefs;
+	std::vector<LuaRef*> OptionRefs;
 	L.GetTableValues(Object, "options", OptionRefs);
 	for (LuaRef* OptionRef : OptionRefs)
 	{

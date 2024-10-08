@@ -9,15 +9,15 @@
 #include "WoflAtlases.h"
 #include "json.h"
 
-map<string, string> WoflAtlases::SubImageToAtlasMap;
-map<string, WoflAtlases::SubImageInfo> WoflAtlases::SubImageToInfoMap;
+std::map<std::string, std::string> WoflAtlases::SubImageToAtlasMap;
+std::map<std::string, WoflAtlases::SubImageInfo> WoflAtlases::SubImageToInfoMap;
 
 void WoflAtlases::LoadAtlas(const char* AtlasName)
 {
-	std::string AtlasMetaPath = Utils::File->GetResourcePath((string(AtlasName) + ".json").c_str());
+	std::string AtlasMetaPath = Utils::File->GetResourcePath((std::string(AtlasName) + ".json").c_str());
 	std::string AtlasMetaContents = Utils::File->LoadFileToString(AtlasMetaPath.c_str());
 	
-	// parse a string using a Reader object
+	// parse a std::string using a Reader object
 	Json::Reader Reader;
 	Json::Value Root(Json::objectValue);
 	
@@ -37,9 +37,9 @@ void WoflAtlases::LoadAtlas(const char* AtlasName)
 	for (const Json::Value& FrameObj : FramesArray)
 	{
 		// get the filename, and pull off any extension
-		string Filename = FrameObj["filename"].asString();
-		stringstream FilenameStream(Filename);
-		string ImageName;
+		std::string Filename = FrameObj["filename"].asString();
+		std::stringstream FilenameStream(Filename);
+		std::string ImageName;
 		std::getline(FilenameStream, ImageName, '.');
 		
 		SubImageToAtlasMap[ImageName] = AtlasName;

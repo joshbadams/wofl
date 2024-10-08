@@ -9,11 +9,15 @@
 #include "Textbox.h"
 #include "Ninebox.h"
 #include "Gridbox.h"
-#include "InvBox.h"
-#include "PAXBox.h"
-#include "SiteBox.h"
+#include "Boxes\InvBox.h"
+#include "Boxes\SiteBox.h"
 #include "NeuroConfig.h"
 #include "NeuroScene.h"
+
+WoflGame* GlobalGameInitialization()
+{
+	return new NeuroGame();
+}
 
 NeuroGame::NeuroGame()
 	: WoflGame("Neuromancer")
@@ -38,10 +42,7 @@ NeuroGame::NeuroGame()
 	
 	Inventory = new InvBox(150, 480, 500, 280);
 	Inventory->SetDelegates(&State, &State);
-	
-	PAX = new PAXBox(100, 40, 1000, 424);
-	PAX->SetDelegates(&State, &State);
-	
+		
 	WebSite = new SiteBox(100, 40, 1000, 600);
 	WebSite->SetDelegates(&State, &State);
 	
@@ -92,7 +93,7 @@ void NeuroGame::Invalidate(ZoneType Zone)
 	if ((Zone & ZoneType::Dialog) != ZoneType::None)
 	{
 		DialogBox->RemoveFromParent();
-		string Dialog = State.GetCurrentDialogLine();
+		std::string Dialog = State.GetCurrentDialogLine();
 		if (Dialog.length() > 0)
 		{
 			DialogBox->Text->SetText(Dialog);
@@ -107,16 +108,6 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		{
 			Inventory->Open();
 			Background->AddChild(Inventory);
-		}
-	}
-
-	if ((Zone & ZoneType::PAX) != ZoneType::None)
-	{
-		PAX->RemoveFromParent();
-		if (State.IsShowingPAX())
-		{
-			PAX->Open();
-			Background->AddChild(PAX);
 		}
 	}
 

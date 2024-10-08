@@ -35,7 +35,7 @@ InvBox::InvBox(float X, float Y, float SizeX, float SizeY)
 	NumInvPerPage = GridsY - 2;
 }
 
-void InvBox::OnTextEntryComplete(const string& Text, const string& Tag)
+void InvBox::OnTextEntryComplete(const std::string& Text, const std::string& Tag)
 {
 	if (Phase == Phase_Amount)
 	{

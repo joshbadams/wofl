@@ -17,12 +17,12 @@ public:
 	
 protected:
 	
-	virtual string PostProcessString(const string& String)
+	virtual std::string PostProcessString(const std::string& String)
 	{
 		return String;
 	}
 	
-	string GetString(const Json::Value& Obj, const char* Key)
+	std::string GetString(const Json::Value& Obj, const char* Key)
 	{
 		if (Obj.isMember(Key))
 		{
@@ -49,7 +49,7 @@ protected:
 		return 0;
 	}
 	
-	void AddIntArrayToObject(const vector<int>& Array, Json::Value& Obj, const char* ArrayName)
+	void AddIntArrayToObject(const std::vector<int>& Array, Json::Value& Obj, const char* ArrayName)
 	{
 		// make a new array
 		Json::Value ArrayObj(Json::arrayValue);
@@ -63,7 +63,7 @@ protected:
 	}
 	
 	template<class T>
-	void AddArrayToObject(const vector<T*>& Array, Json::Value& Obj, const char* ArrayName)
+	void AddArrayToObject(const std::vector<T*>& Array, Json::Value& Obj, const char* ArrayName)
 	{
 		// make a new array
 		Json::Value ArrayObj(Json::arrayValue);
@@ -78,7 +78,7 @@ protected:
 		Obj[ArrayName] = ArrayObj;
 	}
 	
-	void GetIntArrayFromObject(vector<int>& Array, const Json::Value& Obj, const char* ArrayName)
+	void GetIntArrayFromObject(std::vector<int>& Array, const Json::Value& Obj, const char* ArrayName)
 	{
 		Array.clear();
 		// pull out the array
@@ -90,7 +90,7 @@ protected:
 		}
 	}
 	
-	void GetStringArrayFromObject(vector<string>& Array, const Json::Value& Obj, const char* ArrayName)
+	void GetStringArrayFromObject(std::vector<std::string>& Array, const Json::Value& Obj, const char* ArrayName)
 	{
 		Array.clear();
 		// pull out the array
@@ -103,7 +103,7 @@ protected:
 	}
 	
 	template<class T>
-	void GetArrayFromObject(vector<T*>& Array, const Json::Value& Obj, const char* ArrayName, const function<void(T*)>& OnAddFunc=nullptr)
+	void GetArrayFromObject(std::vector<T*>& Array, const Json::Value& Obj, const char* ArrayName, const std::function<void(T*)>& OnAddFunc=nullptr)
 	{
 		// toss any old entries
 		for (T* Entry : Array)
@@ -132,7 +132,7 @@ protected:
 	}
 	
 	template<class T>
-	void GetIntMapFromObject(map<int, T*>& Map, const Json::Value& Obj, const char* MapName, const function<void(T*)>& OnAddFunc=nullptr)
+	void GetIntMapFromObject(std::map<int, T*>& Map, const Json::Value& Obj, const char* MapName, const std::function<void(T*)>& OnAddFunc=nullptr)
 	{
 		// toss any old entries
 		for (auto Pair : Map)
@@ -161,7 +161,7 @@ protected:
 	}
 	
 	template<class T>
-	void GetStringMapFromObject(map<string, T*>& Map, const Json::Value& Obj, const char* MapName, const function<void(T*)>& OnAddFunc=nullptr)
+	void GetStringMapFromObject(std::map<std::string, T*>& Map, const Json::Value& Obj, const char* MapName, const std::function<void(T*)>& OnAddFunc=nullptr)
 	{
 		// toss any old entries
 		for (auto Pair : Map)
@@ -190,7 +190,7 @@ protected:
 	
 	bool SaveToFile(const char* Filename)
 	{
-		string JsonString = ToJsonObject().toStyledString();
+		std::string JsonString = ToJsonObject().toStyledString();
 		
 		return Utils::File->SaveStringToFile(JsonString, Filename);
 	}
@@ -199,7 +199,7 @@ protected:
 	{
 		WLOG("Loading save game %s...\n", Filename);
 		
-		string JsonString = Utils::File->LoadFileToString(Filename);
+		std::string JsonString = Utils::File->LoadFileToString(Filename);
 
 		if (JsonString.length() == 0)
 		{
@@ -216,7 +216,7 @@ protected:
 			return false;
 		}
 
-		// let the object load itself from the Json string
+		// let the object load itself from the Json std::string
 		FromJsonObject(Root);
 		
 		return true;
@@ -243,7 +243,7 @@ public:
 		TheGame = this;
 	}
 
-	const string& GetGameName()
+	const std::string& GetGameName()
 	{
 		return GameName;
 	}
@@ -283,6 +283,6 @@ protected:
 	
 private:
 	// name of the particular games
-	string GameName;
+	std::string GameName;
 };
 

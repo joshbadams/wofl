@@ -102,6 +102,7 @@ Chatsubo = Room:new {
 
 function Chatsubo:OnFirstEnter()
 	s_chatsubo = 0
+	print("FIRST ENTER!")
 	ShowMessage(self.longDescription, function() Talk() end)
 end
 

@@ -16,13 +16,13 @@ const int GRID_Y = 35;
 
 struct GridEntry
 {
-	string Text;
+	std::string Text;
 	int X, Y;
 	int ClickId = -1;
 	char Key=0;
 	bool bWrapText=false;
 	
-	string EntryTag;
+	std::string EntryTag;
 	bool bNumericEntry;
 	bool bMultilineEntry;
 
@@ -55,13 +55,13 @@ protected:
 
 	virtual void OnGenericContinueInput() { }
 	virtual void OnClickEntry(GridEntry& Entry) { }
-	virtual void OnTextEntryComplete(const string& Text, const string& Tag) { }
+	virtual void OnTextEntryComplete(const std::string& Text, const std::string& Tag) { }
 	virtual void OnTextEntryCancelled() { }
 
 
 	void SetupTextEntry(const GridEntry& Entry);
 	
-	void SetupMessages(string MessageSourceID, string Title);
+	void SetupMessages(std::string MessageSourceID, std::string Title);
 	bool IsInMessagePhase() { return bIsShowingMessageList || bIsShowingMessage; }
 	
 	void OnClickMessageEntry(GridEntry& Entry);
@@ -74,11 +74,11 @@ protected:
 		
 	LuaRef* LuaBox = nullptr;
 	
-	vector<GridEntry> Entries;
+	std::vector<GridEntry> Entries;
 	Textbox* Messagebox;
 	
-	string FullText;
-	vector<string> Lines;
+	std::string FullText;
+	std::vector<std::string> Lines;
 	WColor TextColor;
 	
 	int GridsX, GridsY;
@@ -89,9 +89,9 @@ protected:
 private:
 	
 	// list of unlocked messages from the active message source
-	vector<class Message*> CurrentMessages;
+	std::vector<class Message*> CurrentMessages;
 	class Message* ChosenMessage;
-	string MessagesTitle;
+	std::string MessagesTitle;
 	bool bIsShowingMessageList;
 	bool bIsShowingMessage;
 	int FirstMessage;

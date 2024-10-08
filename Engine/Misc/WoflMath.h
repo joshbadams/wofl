@@ -108,7 +108,7 @@ public:
 	
 	inline float Length()
 	{
-		return sqrt(LengthSquared());
+		return sqrtf(LengthSquared());
 	}
 	
 	/** Safe normal */

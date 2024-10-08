@@ -12,32 +12,32 @@
 //class StringOrString
 //{
 //public:
-//	string Get();
+//	std::string Get();
 //
-//	void Set(string& Val)
+//	void Set(std::string& Val)
 //	{
 //		Value = Val;
 //	}
 //private:
-//	string Value;
-//	string CachedLuaValue;
+//	std::string Value;
+//	std::string CachedLuaValue;
 //};
 //
 //class StringOrBool
 //{
 //public:
-//	string Get();
+//	std::string Get();
 //
-//	void Set(string& Val)
+//	void Set(std::string& Val)
 //	{
 //		Value = Val;
 //	}
 //private:
-//	string Value;
-//	string CachedLuaValue;
+//	std::string Value;
+//	std::string CachedLuaValue;
 //};
-#define StringOrString string
-#define StringOrBool string
+#define StringOrString std::string
+#define StringOrBool std::string
 
 class Lua;
 class LuaRef;
@@ -49,7 +49,7 @@ public:
 	virtual void FromLuaDeleteRef(Lua& L, LuaRef*& Object);
 
 protected:
-	virtual string PostProcessString(const string& String) override;
+	virtual std::string PostProcessString(const std::string& String) override;
 };
 
 class Option : public NeuroConfigObj
@@ -68,15 +68,15 @@ class Conversation : public NeuroConfigObj
 public:
 	~Conversation();
 	
-	string Tag;
+	std::string Tag;
 	StringOrBool Condition;
 	StringOrBool Action;
 	
 	class LuaRef* Lua_OnStart = nullptr;
 	class LuaRef* Lua_OnEnd = nullptr;
 
-	vector<string> Lines;
-	vector<Option*> Options;
+	std::vector<std::string> Lines;
+	std::vector<Option*> Options;
 
 	virtual void FromJsonObject(const Json::Value& Object) override;
 	virtual void FromLua(Lua& L, LuaRef* Object) override;
@@ -87,12 +87,12 @@ public:
 class Room : public NeuroConfigObj
 {
 public:
-	string ID;
-	string BackgroundImage;
+	std::string ID;
+	std::string BackgroundImage;
 	bool bHasPAX;
 	bool bHasJack;
 
-	vector<Conversation*> Conversations;
+	std::vector<Conversation*> Conversations;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
@@ -101,8 +101,8 @@ class Item : public NeuroConfigObj
 {
 public:
 	int ID;
-	string Name;
-	string Type;
+	std::string Name;
+	std::string Type;
 
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
@@ -111,9 +111,9 @@ class NewsItem : public NeuroConfigObj
 {
 public:
 	int Date;
-	string Title;
-	string Message;
-	string Condition;
+	std::string Title;
+	std::string Message;
+	std::string Condition;
 
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
@@ -122,10 +122,10 @@ class Message : public NeuroConfigObj
 {
 public:
 	int Date;
-	string To;
-	string From;
-	string Message;
-	string Condition;
+	std::string To;
+	std::string From;
+	std::string Message;
+	std::string Condition;
 
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
@@ -133,7 +133,7 @@ public:
 class MailActions : public NeuroConfigObj
 {
 public:
-	map<string, string> Actions;
+	std::map<std::string, std::string> Actions;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
@@ -142,9 +142,9 @@ public:
 class MenuEntry : public NeuroConfigObj
 {
 public:
-	string Name;
-	string Dest;
-	string Condition;
+	std::string Name;
+	std::string Dest;
+	std::string Condition;
 	char Key;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
@@ -153,8 +153,8 @@ public:
 class ListEntry : public NeuroConfigObj
 {
 public:
-	vector<string> Fields;
-	string Details;
+	std::vector<std::string> Fields;
+	std::string Details;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
@@ -162,14 +162,14 @@ public:
 class SitePage : public NeuroConfigObj
 {
 public:
-	vector<MenuEntry*> MenuEntries;
-	vector<ListEntry*> ListEntries;
-	vector<string> ListColumns;
-	string Type;
-	string MessagesID;
-	string StringID;
-	string ExitDest;
-	string Header;
+	std::vector<MenuEntry*> MenuEntries;
+	std::vector<ListEntry*> ListEntries;
+	std::vector<std::string> ListColumns;
+	std::string Type;
+	std::string MessagesID;
+	std::string StringID;
+	std::string ExitDest;
+	std::string Header;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
 };
@@ -177,9 +177,9 @@ public:
 class Site : public NeuroConfigObj
 {
 public:
-	vector<string> Passwords;
-	string Title;
-	map<string, SitePage*> Pages;
+	std::vector<std::string> Passwords;
+	std::string Title;
+	std::map<std::string, SitePage*> Pages;
 	int ComlinkLevel;
 	
 	virtual void FromJsonObject(const Json::Value& Object) override;
@@ -188,15 +188,15 @@ public:
 class NeuroConfig : public NeuroConfigObj
 {
 public:
-	vector<Room*> Rooms;
-	vector<NewsItem*> NewsItems;
+	std::vector<Room*> Rooms;
+	std::vector<NewsItem*> NewsItems;
 
-	map<int, Item*> Items;
-	map<string, Site*> Sites;
-	map<string, MailActions*> MailServer;
-	map<string, string> Strings;
+	std::map<int, Item*> Items;
+	std::map<std::string, Site*> Sites;
+	std::map<std::string, MailActions*> MailServer;
+	std::map<std::string, std::string> Strings;
 
-	map<string, vector<Message*>> AllMessages;
+	std::map<std::string, std::vector<Message*>> AllMessages;
 
 	NeuroConfig();
 	void Initialize();

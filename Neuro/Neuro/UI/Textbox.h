@@ -24,7 +24,7 @@ public:
 		InterfaceDelegate = Delegate;
 	}
 	
-	void SetText(const string& InText);
+	void SetText(const std::string& InText);
 	
 	
 	virtual void CustomRender() override;
@@ -34,8 +34,8 @@ protected:
 
 	IInterfaceChangingStateDelegate* InterfaceDelegate;
 	
-	string FullText;
-	vector<string> Lines;
+	std::string FullText;
+	std::vector<std::string> Lines;
 	int FirstLine;
 	int NumLinesToRender;
 	bool bPauseOnLastPage;

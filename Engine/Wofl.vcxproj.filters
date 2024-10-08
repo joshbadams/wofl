@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{a62432a0-0c55-4b88-ad49-aecdea5d257d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{3f1ec7ec-f61f-434f-b3c0-67abe754f9a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{55cddc00-9e7e-462f-ab5a-fd23eb7a6c64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wofl">
+      <UniqueIdentifier>{2e38f646-0488-47b4-8feb-264fb61dd102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{94244cda-3a30-4d8c-a488-069a13a44feb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{ad16ab98-9db6-450a-8990-785abf74b9e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Launch">
+      <UniqueIdentifier>{0595bc87-17d4-4f21-879b-a86648c30016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Resources">
+      <UniqueIdentifier>{2ff1321b-67dd-470c-8ee6-70c74f3e2772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Resources\Shaders">
+      <UniqueIdentifier>{280d5335-6330-4757-9a05-dade09cc641c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Misc\WoflFile.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Misc\WoflMath.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Misc\WoflPlatform.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Misc\WoflPrefix.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Misc\WoflUtils.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WoflApp.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WoflButton.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WoflGame.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WoflHud.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WoflInput.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\WoflWorld.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\WoflAtlases.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\WoflImage.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\WoflLabel.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\WoflRenderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\WoflSprite.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Wofl\Wofl.h">
+      <Filter>Wofl</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json-forwards.h">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\WindowsFile.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\WindowsGLSetup.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\WindowsInput.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\WindowsPlatform.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\WindowsRenderer.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Wofl\WoflStandardIncludes.h">
+      <Filter>Wofl</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Misc\WoflUtils.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\WoflApp.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\WoflButton.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\WoflGame.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\WoflHud.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\WoflInput.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\WoflWorld.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\WoflAtlases.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\WoflImage.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\WoflLabel.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\WoflRenderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\WoflSprite.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="json\jsoncpp.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\WindowsSupport.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\WindowsRenderer.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\Launch\Launch.cpp">
+      <Filter>Windows\Launch</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Rendering\Resources\Font.png">
+      <Filter>Rendering\Resources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Rendering\Resources\Tree.png">
+      <Filter>Rendering\Resources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Rendering\Resources\White.png">
+      <Filter>Rendering\Resources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Rendering\Resources\Shaders\Shader.vsh">
+      <Filter>Rendering\Resources\Shaders</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Rendering\Resources\Shaders\Shader.fsh">
+      <Filter>Rendering\Resources\Shaders</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+</Project>

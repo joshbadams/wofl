@@ -12,13 +12,18 @@
 //! Project version number for Wofl.
 FOUNDATION_EXPORT double WoflVersionNumber;
 
-//! Project version string for Wofl.
+//! Project version std::string for Wofl.
 FOUNDATION_EXPORT const unsigned char WoflVersionString[];
 
 #endif
 
 // In this header, you should import all the public headers of your framework using statements like #import <Wofl/PublicHeader.h>
 
+#if WINDOWS
+#include "WoflStandardIncludes.h"
+#else
+
+@todo move to WoflFrameworkIncludes.h or something?
 #define IOS 1
 
 #include <Wofl/WoflPrefix.h>
@@ -40,3 +45,5 @@ FOUNDATION_EXPORT const unsigned char WoflVersionString[];
 #include <Wofl/WoflLabel.h>
 #include <Wofl/WoflImage.h>
 #include <Wofl/WoflAtlases.h>
+
+#endif

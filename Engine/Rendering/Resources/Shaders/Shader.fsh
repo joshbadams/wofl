@@ -12,5 +12,5 @@ void main()
 //		gl_FragColor = vec4(0, 1, 0, 1);
 //		return;
 //	}
-    gl_FragColor = vec4(1,1,1,1);//Color * texture2D(SpriteTexture, UVVarying);
+    gl_FragColor = Color * texture2D(SpriteTexture, UVVarying);
 }

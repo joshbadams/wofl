@@ -1,7 +1,9 @@
-attribute vec2 Corner;
+#version 400
 
-varying vec2 UVVarying;
-varying vec4 ColorVarying;
+in vec2 Corner;
+
+out vec2 UVVarying;
+out vec4 ColorVarying;
 
 uniform vec4 UVScaleBias;
 uniform mat4 SpriteMatrix;

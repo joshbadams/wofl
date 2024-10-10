@@ -31,7 +31,7 @@ public:
 	{
 	}
 
-	virtual void InitializeAfterWindowCreate(unsigned int Width, unsigned int Height)
+	virtual void InitializeAfterWindowCreate(void* Window, unsigned int Width, unsigned int Height)
 	{
 
 	}

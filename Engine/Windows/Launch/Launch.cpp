@@ -46,8 +46,12 @@ int main(int argc, char* argv[])
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
     WoflApplication::InitializePlatform();
-    WoflRenderer::Renderer->InitializeAfterWindowCreate(WINDOW_WIDTH, WINDOW_HEIGHT);
+    WoflRenderer::Renderer->InitializeAfterWindowCreate(window, WINDOW_WIDTH, WINDOW_HEIGHT);
     WoflApplication::InitializeAndCreateGame();
+
+
+
+
 
 
     // render loop

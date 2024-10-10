@@ -37,9 +37,10 @@ static void InitMatrix(GLfloat M[4][4])
 	M[3][3] = 1.0f;
 }
 
-
-void WindowsRenderer::InitializeGL(GLuint InWidth, GLuint InHeight)
+void WindowsRenderer::InitializeGL(void* InWindow, GLuint InWidth, GLuint InHeight)
 {
+	Window = (GLFWwindow*)InWindow;
+
 	ViewSize = Vector((float)InWidth, (float)InHeight);
 	
 	// let the platform do its thing
@@ -56,7 +57,7 @@ void WindowsRenderer::InitializeGL(GLuint InWidth, GLuint InHeight)
 	GLCHECK(glDisable(GL_CULL_FACE));
 	GLCHECK(glDisable(GL_DEPTH_TEST));
 	GLCHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-	GLCHECK(glEnable(GL_BLEND));
+	GLCHECK(glDisable(GL_BLEND));
 }
 
 void WindowsRenderer::LoadShaders()
@@ -215,7 +216,11 @@ void WindowsRenderer::DrawSprite(WoflSprite* Sprite)
 
 void WindowsRenderer::BeginFrame()
 {
-
+	//	GLCHECK(glClearColor(1.65f, 0.65f, 0.65f, 1.0f));
+	static unsigned char b = 0;
+	b++;
+	GLCHECK(glClearColor(0, (float)b / 255, 0, 1.0f));
+	GLCHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
 void WindowsRenderer::EndFrame()
@@ -230,11 +235,15 @@ Vector WindowsRenderer::GetTextureSize(unsigned int Texture)
 
 void WindowsRenderer::DrawScene(WoflSprite* RootSprite)
 {
-	//	GLCHECK(glClearColor(1.65f, 0.65f, 0.65f, 1.0f));
-	static unsigned char b = 0;
-	b++;
-	GLCHECK(glClearColor(0, (float)b/255, 0, 1.0f));
-	GLCHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+//	glUseProgram(SpriteShader);
+//	glBindVertexArray(SpriteVB);
+	// draw points 0-3 from the currently bound VAO with current in-use shader
+//	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+
+
 
 	if (RootSprite == nullptr)
 	{

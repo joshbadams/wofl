@@ -17,9 +17,9 @@ public:
 	
 	WindowsRenderer();
 
-	void InitializeAfterWindowCreate(unsigned int Width, unsigned int Height)
+	void InitializeAfterWindowCreate(void* Window, unsigned int Width, unsigned int Height)
 	{
-		InitializeGL(Width, Height);
+		InitializeGL(Window, Width, Height);
 	}
 		
 	void BeginFrame() override;
@@ -33,7 +33,7 @@ public:
 
 protected:
 
-	void InitializeGL(GLuint InWidth, GLuint InHeight);
+	void InitializeGL(void* Window, GLuint InWidth, GLuint InHeight);
 
 	void LoadShaders();
 	GLuint CompileShader(const char* Shader, GLenum ShaderType);
@@ -59,6 +59,7 @@ protected:
 		return (int)TexId;
 	}
 
+	GLFWwindow* Window;
 
 	GLuint SpriteShader;
 

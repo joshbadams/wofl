@@ -10,6 +10,8 @@
 #define Wofl_iOSFile_h
 
 #include "WoflFile.h"
+#include "stb_image.h"
+
 
 class WindowsFile : public WoflFile
 {
@@ -77,13 +79,17 @@ public:
 		// load PNG file into buffer
 		std::string Filename = std::string(ImageName);
 		Filename = GetResourcePath(Filename.c_str());
-		std::vector<unsigned char> Buffer = LoadFileToArray(Filename.c_str());
 
-		Width = 64;
-		Height = 64;
+		int X, Y, N;
+		unsigned char* PNGData = stbi_load(Filename.c_str(), &X, &Y, &N, 4);
+		Width = X;
+		Height = Y;
+
 		void* Texture = malloc(Width * Height * 4);
-//		memcpy(Texture, &Buffer[0], Buffer.size());
-		memcpy(Texture, &Buffer[0], std::min<size_t>(Buffer.size(), Width * Height * 4));
+		//		memcpy(Texture, &Buffer[0], Buffer.size());
+		memcpy(Texture, &PNGData[0], Width * Height * 4);
+
+		stbi_image_free(PNGData);
 		return Texture;
 	}
 	

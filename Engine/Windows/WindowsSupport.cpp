@@ -13,6 +13,9 @@
 #include "WindowsPlatform.h"
 #include "WindowsRenderer.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 void WoflApplication::InitializePlatform()
 {
 	static WindowsFile Singleton_WindowsFile;

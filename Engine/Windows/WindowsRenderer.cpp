@@ -57,7 +57,7 @@ void WindowsRenderer::InitializeGL(void* InWindow, GLuint InWidth, GLuint InHeig
 	GLCHECK(glDisable(GL_CULL_FACE));
 	GLCHECK(glDisable(GL_DEPTH_TEST));
 	GLCHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-	GLCHECK(glDisable(GL_BLEND));
+	GLCHECK(glEnable(GL_BLEND));
 }
 
 void WindowsRenderer::LoadShaders()
@@ -164,13 +164,11 @@ void WindowsRenderer::MakeSpriteMatrix(const WoflSprite* Sprite)
 	Vector Size = Sprite->GetSize();
 	
 	SpriteMatrix[3][0] = Pos.X;
-//	SpriteMatrix[3][1] = ViewSize.Y - Pos.Y;
-	SpriteMatrix[3][1] = Pos.Y;
-//	SpriteMatrix[3][0] = (Pos.X);// / (GLfloat)ViewSize.X) * 2.0f - 1.0f;
-//	SpriteMatrix[3][1] = ((ViewSize.Y - Pos.Y));// / (GLfloat)ViewSize.Y) * 2.0f - 1.0f;
+	SpriteMatrix[3][1] = ViewSize.Y - Pos.Y;
+//	SpriteMatrix[3][1] = Pos.Y;
 
 	SpriteMatrix[0][0] = Size.X;
-	SpriteMatrix[1][1] = Size.Y;
+	SpriteMatrix[1][1] = -Size.Y;
 }
 
 void WindowsRenderer::MakeViewMatrix()
@@ -235,16 +233,6 @@ Vector WindowsRenderer::GetTextureSize(unsigned int Texture)
 
 void WindowsRenderer::DrawScene(WoflSprite* RootSprite)
 {
-
-//	glUseProgram(SpriteShader);
-//	glBindVertexArray(SpriteVB);
-	// draw points 0-3 from the currently bound VAO with current in-use shader
-//	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-
-
-
-
 	if (RootSprite == nullptr)
 	{
 		return;

@@ -36,7 +36,9 @@
 #endif
 
 #if WINDOWS
+//#include <Windows.h>
 #define WLOG(...) printf(__VA_ARGS__)
+//#define WLOG(...) OutputDebugStringA("test\n")
 #endif
 
 #define PREPROCESSOR_TO_STRING(x) PREPROCESSOR_TO_STRING_INNER(x)

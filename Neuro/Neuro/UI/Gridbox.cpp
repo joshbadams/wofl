@@ -28,7 +28,7 @@ void GridEntry::FromLua(LuaRef Ref)
 	L->GetIntValue(Ref, "y", Y);
 	L->GetStringValue(Ref, "text", Text);
 	L->GetIntValue(Ref, "clickId", ClickId);
-	string KeyStr;
+	std::string KeyStr;
 	L->GetStringValue(Ref, "key", KeyStr);
 	if (KeyStr.length() == 1)
 	{
@@ -230,7 +230,7 @@ void Gridbox::OnTextEntryCancelled(const string& Tag)
 	Update();
 }
 
-void Gridbox::SetupMessages(string MessageSourceID, string Title)
+void Gridbox::SetupMessages(std::string MessageSourceID, std::string Title)
 {
 //	CurrentMessages = QueryStateDelegate->GetUnlockedMessages(MessageSourceID);
 	MessagesTitle = Title;
@@ -264,7 +264,7 @@ void Gridbox::Update()
 	LuaBox->LuaSystem->GetIntValue(LuaBox, "detailsIndex", DetailsIndex);
 	if (DetailsIndex > 0)
 	{
-		string DetailsString;
+		std::string DetailsString;
 		LuaBox->LuaSystem->CallFunction_Return(LuaBox, "GetDetailsString", DetailsString);
 		Messagebox->SetText(DetailsString);
 		AddChild(Messagebox);

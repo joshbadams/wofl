@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 Josh. All rights reserved.
 //
 
-#include "WoflRenderer.h"
-#include "Utils.h"
+#include "WindowsRenderer.h"
+#include "WoflUtils.h"
 #include "WoflSprite.h"
+#include "WoflImage.h"
 #include "WoflWorld.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -18,13 +19,10 @@ enum Attributes
 	Attrib_UV,
 };
 
-// singleton
-WoflRenderer* WoflRenderer::Renderer = NULL;
 
-WoflRenderer::WoflRenderer()
+WindowsRenderer::WindowsRenderer()
+	: WoflRenderer()
 {
-	// cache the singleton
-	Renderer = this;
 }
 
 static void InitMatrix(GLfloat M[4][4])
@@ -39,13 +37,14 @@ static void InitMatrix(GLfloat M[4][4])
 	M[3][3] = 1.0f;
 }
 
-
-void WoflRenderer::InitializeGL(GLuint InWidth, GLuint InHeight)
+void WindowsRenderer::InitializeGL(void* InWindow, GLuint InWidth, GLuint InHeight)
 {
-	ViewSize = Vector(InWidth, InHeight);
+	Window = (GLFWwindow*)InWindow;
+
+	ViewSize = Vector((float)InWidth, (float)InHeight);
 	
 	// let the platform do its thing
-	PlatformInitializeGL();
+//	PlatformInitializeGL();
 	
 	// crank up GL objects
 	LoadShaders();
@@ -61,7 +60,7 @@ void WoflRenderer::InitializeGL(GLuint InWidth, GLuint InHeight)
 	GLCHECK(glEnable(GL_BLEND));
 }
 
-void WoflRenderer::LoadShaders()
+void WindowsRenderer::LoadShaders()
 {
 	GLuint VertexShader = CompileShader("Shader.vsh", GL_VERTEX_SHADER);
 	GLuint FragmentShader = CompileShader("Shader.fsh", GL_FRAGMENT_SHADER);
@@ -85,7 +84,7 @@ void WoflRenderer::LoadShaders()
 	GLCHECK(ColorUniform = glGetUniformLocation(SpriteShader, "Color"));
 }
 
-GLuint WoflRenderer::CompileShader(const char* ShaderName, GLenum ShaderType)
+GLuint WindowsRenderer::CompileShader(const char* ShaderName, GLenum ShaderType)
 {
 	// laod the file
 	std::string ShaderPath = Utils::File->GetResourcePath(ShaderName);
@@ -125,7 +124,7 @@ GLuint WoflRenderer::CompileShader(const char* ShaderName, GLenum ShaderType)
 	
 }
 
-void WoflRenderer::CreateBuffers()
+void WindowsRenderer::CreateBuffers()
 {
     GLCHECK(glGenBuffers(1, &SpriteVB));
     GLCHECK(glBindBuffer(GL_ARRAY_BUFFER, SpriteVB));
@@ -159,25 +158,23 @@ void WoflRenderer::CreateBuffers()
 #endif
 }
 
-void WoflRenderer::MakeSpriteMatrix(const WoflSprite* Sprite)
+void WindowsRenderer::MakeSpriteMatrix(const WoflSprite* Sprite)
 {
 	Vector Pos = Sprite->GetPosition();
 	Vector Size = Sprite->GetSize();
 	
 	SpriteMatrix[3][0] = Pos.X;
-//	SpriteMatrix[3][1] = ViewSize.Y - Pos.Y;
-	SpriteMatrix[3][1] = Pos.Y;
-//	SpriteMatrix[3][0] = (Pos.X);// / (GLfloat)ViewSize.X) * 2.0f - 1.0f;
-//	SpriteMatrix[3][1] = ((ViewSize.Y - Pos.Y));// / (GLfloat)ViewSize.Y) * 2.0f - 1.0f;
+	SpriteMatrix[3][1] = ViewSize.Y - Pos.Y;
+//	SpriteMatrix[3][1] = Pos.Y;
 
 	SpriteMatrix[0][0] = Size.X;
-	SpriteMatrix[1][1] = Size.Y;
+	SpriteMatrix[1][1] = -Size.Y;
 }
 
-void WoflRenderer::MakeViewMatrix()
+void WindowsRenderer::MakeViewMatrix()
 {
-	Vector ViewOffset = WoflWorld::World->GetViewOffset();
-	Vector ViewScale = WoflWorld::World->GetViewScale();
+	Vector ViewOffset = WoflWorld::Get()->GetViewOffset();
+	Vector ViewScale = WoflWorld::Get()->GetViewScale();
 
 	ViewMatrix[3][0] = (ViewOffset.X * 2.0f / (GLfloat)ViewSize.X) - 1.0f;
 //	ViewMatrix[3][1] = (-ViewOffset.Y * 2.0f / (GLfloat)ViewSize.Y) - 1.0f;
@@ -187,10 +184,10 @@ void WoflRenderer::MakeViewMatrix()
 	ViewMatrix[1][1] = (ViewScale.Y * 2.0f / (GLfloat)ViewSize.Y);
 }
 
-void WoflRenderer::DrawSprite(WoflSprite* Sprite)
+void WindowsRenderer::DrawSprite(WoflSprite* Sprite)
 {
 	// allow the sprite to render itself
-	if (Sprite->CustomRender())
+	if (Sprite->CustomPreRender())
 	{
 		return;
 	}
@@ -211,16 +208,30 @@ void WoflRenderer::DrawSprite(WoflSprite* Sprite)
 		GLCHECK(glUniformMatrix4fv(SpriteMatrixUniform, 1, 0, (GLfloat*)SpriteMatrix));
 		GLCHECK(glDrawArrays(GL_TRIANGLES, 0, 6));
 	}
+
+	Sprite->CustomRender();
 }
 
-void WoflRenderer::ClearView()
+void WindowsRenderer::BeginFrame()
 {
 	//	GLCHECK(glClearColor(1.65f, 0.65f, 0.65f, 1.0f));
-	GLCHECK(glClearColor(0, 0, 0, 1.0f));
+	static unsigned char b = 0;
+	b++;
+	GLCHECK(glClearColor(0, (float)b / 255, 0, 1.0f));
 	GLCHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
-void WoflRenderer::DrawScene(WoflSprite* RootSprite)
+void WindowsRenderer::EndFrame()
+{
+
+}
+
+Vector WindowsRenderer::GetTextureSize(unsigned int Texture)
+{
+	return Vector(128, 128);
+}
+
+void WindowsRenderer::DrawScene(WoflSprite* RootSprite)
 {
 	if (RootSprite == nullptr)
 	{
@@ -240,7 +251,7 @@ void WoflRenderer::DrawScene(WoflSprite* RootSprite)
 	MakeViewMatrix();
 	GLCHECK(glUniformMatrix4fv(ViewMatrixUniform, 1, 0, (GLfloat*)ViewMatrix));
 
-	WoflWorld::World->Visit(true, true, false,
+	WoflWorld::Get()->Visit(true, true, false,
 							[this](WoflSprite* Sprite)
 							{
 								DrawSprite(Sprite);
@@ -257,7 +268,7 @@ const int CharY = 35;
 const int NumCharsX = TexSize / CharX;
 //const int NumCharsY = TexSize / CharY;
 
-void WoflRenderer::DrawString(const char* String, Vector Location, float Scale, WColor& Color)
+void WindowsRenderer::DrawString(const char* String, Vector Location, float Scale, WColor& Color)
 {
 	GLCHECK(glUniform4fv(ColorUniform, 1, (float*)&Color));
 
@@ -289,16 +300,4 @@ void WoflRenderer::DrawString(const char* String, Vector Location, float Scale, 
 		
 		String++;
 	}
-}
-
-void WoflRenderer::DrawCenteredString(const char* String, float Y, float Scale, WColor& Color)
-{
-	Vector StringSize = GetStringSize(String, Scale);
-	DrawString(String, Vector((ViewSize.X - StringSize.X) / 2.0f, Y), Scale, Color);
-}
-
-Vector WoflRenderer::GetStringSize(const char* String, float Scale)
-{
-	Vector StrSize(strlen(String) * CharX * Scale, CharY * Scale);
-	return StrSize;
 }

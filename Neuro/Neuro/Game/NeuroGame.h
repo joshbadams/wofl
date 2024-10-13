@@ -40,7 +40,6 @@ private:
 	class Textbox* MessageBox;
 	class Ninebox* DialogBox;
 	class InvBox* Inventory;
-	class PAXBox* PAX;
 	class SiteBox* WebSite;
 
 	void LoadConfig();

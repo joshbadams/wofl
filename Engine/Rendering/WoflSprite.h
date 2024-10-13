@@ -211,7 +211,7 @@ public:
 protected:
 	
 	// animation frames
-	vector<WoflImage*> Images;
+	std::vector<WoflImage*> Images;
 	float FramesPerSecond;
 	int Frame;
 	float AnimTime;

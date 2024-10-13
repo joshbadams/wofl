@@ -97,7 +97,7 @@ void WoflWorld::Render()
 	WoflRenderer::Renderer->EndFrame();
 }
 
-void WoflWorld::Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision, const function<bool(WoflSprite*)>& VisitFunction, WoflSprite* CurrentSprite)
+void WoflWorld::Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision, const std::function<bool(WoflSprite*)>& VisitFunction, WoflSprite* CurrentSprite)
 {
 	if (bVisitBeforeMoving)
 	{
@@ -110,8 +110,8 @@ void WoflWorld::Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollis
 }
 
 void WoflWorld::VisitEx(bool bDepthFirst, bool bForCollision,
-					  const function<bool(WoflSprite*)>& PremoveVisitFunction,
-					  const function<bool(WoflSprite*)>& PostmoveVisitFunction,
+					  const std::function<bool(WoflSprite*)>& PremoveVisitFunction,
+					  const std::function<bool(WoflSprite*)>& PostmoveVisitFunction,
 					  WoflSprite* CurrentSprite)
 {
 	bool bAbortedVisiting = false;
@@ -129,8 +129,8 @@ void WoflWorld::VisitEx(bool bDepthFirst, bool bForCollision,
 }
 
 void WoflWorld::VisitInner(bool bDepthFirst, bool bForCollision,
-						   const function<bool(WoflSprite*)>& PremoveVisitFunction,
-						   const function<bool(WoflSprite*)>& PostmoveVisitFunction,
+						   const std::function<bool(WoflSprite*)>& PremoveVisitFunction,
+						   const std::function<bool(WoflSprite*)>& PostmoveVisitFunction,
 						   WoflSprite* CurrentSprite, bool& bAbortedVisiting)
 {
 	// should we call the visitor function on this node
@@ -191,8 +191,8 @@ WoflSprite* WoflWorld::HitTest(Vector ScreenLocation)
 {
 	// convert screenspace to local
 	Vector Loc = ConvertToLocalSpace(ScreenLocation);
-	
-	// printf("ScreenLoc = [%.2f, %.2f], Local = [%.2f, %2.f]\n", ScreenLocation.X, ScreenLocation.Y, Loc.X, Loc.Y);
+
+	WLOG("ScreenLoc = [%.2f, %.2f], Local = [%.2f, %2.f]\n", ScreenLocation.X, ScreenLocation.Y, Loc.X, Loc.Y);
 	
 	WoflSprite* HitSprite = NULL;
 	

@@ -9,10 +9,15 @@
 #include "Textbox.h"
 #include "Ninebox.h"
 #include "Gridbox.h"
-#include "InvBox.h"
-#include "SiteBox.h"
+#include "Boxes\InvBox.h"
+#include "Boxes\SiteBox.h"
 #include "NeuroConfig.h"
 #include "NeuroScene.h"
+
+WoflGame* GlobalGameInitialization()
+{
+	return new NeuroGame();
+}
 
 NeuroGame::NeuroGame()
 	: WoflGame("Neuromancer")
@@ -94,7 +99,7 @@ void NeuroGame::Invalidate(ZoneType Zone)
 	if ((Zone & ZoneType::Dialog) != ZoneType::None)
 	{
 		DialogBox->RemoveFromParent();
-		string Dialog = State.GetCurrentDialogLine();
+		std::string Dialog = State.GetCurrentDialogLine();
 		if (Dialog.length() > 0)
 		{
 			DialogBox->Text->SetText(Dialog);

@@ -104,7 +104,7 @@ Lua::Lua(void* Context)
 	LoadScript("Items.lua");
 
 //	int IntVal;
-//	string StringVal;
+//	std::string StringVal;
 //	GetIntValue("foo", IntVal);
 //	GetStringValue("bar", StringVal);
 //	
@@ -140,7 +140,7 @@ Json::Value Lua::ToJsonObject()
 	lua_pushnil(L);  // first key
 	while (lua_next(L, Table) != 0)
 	{
-		string Key = lua_tostring(L, -2);
+		std::string Key = lua_tostring(L, -2);
 		if (SystemVariables.find(Key) == SystemVariables.end())
 		{
 			if (lua_isinteger(L, -1))
@@ -178,7 +178,7 @@ void Lua::FromJsonObject(const Json::Value& LuaObject)
 		}
 		else if (LuaObject[Name].isString())
 		{
-			WLOG("Looading string value %s = %s\n", Name.c_str(), LuaObject[Name].asString().c_str());
+			WLOG("Looading std::string value %s = %s\n", Name.c_str(), LuaObject[Name].asString().c_str());
 			SetStringValue(nullptr, Name.c_str(), LuaObject[Name].asString());
 		}
 	}
@@ -258,7 +258,7 @@ void Lua::SetGlobal(const char* GlobalName, const char* Value)
 	lua_setglobal(L, GlobalName);
 }
 
-bool Lua::GetString(const string& Code, string& Result)
+bool Lua::GetString(const std::string& Code, std::string& Result)
 {
 	SCOPE;
 	
@@ -269,7 +269,7 @@ bool Lua::GetString(const string& Code, string& Result)
 	}
 
 	lua_getglobal(L, "result");
-	// allow no return, treated as empty string
+	// allow no return, treated as empty std::string
 	if (lua_isnil(L, -1))
 	{
 		Result = false;
@@ -287,14 +287,14 @@ bool Lua::GetString(const string& Code, string& Result)
 	return true;
 }
 
-bool Lua::GetBool(const string& Code, bool& Result)
+bool Lua::GetBool(const std::string& Code, bool& Result)
 {
 	SCOPE;
 	
 //	int Top1 = lua_gettop(L);
 	SetGlobal("result", nullptr);
-	bool bSetsResult = Code.find("result = ") != string::npos || Code.find("result=") != string::npos;
-	if (!RunCode(bSetsResult ? Code : (string("result = ") + Code)))
+	bool bSetsResult = Code.find("result = ") != std::string::npos || Code.find("result=") != std::string::npos;
+	if (!RunCode(bSetsResult ? Code : (std::string("result = ") + Code)))
 	{
 		return false;
 	}
@@ -318,7 +318,7 @@ bool Lua::GetBool(const string& Code, bool& Result)
 	return true;
 }
 
-bool Lua::RunCode(const string& Code)
+bool Lua::RunCode(const std::string& Code)
 {
 	SCOPE;
 	
@@ -418,7 +418,7 @@ int PushSpec(lua_State* L, LuaRef TableRef)
 
 int PushSpec(lua_State* L, const char* TableName)
 {
-	// empty string is global
+	// empty std::string is global
 	if (TableName == nullptr || TableName[0] == 0)
 	{
 		lua_pushglobaltable(L);
@@ -493,7 +493,7 @@ bool GetReturn(lua_State* L, int& Param)
 	return true;
 }
 
-bool GetReturn(lua_State* L, string& Param)
+bool GetReturn(lua_State* L, std::string& Param)
 {
 	if (!lua_isstring(L, -1) )
 	{
@@ -540,7 +540,7 @@ void Lua::SetIntValue(const char* Object, const char* Name, int Value) const
 	lua_setglobal(L, Name);
 }
 
-//bool Lua::GetStringValue(const char* Object, const char* Name, string& Result) const
+//bool Lua::GetStringValue(const char* Object, const char* Name, std::string& Result) const
 //{
 //	SCOPE;
 //	
@@ -563,7 +563,7 @@ void Lua::SetIntValue(const char* Object, const char* Name, int Value) const
 //	return true;
 //}
 //
-void Lua::SetStringValue(const char* Object, const char* Name, const string& Value) const
+void Lua::SetStringValue(const char* Object, const char* Name, const std::string& Value) const
 {
 	SCOPE;
 	
@@ -586,7 +586,7 @@ void Lua::SetStringValue(const char* Object, const char* Name, const string& Val
 //	return true;
 //}
 //
-//bool Lua::GetTableStringValue(const char* Name, string& Result, int StackLoc) const
+//bool Lua::GetTableStringValue(const char* Name, std::string& Result, int StackLoc) const
 //{
 //	GET_TABLE_VALUE_PREAMBLE(lua_isstring, "")
 //	
@@ -594,7 +594,7 @@ void Lua::SetStringValue(const char* Object, const char* Name, const string& Val
 //	return true;
 //}
 //
-//bool Lua::GetTableStringsValue(const char* Name, vector<string>& Result, int StackLoc) const
+//bool Lua::GetTableStringsValue(const char* Name, std::vector<std::string>& Result, int StackLoc) const
 //{
 //	GET_TABLE_VALUE_PREAMBLE(lua_istable, {})
 //

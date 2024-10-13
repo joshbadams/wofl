@@ -82,8 +82,8 @@ public:
 	}
 	
 	
-	void Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision, const function<bool(WoflSprite*)>& VisitFunction, WoflSprite* CurrentSprite=nullptr);
-	void VisitEx(bool bDepthFirst, bool bForCollision, const function<bool(WoflSprite*)>& PremoveVisitFunction, const function<bool(WoflSprite*)>& PostmoveVisitFunction, WoflSprite* CurrentSprite=nullptr);
+	void Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision, const std::function<bool(WoflSprite*)>& VisitFunction, WoflSprite* CurrentSprite=nullptr);
+	void VisitEx(bool bDepthFirst, bool bForCollision, const std::function<bool(WoflSprite*)>& PremoveVisitFunction, const std::function<bool(WoflSprite*)>& PostmoveVisitFunction, WoflSprite* CurrentSprite=nullptr);
 
 	
 /*
@@ -173,8 +173,8 @@ protected:
 	WoflWorld();
 
 	void VisitInner(bool bDepthFirst, bool bForCollision,
-					const function<bool(WoflSprite*)>& PremoveVisitFunction,
-					const function<bool(WoflSprite*)>& PostmoveVisitFunction,
+					const std::function<bool(WoflSprite*)>& PremoveVisitFunction,
+					const std::function<bool(WoflSprite*)>& PostmoveVisitFunction,
 					WoflSprite* CurrentSprite, bool& bAbortedVisiting);
 
 	

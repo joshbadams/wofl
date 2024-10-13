@@ -44,7 +44,7 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 //	LuaRef IRS;
 //	Lua.GetTableValue("", "IRS", IRS);
 //	
-//	string Page;
+//	std::string Page;
 ////	Lua.CallFunction_NoParam_Return(IRS, "GetCurrentPage", Page);
 //	Lua.GetStringValue(IRS, "currentPage", Page);
 //
@@ -57,14 +57,14 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 //
 //	int Obj;
 //	Lua.GetObject("Room", Obj);
-//	string Str;
+//	std::string Str;
 //	Lua.GetStringValue("Room", "shortDesc", Str);
 	
 //	int Stack = Lua.MarkStack();
 //	LuaRef RRef;
 //	Lua.GetTableValue("", "chatsubo", RRef);
 //
-//	string foobar;
+//	std::string foobar;
 //	Lua.GetStringValue("chatsubo", "foobar", foobar);
 //	foobar = "";
 //	Lua.GetStringValue(RRef, "foobar", foobar);
@@ -219,7 +219,7 @@ void NeuroState::ClickInventory()
 }
 
 template<typename T>
-void CheckMessagesForActivation(NeuroState* State, vector<T*>& Items, vector<int>& UnlockedItems)
+void CheckMessagesForActivation(NeuroState* State, std::vector<T*>& Items, std::vector<int>& UnlockedItems)
 {
 	int CurrentData = 111758;
 
@@ -287,6 +287,10 @@ void NeuroState::ActivateRoom(LuaRef OldRoom, LuaRef NewRoom)
 	CurrentRoom = NewRoom;
 		
 	PendingInvalidation = ZoneType::Room;
+
+	string FirstVisitKey = string("__") + CurrentRoom->ID;
+	bool bFirstEnter = GetIntValue(FirstVisitKey.c_str()) != 1;
+	SetIntValue(FirstVisitKey, 1);
 	
 	if (OldRoom)
 	{
@@ -326,7 +330,7 @@ void NeuroState::ActivateConversation(Conversation* Convo)
 //	}
 }
 
-string NeuroState::GetCurrentDialogLine()
+std::string NeuroState::GetCurrentDialogLine()
 {
 	if (CurrentConversation == nullptr || (DialogIndex == -1 && ChoiceIndex == -1))
 	{
@@ -345,7 +349,7 @@ string NeuroState::GetCurrentDialogLine()
 	return CurrentConversation->Lines[DialogIndex];
 }
 
-string NeuroState::GetCurrentMessage()
+std::string NeuroState::GetCurrentMessage()
 {
 	return PendingMessage;
 //	if (CurrentConversation == nullptr)
@@ -355,7 +359,7 @@ string NeuroState::GetCurrentMessage()
 //	
 //	if (CurrentConversation->Message.starts_with("lua:"))
 //	{
-//		string Result;
+//		std::string Result;
 //		Lua.GetString(CurrentConversation->Message.substr(4), Result);
 //		return Result;
 //	}
@@ -549,7 +553,7 @@ void NeuroState::GridboxClosed(LuaRef Box)
 //
 bool NeuroState::ConnectToSite(const string& SiteName, int ComLinkLevel)
 {
-	string LocalSiteName = SiteName;
+	std::string LocalSiteName = SiteName;
 	for (char& c : LocalSiteName) { c = tolower(c); }
 
 	LuaRef Site = GetTableValue(LocalSiteName);
@@ -566,7 +570,7 @@ bool NeuroState::ConnectToSite(const string& SiteName, int ComLinkLevel)
 }
 
 
-bool NeuroState::TestCondition(const string& Condition, bool bEmptyConditionIsSuccess, const string* Action, const string* Value)
+bool NeuroState::TestCondition(const std::string& Condition, bool bEmptyConditionIsSuccess, const std::string* Action, const std::string* Value)
 {
 	// no condition uses bEmptyConditionIsSuccess
 	if (Condition == "")
@@ -582,17 +586,17 @@ bool NeuroState::TestCondition(const string& Condition, bool bEmptyConditionIsSu
 	}
 	
 	size_t OpLoc = Condition.find('=');
-	if (OpLoc == string::npos) OpLoc = Condition.find('<');
-	if (OpLoc == string::npos) OpLoc = Condition.find('>');
+	if (OpLoc == std::string::npos) OpLoc = Condition.find('<');
+	if (OpLoc == std::string::npos) OpLoc = Condition.find('>');
 	
-	if (OpLoc == string::npos)
+	if (OpLoc == std::string::npos)
 	{
 		WLOG("Invalid condition: %s\n", Condition.c_str());
 		return false;
 	}
 
-	string FirstHalf = Condition.substr(0, OpLoc);
-	string SecondHalf = Condition.substr(OpLoc + 1);
+	std::string FirstHalf = Condition.substr(0, OpLoc);
+	std::string SecondHalf = Condition.substr(OpLoc + 1);
 	
 	if (Action != nullptr && *Action != FirstHalf)
 	{
@@ -625,8 +629,8 @@ bool NeuroState::TestCondition(const string& Condition, bool bEmptyConditionIsSu
 		return bResult;
 	}
 	
-	// string comparison
-	string A = (Value != nullptr) ? *Value : GetStringValue(FirstHalf);
+	// std::string comparison
+	std::string A = (Value != nullptr) ? *Value : GetStringValue(FirstHalf);
 	bool bResult = A == SecondHalf;
 	if (bResult)
 	{
@@ -687,7 +691,7 @@ Conversation* NeuroState::FindActiveConversation()
 }
 
 
-Conversation* NeuroState::FindConversationForAction(const string& Action, const string& Value)
+Conversation* NeuroState::FindConversationForAction(const std::string& Action, const std::string& Value)
 {
 //	for (Conversation* Convo : CurrentRoom->Conversations)
 //	{
@@ -700,7 +704,7 @@ Conversation* NeuroState::FindConversationForAction(const string& Action, const 
 	return nullptr;
 }
 
-int NeuroState::GetIntValue(const string& Key) const
+int NeuroState::GetIntValue(const std::string& Key) const
 {
 	int Value;
 	if (Lua.GetIntValue("", Key.c_str(), Value))
@@ -710,9 +714,9 @@ int NeuroState::GetIntValue(const string& Key) const
 	return -1;
 }
 
-string NeuroState::GetStringValue(const string& Key) const
+std::string NeuroState::GetStringValue(const std::string& Key) const
 {
-	string Value;
+	std::string Value;
 	if (Lua.GetStringValue("", Key.c_str(), Value))
 	{
 		return Value;
@@ -720,7 +724,7 @@ string NeuroState::GetStringValue(const string& Key) const
 	return "";
 }
 
-LuaRef NeuroState::GetTableValue(const string& Key) const
+LuaRef NeuroState::GetTableValue(const std::string& Key) const
 {
 	LuaRef Value;
 	if (Lua.GetTableValue("", Key.c_str(), Value))
@@ -731,18 +735,18 @@ LuaRef NeuroState::GetTableValue(const string& Key) const
 }
 
 
-void NeuroState::SetIntValue(const string& Name, int Value)
+void NeuroState::SetIntValue(const std::string& Name, int Value)
 {
 	Lua.SetIntValue(nullptr, Name.c_str(), Value);
 }
 
-void NeuroState::SetStringValue(const string& Name, const string& Value)
+void NeuroState::SetStringValue(const std::string& Name, const std::string& Value)
 {
 	Lua.SetStringValue(nullptr, Name.c_str(), Value);
 }
 
 
-void NeuroState::Trigger(const string& Type, const string& Value)
+void NeuroState::Trigger(const std::string& Type, const std::string& Value)
 {
 	if (Type == "talk")
 	{
@@ -761,7 +765,7 @@ void NeuroState::Trigger(const string& Type, const string& Value)
 	}
 }
 
-void NeuroState::IncrementIntValue(const string& Key)
+void NeuroState::IncrementIntValue(const std::string& Key)
 {
 	SetIntValue(Key, GetIntValue(Key) + 1);
 }
@@ -855,7 +859,7 @@ int NeuroState::Lua_ShowMessage(lua_State* L)
 		lua_pushvalue(L, StackPos);
 		S->Lua_OnMessageComplete = S->Lua.MakeRef();
 		
-		// move down one to get string
+		// move down one to get std::string
 		StackPos--;
 	}
 	if (!lua_isstring(L, StackPos))
@@ -888,22 +892,22 @@ int NeuroState::Lua_ShowMessage(lua_State* L)
 //	return 0;
 }
 
-void NeuroState::UpdateVariablesFromString(const string& Commands)
+void NeuroState::UpdateVariablesFromString(const std::string& Commands)
 {
 	istringstream Stream(Commands);
 	
-	string Command;
+	std::string Command;
 	while (getline(Stream, Command, '|'))
 	{
 		istringstream InnerStream(Command);
-		string Variable, Value;
+		std::string Variable, Value;
 		getline(InnerStream, Variable, '=');
 		getline(InnerStream, Value, '=');
 		
 		StringReplacement(Variable, '@');
 		StringReplacement(Value, '@');
 	
-		WLOG("Setting variable from string: %s = %s\n", Variable.c_str(), Value.c_str());
+		WLOG("Setting variable from std::string: %s = %s\n", Variable.c_str(), Value.c_str());
 
 		if (Variable.starts_with('_'))
 		{
@@ -940,21 +944,21 @@ void NeuroState::UpdateVariablesFromString(const string& Commands)
 	}
 }
 
-void NeuroState::StringReplacement(string& String, char Delimiter) const
+void NeuroState::StringReplacement(std::string& String, char Delimiter) const
 {
 	size_t FirstPercent = String.find(Delimiter);
-	while (FirstPercent != string::npos)
+	while (FirstPercent != std::string::npos)
 	{
 		size_t SecondPercent = String.find(Delimiter, FirstPercent + 1);
-		if (SecondPercent == string::npos)
+		if (SecondPercent == std::string::npos)
 		{
 			return;
 		}
 		
-		string Variable = String.substr(FirstPercent + 1, SecondPercent - FirstPercent - 1);
+		std::string Variable = String.substr(FirstPercent + 1, SecondPercent - FirstPercent - 1);
 		
 		// replcae %foo% with GetVar(foo)
-		string NewValue;
+		std::string NewValue;
 		if (Lua.GetStringValue("", Variable.c_str(), NewValue))
 		{
 			String.replace(FirstPercent, SecondPercent - FirstPercent + 1, NewValue);
@@ -969,7 +973,7 @@ void NeuroState::StringReplacement(string& String, char Delimiter) const
 }
 
 
-bool NeuroState::CheckVariablesFromString(const string& Query)
+bool NeuroState::CheckVariablesFromString(const std::string& Query)
 {
 	if (Query == "")
 	{
@@ -977,7 +981,7 @@ bool NeuroState::CheckVariablesFromString(const string& Query)
 	}
 	
 	istringstream InnerStream(Query);
-	string Variable, Value;
+	std::string Variable, Value;
 	getline(InnerStream, Variable, '=');
 	getline(InnerStream, Value, '=');
 		
@@ -986,19 +990,19 @@ bool NeuroState::CheckVariablesFromString(const string& Query)
 
 
 
-vector<int> NeuroState::GetInventory() const
+std::vector<int> NeuroState::GetInventory() const
 {
-	vector<int> Inv;
+	std::vector<int> Inv;
 	Lua.GetIntValues("", "inventory", Inv);
 	return Inv;
 }
 
-//vector<Message*> NeuroState::GetUnlockedMessages(string ID)
+//std::vector<Message*> NeuroState::GetUnlockedMessages(std::string ID)
 //{
 //	// check for new unlocks
 //	CheckMessagesForActivation(this, Config->AllMessages[ID], UnlockedMessages[ID]);
 //
-//	vector<Message*> Messages;
+//	std::vector<Message*> Messages;
 //	for (int MessageIndex : UnlockedMessages.at(ID))
 //	{
 //		Messages.push_back(Config->AllMessages[ID][MessageIndex]);

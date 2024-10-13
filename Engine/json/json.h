@@ -522,7 +522,7 @@ enum ValueType {
   intValue,      ///< signed integer value
   uintValue,     ///< unsigned integer value
   realValue,     ///< double value
-  stringValue,   ///< UTF-8 string value
+  stringValue,   ///< UTF-8 std::string value
   booleanValue,  ///< bool value
   arrayValue,    ///< array value (ordered list)
   objectValue    ///< object value (collection of name/value pairs).
@@ -541,11 +541,11 @@ enum CommentPlacement {
 //   typedef CppTL::AnyEnumerator<const Value &> EnumValues;
 //# endif
 
-/** \brief Lightweight wrapper to tag static string.
+/** \brief Lightweight wrapper to tag static std::string.
  *
  * Value constructor and objectValue member assignement takes advantage of the
- * StaticString and avoid the cost of string duplication when storing the
- * string or the member name.
+ * StaticString and avoid the cost of std::string duplication when storing the
+ * std::string or the member name.
  *
  * Example of usage:
  * \code
@@ -573,7 +573,7 @@ private:
  * - signed integer [range: Value::minInt - Value::maxInt]
  * - unsigned integer (range: 0 - Value::maxUInt)
  * - double
- * - UTF-8 string
+ * - UTF-8 std::string
  * - boolean
  * - 'null'
  * - an ordered list of Value
@@ -595,7 +595,7 @@ private:
  * It is possible to iterate over the list of a #objectValue values using
  * the getMemberNames() method.
  *
- * \note #Value string-length fit in size_t, but keys must be < 2^30.
+ * \note #Value std::string-length fit in size_t, but keys must be < 2^30.
  * (The reason is an implementation detail.) A #CharReader will raise an
  * exception if a bound is exceeded to avoid security holes in your app,
  * but the Value API does *not* check bounds. That is the responsibility
@@ -674,7 +674,7 @@ private:
       unsigned length_: 30; // 1GB max
     };
 
-    char const* cstr_;  // actually, a prefixed string, unless policy is noDup
+    char const* cstr_;  // actually, a prefixed std::string, unless policy is noDup
     union {
       ArrayIndex index_;
       StringStorage storage_;
@@ -715,10 +715,10 @@ Json::Value obj_value(Json::objectValue); // {}
   Value(double value);
   Value(const char* value); ///< Copy til first 0. (NULL causes to seg-fault.)
   Value(const char* begin, const char* end); ///< Copy all, incl zeroes.
-  /** \brief Constructs a value from a static string.
+  /** \brief Constructs a value from a static std::string.
 
-   * Like other value string constructor but do not duplicate the string for
-   * internal storage. The given string must remain alive after the call to this
+   * Like other value std::string constructor but do not duplicate the std::string for
+   * internal storage. The given std::string must remain alive after the call to this
    * constructor.
    * \note This works only for null-terminated strings. (We cannot change the
    *   size of this class, so we have nowhere to store the length,
@@ -768,8 +768,8 @@ Json::Value obj_value(Json::objectValue); // {}
   unsigned getCStringLength() const; //Allows you to understand the length of the CString
 #endif
   JSONCPP_STRING asString() const; ///< Embedded zeroes are possible.
-  /** Get raw char* of string-value.
-   *  \return false if !string. (Seg-fault if str or end are NULL.)
+  /** Get raw char* of std::string-value.
+   *  \return false if !std::string. (Seg-fault if str or end are NULL.)
    */
   bool getString(
       char const** begin, char const** end) const;
@@ -830,7 +830,7 @@ Json::Value obj_value(Json::objectValue); // {}
   /// inserted
   /// in the array so that its size is index+1.
   /// (You may need to say 'value[0u]' to get your compiler to distinguish
-  ///  this from the operator[] which takes a string.)
+  ///  this from the operator[] which takes a std::string.)
   Value& operator[](ArrayIndex index);
 
   /// Access an array element (zero based index ).
@@ -838,17 +838,17 @@ Json::Value obj_value(Json::objectValue); // {}
   /// inserted
   /// in the array so that its size is index+1.
   /// (You may need to say 'value[0u]' to get your compiler to distinguish
-  ///  this from the operator[] which takes a string.)
+  ///  this from the operator[] which takes a std::string.)
   Value& operator[](int index);
 
   /// Access an array element (zero based index )
   /// (You may need to say 'value[0u]' to get your compiler to distinguish
-  ///  this from the operator[] which takes a string.)
+  ///  this from the operator[] which takes a std::string.)
   const Value& operator[](ArrayIndex index) const;
 
   /// Access an array element (zero based index )
 	  /// (You may need to say 'value[0u]' to get your compiler to distinguish
-  ///  this from the operator[] which takes a string.)
+  ///  this from the operator[] which takes a std::string.)
   const Value& operator[](int index) const;
 
   /// If the array contains at least index+1 elements, returns the element
@@ -1361,7 +1361,7 @@ public:
 
   /** \brief Read a Value from a <a HREF="http://www.json.org">JSON</a>
    * document.
-   * \param document UTF-8 encoded string containing the document to read.
+   * \param document UTF-8 encoded std::string containing the document to read.
    * \param root [out] Contains the root value of the document if it was
    *             successfully parsed.
    * \param collectComments \c true to collect comment and allow writing them
@@ -1378,9 +1378,9 @@ public:
 
   /** \brief Read a Value from a <a HREF="http://www.json.org">JSON</a>
    document.
-   * \param beginDoc Pointer on the beginning of the UTF-8 encoded string of the
+   * \param beginDoc Pointer on the beginning of the UTF-8 encoded std::string of the
    document to read.
-   * \param endDoc Pointer on the end of the UTF-8 encoded string of the
+   * \param endDoc Pointer on the end of the UTF-8 encoded std::string of the
    document to read.
    *               Must be >= beginDoc.
    * \param root [out] Contains the root value of the document if it was
@@ -1403,22 +1403,22 @@ public:
   /// \see Json::operator>>(std::istream&, Json::Value&).
   bool parse(JSONCPP_ISTREAM& is, Value& root, bool collectComments = true);
 
-  /** \brief Returns a user friendly string that list errors in the parsed
+  /** \brief Returns a user friendly std::string that list errors in the parsed
    * document.
    * \return Formatted error message with the list of errors with their location
    * in
-   *         the parsed document. An empty string is returned if no error
+   *         the parsed document. An empty std::string is returned if no error
    * occurred
    *         during parsing.
    */
   JSONCPP_DEPRECATED("Use getFormattedErrorMessages() instead.")
   JSONCPP_STRING getFormatedErrorMessages() const;
 
-  /** \brief Returns a user friendly string that list errors in the parsed
+  /** \brief Returns a user friendly std::string that list errors in the parsed
    * document.
    * \return Formatted error message with the list of errors with their location
    * in
-   *         the parsed document. An empty string is returned if no error
+   *         the parsed document. An empty std::string is returned if no error
    * occurred
    *         during parsing.
    */
@@ -1550,17 +1550,17 @@ public:
   virtual ~CharReader() {}
   /** \brief Read a Value from a <a HREF="http://www.json.org">JSON</a>
    document.
-   * The document must be a UTF-8 encoded string containing the document to read.
+   * The document must be a UTF-8 encoded std::string containing the document to read.
    *
-   * \param beginDoc Pointer on the beginning of the UTF-8 encoded string of the
+   * \param beginDoc Pointer on the beginning of the UTF-8 encoded std::string of the
    document to read.
-   * \param endDoc Pointer on the end of the UTF-8 encoded string of the
+   * \param endDoc Pointer on the end of the UTF-8 encoded std::string of the
    document to read.
    *        Must be >= beginDoc.
    * \param root [out] Contains the root value of the document if it was
    *             successfully parsed.
    * \param errs [out] Formatted error messages (if not NULL)
-   *        a user friendly string that lists errors in the parsed
+   *        a user friendly std::string that lists errors in the parsed
    * document.
    * \return \c true if the document was successfully parsed, \c false if an
    error occurred.
@@ -1619,7 +1619,7 @@ public:
         so the default is low.
     - `"failIfExtra": false or true`
       - If true, `parse()` returns false when extra non-whitespace trails
-        the JSON value in the input string.
+        the JSON value in the input std::string.
     - `"rejectDupKeys": false or true`
       - If true, `parse()` returns false when a key is duplicated within an object.
     - `"allowSpecialFloats": false or true`
@@ -1782,7 +1782,7 @@ public:
   };  // Factory
 };  // StreamWriter
 
-/** \brief Write into stringstream, then return string, for convenience.
+/** \brief Write into stringstream, then return std::string, for convenience.
  * A StreamWriter will be created from the factory, used, and then deleted.
  */
 JSONCPP_STRING JSON_API writeString(StreamWriter::Factory const& factory, Value const& root);
@@ -1814,7 +1814,7 @@ public:
     - "enableYAMLCompatibility": false or true
       - slightly change the whitespace around colons
     - "dropNullPlaceholders": false or true
-      - Drop the "null" string from the writer's output for nullValues.
+      - Drop the "null" std::string from the writer's output for nullValues.
         Strictly speaking, this is not valid JSON. But when the output is being
         fed to a browser's Javascript, it makes for smaller output and the
         browser can handle the output just fine.
@@ -1879,7 +1879,7 @@ public:
 
   void enableYAMLCompatibility();
 
-  /** \brief Drop the "null" string from the writer's output for nullValues.
+  /** \brief Drop the "null" std::string from the writer's output for nullValues.
    * Strictly speaking, this is not valid JSON. But when the output is being
    * fed to a browser's Javascript, it makes for smaller output and the
    * browser can handle the output just fine.
@@ -1961,7 +1961,7 @@ private:
 
 /** \brief Writes a Value in <a HREF="http://www.json.org">JSON</a> format in a
  human friendly way,
-     to a stream rather than to a string.
+     to a stream rather than to a std::string.
  *
  * The rules for line break and indent are as follow:
  * - Object value:

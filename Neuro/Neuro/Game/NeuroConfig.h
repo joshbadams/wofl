@@ -12,32 +12,32 @@
 //class StringOrString
 //{
 //public:
-//	string Get();
+//	std::string Get();
 //
-//	void Set(string& Val)
+//	void Set(std::string& Val)
 //	{
 //		Value = Val;
 //	}
 //private:
-//	string Value;
-//	string CachedLuaValue;
+//	std::string Value;
+//	std::string CachedLuaValue;
 //};
 //
 //class StringOrBool
 //{
 //public:
-//	string Get();
+//	std::string Get();
 //
-//	void Set(string& Val)
+//	void Set(std::string& Val)
 //	{
 //		Value = Val;
 //	}
 //private:
-//	string Value;
-//	string CachedLuaValue;
+//	std::string Value;
+//	std::string CachedLuaValue;
 //};
-#define StringOrString string
-#define StringOrBool string
+#define StringOrString std::string
+#define StringOrBool std::string
 
 class Lua;
 using LuaRef = shared_ptr<class LuaObjRef>;
@@ -48,7 +48,7 @@ public:
 	virtual void FromLua(Lua& L, LuaRef Object);
 
 protected:
-	virtual string PostProcessString(const string& String);
+	virtual std::string PostProcessString(const std::string& String);
 };
 
 class Option : public NeuroConfigObj
@@ -67,15 +67,15 @@ class Conversation : public NeuroConfigObj
 public:
 	~Conversation();
 	
-	string Tag;
+	std::string Tag;
 	StringOrBool Condition;
 	StringOrBool Action;
 	
 	LuaRef Lua_OnStart;
 	LuaRef Lua_OnEnd;
 
-	vector<string> Lines;
-	vector<Option*> Options;
+	std::vector<std::string> Lines;
+	std::vector<Option*> Options;
 
 //	virtual void FromJsonObject(const Json::Value& Object) override;
 	virtual void FromLua(Lua& L, LuaRef Object) override;
@@ -86,12 +86,12 @@ public:
 class Room : public NeuroConfigObj
 {
 public:
-	string ID;
-	string BackgroundImage;
+	std::string ID;
+	std::string BackgroundImage;
 	bool bHasPAX;
 	bool bHasJack;
 
-	vector<Conversation*> Conversations;
+	std::vector<Conversation*> Conversations;
 	
 	virtual void FromJsonObject(const Json::Value& Object);// override;
 };
@@ -187,17 +187,17 @@ public:
 class NeuroConfig : public NeuroConfigObj
 {
 public:
-	vector<string> RoomNames;
-	vector<string> SiteNames;
+	std::vector<std::string> RoomNames;
+	std::vector<std::string> SiteNames;
 //	vector<Room*> Rooms;
 //	vector<NewsItem*> NewsItems;
 //
 //	map<int, Item*> Items;
 //	map<string, Site*> Sites;
 //	map<string, MailActions*> MailServer;
-	map<string, string> Strings;
+	std::map<std::string, std::string> Strings;
 
-//	map<string, vector<Message*>> AllMessages;
+	std::map<std::string, std::vector<Message*>> AllMessages;
 
 	NeuroConfig();
 //	void Initialize();

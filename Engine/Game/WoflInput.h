@@ -8,7 +8,9 @@
 
 
 #pragma once
+#ifndef _MSC_VER
 #pragma clang system_header
+#endif
 
 #include WOFL_INC(Math)
 
@@ -55,7 +57,7 @@ public:
 		Utils::Input = this;
 	}
 	
-	void SetPreInputFunc(const function<bool(const KeyEvent*, const TouchEvent*)>& PreInputFunc)
+	void SetPreInputFunc(const std::function<bool(const KeyEvent*, const TouchEvent*)>& PreInputFunc)
 	{
 		OnPreInputFunc = PreInputFunc;
 	}
@@ -81,11 +83,11 @@ public:
 
 protected:
 
-	function<bool (const KeyEvent*, const TouchEvent*)> OnPreInputFunc;
+	std::function<bool (const KeyEvent*, const TouchEvent*)> OnPreInputFunc;
 
 	// touches pushed from platform
-	vector<TouchEvent> QueuedTouches;
-	vector<KeyEvent> QueuedKeys;
+	std::vector<TouchEvent> QueuedTouches;
+	std::vector<KeyEvent> QueuedKeys;
 
 	enum class CapturedTouchPhase
 	{

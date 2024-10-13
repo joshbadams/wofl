@@ -92,8 +92,8 @@ license you like.
 #ifndef LIB_JSONCPP_JSON_TOOL_H_INCLUDED
 #define LIB_JSONCPP_JSON_TOOL_H_INCLUDED
 
-/* This header provides common string manipulation support, such as UTF-8,
- * portable conversion from/to string...
+/* This header provides common std::string manipulation support, such as UTF-8,
+ * portable conversion from/to std::string...
  *
  * It is an internal header that must not be exposed.
  */
@@ -141,9 +141,9 @@ enum {
 // Defines a char buffer for use with uintToString().
 typedef char UIntToStringBuffer[uintToStringBufferSize];
 
-/** Converts an unsigned integer to string.
- * @param value Unsigned interger to convert to string
- * @param current Input/Output string buffer.
+/** Converts an unsigned integer to std::string.
+ * @param value Unsigned interger to convert to std::string
+ * @param current Input/Output std::string buffer.
  *        Must have at least uintToStringBufferSize chars free.
  */
 static inline void uintToString(LargestUInt value, char*& current) {
@@ -835,7 +835,7 @@ bool Reader::decodeString(Token& token, JSONCPP_STRING& decoded) {
       break;
     else if (c == '\\') {
       if (current == end)
-        return addError("Empty escape sequence in string", token, current);
+        return addError("Empty escape sequence in std::string", token, current);
       Char escape = *current++;
       switch (escape) {
       case '"':
@@ -869,7 +869,7 @@ bool Reader::decodeString(Token& token, JSONCPP_STRING& decoded) {
         decoded += codePointToUTF8(unicode);
       } break;
       default:
-        return addError("Bad escape sequence in string", token, current);
+        return addError("Bad escape sequence in std::string", token, current);
       }
     } else {
       decoded += c;
@@ -913,7 +913,7 @@ bool Reader::decodeUnicodeEscapeSequence(Token& token,
                                          unsigned int& ret_unicode) {
   if (end - current < 4)
     return addError(
-        "Bad unicode escape sequence in string: four digits expected.",
+        "Bad unicode escape sequence in std::string: four digits expected.",
         token,
         current);
   int unicode = 0;
@@ -928,7 +928,7 @@ bool Reader::decodeUnicodeEscapeSequence(Token& token,
       unicode += c - 'A' + 10;
     else
       return addError(
-          "Bad unicode escape sequence in string: hexadecimal digit expected.",
+          "Bad unicode escape sequence in std::string: hexadecimal digit expected.",
           token,
           current);
   }
@@ -1795,7 +1795,7 @@ bool OurReader::decodeDouble(Token& token, Value& decoded) {
   }
   size_t const ulength = static_cast<size_t>(length);
 
-  // Avoid using a string constant for the format control string given to
+  // Avoid using a std::string constant for the format control std::string given to
   // sscanf, as this can cause hard to debug crashes on OS X. See here for more
   // info:
   //
@@ -1841,7 +1841,7 @@ bool OurReader::decodeString(Token& token, JSONCPP_STRING& decoded) {
       break;
     else if (c == '\\') {
       if (current == end)
-        return addError("Empty escape sequence in string", token, current);
+        return addError("Empty escape sequence in std::string", token, current);
       Char escape = *current++;
       switch (escape) {
       case '"':
@@ -1875,7 +1875,7 @@ bool OurReader::decodeString(Token& token, JSONCPP_STRING& decoded) {
         decoded += codePointToUTF8(unicode);
       } break;
       default:
-        return addError("Bad escape sequence in string", token, current);
+        return addError("Bad escape sequence in std::string", token, current);
       }
     } else {
       decoded += c;
@@ -1919,7 +1919,7 @@ bool OurReader::decodeUnicodeEscapeSequence(Token& token,
                                          unsigned int& ret_unicode) {
   if (end - current < 4)
     return addError(
-        "Bad unicode escape sequence in string: four digits expected.",
+        "Bad unicode escape sequence in std::string: four digits expected.",
         token,
         current);
   int unicode = 0;
@@ -1934,7 +1934,7 @@ bool OurReader::decodeUnicodeEscapeSequence(Token& token,
       unicode += c - 'A' + 10;
     else
       return addError(
-          "Bad unicode escape sequence in string: hexadecimal digit expected.",
+          "Bad unicode escape sequence in std::string: hexadecimal digit expected.",
           token,
           current);
   }
@@ -2495,12 +2495,12 @@ static inline bool InRange(double d, T min, U max) {
 }
 #endif // if !defined(JSON_USE_INT64_DOUBLE_CONVERSION)
 
-/** Duplicates the specified string value.
- * @param value Pointer to the string to duplicate. Must be zero-terminated if
+/** Duplicates the specified std::string value.
+ * @param value Pointer to the std::string to duplicate. Must be zero-terminated if
  *              length is "unknown".
  * @param length Length of the value. if equals to unknown, then it will be
  *               computed using strlen(value).
- * @return Pointer on the duplicate instance of string.
+ * @return Pointer on the duplicate instance of std::string.
  */
 static inline char* duplicateStringValue(const char* value,
                                          size_t length)
@@ -2514,7 +2514,7 @@ static inline char* duplicateStringValue(const char* value,
   if (newString == NULL) {
     throwRuntimeError(
         "in Json::Value::duplicateStringValue(): "
-        "Failed to allocate string value buffer");
+        "Failed to allocate std::string value buffer");
   }
   memcpy(newString, value, length);
   newString[length] = 0;
@@ -2537,7 +2537,7 @@ static inline char* duplicateAndPrefixStringValue(
   if (newString == 0) {
     throwRuntimeError(
         "in Json::Value::duplicateAndPrefixStringValue(): "
-        "Failed to allocate string value buffer");
+        "Failed to allocate std::string value buffer");
   }
   *reinterpret_cast<unsigned*>(newString) = length;
   memcpy(newString + sizeof(unsigned), value, length);
@@ -2556,7 +2556,7 @@ inline static void decodePrefixedString(
     *value = prefixed + sizeof(unsigned);
   }
 }
-/** Free the string duplicated by duplicateStringValue()/duplicateAndPrefixStringValue().
+/** Free the std::string duplicated by duplicateStringValue()/duplicateAndPrefixStringValue().
  */
 #if JSONCPP_USING_SECURE_MEMORY
 static inline void releasePrefixedStringValue(char* value) {
@@ -2659,8 +2659,8 @@ void Value::CommentInfo::setComment(const char* text, size_t len) {
 // //////////////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////////////
 
-// Notes: policy_ indicates if the string was allocated when
-// a string is stored.
+// Notes: policy_ indicates if the std::string was allocated when
+// a std::string is stored.
 
 Value::CZString::CZString(ArrayIndex aindex) : cstr_(0), index_(aindex) {}
 
@@ -3098,7 +3098,7 @@ JSONCPP_STRING Value::asString() const {
   case realValue:
     return valueToString(value_.real_);
   default:
-    JSON_FAIL_MESSAGE("Type is not convertible to string");
+    JSON_FAIL_MESSAGE("Type is not convertible to std::string");
   }
 }
 
@@ -4783,7 +4783,7 @@ void StyledStreamWriter::pushValue(const JSONCPP_STRING& value) {
 }
 
 void StyledStreamWriter::writeIndent() {
-  // blep intended this to look at the so-far-written string
+  // blep intended this to look at the so-far-written std::string
   // to determine whether we are already indented, but
   // with a stream we cannot do that. So we rely on some saved state.
   // The caller checks indented_.
@@ -5066,7 +5066,7 @@ void BuiltStyledStreamWriter::pushValue(JSONCPP_STRING const& value) {
 }
 
 void BuiltStyledStreamWriter::writeIndent() {
-  // blep intended this to look at the so-far-written string
+  // blep intended this to look at the so-far-written std::string
   // to determine whether we are already indented, but
   // with a stream we cannot do that. So we rely on some saved state.
   // The caller checks indented_.

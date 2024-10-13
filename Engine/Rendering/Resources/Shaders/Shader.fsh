@@ -1,15 +1,7 @@
-//
-//  Shader.fsh
-//  Wofl
-//
-//  Created by Josh on 2/4/13.
-//  Copyright (c) 2013 Josh. All rights reserved.
-//
-
-varying lowp vec2 UVVarying;
+varying vec2 UVVarying;
 
 uniform sampler2D SpriteTexture;
-uniform lowp vec4 Color;
+uniform vec4 Color;
 
 void main()
 {

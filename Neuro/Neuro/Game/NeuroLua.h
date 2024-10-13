@@ -76,12 +76,12 @@ public:
 	void SetGlobal(const char* GlobalName, int Value);
 	void SetGlobal(const char* GlobalName, const char* Value);
 
-	bool GetString(const string& Code, string& Result);
-	bool GetBool(const string& Code, bool& Result);
+	bool GetString(const std::string& Code, std::string& Result);
+	bool GetBool(const std::string& Code, bool& Result);
 	
 
 	bool RunCode(const string& Code);
-//	bool CallFunction(const char* ObjectName, LuaRef FunctionRef);
+//	bool CallFunction(const char* ObjectName, LuaRef* FunctionRef);
 //	bool CallFunction_ReturnOnStack(const char* ObjectName, const char* FunctionName);
 //	bool CallFunction_ReturnOnStack(const char* ObjectName, const char* FunctionName, const char* Param);
 //	bool CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef FunctionRef);
@@ -90,8 +90,8 @@ public:
 
 //	bool GetIntValue(const char* Object, const char* Name, int& Result) const;
 	void SetIntValue(const char* Object, const char* Name, int Value) const;
-//	bool GetStringValue(const char* Object, const char* Name, string& Result) const;
-	void SetStringValue(const char* Object, const char* Name, const string& Value) const;
+//	bool GetStringValue(const char* Object, const char* Name, std::string& Result) const;
+	void SetStringValue(const char* Object, const char* Name, const std::string& Value) const;
 	
 	
 	template<typename TableSpec>
@@ -101,7 +101,7 @@ public:
 	bool GetBoolValue(TableSpec Table, const char* Name, bool& Result) const;
 
 	template<typename TableSpec>
-	bool GetStringValue(TableSpec Table, const char* Name, string& Result) const;
+	bool GetStringValue(TableSpec Table, const char* Name, std::string& Result) const;
 
 	template<typename TableSpec>
 	bool GetTableValue(TableSpec Table, const char* Name, LuaRef& Result) const;
@@ -110,13 +110,13 @@ public:
 	bool GetFunctionValue(TableSpec Table, const char* Name, LuaRef& Result) const;
 
 	template<typename TableSpec>
-	bool GetIntValues(TableSpec Table, const char* Name, vector<int>& Result) const;
+	bool GetIntValues(TableSpec Table, const char* Name, std::vector<int>& Result) const;
 
 	template<typename TableSpec>
-	bool GetStringValues(TableSpec Table, const char* Name, vector<string>& Result) const;
+	bool GetStringValues(TableSpec Table, const char* Name, std::vector<std::string>& Result) const;
 
 	template<typename TableSpec>
-	bool GetTableValues(TableSpec Table, const char* Name, vector<LuaRef>& Result) const;
+	bool GetTableValues(TableSpec Table, const char* Name, std::vector<LuaRef>& Result) const;
 
 
 
@@ -140,10 +140,10 @@ public:
 
 
 private:
-	friend class LuaScope;
+	friend struct LuaScope;
 	friend class LuaObjRef;
 	mutable lua_State* L;
-	set<string> SystemVariables;
+	set<std::string> SystemVariables;
 };
 
 
@@ -162,7 +162,7 @@ int PushParam(lua_State* L, const char* Param);
 
 bool GetReturn(lua_State* L, LuaRef& Param);
 bool GetReturn(lua_State* L, int& Param);
-bool GetReturn(lua_State* L, string& Param);
+bool GetReturn(lua_State* L, std::string& Param);
 
 
 void dumpstack (lua_State *L);
@@ -227,7 +227,7 @@ bool Lua::GetBoolValue(TableSpec Table, const char* Name, bool& Result) const
 }
 
 template<typename TableSpec>
-bool Lua::GetStringValue(TableSpec Table, const char* Name, string& Result) const
+bool Lua::GetStringValue(TableSpec Table, const char* Name, std::string& Result) const
 {
 	GET_TABLE_VALUE_PREAMBLE(lua_isstring, "")
 
@@ -256,7 +256,7 @@ bool Lua::GetFunctionValue(TableSpec Table, const char* Name, LuaRef& Result) co
 }
 
 template<typename TableSpec>
-bool Lua::GetIntValues(TableSpec Table, const char* Name, vector<int>& Result) const
+bool Lua::GetIntValues(TableSpec Table, const char* Name, std::vector<int>& Result) const
 {
 	GET_TABLE_VALUE_PREAMBLE(lua_istable, {})
 
@@ -274,7 +274,7 @@ bool Lua::GetIntValues(TableSpec Table, const char* Name, vector<int>& Result) c
 }
 
 template<typename TableSpec>
-bool Lua::GetStringValues(TableSpec Table, const char* Name, vector<string>& Result) const
+bool Lua::GetStringValues(TableSpec Table, const char* Name, std::vector<std::string>& Result) const
 {
 	GET_TABLE_VALUE_PREAMBLE(lua_istable, {})
 
@@ -292,7 +292,7 @@ bool Lua::GetStringValues(TableSpec Table, const char* Name, vector<string>& Res
 }
 
 template<typename TableSpec>
-bool Lua::GetTableValues(TableSpec Table, const char* Name, vector<LuaRef>& Result) const
+bool Lua::GetTableValues(TableSpec Table, const char* Name, std::vector<LuaRef>& Result) const
 {
 	SCOPE;
 

@@ -31,7 +31,7 @@ Textbox::Textbox(const char* BackgroundImage, float X, float Y, float SizeX, flo
 	TextColor = Color;
 }
 
-void Textbox::SetText(const string& InText)
+void Textbox::SetText(const std::string& InText)
 {
 	if (InText == "")
 	{
@@ -76,7 +76,7 @@ void Textbox::UpdateLines()
 	while (true)
 	{
 		int NewlineIndex = (int)FullText.find('\n', Travel);
-		if (NewlineIndex != string::npos)
+		if (NewlineIndex != std::string::npos)
 		{
 			Vector StrSize = WoflRenderer::Renderer->GetStringSize(FullText.substr(LineStart, NewlineIndex - LineStart).c_str());
 			if (StrSize.X <= GetSize().X)
@@ -89,7 +89,7 @@ void Textbox::UpdateLines()
 				
 		int SpaceIndex = (int)FullText.find(' ', Travel);
 		bool bIsLastWord = false;
-		if (SpaceIndex == string::npos)
+		if (SpaceIndex == std::string::npos)
 		{
 			SpaceIndex = (int)FullText.length() + 1;
 			bIsLastWord = true;

@@ -16,7 +16,7 @@
 #elif ANDROID
 #include "Android/AndroidGLSetup.h"
 #else
-#error New platforms here. Hah!
+//#error New platforms here. Hah!
 #endif
 
 //#include "WoflMath.h"
@@ -29,6 +29,11 @@ public:
 	WoflRenderer();
 	virtual ~WoflRenderer()
 	{
+	}
+
+	virtual void InitializeAfterWindowCreate(void* Window, unsigned int Width, unsigned int Height)
+	{
+
 	}
 	
 	virtual void BeginFrame() = 0;

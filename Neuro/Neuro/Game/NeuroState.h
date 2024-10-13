@@ -80,31 +80,31 @@ public:
 		
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) = 0;
 	virtual void GridboxClosed() = 0;
-	virtual void SetIntValue(const string& Name, int Value) = 0;
-//	virtual void SendMessage(const string& Recipient, const string& Message) = 0;
-	virtual bool ConnectToSite(const string& Recipient, int ComLinkLevel) = 0;
+	virtual void SetIntValue(const std::string& Name, int Value) = 0;
+//	virtual void SendMessage(const std::string& Recipient, const std::string& Message) = 0;
+	virtual bool ConnectToSite(const std::string& Recipient, int ComLinkLevel) = 0;
 };
 
 class ITextboxDelegate : public IInterfaceChangingStateDelegate
 {
 public:
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override { assert(0); }
-	virtual void SetIntValue(const string& Name, int Value) override  { assert(0); }
+	virtual void SetIntValue(const std::string& Name, int Value) override  { assert(0); }
 	virtual void GridboxClosed() override  { assert(0); }
-//	virtual void SendMessage(const string& Recipient, const string& Message) override  { assert(0); }
-	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel) override  {assert(0); }
+//	virtual void SendMessage(const std::string& Recipient, const std::string& Message) override  { assert(0); }
+	virtual bool ConnectToSite(const std::string& SiteName, int ComLinkLevel) override { assert(0); return false; }
 };
 
 class IQueryStateDelegate
 {
 public:
-	virtual	vector<int> GetInventory() const = 0;
+	virtual	std::vector<int> GetInventory() const = 0;
 	virtual int GetMoney() const = 0;
-	virtual int GetIntValue(const string& Name) const = 0;
-	virtual string GetStringValue(const string& Name) const = 0;
-	virtual LuaRef GetTableValue(const string& Name) const = 0;
-	virtual const vector<int>& GetUnlockedNewsItems() const = 0;
-//	virtual vector<Message*> GetUnlockedMessages(string ID) = 0;
+	virtual int GetIntValue(const std::string& Name) const = 0;
+	virtual std::string GetStringValue(const std::string& Name) const = 0;
+	virtual LuaRef* GetTableValue(const std::string& Name) const = 0;
+	virtual const std::vector<int>& GetUnlockedNewsItems() const = 0;
+//	virtual std::vector<Message*> GetUnlockedMessages(std::string ID) = 0;
 
 };
 
@@ -113,8 +113,8 @@ class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, publ
 public:
 	LuaRef CurrentRoom;
 	
-//	map<string, int> IntValues;
-//	map<string, string> Variables;
+//	map<std::string, int> IntValues;
+//	map<std::string, std::string> Variables;
 	
 	NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate);
 	virtual ~NeuroState() { }
@@ -128,21 +128,21 @@ public:
 	virtual void MessageComplete() override;
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override;
 	virtual void GridboxClosed() override;
-//	virtual void SendMessage(const string& Recipient, const string& Message) override;
-	virtual bool ConnectToSite(const string& SiteName, int ComLinkLevel) override;
+//	virtual void SendMessage(const std::string& Recipient, const std::string& Message) override;
+	virtual bool ConnectToSite(const std::string& SiteName, int ComLinkLevel) override;
 
 	
 	// IQueryStateDelegate
-	virtual vector<int> GetInventory() const override;
+	virtual std::vector<int> GetInventory() const override;
 	virtual int GetMoney() const override
 	{
 		return GetIntValue("money");
 	}
-	virtual const vector<int>& GetUnlockedNewsItems() const override
+	virtual const std::vector<int>& GetUnlockedNewsItems() const override
 	{
 		return UnlockedMessages.at("news");
 	}
-//	virtual vector<Message*> GetUnlockedMessages(string ID) override;
+//	virtual std::vector<Message*> GetUnlockedMessages(std::string ID) override;
 
 
 	
@@ -155,21 +155,21 @@ public:
 	// returns -1 if not existant
 	int GetIntValue(const char* Key) const
 	{
-		return GetIntValue(string(Key));
+		return GetIntValue(std::string(Key));
 	}
-	virtual int GetIntValue(const string&  Key) const override;
-	virtual void SetIntValue(const string& Key, int Value) override;
-	void IncrementIntValue(const string& Key);
-	virtual string GetStringValue(const string&  Key) const override;
-	void SetStringValue(const string& Key, const string& Value);
-	virtual LuaRef GetTableValue(const string& Key) const override;
+	virtual int GetIntValue(const std::string&  Key) const override;
+	virtual void SetIntValue(const std::string& Key, int Value) override;
+	void IncrementIntValue(const std::string& Key);
+	virtual std::string GetStringValue(const std::string&  Key) const override;
+	void SetStringValue(const std::string& Key, const std::string& Value);
+	virtual LuaRef GetTableValue(const std::string& Key) const override;
 
-	void Trigger(const string& Type, const string& Value);
+	void Trigger(const std::string& Type, const std::string& Value);
 		
-	void StringReplacement(string& String, char Delimiter) const;
+	void StringReplacement(std::string& String, char Delimiter) const;
 	
-	string GetCurrentDialogLine();
-	string GetCurrentMessage();
+	std::string GetCurrentDialogLine();
+	std::string GetCurrentMessage();
 
 	void ClickInventory();
 	void ClickPAX();
@@ -185,7 +185,7 @@ public:
 	bool IsShowingSystem() { return CurrentState == State::InSystem; }
 	bool IsShowingSite() { return CurrentState == State::InSite; }
 
-	bool TestCondition(const string& Condition, bool bEmptyConditionIsSuccess, const string* Action=nullptr, const string* Value=nullptr);
+	bool TestCondition(const std::string& Condition, bool bEmptyConditionIsSuccess, const std::string* Action=nullptr, const std::string* Value=nullptr);
 
 private:
 	
@@ -200,16 +200,16 @@ private:
 	
 	Conversation* FindConversationWithTag(const char* Tag);
 	Conversation* FindActiveConversation();
-	Conversation* FindConversationForAction(const string& Action, const string& Value);
+	Conversation* FindConversationForAction(const std::string& Action, const std::string& Value);
 
-	void UpdateVariablesFromString(const string& Command);
-	bool CheckVariablesFromString(const string& Query);
+	void UpdateVariablesFromString(const std::string& Command);
+	bool CheckVariablesFromString(const std::string& Query);
 
 //	const Item* GetItemForID(int ID);
 
 //	int Money;
-//	vector<int> Inventory;
-	map<string, vector<int>> UnlockedMessages;
+//	std::vector<int> Inventory;
+	map<std::string, std::vector<int>> UnlockedMessages;
 
 	NeuroConfig* Config;
 	IStateChangedDelegate* StateDelegate;
@@ -226,7 +226,7 @@ private:
 	LuaRef Lua_OnMessageComplete;
 
 	Conversation* PendingConversation;
-	string PendingMessage;
+	std::string PendingMessage;
 
 	ZoneType PendingInvalidation;
 	

@@ -22,17 +22,17 @@ public:
 	
 	}
 	
-	virtual string GetResourcePath(const char* Filename) override
+	virtual std::string GetResourcePath(const char* Filename) override
 	{
-		return string("/mnt/sdcard/") + WoflGame::TheGame->GetGameName() + "/" + Filename;
+		return std::string("/mnt/sdcard/") + WoflGame::TheGame->GetGameName() + "/" + Filename;
 	}
 
-	virtual string GetSavePath(const char* Filename) override
+	virtual std::string GetSavePath(const char* Filename) override
 	{
-		return string("/mnt/sdcard/") + WoflGame::TheGame->GetGameName() + "/save/" + Filename;
+		return std::string("/mnt/sdcard/") + WoflGame::TheGame->GetGameName() + "/save/" + Filename;
 	}
 
-	virtual string LoadFileToString(const char* Path) override
+	virtual std::string LoadFileToString(const char* Path) override
 	{
 		FILE* File = fopen(Path, "r");
 		if (File == NULL)
@@ -47,24 +47,24 @@ public:
 		Buffer[FileSize] = 0;
 		fread(Buffer, FileSize, 1, File);
 		fclose(File);
-		string Contents = Buffer;
+		std::string Contents = Buffer;
 		free(Buffer);
 		return Contents;
 	}
 
-	virtual vector<unsigned char> LoadFileToArray(const char* Path) override
+	virtual std::vector<unsigned char> LoadFileToArray(const char* Path) override
 	{
 		FILE* File = fopen(Path, "rb");
 		if (File == NULL)
 		{
 			WLOG("Failed to load %s\n", Path);
-			return vector<unsigned char>();
+			return std::vector<unsigned char>();
 		}
 		fseek(File, 0, SEEK_END);
 		size_t FileSize = ftell(File);
 		fseek(File, 0, SEEK_SET);
 
-		vector<unsigned char> Buffer;
+		std::vector<unsigned char> Buffer;
 		Buffer.reserve(FileSize);
 		fread(&Buffer[0], FileSize, 1, File);
 		fclose(File);
@@ -75,9 +75,9 @@ public:
 	virtual void* LoadPNGToAllocatedBuffer(const char* ImageName, unsigned int& Width, unsigned int& Height) override
 	{
 		// load PNG file into buffer
-		string Filename = string(ImageName) + ".png";
+		std::string Filename = std::string(ImageName) + ".png";
 		Filename = GetResourcePath(Filename.c_str());
-		vector<unsigned char> Buffer = LoadFileToArray(Filename.c_str());
+		std::vector<unsigned char> Buffer = LoadFileToArray(Filename.c_str());
 
 		Width = 64;
 		Height = 64;
@@ -108,7 +108,7 @@ public:
 		return NULL;
 	}
 
-	virtual bool SaveStringToFile(const string& String, const char* Path) override
+	virtual bool SaveStringToFile(const std::string& String, const char* Path) override
 	{
 		FILE* File = fopen(Path, "w");
 		if (File == NULL)
@@ -123,7 +123,7 @@ public:
 		return true;
 	}
 
-	virtual bool SaveArrayToFile(const vector<unsigned char>& Array, const char* Path) override
+	virtual bool SaveArrayToFile(const std::vector<unsigned char>& Array, const char* Path) override
 	{
 		FILE* File = fopen(Path, "w");
 		if (File == NULL)

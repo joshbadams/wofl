@@ -13,27 +13,27 @@
 class WoflImage
 {
 public:
-	uint Texture;
+	unsigned int Texture;
 	float UVScaleBias[4];
 	
-	WoflImage(const string& TextureName, float U, float V, float SizeX, float SizeY);
-	WoflImage(const string& AtlasTextureName);
+	WoflImage(const std::string& TextureName, float U, float V, float SizeX, float SizeY);
+	WoflImage(const std::string& AtlasTextureName);
 
 	void TileImage(float InTileX, float InTileY);
 	
-string _Name;
+std::string _Name;
 protected:
 
 	float TileX, TileY;
 	
-	void Initialize(const string& TextureName, float U, float V, float SizeX, float SizeY);
+	void Initialize(const std::string& TextureName, float U, float V, float SizeX, float SizeY);
 	
 	// tracks all loaded textures so we don't reload images
 	struct Info
 	{
-		uint Texture;
-		uint Width, Height;
+		unsigned int Texture;
+		unsigned int Width, Height;
 	};
-	static map<string, WoflImage::Info> LoadedTextures;
+	static std::map<std::string, WoflImage::Info> LoadedTextures;
 };
 

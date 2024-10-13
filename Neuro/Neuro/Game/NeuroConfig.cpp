@@ -15,10 +15,10 @@ void NeuroConfigObj::FromLua(class Lua& L, LuaRef Object)
 	
 }
 
-string NeuroConfigObj::PostProcessString(const string& String)
+std::string NeuroConfigObj::PostProcessString(const std::string& String)
 {
 	const NeuroState& State = ((NeuroGame*)WoflGame::TheGame)->State;
-	string NewString = String;
+	std::string NewString = String;
 	State.StringReplacement(NewString, '%');
 	return NewString;
 }
@@ -108,7 +108,7 @@ void Conversation::FromLua(class Lua& L, LuaRef Object)
 	L.GetStringValues(Object, "lines", Lines);
 
 	// get option objects
-	vector<LuaRef> OptionRefs;
+	std::vector<LuaRef> OptionRefs;
 	L.GetTableValues(Object, "options", OptionRefs);
 	for (LuaRef OptionRef : OptionRefs)
 	{

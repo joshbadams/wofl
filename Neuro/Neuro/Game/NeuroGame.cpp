@@ -9,8 +9,6 @@
 #include "Textbox.h"
 #include "Ninebox.h"
 #include "Gridbox.h"
-#include "Boxes\InvBox.h"
-#include "Boxes\SiteBox.h"
 #include "NeuroConfig.h"
 #include "NeuroScene.h"
 
@@ -40,13 +38,10 @@ NeuroGame::NeuroGame()
 	
 	DialogBox = new Ninebox(Ninebox::Basic, 0, 0, ScreenSprite->GetSize().X, 150, Tag_Dialog);
 	
-	Inventory = new InvBox(150, 480, 500, 280);
+	Inventory = new Gridbox(150, 480, 500, 280, 0);
 	Inventory->SetDelegates(&State, &State);
-	
-//	PAX = new PAXBox(100, 40, 1000, 424);
-//	PAX->SetDelegates(&State, &State);
-	
-	WebSite = new SiteBox(100, 40, 1000, 600);
+		
+	WebSite = new Gridbox(100, 40, 1000, 600, 0);
 	WebSite->SetDelegates(&State, &State);
 	
 	int Top = 580;
@@ -138,4 +133,10 @@ void NeuroGame::Invalidate(ZoneType Zone)
 			Background->AddChild(WebSite);
 		}
 	}
+}
+
+void NeuroGame::CloseBoxWithObj(LuaRef BoxObj)
+{
+	
+	assert(0);
 }

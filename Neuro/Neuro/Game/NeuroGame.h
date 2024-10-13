@@ -29,6 +29,8 @@ public:
 
 	virtual void Invalidate(ZoneType Zone) override;
 
+	virtual void CloseBoxWithObj(LuaRef BoxObj) override;
+
 private:
 	
 	NeuroConfig Config;
@@ -39,8 +41,8 @@ private:
 	WoflSprite* Background;
 	class Textbox* MessageBox;
 	class Ninebox* DialogBox;
-	class InvBox* Inventory;
-	class SiteBox* WebSite;
+	class Gridbox* Inventory;
+	class Gridbox* WebSite;
 
 	void LoadConfig();
 

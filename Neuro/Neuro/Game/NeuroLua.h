@@ -81,7 +81,7 @@ public:
 	
 
 	bool RunCode(const string& Code);
-//	bool CallFunction(const char* ObjectName, LuaRef* FunctionRef);
+//	bool CallFunction(const char* ObjectName, LuaRef FunctionRef);
 //	bool CallFunction_ReturnOnStack(const char* ObjectName, const char* FunctionName);
 //	bool CallFunction_ReturnOnStack(const char* ObjectName, const char* FunctionName, const char* Param);
 //	bool CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef FunctionRef);

@@ -79,7 +79,7 @@ public:
 	//	virtual void DialogChosen() = 0;
 		
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) = 0;
-	virtual void GridboxClosed() = 0;
+	virtual void GridboxClosed(LuaRef Box) = 0;
 	virtual void SetIntValue(const std::string& Name, int Value) = 0;
 //	virtual void SendMessage(const std::string& Recipient, const std::string& Message) = 0;
 	virtual bool ConnectToSite(const std::string& Recipient, int ComLinkLevel) = 0;
@@ -90,7 +90,7 @@ class ITextboxDelegate : public IInterfaceChangingStateDelegate
 public:
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override { assert(0); }
 	virtual void SetIntValue(const std::string& Name, int Value) override  { assert(0); }
-	virtual void GridboxClosed() override  { assert(0); }
+	virtual void GridboxClosed(LuaRef Box) override  { assert(0); }
 //	virtual void SendMessage(const std::string& Recipient, const std::string& Message) override  { assert(0); }
 	virtual bool ConnectToSite(const std::string& SiteName, int ComLinkLevel) override { assert(0); return false; }
 };
@@ -102,7 +102,7 @@ public:
 	virtual int GetMoney() const = 0;
 	virtual int GetIntValue(const std::string& Name) const = 0;
 	virtual std::string GetStringValue(const std::string& Name) const = 0;
-	virtual LuaRef* GetTableValue(const std::string& Name) const = 0;
+	virtual LuaRef GetTableValue(const std::string& Name) const = 0;
 	virtual const std::vector<int>& GetUnlockedNewsItems() const = 0;
 //	virtual std::vector<Message*> GetUnlockedMessages(std::string ID) = 0;
 
@@ -127,7 +127,7 @@ public:
 	// IInterfaceChangingStateDelegate
 	virtual void MessageComplete() override;
 	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override;
-	virtual void GridboxClosed() override;
+	virtual void GridboxClosed(LuaRef Box) override;
 //	virtual void SendMessage(const std::string& Recipient, const std::string& Message) override;
 	virtual bool ConnectToSite(const std::string& SiteName, int ComLinkLevel) override;
 

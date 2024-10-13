@@ -8,6 +8,13 @@
 #include "NeuroState.h"
 
 
+// TODO:
+// make s. globals for save/load
+// open multiple boxes
+// state machine stuff to have pending stuff, and not the same states like is there
+
+
+
 
 NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate)
 	: CurrentConversation(nullptr)
@@ -23,12 +30,13 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 
 	Config->FromLua(Lua, Lua.GetGlobalTable());
 
-	Lua.LoadScript("PAX.lua");
-	Lua.LoadScript("Cheapo.lua");
-	Lua.LoadScript("IRS.lua");
 	for (string& R : Config->RoomNames)
 	{
 		Lua.LoadScript((R + ".lua").c_str());
+	}
+	for (string& S : Config->SiteNames)
+	{
+		Lua.LoadScript((S + ".lua").c_str());
 	}
 
 	// loaded values here will override init values in tha
@@ -218,27 +226,6 @@ void NeuroState::ClickInventory()
 	}
 }
 
-template<typename T>
-void CheckMessagesForActivation(NeuroState* State, std::vector<T*>& Items, std::vector<int>& UnlockedItems)
-{
-	int CurrentData = 111758;
-
-	for (int Index = 0; Index < (int)Items.size(); Index++)
-	{
-		T* Item = Items[Index];
-		if (CurrentData >= Item->Date)
-		{
-			if (std::find(UnlockedItems.begin(), UnlockedItems.end(), Index) == UnlockedItems.end())
-			{
-				if (State->TestCondition(Item->Condition, true))
-				{
-					UnlockedItems.push_back(Index);
-				}
-			}
-		}
-	}
-}
-
 void NeuroState::ClickPAX()
 {
 	if (CurrentState == State::Idle)
@@ -288,9 +275,9 @@ void NeuroState::ActivateRoom(LuaRef OldRoom, LuaRef NewRoom)
 		
 	PendingInvalidation = ZoneType::Room;
 
-	string FirstVisitKey = string("__") + CurrentRoom->ID;
-	bool bFirstEnter = GetIntValue(FirstVisitKey.c_str()) != 1;
-	SetIntValue(FirstVisitKey, 1);
+//	string FirstVisitKey = string("__") + CurrentRoom->ID;
+//	bool bFirstEnter = GetIntValue(FirstVisitKey.c_str()) != 1;
+//	SetIntValue(FirstVisitKey, 1);
 	
 	if (OldRoom)
 	{
@@ -419,114 +406,10 @@ void NeuroState::MessageComplete()
 	PendingMessage = "";
 }
 
-//void NeuroState::CycleDialog()
-//{
-//	assert(CurrentState == State::InDialog);
-//}
-//
-//void NeuroState::ChooseDialog()
-//{
-//	assert(CurrentState == State::InDialog);
-//
-//}
-
-void NeuroState::InventoryUsed(int Index, InvAction Action, int Modifier)
-{
-	PendingInvalidation |= ZoneType::Inventory;
-	CurrentState = State::Idle;
-	
-	if (Action == InvAction::Cancel)
-	{
-		return;
-	}
-	
-	if (Action == InvAction::Give || Action == InvAction::Use)
-	{
-		if (Index == 0)
-		{
-			Lua.CallFunction_NoReturn(CurrentRoom, "GiveMoney", Modifier);
-		}
-//		else
-//		{
-//			char ValueStr[20];
-//			snprintf(ValueStr, 20, "id_%d", Inventory[Index]);
-//
-//			
-//			Lua.CallFunction_OneParam_NoReturn(CurrentRoom, Action == InvAction::Give ? "GiveItem" : "UseItem", ValueStr);
-//		}
-		
-		// can only give money, not use it
-		if (Index == 0)
-		{
-//			Lua.SetGlobal("action", "give");
-//			Lua.SetGlobal("type", "money");
-//			Lua.SetGlobal("amount", Modifier);
-//
-////			snprintf(ValueStr, 20, "$%d", Modifier);
-//
-//			SetIntValue("money", GetIntValue("money") - Modifier);
-		}
-		else
-		{
-			char ValueStr[20];
-			snprintf(ValueStr, 20, "id_%d", GetInventory()[Index]);
-
-			if (Modifier == 0) Modifier = 1;
-			
-			Lua.SetGlobal("action", Action == InvAction::Give ? "give" : "use");
-			Lua.SetGlobal("type", ValueStr);
-			Lua.SetGlobal("amount", Modifier);
-
-			// todo: check if someone wants it
-//			Inventory.erase(Inventory.begin() + Index);
-		}
-
-//		for (Conversation* Convo : CurrentRoom->Conversations)
-//		{
-//			if (Convo->Action.starts_with("lua:"))
-//			{
-//				bool bActivateConversation = false;
-//				// check condition, then run action, and if it returns true, then activate (we don't break, just in case other actions
-//				// want to do something
-//				if (TestCondition(Convo->Condition, true) &&
-//					Lua.GetBool(Convo->Action.substr(4), bActivateConversation) &&
-//					bActivateConversation)
-//				{
-//					ActivateConversation(Convo);
-//				}
-//			}
-//		}
-		
-//		Variables["receive"] = ValueStr;
-
-		// now find if someone cares
-//		Conversation* Convo = FindConversationForAction("receive", ValueStr);
-//		if (Convo != nullptr)
-//		{
-//			ActivateConversation(Convo);
-//		}
-	}
-	else if (Action == InvAction::Discard)
-	{
-		if (Index == 0)
-		{
-			int NewMoney = GetIntValue("money") - Modifier;
-			if (NewMoney < 0)
-			{
-				NewMoney = 0;
-			}
-			SetIntValue("money", NewMoney);
-		}
-		else
-		{
-//			Inventory.erase(Inventory.begin() + Index);
-		}
-	}
-}
 
 void NeuroState::GridboxClosed(LuaRef Box)
 {
-	StateDelegate->CloseBoxWithObj(Box);
+//	StateDelegate->CloseBoxWithObj(Box);
 	if (CurrentState == State::InInventory)
 	{
 		CurrentState = State::Idle;
@@ -539,18 +422,6 @@ void NeuroState::GridboxClosed(LuaRef Box)
 	}
 }
 
-//void NeuroState::SendMessage(const string& Recipient, const string& Message)
-//{
-//	if (Config->MailServer.contains(Recipient))
-//	{
-//		MailActions* MailActions = Config->MailServer[Recipient];
-//		if (MailActions->Actions.contains(Message))
-//		{
-//			UpdateVariablesFromString(MailActions->Actions[Message]);
-//		}
-//	}
-//}
-//
 bool NeuroState::ConnectToSite(const string& SiteName, int ComLinkLevel)
 {
 	std::string LocalSiteName = SiteName;

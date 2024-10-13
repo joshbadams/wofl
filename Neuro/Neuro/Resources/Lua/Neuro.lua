@@ -27,6 +27,7 @@ SiteScripts = {
 	"IRS",
 	"Cheapo",
 	"PAX",
+	"RegFellow",
 }
 
 

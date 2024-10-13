@@ -22,7 +22,7 @@ public:
 		WoflBundle = [NSBundle bundleForClass:NSClassFromString(@"WoflViewController")];
 	}
 	
-	virtual string GetResourcePath(const char* Filename) override
+	virtual std::string GetResourcePath(const char* Filename) override
 	{
 		NSString* FilenameStr = [NSString stringWithFormat:@"Resources/%s", Filename];
 		NSString* Path = [MainBundle
@@ -40,7 +40,7 @@ public:
 		return [Path UTF8String];
 	}
 	
-	virtual string GetSavePath(const char* Filename) override
+	virtual std::string GetSavePath(const char* Filename) override
 	{
 		// get doc dir location
 		NSArray* DocumentsDirs = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
@@ -50,7 +50,7 @@ public:
 		return [[DocDir URLByAppendingPathComponent:[NSString stringWithUTF8String:Filename]] fileSystemRepresentation];
 	}
 	
-	virtual string LoadFileToString(const char* Path) override
+	virtual std::string LoadFileToString(const char* Path) override
 	{
 		NSString* PathStr =[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
 		NSString* Contents = [NSString stringWithContentsOfFile:PathStr encoding:NSUTF8StringEncoding error:nil];
@@ -63,7 +63,7 @@ public:
 		return "";
 	}
 
-	virtual vector<unsigned char> LoadFileToArray(const char* Path) override
+	virtual std::vector<unsigned char> LoadFileToArray(const char* Path) override
 	{
 		NSString* PathStr =[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
 		NSMutableData* Contents = [NSMutableData dataWithContentsOfFile:PathStr];
@@ -71,7 +71,7 @@ public:
 		if (Contents && Contents.length > 0)
 		{
 			// make a vector with the contents
-			vector<unsigned char> Array;
+			std::vector<unsigned char> Array;
 			Array.resize(Contents.length);
 			
 			// empty now to free memory before the return copy of the vector
@@ -80,7 +80,7 @@ public:
 		}
 		
 		NSLog(@"Failed to load %@", PathStr);
-		return vector<unsigned char>();
+		return std::vector<unsigned char>();
 	}
 
 	
@@ -125,7 +125,7 @@ public:
 		return ImageData;
 	}
 	
-	virtual bool SaveStringToFile(const string& String, const char* Path) override
+	virtual bool SaveStringToFile(const std::string& String, const char* Path) override
 	{
 		NSString* PathStr =[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
 		NSString* Contents = [NSString stringWithCString:String.c_str() encoding:NSUTF8StringEncoding];
@@ -142,7 +142,7 @@ public:
 		return true;
 	}
 	
-	virtual bool SaveArrayToFile(const vector<unsigned char>& Array, const char* Path) override
+	virtual bool SaveArrayToFile(const std::vector<unsigned char>& Array, const char* Path) override
 	{
 		NSString* PathStr =[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
 		NSData* Contents = [NSData dataWithBytes:Array.data() length:Array.size()];

@@ -5,8 +5,7 @@
 //  Created by Josh Adams on 4/10/23.
 //
 
-#ifndef Textbox_hpp
-#define Textbox_hpp
+#pragma once
 
 #include <Wofl/Wofl.h>
 
@@ -48,5 +47,3 @@ protected:
 	
 	int LineHeight;
 };
-
-#endif /* Textbox_hpp */

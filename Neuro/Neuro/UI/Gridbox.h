@@ -54,9 +54,11 @@ public:
 protected:
 
 	virtual void OnGenericContinueInput() { }
-	virtual void OnClickEntry(GridEntry& Entry);
-	virtual void OnTextEntryComplete(const std::string& Text, const std::string& Tag) { }
+	virtual void OnTextEntryComplete(const std::string& Text, const std::string& Tag);
 	virtual void OnTextEntryCancelled(const std::string& Tag);
+	virtual void Update();
+	virtual void OnClickEntry(GridEntry& Entry);	
+	virtual void CloseMessages() {}
 
 
 	void SetupTextEntry(const GridEntry& Entry);
@@ -66,10 +68,6 @@ protected:
 	
 	void OnClickMessageEntry(GridEntry& Entry);
 
-	virtual void Update();
-	virtual void OnClickEntry(GridEntry& Entry);
-	
-	virtual void CloseMessages() {}
 
 	IQueryStateDelegate* QueryStateDelegate;
 	IInterfaceChangingStateDelegate* InterfaceChangingDelegate;

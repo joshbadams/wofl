@@ -40,7 +40,7 @@
 #define StringOrBool std::string
 
 class Lua;
-using LuaRef = shared_ptr<class LuaObjRef>;
+using LuaRef = std::shared_ptr<class LuaObjRef>;
 
 class NeuroConfigObj// : public LoadJsonObj
 {
@@ -197,7 +197,7 @@ public:
 //	map<string, MailActions*> MailServer;
 	std::map<std::string, std::string> Strings;
 
-	std::map<std::string, std::vector<Message*>> AllMessages;
+//	std::map<std::string, std::vector<Message*>> AllMessages;
 
 	NeuroConfig();
 //	void Initialize();

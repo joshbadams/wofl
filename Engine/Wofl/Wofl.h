@@ -23,7 +23,7 @@ FOUNDATION_EXPORT const unsigned char WoflVersionString[];
 #include "WoflStandardIncludes.h"
 #else
 
-@todo move to WoflFrameworkIncludes.h or something?
+// @todo move to WoflFrameworkIncludes.h or something?
 #define IOS 1
 
 #include <Wofl/WoflPrefix.h>

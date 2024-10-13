@@ -763,58 +763,6 @@ int NeuroState::Lua_ShowMessage(lua_State* L)
 //	return 0;
 }
 
-void NeuroState::UpdateVariablesFromString(const std::string& Commands)
-{
-	istringstream Stream(Commands);
-	
-	std::string Command;
-	while (getline(Stream, Command, '|'))
-	{
-		istringstream InnerStream(Command);
-		std::string Variable, Value;
-		getline(InnerStream, Variable, '=');
-		getline(InnerStream, Value, '=');
-		
-		StringReplacement(Variable, '@');
-		StringReplacement(Value, '@');
-	
-		WLOG("Setting variable from std::string: %s = %s\n", Variable.c_str(), Value.c_str());
-
-		if (Variable.starts_with('_'))
-		{
-			if (Variable == "_deposit")
-			{
-				int CurrentBank = GetIntValue("bankaccount");
-				int Change = stoi(Value);
-				CurrentBank += Change;
-				if (CurrentBank < 0)
-				{
-					CurrentBank = 0;
-				}
-				SetIntValue("bankaccount", CurrentBank);
-			}
-			else if (Variable == "_inventory")
-			{
-				if (Value[0] == '$')
-				{
-					SetIntValue("money", GetIntValue("money") + stoi(Value.substr(1)));
-				}
-			}
-			else if (Variable == "_trigger")
-			{
-				if (Value == "talk")
-				{
-					CurrentState = State::ActivateConversation;
-				}
-			}
-		}
-		else
-		{
-			SetIntValue(Variable, std::stoi(Value));
-		}
-	}
-}
-
 void NeuroState::StringReplacement(std::string& String, char Delimiter) const
 {
 	size_t FirstPercent = String.find(Delimiter);
@@ -841,31 +789,6 @@ void NeuroState::StringReplacement(std::string& String, char Delimiter) const
 		
 		FirstPercent = String.find(Delimiter, FirstPercent);
 	}
-}
-
-
-bool NeuroState::CheckVariablesFromString(const std::string& Query)
-{
-	if (Query == "")
-	{
-		return true;
-	}
-	
-	istringstream InnerStream(Query);
-	std::string Variable, Value;
-	getline(InnerStream, Variable, '=');
-	getline(InnerStream, Value, '=');
-		
-	return (GetIntValue(Variable) == std::stoi(Value));
-}
-
-
-
-std::vector<int> NeuroState::GetInventory() const
-{
-	std::vector<int> Inv;
-	Lua.GetIntValues("", "inventory", Inv);
-	return Inv;
 }
 
 //std::vector<Message*> NeuroState::GetUnlockedMessages(std::string ID)

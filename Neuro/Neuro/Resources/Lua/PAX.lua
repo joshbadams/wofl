@@ -1,3 +1,5 @@
+g.mail_armitage = 0
+
 
 PAX = Site:new {
 	hasPassword = false,
@@ -167,10 +169,10 @@ function PAX:GetBankEntries(entries)
 	
 	-- all bank pages have these items
 	table.append(entries, { x = 3, y = 0, text = "First Orbital Bank of Switzerland"})
-	table.append(entries, { x = 3, y = 2, text = string.format("name: %s", name) })
-	table.append(entries, { x = 3, y = 3, text = string.format("chip = %d", money) })
-	table.append(entries, { x = 24, y = 2, text = string.format("BAMA id: %d", bamaid) })
-	table.append(entries, { x = 24, y = 3, text = string.format("account: %s", bankaccount) })
+	table.append(entries, { x = 3, y = 2, text = string.format("name: %s", g.name) })
+	table.append(entries, { x = 3, y = 3, text = string.format("chip = %d", g.money) })
+	table.append(entries, { x = 24, y = 2, text = string.format("BAMA id: %d", g.bamaid) })
+	table.append(entries, { x = 24, y = 3, text = string.format("account: %s", g.bankaccount) })
 
 	if self.currentPage == "banking_deposit" or self.currentPage == "banking_withdrawal" then
 		table.append(entries, { x = 0, y = 5, text = "Enter amount : "})
@@ -216,24 +218,24 @@ function PAX:HandleClickedEntry(id)
 end
 
 function PAX:ProcessMessage()
-	if (mail_armitage ~= 1 and string.lower(self.recipient) == "armitage" and self.message == bamaid) then
-		mail_armitage = 1
-		bankaccount = bankaccount + 10000
+	if (g.mail_armitage ~= 1 and string.lower(self.recipient) == "armitage" and self.message == g.bamaid) then
+		g.mail_armitage = 1
+		g.bankaccount = g.bankaccount + 10000
 	end
 end
 
 function PAX:OnTextEntryComplete(text, tag)
 	amount = tonumber(text)
 
-	if tag == "banking_withdrawal" and amount <= bankaccount then
-		bankaccount = bankaccount - amount
-		money = money + amount
+	if tag == "banking_withdrawal" and amount <= g.bankaccount then
+		g.bankaccount = g.bankaccount - amount
+		g.money = g.money + amount
 		self:GoToPage("banking_menu")
 	end
 
 	if tag == "banking_deposit" and amount <= money then
-		bankaccount = bankaccount + amount
-		money = money - amount
+		g.bankaccount = g.bankaccount + amount
+		g.money = g.money - amount
 		self:GoToPage("banking_menu")
 	end
 

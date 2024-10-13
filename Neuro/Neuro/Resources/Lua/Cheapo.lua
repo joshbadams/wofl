@@ -140,8 +140,8 @@ function Cheapo:HandleClickedEntry(id)
 
 		if (id == 1) then
 			local owed = cheapo_charges - cheapo_account
-			if (owed > 0 and money >= owed) then
-				money = money - owed
+			if (owed > 0 and g.money >= owed) then
+				g.money = g.money - owed
 				cheapo_account = cheapo_charges
 			end
 		end

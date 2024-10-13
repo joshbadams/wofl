@@ -1,18 +1,19 @@
 -- Globals, these will all be saved
 
-money = 6
-inventory = {
-	0, -- cash
-	1, -- pawn ticket
-	100, -- UXB
+g = {
+	money = 6,
+	inventory = {
+		0, -- cash
+		1, -- pawn ticket
+		100, -- UXB
 
-	200, -- Comlink 1.0
+		200, -- Comlink 1.0
+	},
+	date = 111658,
+	bankaccount = 1941,
+	name = "Badams",
+	bamaid = "056306118",
 }
-date = 111658
-bankaccount = 1941
-name = "Badams"
-bamaid = "056306118"
-
 
 
 currentRoom = nil
@@ -121,7 +122,7 @@ function Room:OnExitRoom()
 end
 
 function Room:GiveMoney(amount)
-	money = money - amount
+	g.money = g.money - amount
 end
 
 function Room:GiveItem(item)
@@ -436,8 +437,8 @@ function Site:SelectStoreItem(id)
 
 	local puchasedVarName = string.format("purchased_%s", item.tag)
 
-	if (money >= item.cost and item['in stock'] - _G[itemVar] > 0) then
-		money = money - item.cost
+	if (g.money >= item.cost and item['in stock'] - _G[itemVar] > 0) then
+		g.money = g.money - item.cost
 
 		-- mark one as purchased
 		_G[itemVar] = _G[itemVar] + 1

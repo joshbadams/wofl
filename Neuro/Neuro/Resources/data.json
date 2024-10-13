@@ -48,13 +48,13 @@
 		"condition":"justice>0",
 		"date":110058,
 		"title":"CRIMINAL HITS CHIBA CITY",
-		"message":"CRIMINAL HITS CHIBA CITY\n%name%, a notorious criminal who recently arrived in Chiba City, has been arrested and taken to the Justice Booth. This comes as no surprise to police, who have been watching this criminal ever since he arrived. \"We knew he'd break the law eventually,\" said Officer Watanabe. \"These habitual criminals can't go a whole day without committing a crime.\""
+		"message":"CRIMINAL HITS CHIBA CITY\ng.name, a notorious criminal who recently arrived in Chiba City, has been arrested and taken to the Justice Booth. This comes as no surprise to police, who have been watching this criminal ever since he arrived. \"We knew he'd break the law eventually,\" said Officer Watanabe. \"These habitual criminals can't go a whole day without committing a crime.\""
 	},
 	{
 		"condition":"hotel>100",
 		"date":110058,
 		"title":"VAGRANT PAYS HOTEL BILL",
-		"message":"VAGRANT PAYS HOTEL BILL\nPaul Stack, owner of Cheap Hotel, called a news conference this morning to report that Cowboy %name% has finally paid his hotel bill. Stack is referring to this payment as \"a momentous event in my life. Being the kind-hearted kind of guy that I am, I let that blll accumulate far too long before demanding payment. Imagine my surprise when the scum finally paid it. I was ready to call the Tactical Police.\""
+		"message":"VAGRANT PAYS HOTEL BILL\nPaul Stack, owner of Cheap Hotel, called a news conference this morning to report that Cowboy g.name has finally paid his hotel bill. Stack is referring to this payment as \"a momentous event in my life. Being the kind-hearted kind of guy that I am, I let that blll accumulate far too long before demanding payment. Imagine my surprise when the scum finally paid it. I was ready to call the Tactical Police.\""
 	},
 	{
 		"condition":"s_chatsubo>1",
@@ -77,43 +77,43 @@
 			},
 			{
 				"date":111458,
-				"to":"%name%",
+				"to":g.name,
 				"from":"Matt Shaw",
 				"message":"Take some advice, man. There's a lot of good software showing up on the BBS's. You'll need it to figure out what's going on, so find as much as you can. Upgrade your Comlink warez and your equipment so you can reach the better bases. When you're ready, and you've got enough money together, find us in cyberspace. We need your help bad, but I can't talk about it here. Don't want to start a panic, know what I mean?"
 			},
 			{
 				"date":111458,
-				"to":"%name%",
+				"to":g.name,
 				"from":"FFargo",
 				"message":"You still own me 2000 credits. Will I have to sell your lungs to get it?"
 			},
 			{
 				"date":111458,
-				"to":"%name%",
+				"to":g.name,
 				"from":"Shin",
 				"message":"Better pick up your deck at my pawn shop, otherwise I'll have to sell it."
 			},
 			{
 				"date":111458,
-				"to":"%name%",
+				"to":g.name,
 				"from":"Crazy Edo",
 				"message":"Where's my caviar? I said I'd trade you some software for it, remember?"
 			},
 			{
 				"date":111558,
-				"to":"%name%",
+				"to":g.name,
 				"from":"Matt Shaw",
 				"message":"Since you've been out of touch for a while, and since you're an old friend, I thought I'd help you out with some comlink numbers to get you started. Use them as soon as you get your deck back (yeah, I heard you had to pawn it). The link codes are : CHEAPO for Cheap Hotel, REGFELLOW for the Regular Fellows, CONSUMEREV for Consumer Review, ASANOCOMP for Asano Computing, WORLDCHESS for the World Chess Confederation. These ought to help keep you busy until you can afford a cyberspace-capable deck."
 			},
 			{
 				"date":111558,
-				"to":"%name%",
+				"to":g.name,
 				"from":"Bosch",
 				"message":"Remember your old pal Anonymous Bosch? Remember how I borrowed your Cryptology skill chip siz month ago and forgot to give it back? Well, I dropped it off with Shive at the Gentleman Loser for you to pick up. Thanks. Sorry I took so long."
 			},
 			{
 				"date":111658,
-				"to":"%name%",
+				"to":g.name,
 				"from":"Emp. Norton",
 				"message":"Heard you were in town and thought you ought to know something weird's going on in cyberspace. Sharpen your skills and keep your head down."
 			},
@@ -143,7 +143,7 @@
 			},
 			{
 				"date":111758,
-				"to":"%name%",
+				"to":g.name,
 				"from":"Emp. Norton",
 				"message":"Shiva at the Gentleman Loser has a Matrix Restaurant guest pass for you. Let's talk."
 			},
@@ -162,7 +162,7 @@
 			{
 				"date":110058,
 				"condition":"mail_armitage=1",
-				"to":"%name%",
+				"to":g.name,
 				"from":"Armitage",
 				"message":"Thanks for your response to my ad. The amount of $10,000 has been deposited to your bank account. Please meet me, General Armitage, in the street directly outside the Matrix Restaurant as soon as possible."
 			}
@@ -263,7 +263,7 @@
 				"columns":["Name", "BAMA ID"],
 				"listentries":
 				[
-					{ "fields":["%name%", "%bamaid%"], "details":"Reason: Tax evasion." },
+					{ "fields":[g.name, g.bamaid], "details":"Reason: Tax evasion." },
 					{ "fields":["FINDLEY MATTHEW", "001131968"], "details":"Reason: Tax evasion." },
 					{ "fields":["CHUNG LO DUC", "471294819"], "details":"Reason: Tax evasion." },
 					{ "fields":["NAKASONE SANDRA", "255885697"], "details":"Reason: Tax evasion." },
@@ -281,7 +281,7 @@
 {
 	"armitage":
 	{
-		"%bamaid%":"_deposit=10000|mail_armitage=1"
+		g.bamaid:"_deposit=10000|mail_armitage=1"
 	}
 }
 }

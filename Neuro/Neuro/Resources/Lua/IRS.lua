@@ -74,7 +74,7 @@ IRS = Site:new {
 			items = {
 				{
 					Name = "%name%",
-					['BAMA ID'] = "%bamaid%",
+					['BAMA ID'] = g.bamaid,
 					message = "Reason: Tax evasion."
 				},
 				{

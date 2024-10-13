@@ -55,14 +55,6 @@ enum class State : int
 	InSite,
 };
 
-enum class InvAction : int
-{
-	Cancel,
-	Use,
-	Give,
-	Discard,
-};
-
 ENABLE_ENUM_OPS(ZoneType)
 
 class IStateChangedDelegate
@@ -78,33 +70,25 @@ public:
 	virtual void MessageComplete() = 0;
 	//	virtual void DialogChosen() = 0;
 		
-	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) = 0;
 	virtual void GridboxClosed(LuaRef Box) = 0;
 	virtual void SetIntValue(const std::string& Name, int Value) = 0;
-//	virtual void SendMessage(const std::string& Recipient, const std::string& Message) = 0;
 	virtual bool ConnectToSite(const std::string& Recipient, int ComLinkLevel) = 0;
 };
 
 class ITextboxDelegate : public IInterfaceChangingStateDelegate
 {
 public:
-	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override { assert(0); }
 	virtual void SetIntValue(const std::string& Name, int Value) override  { assert(0); }
 	virtual void GridboxClosed(LuaRef Box) override  { assert(0); }
-//	virtual void SendMessage(const std::string& Recipient, const std::string& Message) override  { assert(0); }
 	virtual bool ConnectToSite(const std::string& SiteName, int ComLinkLevel) override { assert(0); return false; }
 };
 
 class IQueryStateDelegate
 {
 public:
-	virtual	std::vector<int> GetInventory() const = 0;
-	virtual int GetMoney() const = 0;
 	virtual int GetIntValue(const std::string& Name) const = 0;
 	virtual std::string GetStringValue(const std::string& Name) const = 0;
 	virtual LuaRef GetTableValue(const std::string& Name) const = 0;
-	virtual const std::vector<int>& GetUnlockedNewsItems() const = 0;
-//	virtual std::vector<Message*> GetUnlockedMessages(std::string ID) = 0;
 
 };
 
@@ -112,10 +96,7 @@ class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, publ
 {
 public:
 	LuaRef CurrentRoom;
-	
-//	map<std::string, int> IntValues;
-//	map<std::string, std::string> Variables;
-	
+		
 	NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate);
 	virtual ~NeuroState() { }
 	
@@ -126,24 +107,8 @@ public:
 	
 	// IInterfaceChangingStateDelegate
 	virtual void MessageComplete() override;
-	virtual void InventoryUsed(int ID, InvAction Action, int Modifer) override;
 	virtual void GridboxClosed(LuaRef Box) override;
-//	virtual void SendMessage(const std::string& Recipient, const std::string& Message) override;
 	virtual bool ConnectToSite(const std::string& SiteName, int ComLinkLevel) override;
-
-	
-	// IQueryStateDelegate
-	virtual std::vector<int> GetInventory() const override;
-	virtual int GetMoney() const override
-	{
-		return GetIntValue("money");
-	}
-	virtual const std::vector<int>& GetUnlockedNewsItems() const override
-	{
-		return UnlockedMessages.at("news");
-	}
-//	virtual std::vector<Message*> GetUnlockedMessages(std::string ID) override;
-
 
 	
 	
@@ -202,13 +167,6 @@ private:
 	Conversation* FindActiveConversation();
 	Conversation* FindConversationForAction(const std::string& Action, const std::string& Value);
 
-	void UpdateVariablesFromString(const std::string& Command);
-	bool CheckVariablesFromString(const std::string& Query);
-
-//	const Item* GetItemForID(int ID);
-
-//	int Money;
-//	std::vector<int> Inventory;
 	map<std::string, std::vector<int>> UnlockedMessages;
 
 	NeuroConfig* Config;

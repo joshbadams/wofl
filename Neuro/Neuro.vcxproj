@@ -31,8 +31,6 @@
     <ClCompile Include="Neuro\Game\NeuroGame.cpp" />
     <ClCompile Include="Neuro\Game\NeuroLua.cpp" />
     <ClCompile Include="Neuro\Game\NeuroState.cpp" />
-    <ClCompile Include="Neuro\UI\Boxes\InvBox.cpp" />
-    <ClCompile Include="Neuro\UI\Boxes\SiteBox.cpp" />
     <ClCompile Include="Neuro\UI\Gridbox.cpp" />
     <ClCompile Include="Neuro\UI\NeuroScene.cpp" />
     <ClCompile Include="Neuro\UI\Ninebox.cpp" />
@@ -43,8 +41,6 @@
     <ClInclude Include="Neuro\Game\NeuroGame.h" />
     <ClInclude Include="Neuro\Game\NeuroLua.h" />
     <ClInclude Include="Neuro\Game\NeuroState.h" />
-    <ClInclude Include="Neuro\UI\Boxes\InvBox.h" />
-    <ClInclude Include="Neuro\UI\Boxes\SiteBox.h" />
     <ClInclude Include="Neuro\UI\Gridbox.h" />
     <ClInclude Include="Neuro\UI\NeuroScene.h" />
     <ClInclude Include="Neuro\UI\Ninebox.h" />
@@ -59,26 +55,44 @@
     <CopyFileToFolders Include="Neuro\Resources\Lua\Chatsubo.lua">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\Lua\Cheapo.lua">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\Lua\IRS.lua">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\Lua\Items.lua">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\Lua\Neuro.lua">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\Lua\PAX.lua">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +135,22 @@
     <CopyFileToFolders Include="Neuro\Resources\Neuro1.json">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\InvBox.lua">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\RegFellow.lua">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
   <PropertyGroup Label="Globals">

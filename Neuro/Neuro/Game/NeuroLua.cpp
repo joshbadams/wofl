@@ -164,7 +164,7 @@ Json::Value Lua::ToJsonObject()
 		{
 			// check to see the index types (all int = array, all strings = map, mixed = error)
 			bool bIsArrayType = true;
-			WalkOverTable(L, [&bIsArrayType, this]() { if (!lua_isinteger(L, -2)) { bIsArrayType = false; } } );
+			WalkOverTable(L, [&bIsArrayType, this]() { if (!lua_isinteger(L, -2)) { bIsArrayType = false; } });
 			
 			WLOG("global table to save? %s\n", Key.c_str());
 			

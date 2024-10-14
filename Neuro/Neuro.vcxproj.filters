@@ -31,12 +31,6 @@
     <ClCompile Include="Neuro\Game\NeuroState.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Neuro\UI\Boxes\InvBox.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Neuro\UI\Boxes\SiteBox.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Neuro\UI\Gridbox.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -62,12 +56,6 @@
     </ClInclude>
     <ClInclude Include="Neuro\Game\NeuroState.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Neuro\UI\Boxes\InvBox.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Neuro\UI\Boxes\SiteBox.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Neuro\UI\Gridbox.h">
       <Filter>UI</Filter>
@@ -136,6 +124,12 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\TopRight.png">
       <Filter>Resources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\InvBox.lua">
+      <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\RegFellow.lua">
+      <Filter>Resources\Lua</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

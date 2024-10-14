@@ -1,4 +1,4 @@
-s_chatsubo = 0
+s.chatsubo = 0
 
 Chatsubo = Room:new {
 	name = "chatsubo",
@@ -14,20 +14,20 @@ Chatsubo = Room:new {
 	conversations = {
 		{
 			condition = function()
-				return s_chatsubo == 0
+				return s.chatsubo == 0
 			end,
 			lines = {
 				"I don't care if you eat that spaghetti or sleep in it, you still gotta pay for it. 46 credits."
 			},
 			onEnd = function()
-				s_chatsubo = 1
+				s.chatsubo = 1
 				Talk()
 			end
 		},
 		
 		{
 			condition = function()
-				return s_chatsubo == 1
+				return s.chatsubo == 1
 			end,
 			options =
 			{
@@ -51,7 +51,7 @@ Chatsubo = Room:new {
 		},
 
 		{
-			condition = function() return s_chatsubo == 2 end,
+			condition = function() return s.chatsubo == 2 end,
 			options =
 			{
 				{
@@ -61,7 +61,7 @@ Chatsubo = Room:new {
 				{
 					line = "Anything else come up?",
 					response = "One of Lonny Zone's girls was looking for you too. You got biz with Zone?", 
-					onEnd = function() s_chatsubo = 3 end
+					onEnd = function() s.chatsubo = 3 end
 				},
 				{
 					line = "Who you calling an artiste?",
@@ -72,7 +72,7 @@ Chatsubo = Room:new {
 
 		
 		{
-			condition = function() return s_chatsubo == 3 end,
+			condition = function() return s.chatsubo == 3 end,
 			options =
 			{
 				{ 
@@ -82,23 +82,23 @@ Chatsubo = Room:new {
 				{
 					line = "Anything else you want to tell me?",
 					response = "Better find a way to pay your bill at Cheap Hotel, or they'll start asking you to sell yout body parts.",
-					onEnd = function() s_chatsubo = 4 end
+					onEnd = function() s.chatsubo = 4 end
 				}
 			}
 		},
 		{
-			condition = function() return s_chatsubo==4 end,
+			condition = function() return s.chatsubo==4 end,
 			options =
 			{
 				{
 					line = "So I sell a kidney or two. Why don't you get off my case, Ratz?",
 					response = "You should have fear, artiste. It may be your friend. Now get out of here before the lawbot arrives.",
-					onEnd = function() s_chatsubo=5 end
+					onEnd = function() s.chatsubo=5 end
 				},
 				{
 					line = "That's it. I'm leaving.",
 					response = "Good luck, artiste. You're going to need it.",
-					onEnd = function() s_chatsubo=5 end,
+					onEnd = function() s.chatsubo=5 end,
 				}
 			}
 		}
@@ -106,21 +106,22 @@ Chatsubo = Room:new {
 }
 
 function Chatsubo:OnFirstEnter()
-	s_chatsubo = 0
-	print("FIRST ENTER!")
+	s.chatsubo = 0
 	ShowMessage(self.longDescription, function() Talk() end)
 end
 
 -- comment
 
 function Chatsubo:GiveMoney(amount)
+print("Give money, ", amount)
 	if amount >= 46 then
 		-- actually give the money away
 		Room:GiveMoney(amount)
 
 		Say("Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck.")
-		s_chatsubo = 2
+		s.chatsubo = 2
 	else
+print("Showing message")
 		ShowMessage("Ratz refuses to take your credits.", function() Say("I said 46 credits, buckwheat. Are you deaf?") end)
 	end
 end

@@ -13,8 +13,14 @@ Deck = Item:new {
 
 Software = Item:new {
 	type = "software",
-	level = 0,
+	version = 0,
 	desc = "",
+}
+
+Comlink = Software:new {
+	name = "Comlink",
+	subtype = "comlink",
+	desc = "Database access software"
 }
 
 Items = {
@@ -30,20 +36,57 @@ Items = {
 		capacity = 5,
 	},
 	
-	
-	[200] = Software:new {
-		name = "Comlink 1.0",
+	[200] = Comlink:new {
 		cast = 100,
-		level = 1,
-		desc = "Database access software"
+		version = 1,
+	},
+	[201] = Comlink:new {
+		cast = 1,
+		version = 2,
+	},
+	[210] = Software:new {
+		name = "BattleChess",
+		version = 2,
 	}
 }
 
-function GetItemDesc(invItem)
-	
-	if (inventory[invIndex] == 0) then
-		return string.format("Credits %d", money)
+function GetItemDesc(itemId)
+
+	if (itemId == 0) then
+		return string.format("Credits %d", s.money)
 	end
 
-	return Items[inventory[invItem]].name
+	local item = Items[itemId]
+
+	if (item.type == "software") then
+		return string.format("%s %d.0", item.name, item.version)
+	end
+
+	return item.name
 end
+
+function GetListItemDesc(itemId, width)
+	local item = Items[itemId]
+
+	if (item.type ~= "software") then
+		return GetItemDesc(itemId)
+	end
+
+	local desc = item.name
+
+	-- pad out spacing to right align version
+	local ver = string.format("%d.0", item.version)
+	local len = string.len(desc) + string.len(ver)
+	local spaces = width - len
+
+	for i=1,spaces do
+		desc = desc .. ' '
+	end
+
+	return desc .. ver
+end
+
+
+
+
+

@@ -34,16 +34,18 @@ class Gridbox : public Ninebox, public ITextboxDelegate
 {
 public:
 	
+	Gridbox();
 	Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Color=WColor::Black);
 
+	void Open(LuaRef Box);
+	void RefreshUI();
+	bool MatchesLuaBox(LuaRef Box);
 
 	void SetDelegates(class IQueryStateDelegate* InQueryStateDelegate, class IInterfaceChangingStateDelegate* InInterfaceChangingDelegate)
 	{
 		QueryStateDelegate = InQueryStateDelegate;
 		InterfaceChangingDelegate = InInterfaceChangingDelegate;
 	}
-
-	virtual void Open(LuaRef LuaObj);
 
 	virtual void CustomPostChildrenRender() override;
 	virtual void OnInput(const Vector& ScreenLocation, int RepeatIndex) override;
@@ -52,13 +54,13 @@ public:
 	virtual void MessageComplete() override;
 
 protected:
+	void Init();
 
-	virtual void OnGenericContinueInput() { }
+	virtual void OnGenericContinueInput();
 	virtual void OnTextEntryComplete(const std::string& Text, const std::string& Tag);
 	virtual void OnTextEntryCancelled(const std::string& Tag);
 	virtual void Update();
-	virtual void OnClickEntry(GridEntry& Entry);	
-	virtual void CloseMessages() {}
+	virtual void OnClickEntry(GridEntry& Entry);
 
 
 	void SetupTextEntry(const GridEntry& Entry);
@@ -69,13 +71,15 @@ protected:
 	void OnClickMessageEntry(GridEntry& Entry);
 
 
+	virtual void CloseMessages() {}
+
 	IQueryStateDelegate* QueryStateDelegate;
 	IInterfaceChangingStateDelegate* InterfaceChangingDelegate;
 		
 	LuaRef LuaBox;
 	
-	std::vector<GridEntry> Entries;
-	Textbox* Messagebox;
+	vector<GridEntry> Entries;
+	Textbox* Messagebox = nullptr;
 	
 	std::string FullText;
 	std::vector<std::string> Lines;

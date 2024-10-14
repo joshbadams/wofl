@@ -73,6 +73,13 @@ LuaObjRef::~LuaObjRef()
 	luaL_unref(L, LUA_REGISTRYINDEX, Ref);
 }
 
+bool operator==(const LuaRef& A, const LuaRef& B)
+{
+	bool bResult;
+	A->LuaSystem->CallFunction_Return("", "TablesMatch", A, B, bResult);
+	return bResult;
+}
+
 
 Lua::Lua(void* Context)
 {
@@ -80,18 +87,6 @@ Lua::Lua(void* Context)
 	luaL_openlibs(L);
 
 	SCOPE;
-	
-	lua_pushglobaltable(L);
-	int Table = lua_gettop(L);
-	lua_pushnil(L);  // first key
-	while (lua_next(L, Table) != 0)
-	{
-		SystemVariables.insert(lua_tostring(L, -2));
-		// move to next
-		lua_pop(L, 1);
-	}
-	// never serialize our special communcation variable
-	SystemVariables.insert("result");
 	
 	lua_pushlightuserdata(L, Context);
 	lua_setglobal(L, "__neurostate");
@@ -102,6 +97,9 @@ Lua::Lua(void* Context)
 	// load the main file
 	LoadScript("Neuro.lua");
 	LoadScript("Items.lua");
+	LoadScript("InvBox.lua");
+	
+	GetTableValue("", "s", Settings);
 
 //	int IntVal;
 //	std::string StringVal;
@@ -124,8 +122,23 @@ Lua::~Lua()
 {
 	lua_close(L);
 }
-			 
-			 
+
+// table must be on top of stack
+void WalkOverTable(lua_State* L, const std::function<void()>& VisitFunction)
+{
+	lua_pushnil(L);  // first key
+	while (lua_next(L, -2) != 0)
+	{
+		VisitFunction();
+		
+		lua_pop(L, 1);
+	}
+}
+
+//bool IsArrayType(lua_State* L)
+//{
+//	
+//}
 
 // IJsonObj
 Json::Value Lua::ToJsonObject()
@@ -133,32 +146,65 @@ Json::Value Lua::ToJsonObject()
 	SCOPE;
 	
 	Json::Value LuaObject(Json::objectValue);
-	
-	lua_pushglobaltable(L);
-	//lua_getglobal(L, "SavedValues");
-	int Table = lua_gettop(L);
+	int Table = PushSpec(L, "s");
 	lua_pushnil(L);  // first key
+	dumpstack(L);
 	while (lua_next(L, Table) != 0)
 	{
-		std::string Key = lua_tostring(L, -2);
+		string Key = lua_tostring(L, -2);
 		if (SystemVariables.find(Key) == SystemVariables.end())
 		{
-			if (lua_isinteger(L, -1))
+			LuaObject[Key] = Json::Value(lua_tointeger(L, -1));
+		}
+		else if (lua_isstring(L, -1))
+		{
+			LuaObject[Key] = Json::Value(lua_tostring(L, -1));
+		}
+		else if (lua_istable(L, -1))
+		{
+			// check to see the index types (all int = array, all strings = map, mixed = error)
+			bool bIsArrayType = true;
+			WalkOverTable(L, [&bIsArrayType, this]() { if (!lua_isinteger(L, -2)) { bIsArrayType = false; } } );
+			
+			WLOG("global table to save? %s\n", Key.c_str());
+			
+			Json::Value SubObject(Json::objectValue);
+			LuaObject[Key] = SubObject;
+
+			int SubTable = lua_gettop(L);
+			lua_pushnil(L);  // first sub-key
+			dumpstack(L);
+
+			while (lua_next(L, SubTable) != 0)
 			{
-				LuaObject[Key] = Json::Value(lua_tointeger(L, -1));
+				if (lua_isinteger(L, -2))
+				{
+					Key = "asdasd";
+				}
+				else
+				{
+					Key = lua_tostring(L, -2);
+				}
+				if (lua_isinteger(L, -1))
+				{
+					SubObject[Key] = Json::Value(lua_tointeger(L, -1));
+				}
+				else if (lua_isstring(L, -1))
+				{
+					SubObject[Key] = Json::Value(lua_tostring(L, -1));
+				}
+				// move to next
+				lua_pop(L, 1);
+				dumpstack(L);
 			}
-			else if (lua_isstring(L, -1))
-			{
-				LuaObject[Key] = Json::Value(lua_tostring(L, -1));
-			}
-			else //if (lua_isfunction(L, -1) || lua_islightuserdata(L, -1))
-			{
-			}
+		}
+		else //if (lua_isfunction(L, -1) || lua_islightuserdata(L, -1))
+		{
+		}
 //			else
 //			{
 //				assert(0);
 //			}
-		}
 
 		// move to next
 		lua_pop(L, 1);
@@ -174,12 +220,35 @@ void Lua::FromJsonObject(const Json::Value& LuaObject)
 		if (LuaObject[Name].isInt())
 		{
 			WLOG("Looading int value %s = %d\n", Name.c_str(), LuaObject[Name].asInt());
-			SetIntValue(nullptr, Name.c_str(), LuaObject[Name].asInt());
+			SetIntValue("s", Name.c_str(), LuaObject[Name].asInt());
 		}
 		else if (LuaObject[Name].isString())
 		{
-			WLOG("Looading std::string value %s = %s\n", Name.c_str(), LuaObject[Name].asString().c_str());
-			SetStringValue(nullptr, Name.c_str(), LuaObject[Name].asString());
+			WLOG("Looading string value %s = %s\n", Name.c_str(), LuaObject[Name].asString().c_str());
+			SetStringValue("s", Name.c_str(), LuaObject[Name].asString());
+		}
+		else if (LuaObject[Name].isArray())
+		{
+			WLOG("Looading array value %s:\n", Name.c_str());
+			LuaRef Table;
+			if (!GetTableValue("s", Name.c_str(), Table))
+			{
+				assert(0);
+			}
+			
+			for (auto TableName : LuaObject[Name].getMemberNames())
+			{
+				if (LuaObject[Name][TableName].isInt())
+				{
+					WLOG("   Looading int value %s = %d\n", Name.c_str(), LuaObject[Name][TableName].asInt());
+					SetIntValue(Table, TableName.c_str(), LuaObject[Name][TableName].asInt());
+				}
+				else if (LuaObject[Name].isString())
+				{
+					WLOG("   Looading string value %s = %s\n", Name.c_str(), LuaObject[Name][TableName].asString().c_str());
+					SetStringValue(Table, TableName.c_str(), LuaObject[Name][TableName].asString());
+				}
+			}
 		}
 	}
 
@@ -331,78 +400,6 @@ bool Lua::RunCode(const std::string& Code)
 	return true;
 }
 
-//
-//#define CALL_FUNCTION_NO_SCOPE_PREAMBLE \
-//	if (lua_getglobal(L, ObjectName) != LUA_TTABLE) { WLOG("bad table\n"); lua_pop(L, 1); return false; } \
-//	if (lua_getfield(L, -1, FunctionName) != LUA_TFUNCTION) { WLOG("bad func\n"); lua_pop(L, 2); return false; } \
-//	/* put the object back onto the stack for the "self" value in the function */ \
-//	lua_pushvalue(L, -2);
-//
-//#define CALL_FUNCTIONREF_NO_SCOPE_PREAMBLE \
-//	if (lua_getglobal(L, ObjectName) != LUA_TTABLE) { lua_pop(L, 1); return false; } \
-//	lua_rawgeti(L, LUA_REGISTRYINDEX, FunctionRef->Ref); \
-//	/* put the object back onto the stack for the "self" value in the function */ \
-//	lua_pushvalue(L, -2);
-//
-//
-//bool Lua::CallFunction(const char* ObjectName, LuaRef FunctionRef)
-//{
-//	SCOPE;
-//	if (lua_getglobal(L, ObjectName) != LUA_TTABLE) { lua_pop(L, 1); return false; }
-//	lua_rawgeti(L, LUA_REGISTRYINDEX, FunctionRef->Ref); \
-//
-//	/* put the object back onto the stack for the "self" value in the function */ \
-//	lua_pushvalue(L, -2);
-//
-//	lua_pcall(L, 1, 1, 0);
-//
-//	return true;
-//}
-//
-//bool Lua::CallFunction_ReturnOnStack(const char* ObjectName, const char* FunctionName)
-//{
-//	CALL_FUNCTION_NO_SCOPE_PREAMBLE
-//	
-//	lua_pcall(L, 1, 1, 0);
-//
-//	// @todo error handling
-//	return true;
-//}
-//
-//bool Lua::CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef FunctionRef)
-//{
-//	CALL_FUNCTIONREF_NO_SCOPE_PREAMBLE
-//
-//	lua_pcall(L, 1, 1, 0);
-//
-//	// @todo error handling
-//	return true;
-//}
-//
-//bool Lua::CallFunction_ReturnOnStack(const char* ObjectName, const char* FunctionName, const char* Param)
-//{
-//	CALL_FUNCTION_NO_SCOPE_PREAMBLE
-//
-//	lua_pushstring(L, Param);
-//	dumpstack(L);
-//
-//	lua_pcall(L, 2, 1, 0);
-//
-//	// @todo error handling
-//	return true;
-//}
-//
-//bool Lua::CallFunction_ReturnOnStack(const char* ObjectName, const LuaRef FunctionRef, const char* Param)
-//{
-//	CALL_FUNCTIONREF_NO_SCOPE_PREAMBLE
-//
-//	lua_pushstring(L, Param);
-//	lua_pcall(L, 2, 1, 0);
-//
-//	// @todo error handling
-//	return true;
-//}
-
 int PushSpec(lua_State* L, LuaRef TableRef)
 {
 	// just get the real table from the ref onto the stack
@@ -505,173 +502,14 @@ bool GetReturn(lua_State* L, std::string& Param)
 	return true;
 }
 
-//
-//#define INSTANTIATE(Func, ResultType) \
-//	template bool Lua::Func<int>(int, const char*, ResultType&) const; \
-//	template bool Lua::Func<const char*>(const char*, const char*, ResultType&) const; \
-//	template bool Lua::Func<LuaRef>(LuaRef, const char*, ResultType&) const;
-//
-//INSTANTIATE(GetIntValue, int)
-//INSTANTIATE(GetStringValue, string)
-//INSTANTIATE(GetTableValue, LuaRef)
-//INSTANTIATE(GetFunctionValue, LuaRef)
-//INSTANTIATE(GetStringValues, vector<string>)
-//INSTANTIATE(GetTableValues, vector<LuaRef>)
-
-
-//bool Lua::GetIntValue(const char* Object, const char* Name, int& Result) const
-//{
-//	SCOPE;
-//	
-//	lua_getglobal(L, Name);
-//	if (!lua_isinteger(L, -1))
-//	{
-//		return false;
-//	}
-//	Result = (int)lua_tointeger(L, -1);
-//	return true;
-//}
-
-void Lua::SetIntValue(const char* Object, const char* Name, int Value) const
+bool GetReturn(lua_State* L, bool& Param)
 {
-	SCOPE;
-
-	lua_pushinteger(L, Value);
-	lua_setglobal(L, Name);
-}
-
-//bool Lua::GetStringValue(const char* Object, const char* Name, std::string& Result) const
-//{
-//	SCOPE;
-//	
-//	if (Object == nullptr)
-//	{
-//		lua_pushglobaltable(L);
-//	}
-//	else
-//	{
-//		lua_getglobal(L, Object);
-//		// @todo need to check it exists
-//	}
-//	lua_getfield(L, -1, Name);
-//
-//	if (!lua_isstring(L, -1))
-//	{
-//		return false;
-//	}
-//	Result = lua_tostring(L, -1);
-//	return true;
-//}
-//
-void Lua::SetStringValue(const char* Object, const char* Name, const std::string& Value) const
-{
-	SCOPE;
+	if (!lua_isboolean(L, -1) )
+	{
+		Param = false;
+		return false;
+	}
 	
-	lua_pushlstring(L, Value.c_str(), (int)Value.length());
-	lua_setglobal(L, Name);
+	Param = lua_toboolean(L, -1);
+	return true;
 }
-
-//
-//#define GET_TABLE_VALUE_PREAMBLE(TestFunc, FailedValue) \
-//	SCOPE; \
-//	if (lua_isnil(L, StackLoc)) { Result = FailedValue; return false; } \
-//	lua_getfield(L, StackLoc, Name); \
-//	if (!TestFunc(L, -1)) { Result = FailedValue; return false; }
-//
-//bool Lua::GetTableIntValue(const char* Name, int& Result, int StackLoc) const
-//{
-//	GET_TABLE_VALUE_PREAMBLE(lua_isinteger, 0)
-//	
-//	Result = (int)lua_tointeger(L, -1);
-//	return true;
-//}
-//
-//bool Lua::GetTableStringValue(const char* Name, std::string& Result, int StackLoc) const
-//{
-//	GET_TABLE_VALUE_PREAMBLE(lua_isstring, "")
-//	
-//	Result = lua_tostring(L, -1);
-//	return true;
-//}
-//
-//bool Lua::GetTableStringsValue(const char* Name, std::vector<std::string>& Result, int StackLoc) const
-//{
-//	GET_TABLE_VALUE_PREAMBLE(lua_istable, {})
-//
-//	int Table = lua_gettop(L);
-//	lua_pushnil(L);  // first key
-//	while (lua_next(L, Table) != 0)
-//	{
-//		// -2 is key, -1 is value
-//		Result.push_back(lua_tostring(L, -1));
-//		// move to next
-//		lua_pop(L, 1);
-//	}
-//	return true;
-//}
-//
-//bool Lua::GetTableTableValue(const char* Name, LuaRef& Result, int StackLoc) const
-//{
-//	GET_TABLE_VALUE_PREAMBLE(lua_istable, nullptr)
-//
-//	// make a ref to it
-//	Result = MakeRef();
-//	return true;
-//}
-//
-//bool Lua::GetTableFunctionValue(const char* Name, LuaRef& Result, int StackLoc) const
-//{
-//	GET_TABLE_VALUE_PREAMBLE(lua_isfunction, nullptr)
-//
-//	// make a ref to it
-//	Result = MakeRef();
-//	return true;
-//}
-//
-//bool Lua::GetTableTable_OnStack(const char* Name, int StackLoc) const
-//{
-//	if (lua_isnil(L, StackLoc))
-//	{
-//		return false;
-//	}
-//	
-//	lua_getfield(L, StackLoc, Name);
-//	if (!lua_istable(L, -1))
-//	{
-//		return false;
-//	}
-//	return true;
-//}
-//
-
-
-
-
-//bool Lua::GetObject(const char* Name, int& Global)
-//{
-//	SCOPE;
-//	
-//	lua_pushstring(L, Name);
-//	lua_gettable(L, 1);
-//	if (!lua_istable(L, -1))
-//	{
-//		Global = -1;
-//		return false;
-//	}
-//	
-//	Global = lua_tointeger(L, -1);
-//	return false;
-//	
-//	
-//	
-////	lua_getfield(L, 1, Name_);
-////	if (!lua_istable(L, -1))
-//
-//	
-//	int Index;
-//	if (GetIntValue(Name, Index))
-//	{
-//		return Index;
-//	}
-//	return -1;
-//}

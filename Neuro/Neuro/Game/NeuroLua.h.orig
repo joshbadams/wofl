@@ -80,12 +80,20 @@ public:
 
 	bool RunCode(const string& Code);
 
+<<<<<<< Updated upstream
+//	bool GetIntValue(const char* Object, const char* Name, int& Result) const;
+	void SetIntValue(const char* Object, const char* Name, int Value) const;
+//	bool GetStringValue(const char* Object, const char* Name, std::string& Result) const;
+	void SetStringValue(const char* Object, const char* Name, const std::string& Value) const;
+	
+=======
 	template<typename TableSpec>
 	void SetIntValue(TableSpec Table, const char* Name, int Value) const;
 
 	template<typename TableSpec>
 	void SetStringValue(TableSpec Table, const char* Name, const string& Value) const;
 
+>>>>>>> Stashed changes
 	
 	template<typename TableSpec>
 	bool GetIntValue(TableSpec Table, const char* Name, int& Result) const;
@@ -135,10 +143,13 @@ public:
 private:
 	friend struct LuaScope;
 	friend class LuaObjRef;
-	
 	mutable lua_State* L;
+<<<<<<< Updated upstream
+	set<std::string> SystemVariables;
+=======
+	
 	LuaRef Settings;
-	set<string> SystemVariables;
+>>>>>>> Stashed changes
 };
 
 
@@ -157,8 +168,12 @@ int PushParam(lua_State* L, const char* Param);
 
 bool GetReturn(lua_State* L, LuaRef& Param);
 bool GetReturn(lua_State* L, int& Param);
+<<<<<<< Updated upstream
 bool GetReturn(lua_State* L, std::string& Param);
+=======
+bool GetReturn(lua_State* L, string& Param);
 bool GetReturn(lua_State* L, bool& Param);
+>>>>>>> Stashed changes
 
 
 void dumpstack (lua_State *L);

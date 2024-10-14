@@ -39,9 +39,6 @@ enum class State : int
 	ActivateConversation,
 	ShowPostMessage,
 	EndedConversation,
-
-	ShowMessage,
-	EndedMessage,
 	
 	InDialog,
 	InOptions,
@@ -61,7 +58,13 @@ class IStateChangedDelegate
 {
 public:
 	virtual void Invalidate(ZoneType Zone) = 0;
-	virtual void CloseBoxWithObj(LuaRef BoxObj) = 0;
+	virtual void OpenBoxByName(const char* Name) = 0;
+	virtual bool CloseBoxWithObj(LuaRef BoxObj) = 0;
+	virtual bool AreBoxesShowing() = 0;
+	virtual bool IsConversationShowing() = 0;
+	virtual bool IsMessageActive() = 0;
+	virtual void RefreshUI() = 0;
+
 };
 
 class IInterfaceChangingStateDelegate
@@ -70,17 +73,17 @@ public:
 	virtual void MessageComplete() = 0;
 	//	virtual void DialogChosen() = 0;
 		
-	virtual void GridboxClosed(LuaRef Box) = 0;
+	virtual void GridboxClosed(LuaRef LuaObj) = 0;
 	virtual void SetIntValue(const std::string& Name, int Value) = 0;
-	virtual bool ConnectToSite(const std::string& Recipient, int ComLinkLevel) = 0;
+//	virtual void SendMessage(const std::string& Recipient, const string& Message) = 0;
 };
 
 class ITextboxDelegate : public IInterfaceChangingStateDelegate
 {
 public:
 	virtual void SetIntValue(const std::string& Name, int Value) override  { assert(0); }
-	virtual void GridboxClosed(LuaRef Box) override  { assert(0); }
-	virtual bool ConnectToSite(const std::string& SiteName, int ComLinkLevel) override { assert(0); return false; }
+	virtual void GridboxClosed(LuaRef LuaObj) override  { assert(0); }
+//	virtual void SendMessage(const std::string& Recipient, const string& Message) override  { assert(0); }
 };
 
 class IQueryStateDelegate
@@ -108,11 +111,10 @@ public:
 	// IInterfaceChangingStateDelegate
 	virtual void MessageComplete() override;
 	virtual void GridboxClosed(LuaRef Box) override;
-	virtual bool ConnectToSite(const std::string& SiteName, int ComLinkLevel) override;
 
 	
 	
-	void Tick();
+	void Tick(float DeltaTime);
 	
 	void HandleSceneClick(ZoneType Zone);
 
@@ -143,12 +145,12 @@ public:
 	void ClickChip();
 	void ClickSystem();
 
-	bool IsShowingInventory() { return CurrentState == State::InInventory; }
-	bool IsShowingPAX() { return CurrentState == State::InPAX; }
-	bool IsShowingSkill() { return CurrentState == State::InSkill; }
-	bool IsShowingChip() { return CurrentState == State::InChip; }
-	bool IsShowingSystem() { return CurrentState == State::InSystem; }
-	bool IsShowingSite() { return CurrentState == State::InSite; }
+//	bool IsShowingInventory() { return CurrentState == State::InInventory; }
+//	bool IsShowingPAX() { return CurrentState == State::InPAX; }
+//	bool IsShowingSkill() { return CurrentState == State::InSkill; }
+//	bool IsShowingChip() { return CurrentState == State::InChip; }
+//	bool IsShowingSystem() { return CurrentState == State::InSystem; }
+//	bool IsShowingSite() { return CurrentState == State::InSite; }
 
 	bool TestCondition(const std::string& Condition, bool bEmptyConditionIsSuccess, const std::string* Action=nullptr, const std::string* Value=nullptr);
 
@@ -158,7 +160,9 @@ private:
 	static int Lua_Talk(lua_State* L);
 	static int Lua_Say(lua_State* L);
 	static int Lua_ShowMessage(lua_State* L);
+	static int Lua_OpenBox(lua_State* L);
 	static int Lua_CloseBox(lua_State* L);
+	static int Lua_StartTimer(lua_State* L);
 
 	void ActivateRoom(LuaRef OldRoom, LuaRef NewRoom);
 	void ActivateConversation(Conversation* Convo);
@@ -177,6 +181,13 @@ private:
 	int DialogIndex;
 	int ChoiceIndex;
 	
+	struct Timer
+	{
+		float Time;
+		LuaRef Object;
+		LuaRef Callback;
+	};
+	vector<Timer> Timers;
 	
 	State CurrentState;
 
@@ -189,6 +200,6 @@ private:
 	ZoneType PendingInvalidation;
 	
 	Lua Lua;
-	
+	friend class NeuroGame;
 };
 

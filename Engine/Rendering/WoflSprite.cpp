@@ -146,6 +146,7 @@ void WoflSprite::RemoveFromParent()
 			Travel = Travel->Next;
 		}
 	}
+	Parent = nullptr;
 }
 
 void WoflSprite::RemoveFromWorld()

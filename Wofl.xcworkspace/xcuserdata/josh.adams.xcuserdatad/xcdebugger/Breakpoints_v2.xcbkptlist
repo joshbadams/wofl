@@ -48,7 +48,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "190"
             endingLineNumber = "190"
-            landmarkName = "Lua::FromJsonObject(LuaObject)"
+            landmarkName = "Lua::ToJsonObject()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -110,7 +110,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "112"
             endingLineNumber = "112"
-            landmarkName = "NeuroGame::Invalidate(Zone)"
+            landmarkName = "NeuroGame::CloseBoxWithObj(BoxObj)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -270,7 +270,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "43BDF4D7-E3B3-4089-8680-6211AB7ACFE8"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Neuro/Neuro/Game/NeuroGame.cpp"
@@ -278,7 +278,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "141"
             endingLineNumber = "141"
-            landmarkName = "NeuroGame::CloseBoxWithObj(BoxObj)"
+            landmarkName = "NeuroGame::Invalidate(Zone)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -1,4 +1,4 @@
-g.mail_armitage = 0
+s.mail_armitage = 0
 
 
 PAX = Site:new {
@@ -85,7 +85,7 @@ PAX = Site:new {
 					message = "VAGRANT PAYS HOTEL BILL\nPaul Stack, owner of Cheap Hotel, called a news conference this morning to report that Cowboy %name% has finally paid his hotel bill. Stack is referring to this payment as \"a momentous event in my life. Being the kind-hearted kind of guy that I am, I let that blll accumulate far too long before demanding payment. Imagine my surprise when the scum finally paid it. I was ready to call the Tactical Police.\""
 				},
 				{
-					condition = function() return s_chatsubo > 1 end,
+					condition = function() return s.chatsubo > 1 end,
 					date = 110058,
 					subject = "CHATSUBO DEBT",
 					message = "Thisis a story that will appear when chatsubo is paid off but not before."
@@ -124,7 +124,7 @@ PAX = Site:new {
 				{ date = 111758, to = "%name%", from = "Emp. Norton", message = "Shiva at the Gentleman Loser has a Matrix Restaurant guest pass for you. Let's talk." },
 				{ date = 111758, to = "All", from = "CFM", message = "Are you angry about being locked out of cyberspace just because special equipment is required? Does it bug you that thousands of common workers have access to cyberspace every day? Why can't the general public have access to cyberspace information? We're angry too. Contact us for more information at link code FREEMATRIX. The password for those who are non-members is CFM. Fight back and get what's coming to you!" },
 				{ date = 111758, to = "All", from = "IRS", message = "Got a problem with your taxes? Are the hourly tax law changes to hard to keep up with? Give us a call. We've set up a new Tax Information service that allows you, John Q. Taxpayer, to ask us, the Internal Revenu Service, for anwers to your difficult questions.\nThe comlnk number is IRS (that ought to be easy enough to remember), and the password is TAXINFO. Remember the last word in our ame is Service!" },
-				{ date = 110058, condition = function() return mail_armitage == 1 end, to = "%name%", from = "Armitage", message = "Thanks for your response to my ad. The amount of $10,000 has been deposited to your bank account. Please meet me, General Armitage, in the street directly outside the Matrix Restaurant as soon as possible." }
+				{ date = 110058, condition = function() return s.mail_armitage == 1 end, to = "%name%", from = "Armitage", message = "Thanks for your response to my ad. The amount of $10,000 has been deposited to your bank account. Please meet me, General Armitage, in the street directly outside the Matrix Restaurant as soon as possible." }
 			}
 		},
 		
@@ -169,10 +169,10 @@ function PAX:GetBankEntries(entries)
 	
 	-- all bank pages have these items
 	table.append(entries, { x = 3, y = 0, text = "First Orbital Bank of Switzerland"})
-	table.append(entries, { x = 3, y = 2, text = string.format("name: %s", g.name) })
-	table.append(entries, { x = 3, y = 3, text = string.format("chip = %d", g.money) })
-	table.append(entries, { x = 24, y = 2, text = string.format("BAMA id: %d", g.bamaid) })
-	table.append(entries, { x = 24, y = 3, text = string.format("account: %s", g.bankaccount) })
+	table.append(entries, { x = 3, y = 2, text = string.format("name: %s", s.name) })
+	table.append(entries, { x = 3, y = 3, text = string.format("chip = %d", s.money) })
+	table.append(entries, { x = 24, y = 2, text = string.format("BAMA id: %d", s.bamaid) })
+	table.append(entries, { x = 24, y = 3, text = string.format("account: %s", s.bankaccount) })
 
 	if self.currentPage == "banking_deposit" or self.currentPage == "banking_withdrawal" then
 		table.append(entries, { x = 0, y = 5, text = "Enter amount : "})
@@ -218,24 +218,24 @@ function PAX:HandleClickedEntry(id)
 end
 
 function PAX:ProcessMessage()
-	if (g.mail_armitage ~= 1 and string.lower(self.recipient) == "armitage" and self.message == g.bamaid) then
-		g.mail_armitage = 1
-		g.bankaccount = g.bankaccount + 10000
+	if (s.mail_armitage ~= 1 and string.lower(self.recipient) == "armitage" and self.message == s.bamaid) then
+		s.mail_armitage = 1
+		s.bankaccount = s.bankaccount + 10000
 	end
 end
 
 function PAX:OnTextEntryComplete(text, tag)
 	amount = tonumber(text)
 
-	if tag == "banking_withdrawal" and amount <= g.bankaccount then
-		g.bankaccount = g.bankaccount - amount
-		g.money = g.money + amount
+	if tag == "banking_withdrawal" and amount <= s.bankaccount then
+		s.bankaccount = s.bankaccount - amount
+		s.money = s.money + amount
 		self:GoToPage("banking_menu")
 	end
 
-	if tag == "banking_deposit" and amount <= money then
-		g.bankaccount = g.bankaccount + amount
-		g.money = g.money - amount
+	if tag == "banking_deposit" and amount <= s.money then
+		s.bankaccount = s.bankaccount + amount
+		s.money = s.money - amount
 		self:GoToPage("banking_menu")
 	end
 

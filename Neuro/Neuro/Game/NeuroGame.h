@@ -36,6 +36,11 @@ public:
 	virtual bool IsConversationShowing() override;
 	virtual bool IsMessageActive() override;
 	virtual void RefreshUI() override;
+<<<<<<< HEAD
+=======
+
+	virtual void CloseBoxWithObj(LuaRef BoxObj) override;
+>>>>>>> main
 
 private:
 	

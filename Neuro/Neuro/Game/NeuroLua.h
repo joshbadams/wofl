@@ -137,6 +137,7 @@ private:
 	friend class LuaObjRef;
 	mutable lua_State* L;
 	set<string> SystemVariables;
+	LuaRef Settings;
 };
 
 

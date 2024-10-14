@@ -37,8 +37,6 @@ public:
 	virtual bool IsMessageActive() override;
 	virtual void RefreshUI() override;
 
-	virtual void CloseBoxWithObj(LuaRef BoxObj) override;
-
 private:
 	
 	NeuroConfig Config;

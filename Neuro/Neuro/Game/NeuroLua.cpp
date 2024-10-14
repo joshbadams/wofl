@@ -124,7 +124,7 @@ Lua::~Lua()
 }
 
 // table must be on top of stack
-void WalkOverTable(lua_State* L, std::function<void()>& VisitFunction)
+void WalkOverTable(lua_State* L, const std::function<void()>& VisitFunction)
 {
 	lua_pushnil(L);  // first key
 	while (lua_next(L, -2) != 0)
@@ -135,10 +135,10 @@ void WalkOverTable(lua_State* L, std::function<void()>& VisitFunction)
 	}
 }
 
-bool IsArrayType(lua_State* L)
-{
-	
-}
+//bool IsArrayType(lua_State* L)
+//{
+//	
+//}
 
 // IJsonObj
 Json::Value Lua::ToJsonObject()
@@ -163,8 +163,8 @@ Json::Value Lua::ToJsonObject()
 		else if (lua_istable(L, -1))
 		{
 			// check to see the index types (all int = array, all strings = map, mixed = error)
-			bool bIsArrayType = false;
-			WalkOverTable(L, [&bIsArrayType](lua_state* L) { if (lua_isinteger(L, -2))})
+			bool bIsArrayType = true;
+			WalkOverTable(L, [&bIsArrayType, this]() { if (!lua_isinteger(L, -2)) { bIsArrayType = false; } });
 			
 			WLOG("global table to save? %s\n", Key.c_str());
 			

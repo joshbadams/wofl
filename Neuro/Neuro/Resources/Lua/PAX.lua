@@ -1,4 +1,4 @@
-g.mail_armitage = 0
+s.mail_armitage = 0
 
 
 PAX = Site:new {

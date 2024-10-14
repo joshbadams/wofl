@@ -56,13 +56,14 @@ void Textbox::SetText(const std::string& InText)
 	FirstLine = 0;
 	NumLinesToRender = GetSize().Y / LineHeight;
 	
-	if (FullText != "" && InterfaceDelegate != nullptr && !NeedsMore() && !bPauseOnLastPage)
+	if (FullText != "" && InterfaceDelegate != nullptr && !NeedsShowMore() && !bPauseOnLastPage)
 	{
 		InterfaceDelegate->MessageComplete();
 	}
 }
 
-bool Textbox::NeedsMore()
+
+bool Textbox::NeedsShowMore()
 {
 	return FirstLine + NumLinesToRender < Lines.size();
 }
@@ -137,7 +138,7 @@ void Textbox::CustomRender()
 	}
 		
 	int MessageLines = NumLinesToRender;
-	if (NeedsMore())
+	if (NeedsShowMore())
 	{
 		MessageLines -= 1;
 	}
@@ -151,7 +152,7 @@ void Textbox::CustomRender()
 		}
 		RenderPos.Y += LineHeight;
 	}
-	if (NeedsMore())
+	if (NeedsShowMore())
 	{
 		WoflRenderer::Renderer->DrawString("[MORE]", RenderPos, 1.0f, TextColor);
 	}
@@ -159,16 +160,16 @@ void Textbox::CustomRender()
 
 void Textbox::OnClick()
 {
-	if (bPauseOnLastPage && !NeedsMore())
+	if (bPauseOnLastPage && !NeedsShowMore())
 	{
 		InterfaceDelegate->MessageComplete();
 		return;
 	}
 	
-	if (NeedsMore())
+	if (NeedsShowMore())
 	{
 		FirstLine = std::min(FirstLine + NumLinesToRender - 1, (int)Lines.size() - NumLinesToRender);
-		if (!NeedsMore() && InterfaceDelegate != nullptr && !bPauseOnLastPage)
+		if (!NeedsShowMore() && InterfaceDelegate != nullptr && !bPauseOnLastPage)
 		{
 			InterfaceDelegate->MessageComplete();
 		}

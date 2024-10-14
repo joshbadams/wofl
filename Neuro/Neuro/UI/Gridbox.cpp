@@ -40,14 +40,26 @@ void GridEntry::FromLua(LuaRef Ref)
 	L->GetBoolValue(Ref, "multiline", bMultilineEntry);
 }
 
+Gridbox::Gridbox()
+	: Gridbox(0, 0, 0, 0, 0, WColor::Black)
+{
+	
+}
+
 Gridbox::Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Color)
 	: Ninebox(Ninebox::Basic, X, Y, SizeX, SizeY, Tag, Color)
 	, TextColor(Color)
-	, TextEntryIndex(-1)
-	, bIgnoreUntilNextUp(false)
-	, bIsShowingMessageList(false)
-	, bIsShowingMessage(false)
 {
+	Init();
+}
+
+void Gridbox::Init()
+{
+	TextEntryIndex = -1;
+	bIgnoreUntilNextUp = false;
+	bIsShowingMessageList = false;
+	bIsShowingMessage = false;
+
 	Vector ClientLocation;
 	Vector ClientSize;
 	GetClientGeometry(ClientLocation, ClientSize);
@@ -57,17 +69,49 @@ Gridbox::Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Col
 	SetClickEnabled(true);
 	
 	// skip one line
-	Messagebox = new Textbox(nullptr, ClientLocation.X, ClientLocation.Y + GRID_Y, ClientSize.X, ClientSize.Y - (ClientLocation.Y + GRID_Y), 0, true, true, WColor::Black, GRID_Y);
-	Messagebox->SetInterfaceDelegate(this);
+	if (Messagebox == nullptr)
+	{
+		Messagebox = new Textbox(nullptr, ClientLocation.X, ClientLocation.Y + GRID_Y, ClientSize.X, ClientSize.Y - (ClientLocation.Y + GRID_Y), 0, true, true, WColor::Black, GRID_Y);
+		Messagebox->SetInterfaceDelegate(this);
+	}
+	else
+	{
+		Messagebox->SetSize(ClientSize);
+		Messagebox->SetPosition(ClientLocation);
+	}
+	
+	if (LuaBox)
+	{
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OpenBox", GridsX, GridsY);
+	}
+
+	Update();
 }
 
-void Gridbox::Open(LuaRef LuaObj)
+void Gridbox::Open(LuaRef InLuaBox)
 {
-	LuaBox = LuaObj;
+	LuaBox = InLuaBox;
+
+	int X, Y, W, H;
+	LuaBox->LuaSystem->GetIntValue(LuaBox, "x", X);
+	LuaBox->LuaSystem->GetIntValue(LuaBox, "y", Y);
+	LuaBox->LuaSystem->GetIntValue(LuaBox, "w", W);
+	LuaBox->LuaSystem->GetIntValue(LuaBox, "h", H);
 	
-	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OpenBox", GridsX, GridsY);
-	
+	// resize to match
+	Move(X, Y, W, H);
+
+	Init();
+}
+
+void Gridbox::RefreshUI()
+{
 	Update();
+}
+
+bool Gridbox::MatchesLuaBox(LuaRef Box)
+{
+	return Box == LuaBox;
 }
 
 void Gridbox::CustomPostChildrenRender()
@@ -124,7 +168,7 @@ void Gridbox::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 	// allow for full-widget click/space to continue type things
 	if (!bWasHandled)
 	{
-		this->OnGenericContinueInput();
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnGenericContinueInput");
 	}
 }
 
@@ -230,6 +274,12 @@ void Gridbox::OnTextEntryCancelled(const string& Tag)
 	Update();
 }
 
+void Gridbox::OnGenericContinueInput()
+{
+	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnGenericContinueInput");
+	Update();
+}
+
 void Gridbox::SetupMessages(std::string MessageSourceID, std::string Title)
 {
 //	CurrentMessages = QueryStateDelegate->GetUnlockedMessages(MessageSourceID);
@@ -256,6 +306,12 @@ void Gridbox::MessageComplete()
 
 void Gridbox::Update()
 {
+	// child class would need to handle this
+	if (LuaBox == nullptr)
+	{
+		return;
+	}
+	
 	Entries.clear();
 	Messagebox->RemoveFromParent();
 

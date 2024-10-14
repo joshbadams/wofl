@@ -25,8 +25,10 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 	Lua.RegisterFunction("Trigger", Lua_Trigger);
 	Lua.RegisterFunction("Talk", Lua_Talk);
 	Lua.RegisterFunction("Say", Lua_Say);
+	Lua.RegisterFunction("OpenBox", Lua_OpenBox);
 	Lua.RegisterFunction("CloseBox", Lua_CloseBox);
 	Lua.RegisterFunction("ShowMessage", Lua_ShowMessage);
+	Lua.RegisterFunction("StartTimer", Lua_StartTimer);
 
 	Config->FromLua(Lua, Lua.GetGlobalTable());
 
@@ -146,11 +148,12 @@ void NeuroState::FromJsonObject(const Json::Value& Object)
 	Lua.FromJsonObject(Object["lua"]);
 }
 
-void NeuroState::Tick()
+void NeuroState::Tick(float DeltaTime)
 {
 	switch (CurrentState)
 	{
 		case State::EnteredRoom:
+			CurrentState = State::Idle;
 			ActivateRoom(CurrentRoom, PendingRoom);
 			break;
 			
@@ -160,19 +163,7 @@ void NeuroState::Tick()
 		case State::ActivateConversation:
 			ActivateConversation(FindActiveConversation());
 			break;
-			
-		case State::ShowPostMessage:
-//			if (CurrentConversation->Message != "")
-//			{
-//				CurrentState = State::InMessage;
-//				PendingInvalidation |= ZoneType::Message;
-//			}
-//			else
-			{
-				CurrentState = State::EndedConversation;
-			}
-			break;
-			
+
 		case State::EndedConversation:
 			{
 				LuaRef OnEndFunction = CurrentConversation->Lua_OnEnd;
@@ -192,22 +183,22 @@ void NeuroState::Tick()
 			}
 			break;
 		
-		case State::ShowMessage:
-			PendingInvalidation |= ZoneType::Message;
-			CurrentState = State::InMessage;
-			break;
-
-		case State::EndedMessage:
-			CurrentState = State::Idle;
-			if (Lua_OnMessageComplete != nullptr)
-			{
-				Lua.CallFunction_NoReturn(CurrentRoom, Lua_OnMessageComplete);
-			}
-			break;
-
 		case State::Idle:
 		default:
 			break;
+	}
+
+	if (PendingMessage != "")
+	{
+		StateDelegate->Invalidate(ZoneType::Message);
+		PendingMessage = "";
+	}
+
+	if (PendingConversation != nullptr)
+	{
+		ActivateConversation(PendingConversation);
+		PendingConversation = nullptr;
+		StateDelegate->Invalidate(ZoneType::Dialog);
 	}
 
 	if (PendingInvalidation != ZoneType::None)
@@ -215,30 +206,43 @@ void NeuroState::Tick()
 		StateDelegate->Invalidate(PendingInvalidation);
 		PendingInvalidation = ZoneType::None;
 	}
+
+	vector<Timer>::iterator it = Timers.begin();
+	while (it != Timers.end())
+	{
+		it->Time -= DeltaTime;
+		if (it->Time <= 0)
+		{
+			Lua.CallFunction_NoReturn(it->Object, it->Callback);
+			StateDelegate->RefreshUI();
+			
+			Timers.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
 }
 
 void NeuroState::ClickInventory()
 {
-	if (CurrentState == State::Idle)
+	// @todo can also open when in site
+	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
 	{
-		CurrentState = State::InInventory;
-		PendingInvalidation |= ZoneType::Inventory;
+		StateDelegate->OpenBoxByName("InvBox");
 	}
 }
 
 void NeuroState::ClickPAX()
 {
-	if (CurrentState == State::Idle)
+	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
 	{
 //		CheckMessagesForActivation(this, Config->NewsItems, UnlockedMessages["news"]);
 //		CheckMessagesForActivation(this, Config->AllMessages["news"], UnlockedMessages["board"]);
 	
-		//		CurrentState = State::InPAX;
-		//		PendingInvalidation |= ZoneType::PAX;
-
+		StateDelegate->OpenBoxByName("PAX");
 		CurrentState = State::InSite;
-		SetStringValue("currentsite", "PAX");
-		PendingInvalidation |= ZoneType::Site;
 	}
 }
 
@@ -246,16 +250,17 @@ void NeuroState::ClickTalk()
 {
 	if (CurrentState == State::Idle)
 	{
-		CurrentState = State::ActivateConversation;
+		PendingConversation = FindActiveConversation();
 	}
 }
 
 void NeuroState::ClickSkill()
 {
-	CurrentState = State::InSite;
-	//	SetStringValue("currentsite", "Cheapo");
-	SetStringValue("currentsite", "Cheapo");
-	PendingInvalidation |= ZoneType::Site;
+	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
+	{
+		CurrentState = State::InSite;
+		StateDelegate->OpenBoxByName("regfellow");
+	}
 }
 
 void NeuroState::ClickChip()
@@ -363,7 +368,7 @@ void NeuroState::HandleSceneClick(ZoneType Zone)
 			DialogIndex++;
 			if (DialogIndex == CurrentConversation->Lines.size())
 			{
-				CurrentState = State::ShowPostMessage;
+				CurrentState = State::EndedConversation;
 				DialogIndex = -1;
 			}
 			PendingInvalidation |= ZoneType::Dialog;
@@ -400,44 +405,25 @@ void NeuroState::HandleSceneClick(ZoneType Zone)
 
 void NeuroState::MessageComplete()
 {
-	assert(CurrentState == State::InMessage);
+	if (Lua_OnMessageComplete != nullptr)
+	{
+		Lua.CallFunction_NoReturn(CurrentRoom, Lua_OnMessageComplete);
+	}
 
-	CurrentState = State::EndedMessage;
 	PendingMessage = "";
 }
 
 
 void NeuroState::GridboxClosed(LuaRef Box)
 {
-//	StateDelegate->CloseBoxWithObj(Box);
-	if (CurrentState == State::InInventory)
+	// this returns true when all boxes are closed and we can go idle
+	if (StateDelegate->CloseBoxWithObj(Box))
 	{
-		CurrentState = State::Idle;
-		PendingInvalidation |= ZoneType::Inventory;
+		if (CurrentState == State::InSite || CurrentState == State::InInventory)
+		{
+			CurrentState = State::Idle;
+		}
 	}
-	else if (CurrentState == State::InSite)
-	{
-		CurrentState = State::Idle;
-		PendingInvalidation |= ZoneType::Site;
-	}
-}
-
-bool NeuroState::ConnectToSite(const string& SiteName, int ComLinkLevel)
-{
-	std::string LocalSiteName = SiteName;
-	for (char& c : LocalSiteName) { c = tolower(c); }
-
-	LuaRef Site = GetTableValue(LocalSiteName);
-
-	if (Site != nullptr)
-	{
-		SetStringValue("currentsite", LocalSiteName);
-		CurrentState = State::InSite;
-		PendingInvalidation |= ZoneType::Inventory | ZoneType::Site;
-		return true;
-	}
-	
-	return false;
 }
 
 
@@ -578,7 +564,7 @@ Conversation* NeuroState::FindConversationForAction(const std::string& Action, c
 int NeuroState::GetIntValue(const std::string& Key) const
 {
 	int Value;
-	if (Lua.GetIntValue("", Key.c_str(), Value))
+	if (Lua.GetIntValue("s", Key.c_str(), Value))
 	{
 		return Value;
 	}
@@ -588,7 +574,7 @@ int NeuroState::GetIntValue(const std::string& Key) const
 std::string NeuroState::GetStringValue(const std::string& Key) const
 {
 	std::string Value;
-	if (Lua.GetStringValue("", Key.c_str(), Value))
+	if (Lua.GetStringValue("s", Key.c_str(), Value))
 	{
 		return Value;
 	}
@@ -598,7 +584,7 @@ std::string NeuroState::GetStringValue(const std::string& Key) const
 LuaRef NeuroState::GetTableValue(const std::string& Key) const
 {
 	LuaRef Value;
-	if (Lua.GetTableValue("", Key.c_str(), Value))
+	if (Lua.GetTableValue("s", Key.c_str(), Value))
 	{
 		return Value;
 	}
@@ -608,12 +594,12 @@ LuaRef NeuroState::GetTableValue(const std::string& Key) const
 
 void NeuroState::SetIntValue(const std::string& Name, int Value)
 {
-	Lua.SetIntValue(nullptr, Name.c_str(), Value);
+	Lua.SetIntValue("s", Name.c_str(), Value);
 }
 
 void NeuroState::SetStringValue(const std::string& Name, const std::string& Value)
 {
-	Lua.SetStringValue(nullptr, Name.c_str(), Value);
+	Lua.SetStringValue("s", Name.c_str(), Value);
 }
 
 
@@ -682,12 +668,6 @@ int NeuroState::Lua_Talk(lua_State* L)
 		NS->PendingConversation = NS->FindActiveConversation();
 	}
 	
-	// trigger a talk, with or without tag
-	if (NS->PendingConversation != nullptr)
-	{
-		NS->CurrentState = State::ActivateConversation;
-	}
-
 	return 0;
 }
 
@@ -720,6 +700,16 @@ int NeuroState::Lua_CloseBox(lua_State* L)
 	return 0;
 }
 
+int NeuroState::Lua_OpenBox(lua_State* L)
+{
+	NeuroState* NS = State(L);
+
+	// stack has the box name to open
+	NS->StateDelegate->OpenBoxByName(lua_tostring(L, -1));
+
+	return 0;
+}
+
 int NeuroState::Lua_ShowMessage(lua_State* L)
 {
 	NeuroState* S = State(L);
@@ -740,27 +730,35 @@ int NeuroState::Lua_ShowMessage(lua_State* L)
 
 	//
 	S->PendingMessage = lua_tostring(L, StackPos);
-	S->CurrentState = State::ShowMessage;
+//	S->CurrentState = State::ShowMessage;
 	
 	return 0;
-//
-//	// check for optional oncomplete callback
-//	if (lua_isfunction(L, -1))
-//	{
-//		S->Lua_OnMessageComplete
-//	}
-//	if (!lua_isstring(L, -1) || !lua_isstring(L, -2))
-//	{
-//		return 0;
-//	}
-//
-//	// Lua: Trigger(type, value)
-//	const char* Type = lua_tostring(L, -2);
-//	const char* Value = lua_tostring(L, -1);
-//	
-//	State(L)->Trigger(Type, Value);
-//
-//	return 0;
+}
+
+int NeuroState::Lua_StartTimer(lua_State *L)
+{
+	NeuroState* S = State(L);
+
+dumpstack(L);
+	
+	
+	// put it on top for MakeRef()
+	int StackPos = lua_gettop(L);
+	lua_pushvalue(L, StackPos);
+	LuaRef Func = S->Lua.MakeRef();
+
+	lua_pushvalue(L, StackPos - 1);
+	LuaRef Obj = S->Lua.MakeRef();
+dumpstack(L);
+
+	assert(lua_isinteger(L, -3));
+	float Time = lua_tonumber(L, -3);
+
+	S->Timers.push_back({Time, Obj, Func});
+	
+	// @todo push the timer id
+	lua_pushinteger(L, 33);
+	return 1;
 }
 
 void NeuroState::StringReplacement(std::string& String, char Delimiter) const

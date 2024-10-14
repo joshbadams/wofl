@@ -24,10 +24,18 @@ public:
 	
 	virtual void Tick(float DeltaTime) override
 	{
-		State.Tick();
+		State.Tick(DeltaTime);
 	}
 
 	virtual void Invalidate(ZoneType Zone) override;
+	
+	virtual void OpenBoxByName(const char* Name) override;
+	virtual bool CloseBoxWithObj(LuaRef BoxObj) override;
+	
+	virtual bool AreBoxesShowing() override;
+	virtual bool IsConversationShowing() override;
+	virtual bool IsMessageActive() override;
+	virtual void RefreshUI() override;
 
 	virtual void CloseBoxWithObj(LuaRef BoxObj) override;
 
@@ -41,8 +49,8 @@ private:
 	WoflSprite* Background;
 	class Textbox* MessageBox;
 	class Ninebox* DialogBox;
-	class Gridbox* Inventory;
-	class Gridbox* WebSite;
+	vector<class Gridbox*> Boxes;
+	vector<class Gridbox*> BoxCache;
 
 	void LoadConfig();
 

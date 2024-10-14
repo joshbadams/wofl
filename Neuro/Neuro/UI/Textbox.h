@@ -25,7 +25,8 @@ public:
 	
 	void SetText(const std::string& InText);
 	
-	
+	bool NeedsShowMore();
+
 	virtual void CustomRender() override;
 	virtual void OnClick() override;
 
@@ -40,7 +41,6 @@ protected:
 	bool bPauseOnLastPage;
 	WColor TextColor;
 	
-	bool NeedsMore();
 	void UpdateLines();
 	
 	

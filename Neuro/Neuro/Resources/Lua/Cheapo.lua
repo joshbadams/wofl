@@ -1,11 +1,11 @@
-cheapo_charges = 1000
-cheapo_account = 0
+s.cheapo_charges = 1000
+s.cheapo_account = 0
 
-purchased_cheapo_caviar = 0
-purchased_cheapo_sake = 0
+s.purchased_cheapo_caviar = 0
+s.purchased_cheapo_sake = 0
 
-item_waiting_cheapo_caviar = 0
-item_waiting_cheapo_sake = 0
+s.item_waiting_cheapo_caviar = 0
+s.item_waiting_cheapo_sake = 0
 
 
 Cheapo = Site:new {
@@ -139,10 +139,10 @@ function Cheapo:HandleClickedEntry(id)
 		end
 
 		if (id == 1) then
-			local owed = cheapo_charges - cheapo_account
-			if (owed > 0 and g.money >= owed) then
-				g.money = g.money - owed
-				cheapo_account = cheapo_charges
+			local owed = s.cheapo_charges - s.cheapo_account
+			if (owed > 0 and s.money >= owed) then
+				s.money = s.money - owed
+				s.cheapo_account = s.cheapo_charges
 			end
 		end
 

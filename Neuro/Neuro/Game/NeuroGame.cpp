@@ -11,6 +11,7 @@
 #include "Gridbox.h"
 #include "NeuroConfig.h"
 #include "NeuroScene.h"
+#include <algorithm>
 
 WoflGame* GlobalGameInitialization()
 {
@@ -38,11 +39,11 @@ NeuroGame::NeuroGame()
 	
 	DialogBox = new Ninebox(Ninebox::Basic, 0, 0, ScreenSprite->GetSize().X, 150, Tag_Dialog);
 	
-	Inventory = new Gridbox(150, 480, 500, 280, 0);
-	Inventory->SetDelegates(&State, &State);
-		
-	WebSite = new Gridbox(100, 40, 1000, 600, 0);
-	WebSite->SetDelegates(&State, &State);
+//	Inventory = new InvBox(150, 480, 500, 280);
+	//	Inventory->SetDelegates(&State, &State);
+//
+//	WebSite = new SiteBox(100, 40, 1000, 600);
+//	WebSite->SetDelegates(&State, &State);
 	
 	int Top = 580;
 	int Left = 58;
@@ -74,6 +75,64 @@ NeuroGame::NeuroGame()
 	WoflWorld::Get()->SetRootSprite(Background);
 }
 
+void NeuroGame::OpenBoxByName(const char* Name)
+{
+	LuaRef NewBox;
+	State.Lua.GetTableValue("", Name, NewBox);
+	
+	Gridbox* Box;
+	if (BoxCache.size() > 0)
+	{
+		Box = BoxCache.back();
+		BoxCache.pop_back();
+	}
+	else
+	{
+		Box = new Gridbox();
+		Box->SetDelegates(&State, &State);
+	}
+
+	Box->Open(NewBox);
+	
+	Boxes.push_back(Box);
+	Background->AddChild(Box);
+}
+
+bool NeuroGame::CloseBoxWithObj(LuaRef BoxObj)
+{
+	vector<Gridbox*>::iterator FoundPos = std::find_if(Boxes.begin(), Boxes.end(), [BoxObj](Gridbox* B) { return B->MatchesLuaBox(BoxObj); });
+	if (FoundPos != Boxes.end())
+	{
+		(*FoundPos)->RemoveFromParent();
+		BoxCache.push_back(*FoundPos);
+		Boxes.erase(FoundPos);
+	}
+	
+	return Boxes.size() == 0;
+}
+
+bool NeuroGame::AreBoxesShowing()
+{
+	return Boxes.size() > 0;
+}
+
+bool NeuroGame::IsConversationShowing()
+{
+	return DialogBox->GetParent() != nullptr;
+}
+
+bool NeuroGame::IsMessageActive()
+{
+	return MessageBox->NeedsShowMore();
+}
+
+void NeuroGame::RefreshUI()
+{
+	for (Gridbox* Box : Boxes)
+	{
+		Box->RefreshUI();
+	}
+}
 
 void NeuroGame::Invalidate(ZoneType Zone)
 {
@@ -102,15 +161,13 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		}
 	}
 	
-	if ((Zone & ZoneType::Inventory) != ZoneType::None)
-	{
-		Inventory->RemoveFromParent();
-		if (State.IsShowingInventory())
-		{
-			Inventory->Open(State.GetTableValue("InvBox"));
-			Background->AddChild(Inventory);
-		}
-	}
+//	if ((Zone & ZoneType::Inventory) != ZoneType::None)
+//	{
+//		if (State.IsShowingInventory())
+//		{
+//			OpenBoxByName("InvBox");
+//		}
+//	}
 
 //	if ((Zone & ZoneType::PAX) != ZoneType::None)
 //	{
@@ -122,21 +179,15 @@ void NeuroGame::Invalidate(ZoneType Zone)
 //		}
 //	}
 
-	if ((Zone & ZoneType::Site) != ZoneType::None)
-	{
-		WebSite->RemoveFromParent();
-		if (State.IsShowingSite())
-		{
-			// need to lowercase to look up an object, there's no case insensitive object lookup :|
-			LuaRef Site = State.GetTableValue(State.GetStringValue("currentsite"));
-			WebSite->Open(Site);
-			Background->AddChild(WebSite);
-		}
-	}
-}
-
-void NeuroGame::CloseBoxWithObj(LuaRef BoxObj)
-{
-	
-	assert(0);
+//	if ((Zone & ZoneType::Site) != ZoneType::None)
+//	{
+//		WebSite->RemoveFromParent();
+//		if (State.IsShowingSite())
+//		{
+//			// need to lowercase to look up an object, there's no case insensitive object lookup :|
+//			LuaRef Site = State.GetTableValue(State.GetStringValue("currentsite"));
+//			WebSite->Open(Site);
+//			Background->AddChild(WebSite);
+//		}
+//	}
 }

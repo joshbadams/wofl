@@ -13,8 +13,8 @@ WoflButton::WoflButton(const char* BackgroundImage, const char* LabelText, float
 	: WoflSprite(X, Y, SizeX, SizeY)
 	, OnClickFunc(nullptr)
 	, CaptureType(InCaptureType)
-	, CharShortcut(0)
-	, KeycodeShortcut(0)
+	, CharShortcut(-1)
+	, KeycodeShortcut(WoflKeys::None)
 {
 	if (BackgroundImage != nullptr)
 	{
@@ -60,7 +60,8 @@ void WoflButton::OnInput(const Vector& ScreenLocation, int RepeatCount)
 
 bool WoflButton::OnKey(const KeyEvent& Event)
 {
-	if (Event.Char == CharShortcut || Event.KeyCode == KeycodeShortcut)
+	if ((Event.Char != 0 && Event.Char == CharShortcut) || 
+		(Event.KeyCode != WoflKeys::None && Event.KeyCode == KeycodeShortcut))
 	{
 		if (Event.Type == KeyType::Down && OnClickFunc)
 		{

@@ -27,6 +27,7 @@ InvBox = Gridbox:new {
 }
 
 function InvBox:OpenBox(width, height)
+	print("opening invbox", s.inventory, s.money)
 	Gridbox.OpenBox(self, width, height)
 
 	self.phase = InvPhase.List

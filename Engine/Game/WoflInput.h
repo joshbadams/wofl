@@ -16,6 +16,53 @@
 
 #define WOFL_MAX_FINGERS 5
 
+enum class WoflKeys
+{
+	None,
+
+	Escape,
+	Enter,
+	Space,
+	Backspace,
+
+	A = 'A',
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+	I,
+	J,
+	K,
+	L,
+	M,
+	N,
+	O,
+	P,
+	Q,
+	R,
+	S,
+	T,
+	U,
+	V,
+	W,
+	X,
+	Y,
+	Z,
+	Zero = '0',
+	One,
+	Two,
+	Three,
+	Four,
+	Five,
+	Six,
+	Seven,
+	Eight,
+	Nine,
+};
+
 class WoflSprite;
 
 enum class KeyType
@@ -27,7 +74,7 @@ enum class KeyType
 
 struct KeyEvent
 {
-	int KeyCode;
+	WoflKeys KeyCode;
 	char Char;
 	KeyType Type;
 };
@@ -68,7 +115,7 @@ public:
 		QueuedTouches.push_back(Event);
 	}
 	
-	virtual void AddKey(int KeyCode, char Char, KeyType Type)
+	virtual void AddKey(WoflKeys KeyCode, char Char, KeyType Type)
 	{
 		QueuedKeys.push_back({KeyCode, Char, Type});
 	}

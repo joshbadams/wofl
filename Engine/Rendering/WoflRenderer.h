@@ -16,7 +16,8 @@
 #elif ANDROID
 #include "Android/AndroidGLSetup.h"
 #else
-//#error New platforms here. Hah!
+//#error New platforms here. Hah!lib
+
 #endif
 
 //#include "WoflMath.h"

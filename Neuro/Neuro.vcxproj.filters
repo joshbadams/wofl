@@ -17,6 +17,9 @@
     <Filter Include="Resources\Lua">
       <UniqueIdentifier>{7f933be7-0be9-46c8-964a-61c97e64f4da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\DLLs">
+      <UniqueIdentifier>{2b156e98-2ac1-4f58-a950-3f6485ae13c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Neuro\Game\NeuroConfig.cpp">
@@ -130,6 +133,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\Lua\RegFellow.lua">
       <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="lua\lua54.dll">
+      <Filter>Resources\DLLs</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

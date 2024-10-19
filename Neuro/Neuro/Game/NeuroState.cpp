@@ -8,14 +8,6 @@
 #include "NeuroState.h"
 
 
-// TODO:
-// make s. globals for save/load
-// open multiple boxes
-// state machine stuff to have pending stuff, and not the same states like is there
-
-
-
-
 NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate)
 	: CurrentConversation(nullptr)
 	, Config(InConfig)
@@ -217,6 +209,7 @@ void NeuroState::Tick(float DeltaTime)
 			StateDelegate->RefreshUI();
 			
 			Timers.erase(it);
+			break;
 		}
 		else
 		{

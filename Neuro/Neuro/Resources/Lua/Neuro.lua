@@ -20,6 +20,7 @@ s = {
 
 }
 
+print("inv: ", s.inventory)
 currentRoom = nil
 
 
@@ -103,9 +104,9 @@ end
 
 function Room:OnEnterRoom()
 	local firstTimeKey = "__" .. self.name
-	if (_G[firstTimeKey] ~= 1) then
+	if (s[firstTimeKey] ~= 1) then
 		self:OnFirstEnter()
-		_G[firstTimeKey] = 1
+		s[firstTimeKey] = 1
 	else
 		self:OnEnter()
 	end
@@ -262,7 +263,6 @@ function Site:GetDetailsString()
 	local page = self:GetCurrentPage()
 
 	if (page.type == "message") then
-		print("details for message", page.message)
 		return page.message
 	end
 

@@ -251,13 +251,18 @@ void WindowsRenderer::DrawScene(WoflSprite* RootSprite)
 	MakeViewMatrix();
 	GLCHECK(glUniformMatrix4fv(ViewMatrixUniform, 1, 0, (GLfloat*)ViewMatrix));
 
-	WoflWorld::Get()->Visit(true, true, false,
-							[this](WoflSprite* Sprite)
-							{
-								DrawSprite(Sprite);
-								return true;
-							},
-							RootSprite);
+	WoflWorld::Get()->VisitEx(true, false,
+		[this](WoflSprite* Sprite)
+		{
+			DrawSprite(Sprite);
+			return true;
+		},
+		[](WoflSprite* Sprite)
+		{
+			Sprite->CustomPostChildrenRender();
+			return true;
+		},
+		RootSprite);
 }
 
 const char* Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-=_+`~[]\\{}|;':\",./<>? ";

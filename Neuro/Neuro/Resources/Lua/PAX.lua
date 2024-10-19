@@ -19,7 +19,7 @@ PAX = Site:new {
 		
 		['firsttime'] = {
 			type = "message",
-			message = "@paxfirsttime",
+			message = "PAX, the Public Access System, was first implemented as a result of the Gibson Mandate of 2036. PAX allows general access to the Central Database Interlink (CDI) with Friendly Interface System Hardware (FISH) designed for Limited Free Access (LFA) to the Multi-Phased Public Information Library Core (MPPILC) in conjunction with the Swiss Orbital Banking (SOB) network, which is regulated by the Chiba City Public Database Regulating Agency (CCPDRA) in concordance with the World Holographic Organizational Obligation for Electronic Eavesdropped (WHOOPEE) Guidlines established by the Balfour Act. With the institution of WHOOPEE protocol, LFA became possible with the MPPILC system and the SOB network. The FISH, contained within the PAX Booth, was ergonomically designed for Optimal Ease of Use (OEU) within the specifications of the agencies involved, primarily CCPDRA and the SOB network. OEU makes operation of the PAX system a simple task for both the First Time User (FTU) and the Experienced Adept (EA) through implementation of menus and Simple Directions (SD) available in Lucid Help Files (LHF) such as this one, in which Simplified Grammatical Syntax (SGS) and Simple Word Choice (SWC) algorithms have been employed to benefit User Understanding (UU).",
 			exit = "main"
 		},
 		
@@ -182,7 +182,7 @@ end
 
 function PAX:GetSendMessageEntries(entries)
 	table.append(entries, { x = 5, y = 0, text = "Send Message" })
-	table.append(entries, { x = 0, y = 4, text = "date: " .. string.fromDate(date) })
+	table.append(entries, { x = 0, y = 4, text = "date: " .. string.fromDate(s.date) })
 	table.append(entries, { x = 0, y = 5, text = "to:   " })
 
 	if (self.currentPage == "bbs_send_verify") then

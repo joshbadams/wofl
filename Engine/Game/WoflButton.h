@@ -34,7 +34,7 @@ public:
 	{
 		CharShortcut = Char;
 	}
-	void SetKeycodeShortcut(int Keycode)
+	void SetKeycodeShortcut(WoflKeys Keycode)
 	{
 		KeycodeShortcut = Keycode;
 	}
@@ -49,5 +49,5 @@ protected:
 	
 	SpriteCaptureType CaptureType;
 	char CharShortcut;
-	int KeycodeShortcut;
+	WoflKeys KeycodeShortcut;
 };

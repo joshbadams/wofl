@@ -31,6 +31,9 @@ void GridEntry::FromLua(LuaRef Ref)
 	L->GetStringValue(Ref, "entryTag", EntryTag);
 	L->GetBoolValue(Ref, "numeric", bNumericEntry);
 	L->GetBoolValue(Ref, "multiline", bMultilineEntry);
+
+	L->GetFunctionValue(Ref, "onClick", OnClick);
+	L->GetFunctionValue(Ref, "onClickEntry", OnClickEntry);
 }
 
 Gridbox::Gridbox()
@@ -143,7 +146,8 @@ void Gridbox::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 	bool bWasHandled = false;
 	for (GridEntry& Entry : Entries)
 	{
-		if (Entry.ClickId != 0 && Y == Entry.Y && X >= Entry.X && X < Entry.X + Entry.Text.length())
+		bool bWantsInput = Entry.ClickId != 0 || Entry.OnClick || Entry.OnClickEntry;
+		if (bWantsInput && Y == Entry.Y && X >= Entry.X && X < Entry.X + Entry.Text.length())
 		{
 			if (IsInMessagePhase())
 			{
@@ -341,7 +345,19 @@ void Gridbox::Update()
 
 void Gridbox::OnClickEntry(GridEntry& Entry)
 {
-	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleClickedEntry", Entry.ClickId);
+	if (Entry.OnClick != nullptr)
+	{
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, Entry.OnClick);
+	}
+	else if (Entry.OnClickEntry != nullptr)
+	{
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, Entry.OnClickEntry, Entry.LuaEntry);
+	}
+	else
+	{
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleClickedEntry", Entry.ClickId);
+	}
+	
 	Update();
 }
 

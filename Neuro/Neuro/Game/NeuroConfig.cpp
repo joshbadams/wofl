@@ -15,14 +15,6 @@ void NeuroConfigObj::FromLua(class Lua& L, LuaRef Object)
 	
 }
 
-std::string NeuroConfigObj::PostProcessString(const std::string& String)
-{
-	const NeuroState& State = ((NeuroGame*)WoflGame::TheGame)->State;
-	std::string NewString = String;
-	State.StringReplacement(NewString, '%');
-	return NewString;
-}
-
 
 NeuroConfig::NeuroConfig()
 {

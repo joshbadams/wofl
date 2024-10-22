@@ -33,6 +33,8 @@ SiteScripts = {
 	"Cheapo",
 	"PAX",
 	"RegFellow",
+
+	"MiscBoxes",
 }
 
 function TablesMatch(g, a, b)
@@ -167,6 +169,16 @@ end
 
 function Gridbox:GetEntries()
 	return {}
+end
+
+function Gridbox:HandleClickedEntry(id)
+	-- -1 is always the "exit" option
+	if id == -1 then
+		self:HandleClickedExit()
+	-- -2 is always the "more" option
+	elseif id == -2 then
+		self:HandleClickedMore()
+	end
 end
 
 function Gridbox:AddExitMoreEntries(entries, needsMore)
@@ -489,12 +501,8 @@ print("Handle cliecked entry", self, page.type, id)
 			self:OnDownloadSelected(page, page.items[id])
 		end
 
-	-- -1 is always the "exit" option
-	elseif id == -1 then
-		self:HandleClickedExit()
-	-- -2 is always the "more" option
-	elseif id == -2 then
-		self:HandleClickedMore()
+	else
+		Gridbox.HandleClickedEntry(id)
 	end
 end
 

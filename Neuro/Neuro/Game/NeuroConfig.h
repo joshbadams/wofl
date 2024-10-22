@@ -48,7 +48,6 @@ public:
 	virtual void FromLua(Lua& L, LuaRef Object);
 
 protected:
-	virtual std::string PostProcessString(const std::string& String);
 };
 
 class Option : public NeuroConfigObj

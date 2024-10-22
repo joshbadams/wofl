@@ -130,11 +130,7 @@ public:
 	virtual std::string GetStringValue(const std::string&  Key) const override;
 	void SetStringValue(const std::string& Key, const std::string& Value);
 	virtual LuaRef GetTableValue(const std::string& Key) const override;
-
-	void Trigger(const std::string& Type, const std::string& Value);
-		
-	void StringReplacement(std::string& String, char Delimiter) const;
-	
+			
 	std::string GetCurrentDialogLine();
 	std::string GetCurrentMessage();
 
@@ -145,15 +141,6 @@ public:
 	void ClickChip();
 	void ClickSystem();
 
-//	bool IsShowingInventory() { return CurrentState == State::InInventory; }
-//	bool IsShowingPAX() { return CurrentState == State::InPAX; }
-//	bool IsShowingSkill() { return CurrentState == State::InSkill; }
-//	bool IsShowingChip() { return CurrentState == State::InChip; }
-//	bool IsShowingSystem() { return CurrentState == State::InSystem; }
-//	bool IsShowingSite() { return CurrentState == State::InSite; }
-
-	bool TestCondition(const std::string& Condition, bool bEmptyConditionIsSuccess, const std::string* Action=nullptr, const std::string* Value=nullptr);
-
 private:
 	
 	static int Lua_Trigger(lua_State* L);
@@ -163,14 +150,17 @@ private:
 	static int Lua_OpenBox(lua_State* L);
 	static int Lua_CloseBox(lua_State* L);
 	static int Lua_StartTimer(lua_State* L);
+	static int Lua_SaveGame(lua_State* L);
+	static int Lua_LoadGame(lua_State* L);
+	static int Lua_PauseGame(lua_State* L);
+	static int Lua_QuitGame(lua_State* L);
 
 	void ActivateRoom(LuaRef OldRoom, LuaRef NewRoom);
 	void ActivateConversation(Conversation* Convo);
 	
 	Conversation* FindConversationWithTag(const char* Tag);
 	Conversation* FindActiveConversation();
-	Conversation* FindConversationForAction(const std::string& Action, const std::string& Value);
-
+	
 	map<std::string, std::vector<int>> UnlockedMessages;
 
 	NeuroConfig* Config;

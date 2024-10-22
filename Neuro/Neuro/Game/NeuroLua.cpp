@@ -179,7 +179,7 @@ Json::Value Lua::ToJsonObject()
 				{
 					if (lua_isinteger(L, -1))
 					{
-						WLOG("  %d\n", lua_tointeger(L, -1));
+						WLOG("  %d\n", (int)lua_tointeger(L, -1));
 						SubObject.append(Json::Value(lua_tointeger(L, -1)));
 					}
 					else if (lua_isstring(L, -1))

@@ -137,5 +137,8 @@
     <CopyFileToFolders Include="lua\lua54.dll">
       <Filter>Resources\DLLs</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\MiscBoxes.lua">
+      <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

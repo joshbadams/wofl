@@ -14,13 +14,16 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 	, StateDelegate(InStateDelegate)
 	, Lua(this)
 {
-	Lua.RegisterFunction("Trigger", Lua_Trigger);
 	Lua.RegisterFunction("Talk", Lua_Talk);
 	Lua.RegisterFunction("Say", Lua_Say);
 	Lua.RegisterFunction("OpenBox", Lua_OpenBox);
 	Lua.RegisterFunction("CloseBox", Lua_CloseBox);
 	Lua.RegisterFunction("ShowMessage", Lua_ShowMessage);
 	Lua.RegisterFunction("StartTimer", Lua_StartTimer);
+	Lua.RegisterFunction("SaveGame", Lua_SaveGame);
+	Lua.RegisterFunction("LoadGame", Lua_LoadGame);
+	Lua.RegisterFunction("PauseGame", Lua_PauseGame);
+	Lua.RegisterFunction("QuitGame", Lua_QuitGame);
 
 	Config->FromLua(Lua, Lua.GetGlobalTable());
 
@@ -34,7 +37,7 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 	}
 
 	// loaded values here will override init values in tha
-	LoadFromFile(Utils::File->GetSavePath("game.sav").c_str());
+	LoadFromFile(Utils::File->GetSavePath("game1.sav").c_str());
 
 	// get a pointer to starting room
 	Lua.GetTableValue("", Config->RoomNames[0].c_str(), PendingRoom);
@@ -258,12 +261,14 @@ void NeuroState::ClickSkill()
 
 void NeuroState::ClickChip()
 {
-	LoadFromFile(Utils::File->GetSavePath("game.sav").c_str());
+//	LoadFromFile(Utils::File->GetSavePath("game.sav").c_str());
 }
 
 void NeuroState::ClickSystem()
 {
-	SaveToFile(Utils::File->GetSavePath("game.sav").c_str());
+	StateDelegate->OpenBoxByName("SystemBox");
+
+//	SaveToFile(Utils::File->GetSavePath("game.sav").c_str());
 }
 
 
@@ -419,76 +424,6 @@ void NeuroState::GridboxClosed(LuaRef Box)
 	}
 }
 
-
-bool NeuroState::TestCondition(const std::string& Condition, bool bEmptyConditionIsSuccess, const std::string* Action, const std::string* Value)
-{
-	// no condition uses bEmptyConditionIsSuccess
-	if (Condition == "")
-	{
-		return bEmptyConditionIsSuccess;
-	}
-	
-	if (Condition.starts_with("lua:"))
-	{
-		bool Result;
-		Lua.GetBool(Condition.substr(4), Result);
-		return Result;
-	}
-	
-	size_t OpLoc = Condition.find('=');
-	if (OpLoc == std::string::npos) OpLoc = Condition.find('<');
-	if (OpLoc == std::string::npos) OpLoc = Condition.find('>');
-	
-	if (OpLoc == std::string::npos)
-	{
-		WLOG("Invalid condition: %s\n", Condition.c_str());
-		return false;
-	}
-
-	std::string FirstHalf = Condition.substr(0, OpLoc);
-	std::string SecondHalf = Condition.substr(OpLoc + 1);
-	
-	if (Action != nullptr && *Action != FirstHalf)
-	{
-		return false;
-	}
-	// if one value but not both is $, return false, and skip the $
-	int FirstIndex = 0;
-	if (Value != nullptr && ((*Value)[0] == '$' || SecondHalf[0] == '$'))
-	{
-		if ((*Value)[0] != SecondHalf[0])
-		{
-			return false;
-		}
-		FirstIndex = 1;
-	}
-
-	char Op = Condition[OpLoc];
-	// dealing with integer operations?
-	if (Op == '>' || Op == '<' || (SecondHalf[FirstIndex] >= '0' && SecondHalf[FirstIndex] <= '9') || SecondHalf[FirstIndex] == '$')
-	{
-		int A = (Value != nullptr) ? stoi(Value->substr(FirstIndex)) : GetIntValue(FirstHalf);
-		int B = stoi(SecondHalf.substr(FirstIndex));
-		
-		bool bResult = (Op == '<' && A < B) || (Op == '>' && A > B) || (Op == '=' && A == B);
-		
-		if (bResult)
-		{
-			WLOG("Condition: %s, was met!\n", Condition.c_str());
-		}
-		return bResult;
-	}
-	
-	// std::string comparison
-	std::string A = (Value != nullptr) ? *Value : GetStringValue(FirstHalf);
-	bool bResult = A == SecondHalf;
-	if (bResult)
-	{
-		WLOG("Condition: %s, was met!\n", Condition.c_str());
-	}
-	return bResult;
-}
-
 Conversation* NeuroState::FindConversationWithTag(const char* Tag)
 {
 //	LUA_SCOPE;
@@ -530,29 +465,9 @@ Conversation* NeuroState::FindActiveConversation()
 		return &LuaConversation;
 	}
 
-//	for (Conversation* Convo : CurrentRoom->Conversations)
-//	{
-//		if (TestCondition(Convo->Condition, false))
-//		{
-//			return Convo;
-//		}
-//	}
 	return nullptr;
 }
 
-
-Conversation* NeuroState::FindConversationForAction(const std::string& Action, const std::string& Value)
-{
-//	for (Conversation* Convo : CurrentRoom->Conversations)
-//	{
-//		// empty condition is success when doing actions
-//		if (TestCondition(Convo->Condition, true) && TestCondition(Convo->Action, false, &Action, &Value))
-//		{
-//			return Convo;
-//		}
-//	}
-	return nullptr;
-}
 
 int NeuroState::GetIntValue(const std::string& Key) const
 {
@@ -596,25 +511,6 @@ void NeuroState::SetStringValue(const std::string& Name, const std::string& Valu
 }
 
 
-void NeuroState::Trigger(const std::string& Type, const std::string& Value)
-{
-	if (Type == "talk")
-	{
-		if (Value == "")
-		{
-			PendingConversation = FindActiveConversation();
-		}
-		else
-		{
-			PendingConversation = FindConversationWithTag(Value.c_str());
-		}
-		if (PendingConversation != nullptr)
-		{
-			CurrentState = State::ActivateConversation;
-		}
-	}
-}
-
 void NeuroState::IncrementIntValue(const std::string& Key)
 {
 	SetIntValue(Key, GetIntValue(Key) + 1);
@@ -628,22 +524,6 @@ static NeuroState* State(lua_State* L)
 	
 	return State;
 
-}
-
-int NeuroState::Lua_Trigger(lua_State* L)
-{
-	if (!lua_isstring(L, -1) || !lua_isstring(L, -2))
-	{
-		return 0;
-	}
-
-	// Lua: Trigger(type, value)
-	const char* Type = lua_tostring(L, -2);
-	const char* Value = lua_tostring(L, -1);
-	
-	State(L)->Trigger(Type, Value);
-
-	return 0;
 }
 
 int NeuroState::Lua_Talk(lua_State* L)
@@ -730,10 +610,7 @@ int NeuroState::Lua_ShowMessage(lua_State* L)
 
 int NeuroState::Lua_StartTimer(lua_State *L)
 {
-	NeuroState* S = State(L);
-
-dumpstack(L);
-	
+	NeuroState* S = State(L);	
 	
 	// put it on top for MakeRef()
 	int StackPos = lua_gettop(L);
@@ -754,33 +631,34 @@ dumpstack(L);
 	return 1;
 }
 
-void NeuroState::StringReplacement(std::string& String, char Delimiter) const
+int NeuroState::Lua_SaveGame(lua_State* L)
 {
-	size_t FirstPercent = String.find(Delimiter);
-	while (FirstPercent != std::string::npos)
-	{
-		size_t SecondPercent = String.find(Delimiter, FirstPercent + 1);
-		if (SecondPercent == std::string::npos)
-		{
-			return;
-		}
-		
-		std::string Variable = String.substr(FirstPercent + 1, SecondPercent - FirstPercent - 1);
-		
-		// replcae %foo% with GetVar(foo)
-		std::string NewValue;
-		if (Lua.GetStringValue("", Variable.c_str(), NewValue))
-		{
-			String.replace(FirstPercent, SecondPercent - FirstPercent + 1, NewValue);
-		}
-		else
-		{
-			FirstPercent = SecondPercent + 1;
-		}
-		
-		FirstPercent = String.find(Delimiter, FirstPercent);
-	}
+	NeuroState* S = State(L);
+	int Index = lua_tointeger(L, -1);
+	S->SaveToFile(Utils::File->GetSavePath((std::string("game") + (char)('0' + Index) + ".sav").c_str()).c_str());
+
+	return 0;
 }
+
+int NeuroState::Lua_LoadGame(lua_State* L)
+{
+	NeuroState* S = State(L);
+	int Index = lua_tointeger(L, -1);
+	S->LoadFromFile(Utils::File->GetSavePath((std::string("game") + (char)('0' + Index) + ".sav").c_str()).c_str());
+	return 0;
+}
+
+int NeuroState::Lua_PauseGame(lua_State* L)
+{
+	return 0;
+}
+
+int NeuroState::Lua_QuitGame(lua_State* L)
+{
+	return 0;
+}
+
+
 
 //std::vector<Message*> NeuroState::GetUnlockedMessages(std::string ID)
 //{

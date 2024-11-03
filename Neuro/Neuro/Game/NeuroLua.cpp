@@ -152,7 +152,7 @@ Json::Value Lua::ToJsonObject()
 	while (lua_next(L, Table) != 0)
 	{
 		string Key = lua_tostring(L, -2);
-		if (SystemVariables.find(Key) == SystemVariables.end())
+		if (lua_isinteger(L, -1))
 		{
 			LuaObject[Key] = Json::Value(lua_tointeger(L, -1));
 		}
@@ -168,43 +168,49 @@ Json::Value Lua::ToJsonObject()
 			
 			WLOG("global table to save? %s\n", Key.c_str());
 			
-			Json::Value SubObject(Json::objectValue);
-			LuaObject[Key] = SubObject;
-
 			int SubTable = lua_gettop(L);
 			lua_pushnil(L);  // first sub-key
-			dumpstack(L);
+//			dumpstack(L);
 
-			while (lua_next(L, SubTable) != 0)
+			if (bIsArrayType)
 			{
-				if (lua_isinteger(L, -2))
+				Json::Value SubObject(Json::arrayValue);
+				while (lua_next(L, SubTable) != 0)
 				{
-					Key = "asdasd";
+					if (lua_isinteger(L, -1))
+					{
+						WLOG("  %d\n", (int)lua_tointeger(L, -1));
+						SubObject.append(Json::Value(lua_tointeger(L, -1)));
+					}
+					else if (lua_isstring(L, -1))
+					{
+						WLOG("  %s\n", lua_tostring(L, -1));
+						SubObject.append(Json::Value(lua_tostring(L, -1)));
+					}
+					lua_pop(L, 1);
 				}
-				else
+				LuaObject[Key] = SubObject;
+			}
+			else
+			{
+				Json::Value SubObject(Json::objectValue);
+
+				while (lua_next(L, SubTable) != 0)
 				{
-					Key = lua_tostring(L, -2);
+					if (lua_isinteger(L, -1))
+					{
+						SubObject[Key] = Json::Value(lua_tointeger(L, -1));
+					}
+					else if (lua_isstring(L, -1))
+					{
+						SubObject[Key] = Json::Value(lua_tostring(L, -1));
+					}
+					// move to next
+					lua_pop(L, 1);
 				}
-				if (lua_isinteger(L, -1))
-				{
-					SubObject[Key] = Json::Value(lua_tointeger(L, -1));
-				}
-				else if (lua_isstring(L, -1))
-				{
-					SubObject[Key] = Json::Value(lua_tostring(L, -1));
-				}
-				// move to next
-				lua_pop(L, 1);
-				dumpstack(L);
+				LuaObject[Key] = SubObject;
 			}
 		}
-		else //if (lua_isfunction(L, -1) || lua_islightuserdata(L, -1))
-		{
-		}
-//			else
-//			{
-//				assert(0);
-//			}
 
 		// move to next
 		lua_pop(L, 1);
@@ -236,17 +242,24 @@ void Lua::FromJsonObject(const Json::Value& LuaObject)
 				assert(0);
 			}
 			
-			for (auto TableName : LuaObject[Name].getMemberNames())
+			for (int Index = 0; Index < LuaObject[Name].size(); Index++)
 			{
-				if (LuaObject[Name][TableName].isInt())
+				if (LuaObject[Name][Index].isInt())
 				{
-					WLOG("   Looading int value %s = %d\n", Name.c_str(), LuaObject[Name][TableName].asInt());
-					SetIntValue(Table, TableName.c_str(), LuaObject[Name][TableName].asInt());
+					WLOG("   Looading int value %d\n", LuaObject[Name][Index].asInt());
+					
+					SCOPE;
+					PushSpec(L, Table);
+					lua_pushinteger(L, Index + 1);
+					lua_pushinteger(L, LuaObject[Name][Index].asInt());
+					lua_settable(L, -3);
+
+//					SetIntValue(Table, TableName.c_str(), LuaObject[Name][Index].asInt());
 				}
-				else if (LuaObject[Name].isString())
+				else if (LuaObject[Name][Index].isString())
 				{
-					WLOG("   Looading string value %s = %s\n", Name.c_str(), LuaObject[Name][TableName].asString().c_str());
-					SetStringValue(Table, TableName.c_str(), LuaObject[Name][TableName].asString());
+					WLOG("   Looading string value %s\n", LuaObject[Name][Index].asString().c_str());
+//					SetStringValue(Table, TableName.c_str(), LuaObject[Name][Index].asString());
 				}
 			}
 		}

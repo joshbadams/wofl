@@ -12,13 +12,6 @@
 const int Message_Exit = -1;
 const int Message_More = -2;
 
-enum KeyCodes
-{
-	Key_Enter = 36,
-	Key_Delete = 51,
-	Key_Escape = 53,
-};
-
 void GridEntry::FromLua(LuaRef Ref)
 {
 	Lua* L = Ref->LuaSystem;
@@ -38,6 +31,9 @@ void GridEntry::FromLua(LuaRef Ref)
 	L->GetStringValue(Ref, "entryTag", EntryTag);
 	L->GetBoolValue(Ref, "numeric", bNumericEntry);
 	L->GetBoolValue(Ref, "multiline", bMultilineEntry);
+
+	L->GetFunctionValue(Ref, "onClick", OnClick);
+	L->GetFunctionValue(Ref, "onClickEntry", OnClickEntry);
 }
 
 Gridbox::Gridbox()
@@ -76,8 +72,8 @@ void Gridbox::Init()
 	}
 	else
 	{
-		Messagebox->SetSize(ClientSize);
-		Messagebox->SetPosition(ClientLocation);
+		Messagebox->SetPosition(Vector(ClientLocation.X, ClientLocation.Y + GRID_Y));
+		Messagebox->SetSize(Vector(ClientSize.X, ClientSize.Y - (ClientLocation.Y + GRID_Y)));
 	}
 	
 	if (LuaBox)
@@ -150,7 +146,8 @@ void Gridbox::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 	bool bWasHandled = false;
 	for (GridEntry& Entry : Entries)
 	{
-		if (Entry.ClickId != 0 && Y == Entry.Y && X >= Entry.X && X < Entry.X + Entry.Text.length())
+		bool bWantsInput = Entry.ClickId != 0 || Entry.OnClick || Entry.OnClickEntry;
+		if (bWantsInput && Y == Entry.Y && X >= Entry.X && X < Entry.X + Entry.Text.length())
 		{
 			if (IsInMessagePhase())
 			{
@@ -189,7 +186,7 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 	{
 		return true;
 	}
-	if (Event.Char == 0 && Event.KeyCode != Key_Enter && Event.KeyCode != Key_Delete && Event.KeyCode != Key_Escape)
+	if (Event.Char == 0 && Event.KeyCode != WoflKeys::Enter && Event.KeyCode != WoflKeys::Backspace && Event.KeyCode != WoflKeys::Escape)
 	{
 		return true;
 	}
@@ -203,7 +200,7 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 			Entries[TextEntryIndex].Text += Event.Char;
 		}
 		// delete
-		else if (Event.KeyCode == Key_Delete)
+		else if (Event.KeyCode == WoflKeys::Backspace)
 		{
 			if (Entries[TextEntryIndex].Text.length() > 0)
 			{
@@ -211,8 +208,8 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 			}
 		}
 		// complete entry (enter for single line, esc for multiline)
-		else if ((Event.KeyCode == Key_Enter && !TextEntry.bMultilineEntry) ||
-				 (Event.KeyCode == Key_Escape && TextEntry.bMultilineEntry))
+		else if ((Event.KeyCode == WoflKeys::Enter && !TextEntry.bMultilineEntry) ||
+				 (Event.KeyCode == WoflKeys::Escape && TextEntry.bMultilineEntry))
 		{
 			int Index = TextEntryIndex;
 			TextEntryIndex = -1;
@@ -220,7 +217,7 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 			bIgnoreUntilNextUp = true;
 		}
 		// cancel (escape for single line_
-		else if (Event.KeyCode == Key_Escape)
+		else if (Event.KeyCode == WoflKeys::Escape)
 		{
 			int Index = TextEntryIndex;
 			TextEntryIndex = -1;
@@ -253,7 +250,7 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 	
 	if (!bIgnoreUntilNextUp)
 	{
-		if (Event.Type == KeyType::Down && (Event.KeyCode == Key_Enter || Event.Char == ' ' || Event.KeyCode == Key_Escape))
+		if (Event.Type == KeyType::Down && (Event.KeyCode == WoflKeys::Enter || Event.KeyCode == WoflKeys::Space || Event.KeyCode == WoflKeys::Escape))
 		{
 			OnGenericContinueInput();
 		}
@@ -348,7 +345,19 @@ void Gridbox::Update()
 
 void Gridbox::OnClickEntry(GridEntry& Entry)
 {
-	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleClickedEntry", Entry.ClickId);
+	if (Entry.OnClick != nullptr)
+	{
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, Entry.OnClick);
+	}
+	else if (Entry.OnClickEntry != nullptr)
+	{
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, Entry.OnClickEntry, Entry.LuaEntry);
+	}
+	else
+	{
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleClickedEntry", Entry.ClickId);
+	}
+	
 	Update();
 }
 

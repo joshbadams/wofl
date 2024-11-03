@@ -11,6 +11,8 @@
 
 #include "WoflFile.h"
 #include "stb_image.h"
+#include <windows.h>
+#include <fileapi.h>
 
 
 class WindowsFile : public WoflFile
@@ -30,7 +32,11 @@ public:
 	
 	virtual std::string GetSavePath(const char* Filename) override
 	{
-		return std::string("C:/WoflSave");
+		char HomeDir[1024];
+		GetEnvironmentVariableA("APPDATA", HomeDir, 1023);
+		std::string Path = std::string(HomeDir) + "/Wofl/";
+		CreateDirectoryA(Path.c_str(), nullptr);
+		return Path + Filename;
 	}
 	
 	virtual std::string LoadFileToString(const char* Path) override

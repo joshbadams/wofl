@@ -28,6 +28,9 @@
     <Filter Include="Rendering\Resources\Shaders">
       <UniqueIdentifier>{280d5335-6330-4757-9a05-dade09cc641c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows\DLLs">
+      <UniqueIdentifier>{a0558c3c-165d-45f0-96b0-aa5914d56232}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Misc\WoflFile.h">
@@ -171,6 +174,12 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Rendering\Resources\Shaders\Shader.fsh">
       <Filter>Rendering\Resources\Shaders</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Windows\bin\glew-2.2.0\Release\x64\glew32.dll">
+      <Filter>Windows\DLLs</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Windows\lib\glfw\x64\glfw3.dll">
+      <Filter>Windows\DLLs</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

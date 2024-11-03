@@ -19,7 +19,7 @@ void WoflInput::PreWorldTick(float DeltaTime)
 			continue;
 		}
 		
-		if (KeyCapturedSprite != nullptr)
+		if (KeyEvent.KeyCode != WoflKeys::None && KeyCapturedSprite != nullptr)
 		{
 			if (KeyCapturedSprite->IsRooted())
 			{
@@ -28,15 +28,18 @@ void WoflInput::PreWorldTick(float DeltaTime)
 			
 			if (KeyEvent.Type == KeyType::Down)
 			{
+				WLOG("Increment capure\n");
 				CapturedKeysDown++;
 			}
 			if (KeyEvent.Type == KeyType::Up)
 			{
+				WLOG("Decrement capure\n");
 				CapturedKeysDown--;
 			}
 			
 			if (CapturedKeysDown == 0)
 			{
+				WLOG("clearning capture\n");
 				KeyCapturedSprite = nullptr;
 			}
 		}
@@ -47,8 +50,12 @@ void WoflInput::PreWorldTick(float DeltaTime)
 					bool bWasHandled = Sprite->OnKey(KeyEvent);
 					if (bWasHandled)
 					{
-						KeyCapturedSprite = Sprite;
-						CapturedKeysDown++;
+						WLOG("setting capture\n");
+						if (KeyEvent.KeyCode != WoflKeys::None)
+						{
+							KeyCapturedSprite = Sprite;
+							CapturedKeysDown++;
+						}
 					}
 					return !bWasHandled;
 				});

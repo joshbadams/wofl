@@ -50,27 +50,27 @@ NeuroGame::NeuroGame()
 	int Size = 94;
 	WoflButton* InvButton    = new WoflButton(nullptr, "", Left + 0 * Size, Top + 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickInventory(); });
 	Background->AddChild(InvButton);
-	InvButton->SetCharShortcut('i');
+	InvButton->SetKeycodeShortcut(WoflKeys::I);
 
 	WoflButton* PAXButton    = new WoflButton(nullptr, "", Left + 1 * Size, Top + 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickPAX(); });
 	Background->AddChild(PAXButton);
-	PAXButton->SetCharShortcut('p');
+	PAXButton->SetKeycodeShortcut(WoflKeys::P);
 
 	WoflButton* TalkButton   = new WoflButton(nullptr, "", Left + 2 * Size, Top + 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickTalk(); });
 	Background->AddChild(TalkButton);
-	TalkButton->SetCharShortcut('t');
+	TalkButton->SetKeycodeShortcut(WoflKeys::T);
 
 	WoflButton* SkillButton  = new WoflButton(nullptr, "", Left + 0 * Size, Top + 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSkill(); });
 	Background->AddChild(SkillButton);
-	SkillButton->SetCharShortcut('s');
+	SkillButton->SetKeycodeShortcut(WoflKeys::S);
 
 	WoflButton* ChipButton   = new WoflButton(nullptr, "", Left + 1 * Size, Top + 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickChip(); });
 	Background->AddChild(ChipButton);
-	ChipButton->SetCharShortcut('c');
+	ChipButton->SetKeycodeShortcut(WoflKeys::C);
 
 	WoflButton* SystemButton = new WoflButton(nullptr, "", Left + 2 * Size, Top + 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSystem(); });
 	Background->AddChild(SystemButton);
-	SystemButton->SetCharShortcut(53);
+	SystemButton->SetKeycodeShortcut(WoflKeys::Escape);
 
 	WoflWorld::Get()->SetRootSprite(Background);
 }

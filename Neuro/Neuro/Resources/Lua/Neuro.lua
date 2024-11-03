@@ -20,6 +20,7 @@ s = {
 
 }
 
+print("inv: ", s.inventory)
 currentRoom = nil
 
 
@@ -32,6 +33,8 @@ SiteScripts = {
 	"Cheapo",
 	"PAX",
 	"RegFellow",
+
+	"MiscBoxes",
 }
 
 function TablesMatch(g, a, b)
@@ -103,9 +106,9 @@ end
 
 function Room:OnEnterRoom()
 	local firstTimeKey = "__" .. self.name
-	if (_G[firstTimeKey] ~= 1) then
+	if (s[firstTimeKey] ~= 1) then
 		self:OnFirstEnter()
-		_G[firstTimeKey] = 1
+		s[firstTimeKey] = 1
 	else
 		self:OnEnter()
 	end
@@ -166,6 +169,16 @@ end
 
 function Gridbox:GetEntries()
 	return {}
+end
+
+function Gridbox:HandleClickedEntry(id)
+	-- -1 is always the "exit" option
+	if id == -1 then
+		self:HandleClickedExit()
+	-- -2 is always the "more" option
+	elseif id == -2 then
+		self:HandleClickedMore()
+	end
 end
 
 function Gridbox:AddExitMoreEntries(entries, needsMore)
@@ -262,7 +275,6 @@ function Site:GetDetailsString()
 	local page = self:GetCurrentPage()
 
 	if (page.type == "message") then
-		print("details for message", page.message)
 		return page.message
 	end
 
@@ -489,12 +501,8 @@ print("Handle cliecked entry", self, page.type, id)
 			self:OnDownloadSelected(page, page.items[id])
 		end
 
-	-- -1 is always the "exit" option
-	elseif id == -1 then
-		self:HandleClickedExit()
-	-- -2 is always the "more" option
-	elseif id == -2 then
-		self:HandleClickedMore()
+	else
+		Gridbox.HandleClickedEntry(id)
 	end
 end
 

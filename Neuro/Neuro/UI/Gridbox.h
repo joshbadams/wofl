@@ -26,8 +26,12 @@ struct GridEntry
 	bool bNumericEntry;
 	bool bMultilineEntry;
 
+	LuaRef OnClick;
+	LuaRef OnClickEntry;
+
 	void FromLua(LuaRef Ref);
 	LuaRef LuaEntry;
+
 };
 
 class Gridbox : public Ninebox, public ITextboxDelegate

@@ -1,0 +1,21 @@
+{"frames": [
+
+{
+	"filename": "background.png",
+	"frame": {"x":0,"y":0,"w":1280,"h":796},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1280,"h":796},
+	"sourceSize": {"w":1280,"h":796}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Neuro2.png",
+	"format": "RGBA8888",
+	"size": {"w":1280,"h":796},
+	"scale": "1",
+	"related_multi_packs": [ "Neuro1.json" ],
+	"smartupdate": "$TexturePacker:SmartUpdate:1b45762f878b68dad33798d573955dbb:b5d969594e4bf1c857d85eb8a74770fa:8e5f1c61dd1938f0ebcc3dab307fd743$"
+}
+}

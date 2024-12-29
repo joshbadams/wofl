@@ -17,11 +17,6 @@ class NeuroGame : public WoflGame, public IStateChangedDelegate
 public:
 	NeuroGame();
 
-	NeuroConfig& GetConfig()
-	{
-		return Config;
-	}
-	
 	virtual void Tick(float DeltaTime) override
 	{
 		State.Tick(DeltaTime);
@@ -39,13 +34,12 @@ public:
 
 private:
 	
-	NeuroConfig Config;
-	friend class NeuroConfigObj;
 	NeuroState State;
 		
 	WoflSprite* ScreenSprite;
 	WoflSprite* Background;
 	class Textbox* MessageBox;
+	class Textbox* InfoBox;
 	class Ninebox* DialogBox;
 	vector<class Gridbox*> Boxes;
 	vector<class Gridbox*> BoxCache;

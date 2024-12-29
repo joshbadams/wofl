@@ -1,3 +1,7 @@
+-----------------------------------------------------------------------------------------------------------------
+-- SystemBox
+-----------------------------------------------------------------------------------------------------------------
+
 SystemPhase = {
 	Menu = {},
 	Save = {},
@@ -47,7 +51,7 @@ function SystemBox:GetEntries()
 		table.append(entries, {x = 9, y = 2, text = "4", key = "4", onClick = function() SaveGame(4); self:Close() end })
 	end
 	
-	self:AddExitMoreEntries(entries, needsMore)
+	self:AddExitMoreEntries(entries, false)
 
 	return entries
 end
@@ -58,4 +62,137 @@ function SystemBox:HandleClickedExit()
 	else
 		self.Phase = SystemPhase.Menu
 	end
+end
+
+-----------------------------------------------------------------------------------------------------------------
+-- ShopBox
+-----------------------------------------------------------------------------------------------------------------
+
+ShopBox = Gridbox:new {
+	x = 150,
+	y = 430,
+	w = 700,
+	h = 330,
+	
+	heading = "PRICE LIST",
+
+	isBuying = true,
+
+	items = {},
+}
+
+function ShopBox:OpenBox(width, height)
+	print("Opened a shop")
+	Gridbox:OpenBox(width, height)
+
+	self.firstVisibleIndex = 1
+	self.numItemsPerPage = self.sizeY - 2
+	self.boughtSold = false
+end
+
+function ShopBox:GetPrice(id)
+	local template = Items[id]
+	local price = 0
+
+	if (template.type == "organ") then
+		print("buy", template.buy, "sell", template.sell)
+		price = template.sell
+		if (self.isBuying) then
+			price = template.buy
+		end
+	end
+
+	return price
+end
+
+function ShopBox:GetEntries()
+	local entries = {}
+
+	local headingText = string.format("%s  credits--%d", self.heading, s.money)
+	table.append(entries, {x = 0, y = 0, text = headingText})
+
+	-- init loop counters
+	local localIndex = 1
+	local listIndex = self.firstVisibleIndex
+	local label = ""
+	local curY = 1
+
+print("num items", #self.items)
+
+	-- go until we are end of page or end of list
+	while listIndex <= #self.items and localIndex <= self.numItemsPerPage do
+
+		local id = self.items[listIndex]
+		local template = Items[id]
+
+		-- organs can only buy/sell one, so check inventory
+		local inactive = false
+		if (template.type == "organ") then
+			if (self.isBuying) then
+				inactive = table.containsArrayItem(s.organs, id)
+			else
+				inactive = not table.containsArrayItem(s.organs, id)
+			end
+		end
+
+		local prefix = " "
+		if (inactive) then
+			prefix = "-"
+		end
+
+		label = string.format("%d %s", localIndex, prefix)
+		label = label:appendPadded(template.name, self.sizeX - 9)
+		local priceString = string.format("%d", self:GetPrice(id))
+		label = label:appendPadded(priceString, 6)
+
+		table.append(entries, {x = 0, y = curY, text = label, clickId = listIndex, key = keyPress})
+
+		listIndex = listIndex + 1
+		localIndex = localIndex + 1
+		curY = curY + 1
+	end
+
+	local needsMore = #self.items > self.numItemsPerPage
+	self:AddExitMoreEntries(entries, needsMore)
+	
+	return entries;
+end
+
+function ShopBox:HandleClickedEntry(clickId)
+
+	print("shop clicked", self, clickId, self.isBuying)
+
+	local id = self.items[clickId]
+	local item = Items[id];
+	local price = self:GetPrice(id)
+	print("clicked on ", item.name, id, price)
+
+	if (self.isBuying) then
+		if (s.money >= price) then
+			s.money = s.money - price
+			self.boughtSold = true
+			self:OnBoughtSoldItem(clickId)
+		end
+	else
+		s.money = s.money + price
+		self.boughtSold = true
+		self:OnBoughtSoldItem(clickId)
+	end
+end
+
+function ShopBox:OnBoughtSoldNothing()
+end
+
+function ShopBox:OnBoughtSoldItem(itemIndex)
+end
+
+function ShopBox:HandleClickedMore()
+	self.firstVisibleIndex = self.firstVisibleIndex + self.numItemsPerPage
+	if (self.firstVisibleIndex > #self.items) then
+		self.firstVisibleIndex = 1
+	end
+end
+
+function ShopBox:HandleClickedExit()
+	self:Close()
 end

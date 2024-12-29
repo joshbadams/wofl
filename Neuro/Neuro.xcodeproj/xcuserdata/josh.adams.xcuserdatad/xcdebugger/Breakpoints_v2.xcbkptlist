@@ -14,8 +14,8 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "247"
-            endingLineNumber = "247"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
             landmarkName = "NeuroState::ClickTalk()"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,9 +30,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
-            landmarkName = "NeuroState::Tick()"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
+            landmarkName = "NeuroState::Tick(DeltaTime)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -46,9 +46,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "NeuroState::NeuroState(InConfig, InStateDelegate)"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "NeuroState::ToJsonObject()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -63,9 +63,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "656"
-            endingLineNumber = "656"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            endingLineNumber = "656">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -79,9 +77,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "663"
-            endingLineNumber = "663"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            endingLineNumber = "663">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -110,9 +106,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "NeuroState::Tick()"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
+            landmarkName = "NeuroState::Tick(DeltaTime)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -126,10 +122,10 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "652"
-            endingLineNumber = "652"
-            landmarkName = "State(L)"
-            landmarkType = "9">
+            startingLineNumber = "751"
+            endingLineNumber = "751"
+            landmarkName = "NeuroState::Lua_PauseGame(L)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -142,9 +138,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "661"
-            endingLineNumber = "661"
-            landmarkName = "NeuroState::Lua_Trigger(L)"
+            startingLineNumber = "771"
+            endingLineNumber = "771"
+            landmarkName = "NeuroState::Lua_UpdateInfo(L)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -160,8 +156,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "337"
             endingLineNumber = "337"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "Lua::SetGlobal(GlobalName, Value)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -176,8 +172,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "336"
             endingLineNumber = "336"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "Lua::SetGlobal(GlobalName, Value)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -192,8 +188,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "384"
             endingLineNumber = "384"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "Lua::GetBool(Code, Result)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -208,8 +204,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "383"
             endingLineNumber = "383"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "Lua::GetBool(Code, Result)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -224,8 +220,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "364"
             endingLineNumber = "364"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "Lua::GetString(Code, Result)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -238,9 +234,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "630"
-            endingLineNumber = "630"
-            landmarkName = "NeuroState::Trigger(Type, Value)"
+            startingLineNumber = "729"
+            endingLineNumber = "729"
+            landmarkName = "NeuroState::Lua_StartTimer(L)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -254,9 +250,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "537"
-            endingLineNumber = "537"
-            landmarkName = "NeuroState::FindActiveConversation()"
+            startingLineNumber = "637"
+            endingLineNumber = "637"
+            landmarkName = "NeuroState::Lua_Talk(L)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -270,8 +266,8 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "NeuroState::ClickTalk()"
             landmarkType = "7">
          </BreakpointContent>
@@ -286,8 +282,8 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "287"
-            endingLineNumber = "287"
+            startingLineNumber = "332"
+            endingLineNumber = "332"
             landmarkName = "NeuroState::ActivateRoom(OldRoom, NewRoom)"
             landmarkType = "7">
          </BreakpointContent>
@@ -302,9 +298,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "NeuroState::NeuroState(InConfig, InStateDelegate)"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "NeuroState::NeuroState(InStateDelegate)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -318,9 +314,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
-            landmarkName = "NeuroState::NeuroState(InConfig, InStateDelegate)"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "NeuroState::NeuroState(InStateDelegate)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -336,7 +332,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "470"
             endingLineNumber = "470"
-            landmarkName = "GetReturn(L, Param)"
+            landmarkName = "PushParam(L, Param)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -350,9 +346,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
-            landmarkName = "NeuroState::NeuroState(InConfig, InStateDelegate)"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "NeuroState::NeuroState(InStateDelegate)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -366,9 +362,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "NeuroState::NeuroState(InConfig, InStateDelegate)"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "NeuroState::NeuroState(InStateDelegate)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -382,10 +378,10 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "546"
-            endingLineNumber = "546"
-            landmarkName = "NeuroState::FindActiveConversation()"
-            landmarkType = "7">
+            startingLineNumber = "646"
+            endingLineNumber = "646"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -398,8 +394,8 @@
             filePath = "Neuro/Game/NeuroLua.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "311"
-            endingLineNumber = "311"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
             landmarkName = "Lua::GetTableValues(Table, Name, Result)"
             landmarkType = "7">
          </BreakpointContent>
@@ -414,8 +410,8 @@
             filePath = "Neuro/Game/NeuroConfig.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "Conversation::FromLua(L, Object)"
             landmarkType = "7">
          </BreakpointContent>
@@ -430,10 +426,10 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "723"
-            endingLineNumber = "723"
-            landmarkName = "NeuroState::Lua_ShowMessage(L)"
-            landmarkType = "7">
+            startingLineNumber = "783"
+            endingLineNumber = "783"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -462,8 +458,8 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "399"
-            endingLineNumber = "399"
+            startingLineNumber = "499"
+            endingLineNumber = "499"
             landmarkName = "NeuroState::HandleSceneClick(Zone)"
             landmarkType = "7">
          </BreakpointContent>
@@ -494,9 +490,9 @@
             filePath = "Neuro/Game/NeuroGame.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "NeuroGame::Invalidate(Zone)"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "NeuroGame::CloseBoxWithObj(BoxObj)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -510,8 +506,8 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
             landmarkName = "NeuroState::ClickPAX()"
             landmarkType = "7">
          </BreakpointContent>
@@ -551,22 +547,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2C0E9029-C955-4AA6-90F6-82CB51F6E2C8"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Neuro/Game/NeuroState.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "NeuroState::NeuroState(InConfig, InStateDelegate)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D4C49183-DED8-43AA-B88D-3072D7CC47D7"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -574,9 +554,9 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "NeuroState::NeuroState(InConfig, InStateDelegate)"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "NeuroState::NeuroState(InStateDelegate)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -622,10 +602,10 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "359"
-            endingLineNumber = "359"
-            landmarkName = "NeuroState::HandleSceneClick(Zone)"
-            landmarkType = "7">
+            startingLineNumber = "425"
+            endingLineNumber = "425"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -640,7 +620,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "295"
             endingLineNumber = "295"
-            landmarkName = "Gridbox::OnClickEntry(Entry)"
+            landmarkName = "Gridbox::MessageComplete()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -656,7 +636,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "222"
             endingLineNumber = "222"
-            landmarkName = "Gridbox::OnTextEntryComplete(Text, Tag)"
+            landmarkName = "Gridbox::OnKey(Event)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -672,7 +652,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "223"
             endingLineNumber = "223"
-            landmarkName = "Gridbox::OnTextEntryComplete(Text, Tag)"
+            landmarkName = "Gridbox::OnKey(Event)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -686,10 +666,10 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "709"
-            endingLineNumber = "709"
-            landmarkName = "NeuroState::Lua_Say(L)"
-            landmarkType = "7">
+            startingLineNumber = "786"
+            endingLineNumber = "786"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -702,8 +682,8 @@
             filePath = "Neuro/Game/NeuroState.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "224"
-            endingLineNumber = "224"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
             landmarkName = "NeuroState::ClickInventory()"
             landmarkType = "7">
          </BreakpointContent>
@@ -720,7 +700,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "89"
             endingLineNumber = "89"
-            landmarkName = "Gridbox::SetupTextEntry(Entry)"
+            landmarkName = "Gridbox::Open(InLuaBox)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -737,6 +717,118 @@
             startingLineNumber = "175"
             endingLineNumber = "175"
             landmarkName = "Gridbox::OnKey(Event)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E77EB6BC-8DB8-43AA-AEED-B6A0F484998D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Neuro/Game/NeuroState.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "NeuroState::Tick(DeltaTime)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "899B8A44-6304-4E40-BBF9-EEC34B4CE6B0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Neuro/Game/NeuroState.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
+            landmarkName = "NeuroState::Tick(DeltaTime)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CF9FDB74-D2E6-4306-A84F-6BB11936D1BA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Neuro/Game/NeuroState.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "762"
+            endingLineNumber = "762"
+            landmarkName = "NeuroState::Lua_GoToRoom(L)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6EED6BB8-9A4C-4EEF-9A48-05282AFA4354"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Neuro/UI/Gridbox.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
+            landmarkName = "Gridbox::OnClickEntry(Entry)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "248DD892-B73D-47D6-9C4C-2D2E65832E03"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Neuro/Game/NeuroState.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
+            landmarkName = "NeuroState::ClickDate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "643CA344-E6C5-40BA-BE82-AFB6E88F748B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Neuro/Game/NeuroGame.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
+            landmarkName = "NeuroGame::Invalidate(Zone)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4F1A36D0-C8B1-41FB-B245-AA7B3EACA231"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Neuro/Game/NeuroState.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "688"
+            endingLineNumber = "688"
+            landmarkName = "NeuroState::Lua_ShowMessage(L)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

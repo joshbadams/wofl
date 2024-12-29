@@ -25,6 +25,15 @@ enum class ZoneType : int
 	Inventory	= 16,
 	PAX			= 32,
 	Site		= 64,
+	Info		= 128,
+};
+
+enum class InfoType : int
+{
+	Date,
+	Time,
+	Money,
+	Health,
 };
 
 
@@ -100,7 +109,7 @@ class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, publ
 public:
 	LuaRef CurrentRoom;
 		
-	NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate);
+	NeuroState(IStateChangedDelegate* InStateDelegate);
 	virtual ~NeuroState() { }
 	
 	// IJsonObj
@@ -117,6 +126,7 @@ public:
 	void Tick(float DeltaTime);
 	
 	void HandleSceneClick(ZoneType Zone);
+	bool HandleSceneKey(KeyEvent Event);
 
 
 	// returns -1 if not existant
@@ -133,6 +143,7 @@ public:
 			
 	std::string GetCurrentDialogLine();
 	std::string GetCurrentMessage();
+	std::string GetCurrentInfoText();
 
 	void ClickInventory();
 	void ClickPAX();
@@ -140,6 +151,11 @@ public:
 	void ClickSkill();
 	void ClickChip();
 	void ClickSystem();
+	
+	void ClickDate();
+	void ClickTime();
+	void ClickMoney();
+	void ClickHealth();
 
 private:
 	
@@ -154,6 +170,8 @@ private:
 	static int Lua_LoadGame(lua_State* L);
 	static int Lua_PauseGame(lua_State* L);
 	static int Lua_QuitGame(lua_State* L);
+	static int Lua_GoToRoom(lua_State* L);
+	static int Lua_UpdateInfo(lua_State* L);
 
 	void ActivateRoom(LuaRef OldRoom, LuaRef NewRoom);
 	void ActivateConversation(Conversation* Convo);
@@ -163,7 +181,6 @@ private:
 	
 	map<std::string, std::vector<int>> UnlockedMessages;
 
-	NeuroConfig* Config;
 	IStateChangedDelegate* StateDelegate;
 	
 	Conversation LuaConversation;
@@ -188,7 +205,8 @@ private:
 	std::string PendingMessage;
 
 	ZoneType PendingInvalidation;
-	
+	InfoType CurrentInfoType;
+
 	Lua Lua;
 	friend class NeuroGame;
 };

@@ -82,6 +82,8 @@ void WoflInput::PreWorldTick(float DeltaTime)
 			Capture.LastRepeatTime = 0.0;
 			Capture.RepeatCount = 0;
 			
+			WLOG("loc %d %d\n", (int)Capture.Location.X, (int)Capture.Location.Y);
+			
 			if (HitSprite)
 			{
 				HitSprite->OnClick();

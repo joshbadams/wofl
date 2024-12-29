@@ -212,8 +212,6 @@ function PAX:HandleClickedEntry(id)
 			self:ProcessMessage()
 		end
 		self:GoToPage("bbs_menu")
-	else
-		Site.HandleClickedEntry(self, id)
 	end
 end
 

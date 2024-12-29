@@ -8,9 +8,8 @@
 #include "NeuroState.h"
 
 
-NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDelegate)
+NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate)
 	: CurrentConversation(nullptr)
-	, Config(InConfig)
 	, StateDelegate(InStateDelegate)
 	, Lua(this)
 {
@@ -24,26 +23,30 @@ NeuroState::NeuroState(NeuroConfig* InConfig, IStateChangedDelegate* InStateDele
 	Lua.RegisterFunction("LoadGame", Lua_LoadGame);
 	Lua.RegisterFunction("PauseGame", Lua_PauseGame);
 	Lua.RegisterFunction("QuitGame", Lua_QuitGame);
+	Lua.RegisterFunction("GoToRoom", Lua_GoToRoom);
+	Lua.RegisterFunction("UpdateInfo", Lua_UpdateInfo);
 
-	Config->FromLua(Lua, Lua.GetGlobalTable());
+	std::vector<string> GameScripts;
+	Lua.GetStringValues("", "GameScripts", GameScripts);
 
-	for (string& R : Config->RoomNames)
+	for (string& R : GameScripts)
 	{
 		Lua.LoadScript((R + ".lua").c_str());
 	}
-	for (string& S : Config->SiteNames)
-	{
-		Lua.LoadScript((S + ".lua").c_str());
-	}
+
+	// default to initial room (LoadFromFile will set PendingRoom if loaded)
+	string InitialRoom;
+	Lua.GetStringValue("s", "savedroom", InitialRoom);
+	Lua.GetTableValue("", InitialRoom.c_str(), PendingRoom);
 
 	// loaded values here will override init values in tha
 	LoadFromFile(Utils::File->GetSavePath("game1.sav").c_str());
-
-	// get a pointer to starting room
-	Lua.GetTableValue("", Config->RoomNames[0].c_str(), PendingRoom);
 	
 	PendingConversation = nullptr;
 	CurrentState = State::EnteredRoom;
+	
+	CurrentInfoType = InfoType::Date;
+	PendingInvalidation |= ZoneType::Info;
 	
 	
 //	LuaRef IRS;
@@ -116,6 +119,11 @@ Json::Value NeuroState::ToJsonObject()
 	Json::Value StateObj(Json::objectValue);
 	StateObj["lua"] = Lua.ToJsonObject();
 	
+	// remebmer which room we are in
+	string RoomName;
+	Lua.GetStringValue(CurrentRoom, "name", RoomName);
+	StateObj["room"] = RoomName;
+	
 //	StateObj["money"] = Json::Value(Money);
 //	AddIntArrayToObject(Inventory, StateObj, "inventory");
 
@@ -141,6 +149,13 @@ void NeuroState::FromJsonObject(const Json::Value& Object)
 //	Money = Object["money"].asInt();
 //	GetIntArrayFromObject(Inventory, Object, "inventory");
 	Lua.FromJsonObject(Object["lua"]);
+
+	// we don't want to perform any ExitRoom functionality
+	CurrentRoom = nullptr;
+	
+	// set next room to saved room
+	Lua.GetTableValue("", Object["room"].asString().c_str(), PendingRoom);
+	CurrentState = State::EnteredRoom;
 }
 
 void NeuroState::Tick(float DeltaTime)
@@ -162,7 +177,12 @@ void NeuroState::Tick(float DeltaTime)
 		case State::EndedConversation:
 			{
 				LuaRef OnEndFunction = CurrentConversation->Lua_OnEnd;
-	 
+				if (ChoiceIndex != -1 && CurrentConversation->Options[ChoiceIndex]->Lua_OnEnd)
+				{
+					assert(OnEndFunction == nullptr);
+					OnEndFunction = CurrentConversation->Options[ChoiceIndex]->Lua_OnEnd;
+				}
+
 				CurrentState = State::Idle;
 				CurrentConversation = nullptr;
 				
@@ -271,12 +291,37 @@ void NeuroState::ClickSystem()
 //	SaveToFile(Utils::File->GetSavePath("game.sav").c_str());
 }
 
+void NeuroState::ClickDate()
+{
+	CurrentInfoType = InfoType::Date;
+	PendingInvalidation |= ZoneType::Info;
+
+}
+
+void NeuroState::ClickTime()
+{	
+	CurrentInfoType = InfoType::Time;
+	PendingInvalidation |= ZoneType::Info;
+}
+
+void NeuroState::ClickMoney()
+{
+	CurrentInfoType = InfoType::Money;
+	PendingInvalidation |= ZoneType::Info;
+}
+
+void NeuroState::ClickHealth()
+{
+	CurrentInfoType = InfoType::Health;
+	PendingInvalidation |= ZoneType::Info;
+}
+
 
 void NeuroState::ActivateRoom(LuaRef OldRoom, LuaRef NewRoom)
 {
 	CurrentRoom = NewRoom;
 		
-	PendingInvalidation = ZoneType::Room;
+	PendingInvalidation |= ZoneType::Room;
 
 //	string FirstVisitKey = string("__") + CurrentRoom->ID;
 //	bool bFirstEnter = GetIntValue(FirstVisitKey.c_str()) != 1;
@@ -357,6 +402,65 @@ std::string NeuroState::GetCurrentMessage()
 //	return CurrentConversation->Message;
 }
 
+std::string NeuroState::GetCurrentInfoText()
+{
+	string Info;
+	switch (CurrentInfoType)
+	{
+		case InfoType::Date:
+			Lua.GetStringValue("s", "date", Info);
+			break;
+		case InfoType::Time:
+			Lua.GetStringValue("s", "time", Info);
+			break;
+		case InfoType::Money:
+			Lua.GetStringValue("s", "money", Info);
+			break;
+		case InfoType::Health:
+			Lua.GetStringValue("s", "hp", Info);
+			break;
+	}
+	return Info;
+}
+
+bool NeuroState::HandleSceneKey(KeyEvent Event)
+{
+	bool bWasHandled = false;
+	if (Event.Type == KeyType::Down)
+	{
+		const char* Direction = nullptr;
+		if (Event.KeyCode == WoflKeys::UpArrow)
+		{
+			Direction = "north";
+		}
+		else if (Event.KeyCode == WoflKeys::DownArrow)
+		{
+			Direction = "south";
+		}
+		else if (Event.KeyCode == WoflKeys::LeftArrow)
+		{
+			Direction = "west";
+		}
+		else if (Event.KeyCode == WoflKeys::RightArrow)
+		{
+			Direction = "east";
+		}
+
+		if (Direction != nullptr)
+		{
+			LuaRef NewRoom;
+			Lua.CallFunction_Return(CurrentRoom, "GetConnectingRoom", Direction, NewRoom);
+			if (NewRoom != nullptr)
+			{
+				ActivateRoom(CurrentRoom, NewRoom);
+			}
+			bWasHandled = true;
+		}
+	}
+	
+	return bWasHandled;
+}
+
 void NeuroState::HandleSceneClick(ZoneType Zone)
 {
 	if (CurrentConversation != nullptr)
@@ -375,10 +479,6 @@ void NeuroState::HandleSceneClick(ZoneType Zone)
 		{
 			if (Zone == ZoneType::Dialog)
 			{
-				if (CurrentConversation->Options[ChoiceIndex]->Lua_OnEnd)
-				{
-					Lua.CallFunction_NoReturn(CurrentRoom, CurrentConversation->Options[ChoiceIndex]->Lua_OnEnd);
-				}
 				if (CurrentConversation->Options[ChoiceIndex]->Response != "")
 				{
 					CurrentState = State::InDialog;
@@ -619,7 +719,6 @@ int NeuroState::Lua_StartTimer(lua_State *L)
 
 	lua_pushvalue(L, StackPos - 1);
 	LuaRef Obj = S->Lua.MakeRef();
-dumpstack(L);
 
 	assert(lua_isinteger(L, -3));
 	float Time = lua_tonumber(L, -3);
@@ -634,7 +733,7 @@ dumpstack(L);
 int NeuroState::Lua_SaveGame(lua_State* L)
 {
 	NeuroState* S = State(L);
-	int Index = lua_tointeger(L, -1);
+	int Index = (int)lua_tointeger(L, -1);
 	S->SaveToFile(Utils::File->GetSavePath((std::string("game") + (char)('0' + Index) + ".sav").c_str()).c_str());
 
 	return 0;
@@ -643,7 +742,7 @@ int NeuroState::Lua_SaveGame(lua_State* L)
 int NeuroState::Lua_LoadGame(lua_State* L)
 {
 	NeuroState* S = State(L);
-	int Index = lua_tointeger(L, -1);
+	int Index = (int)lua_tointeger(L, -1);
 	S->LoadFromFile(Utils::File->GetSavePath((std::string("game") + (char)('0' + Index) + ".sav").c_str()).c_str());
 	return 0;
 }
@@ -658,7 +757,23 @@ int NeuroState::Lua_QuitGame(lua_State* L)
 	return 0;
 }
 
+int NeuroState::Lua_GoToRoom(lua_State* L)
+{
+	string RoomName = lua_tostring(L, -1);
+	
+	NeuroState* S = State(L);
+	S->Lua.GetTableValue("", RoomName.c_str(), S->PendingRoom);
+	S->CurrentState = State::EnteredRoom;
+	
+	return 0;
+}
 
+int NeuroState::Lua_UpdateInfo(lua_State* L)
+{
+	NeuroState* S = State(L);
+	S->PendingInvalidation |= ZoneType::Info;
+	return 0;
+}
 
 //std::vector<Message*> NeuroState::GetUnlockedMessages(std::string ID)
 //{

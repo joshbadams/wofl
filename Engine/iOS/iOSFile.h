@@ -35,8 +35,7 @@ public:
 					pathForResource:[FilenameStr stringByDeletingPathExtension]
 					ofType:[FilenameStr pathExtension]];
 		}
-		
-		
+
 		return [Path UTF8String];
 	}
 	

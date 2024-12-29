@@ -60,6 +60,11 @@ IRS = Site:new {
 			}
 		},
 		
+		['notice'] = {
+			type = "message",
+			message = "IRS Field Supervisors:\n\nField Supervisors should warn IRS Field Examiners under their command that use of the garrote, the Rack, and the Iron Maien by Examiners is unwarranted under most Taxpayer Compliance Program cases. The rubber hose and the insertion of bamboo under the fingernails should be sufficient for Taxpayer compliance in most situations where motivation is required. Use of stronger forms of interrogation by Field Examiners is frowned upon, unless a Field Supervisor qualified in Interrogation is , or the Field Examiner is performing a Special Field Audit. Due to the high number of Taxpayer requests for current information, possibly due to the Public's inability to remain current with the hourly changes in the Tax Code, the IRS Administration has approved the activation of a question-and-answer bulletin board service on this system. The real purpose of this service is to locate and arrest tax offenders who have otherwise managed to be overlooked by our standard procedues. So far, results have been excellent. In two weeks of operation, over four thousand tax offenders have been arrested and sentenced.",
+		},
+
 		['auditreport'] = {
 			type = "message",
 			message = "No report at this time."

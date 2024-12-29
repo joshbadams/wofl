@@ -132,41 +132,37 @@ function InvBox:HandleClickedEntry(id)
 
 	print("Inv clicked", self, self.phase, id)
 
-	-- handle non-zero ids
-	if (id > 0) then
-		if (self.phase == InvPhase.List) then
-			self.invItem = id
-			self.phase = InvPhase.Action
-		elseif (self.phase == InvPhase.Action) then
-			self:PerformAction(id)
-		elseif (self.phase == InvPhase.Software) then
-			self:UseSoftware(id)
-		elseif (self.phase == InvPhase.ConfirmGive) then
-			if (id == InvAction.Yes) then
-				currentRoom:GiveItem(self.invItem)
-				table.removeKey(self.invItem)
-			elseif (id == InvAction.No) then
-				self.phase = InvPhase.List
-			end
-		elseif (self.phase == InvPhase.ConfirmDiscard) then
-			if (id == InvAction.Yes) then
-				table.removeKey(self.invItem)
-			elseif (id == InvAction.No) then
-				self.phase = InvPhase.List
-			end
+	if (self.phase == InvPhase.List) then
+		self.invItem = id
+		self.phase = InvPhase.Action
+	elseif (self.phase == InvPhase.Action) then
+		self:PerformAction(id)
+	elseif (self.phase == InvPhase.Software) then
+		self:UseSoftware(id)
+	elseif (self.phase == InvPhase.ConfirmGive) then
+		if (id == InvAction.Yes) then
+			currentRoom:GiveItem(self.invItem)
+			table:removeKey(s.inventory, self.invItem)
+		elseif (id == InvAction.No) then
+			self.phase = InvPhase.List
 		end
-
-
-	-- -1 is always the "exit" option
-	elseif id == -1 then
-		print("closing box")
-		self:Close()
-	-- -2 is always the "more" option
-	elseif id == -2 then
-		-- self.page = math.fmod(self.page + 1, self.numPages)
-		self.page = self.page + 1
-		if (self.page == self.numPages) then self.page = 0 end
+	elseif (self.phase == InvPhase.ConfirmDiscard) then
+		if (id == InvAction.Yes) then
+			table:removeKey(s.inventory, self.invItem)
+		elseif (id == InvAction.No) then
+			self.phase = InvPhase.List
+		end
 	end
+end
+
+function InvBox:HandleClickedExit()
+	print("closing box")
+	self:Close()
+end
+
+function InvBox:HandleClickedMore()
+	self.page = self.page + 1
+	if (self.page == self.numPages) then self.page = 0 end
 end
 
 function InvBox:OnTextEntryComplete(text, tag)

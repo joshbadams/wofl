@@ -15,6 +15,7 @@ public:
 	
 	NeuroScene(class NeuroState* InState, float X, float Y, float SizeX, float SizeY);
 	
+	virtual bool OnKey(const KeyEvent& Event) override;
 	virtual void OnInput(const Vector& ScreenLocation, int RepeatIndex) override;
 
 	

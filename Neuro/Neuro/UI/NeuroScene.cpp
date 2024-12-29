@@ -16,6 +16,12 @@ NeuroScene::NeuroScene(class NeuroState* InState, float X, float Y, float SizeX,
 	SetClickEnabled(true);
 }
 
+
+bool NeuroScene::OnKey(const KeyEvent& Event)
+{
+	return State->HandleSceneKey(Event);
+}
+
 // RepeatIndex: 0 is first, > 0 is repeat, < 0 is end)
 void NeuroScene::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 {

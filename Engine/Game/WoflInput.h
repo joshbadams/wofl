@@ -61,6 +61,11 @@ enum class WoflKeys
 	Seven,
 	Eight,
 	Nine,
+	
+	UpArrow,
+	DownArrow,
+	LeftArrow,
+	RightArrow,
 };
 
 class WoflSprite;

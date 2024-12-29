@@ -149,8 +149,6 @@ function Cheapo:HandleClickedEntry(id)
 		if (id == 10) then
 			self:GoToPage("bill_modify")
 		end
-	else
-		Site.HandleClickedEntry(self, id)
 	end
 end
 

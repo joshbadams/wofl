@@ -40,8 +40,7 @@ void Textbox::SetText(const std::string& InText)
 		
 	if (InText[0] == '@')
 	{
-		NeuroConfig& Config = ((NeuroGame*)WoflGame::TheGame)->GetConfig();
-		FullText = Config.Strings[InText.substr(1)];
+		assert(0);
 	}
 	else
 	{

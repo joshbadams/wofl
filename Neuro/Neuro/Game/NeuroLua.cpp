@@ -291,7 +291,7 @@ void Lua::LoadScript(const char* ScriptName)
 }
 
 LuaRef Lua::MakeRef() const
-{
+{	
 	return make_shared<LuaObjRef>(const_cast<Lua*>(this), luaL_ref(L, LUA_REGISTRYINDEX));
 }
 

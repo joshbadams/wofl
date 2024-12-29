@@ -139,7 +139,6 @@ private:
 	mutable lua_State* L;
 	LuaRef Settings;
 	set<string> SystemVariables;
-	LuaRef Settings;
 };
 
 

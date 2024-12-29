@@ -355,7 +355,7 @@ void Gridbox::OnClickEntry(GridEntry& Entry)
 	}
 	else
 	{
-		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleClickedEntry", Entry.ClickId);
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleClickedGridEntry", Entry.ClickId);
 	}
 	
 	Update();

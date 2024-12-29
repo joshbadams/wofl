@@ -18,13 +18,13 @@
 		7C88AEBB29EB73110011A3B3 /* NeuroGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEB429EB73110011A3B3 /* NeuroGame.cpp */; };
 		7C88AEBC29EB73110011A3B3 /* Ninebox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEB829EB73110011A3B3 /* Ninebox.cpp */; };
 		7C88AEBD29EB73110011A3B3 /* Textbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEBA29EB73110011A3B3 /* Textbox.cpp */; };
-		7C88AEC029EB73EB0011A3B3 /* NeuroConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C88AEBE29EB73EB0011A3B3 /* NeuroConfig.cpp */; };
 		7C9E069329E3855400A88DE7 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7C9E069229E3855400A88DE7 /* AppDelegate.mm */; };
 		7C9E069829E3855500A88DE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C9E069729E3855500A88DE7 /* Assets.xcassets */; };
 		7C9E069B29E3855500A88DE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C9E069929E3855500A88DE7 /* Main.storyboard */; };
 		7C9E069D29E3855500A88DE7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C9E069C29E3855500A88DE7 /* main.m */; };
 		7CA3605D29E3AB58009B40DA /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CA3605C29E3AB57009B40DA /* AppKit.framework */; };
 		7CB134B22A08425F00AF73AB /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7CB134B12A08425F00AF73AB /* Readme.txt */; };
+		7CC7FB542D21DB0C00621041 /* NeuroConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CC7FB532D21DB0C00621041 /* NeuroConfig.cpp */; };
 		7CF9A57929E5177D00FDB4A6 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 7CF9A57829E5177D00FDB4A6 /* Resources */; };
 /* End PBXBuildFile section */
 
@@ -112,8 +112,6 @@
 		7C88AEB829EB73110011A3B3 /* Ninebox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ninebox.cpp; sourceTree = "<group>"; };
 		7C88AEB929EB73110011A3B3 /* Ninebox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ninebox.h; sourceTree = "<group>"; };
 		7C88AEBA29EB73110011A3B3 /* Textbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Textbox.cpp; sourceTree = "<group>"; };
-		7C88AEBE29EB73EB0011A3B3 /* NeuroConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroConfig.cpp; sourceTree = "<group>"; };
-		7C88AEBF29EB73EB0011A3B3 /* NeuroConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeuroConfig.h; sourceTree = "<group>"; };
 		7C9E068E29E3855400A88DE7 /* Neuro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Neuro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C9E069129E3855400A88DE7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7C9E069229E3855400A88DE7 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -123,6 +121,8 @@
 		7C9E069E29E3855500A88DE7 /* Neuro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Neuro.entitlements; sourceTree = "<group>"; };
 		7CA3605C29E3AB57009B40DA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		7CB134B12A08425F00AF73AB /* Readme.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		7CC7FB522D21DB0C00621041 /* NeuroConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeuroConfig.h; sourceTree = "<group>"; };
+		7CC7FB532D21DB0C00621041 /* NeuroConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuroConfig.cpp; sourceTree = "<group>"; };
 		7CF9A57829E5177D00FDB4A6 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -179,8 +179,8 @@
 		7C88AEB329EB73110011A3B3 /* Game */ = {
 			isa = PBXGroup;
 			children = (
-				7C88AEBE29EB73EB0011A3B3 /* NeuroConfig.cpp */,
-				7C88AEBF29EB73EB0011A3B3 /* NeuroConfig.h */,
+				7CC7FB522D21DB0C00621041 /* NeuroConfig.h */,
+				7CC7FB532D21DB0C00621041 /* NeuroConfig.cpp */,
 				7C88AEB429EB73110011A3B3 /* NeuroGame.cpp */,
 				7C88AEB529EB73110011A3B3 /* NeuroGame.h */,
 				7C382ABE29ECE71500FD8086 /* NeuroState.cpp */,
@@ -380,9 +380,9 @@
 				7C88AEBB29EB73110011A3B3 /* NeuroGame.cpp in Sources */,
 				7C06E60B29F956C400167332 /* Gridbox.cpp in Sources */,
 				7C9E069D29E3855500A88DE7 /* main.m in Sources */,
+				7CC7FB542D21DB0C00621041 /* NeuroConfig.cpp in Sources */,
 				7C382AC029ECE71500FD8086 /* NeuroState.cpp in Sources */,
 				7C9E069329E3855400A88DE7 /* AppDelegate.mm in Sources */,
-				7C88AEC029EB73EB0011A3B3 /* NeuroConfig.cpp in Sources */,
 				7C88AEBD29EB73110011A3B3 /* Textbox.cpp in Sources */,
 				7C723BBE2B814D5600D2369D /* NeuroLua.cpp in Sources */,
 				7C06E60829F5FF4300167332 /* NeuroScene.cpp in Sources */,

@@ -2,10 +2,11 @@ s.chatsubo = 0
 
 Chatsubo = Room:new {
 	name = "chatsubo",
-	background = "chatsubo",
 	hasPerson = true,
 	hasPax = true,
 	hasJack = true,
+	
+	south = "streetwest1",
 	
 	longDescription = "You've just spent the night sleeping face-down in a pile of synth-spaghetti in a bar called Chatsubo. After rubbint the sauce out of your eyes, you can see Chiba sky through the window, the color of television tuned to a dead channel.\nA PAX booth is on the wall. Ratz's prosthetic Russin arm whines as he wipes the bar. His teeth are a webwork of East Eurpoean steel and brown decay.",
 	
@@ -125,3 +126,5 @@ print("Showing message")
 		ShowMessage("Ratz refuses to take your credits.", function() Say("I said 46 credits, buckwheat. Are you deaf?") end)
 	end
 end
+
+chatsubo = Chatsubo

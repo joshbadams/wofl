@@ -1,7 +1,10 @@
 -- Globals, these will all be saved
 
 s = {
+	savedroom = "chatsubo",
+	
 	money = 6,
+	hp = 2000,
 
 	inventory = {
 		0, -- cash
@@ -12,6 +15,29 @@ s = {
 	software = {
 		200, -- Comlink 1.0
 	},
+	
+	organs = {
+		300,
+		301,
+		302,
+		303,
+		304,
+		305,
+		306,
+		307,
+		308,
+		309,
+		310,
+		311,
+		312,
+		313,
+		314,
+		315,
+		316,
+		317,
+		318,
+		319,
+	},
 
 	date = 111658,
 	bankaccount = 1941,
@@ -20,21 +46,24 @@ s = {
 
 }
 
-print("inv: ", s.inventory)
+-- print("inv: ", s.inventory)
 currentRoom = nil
 
 
-RoomScripts = {
+GameScripts = {
+	-- helpers
+	"MiscBoxes",
+	
+	-- rooms
 	"Chatsubo",
-}
-
-SiteScripts = {
+	"BodyShop",
+	"MiscRooms",
+	
+	-- sites
 	"IRS",
 	"Cheapo",
 	"PAX",
 	"RegFellow",
-
-	"MiscBoxes",
 }
 
 function TablesMatch(g, a, b)
@@ -49,9 +78,30 @@ function table:removekey(key)
 	return element
 end
 
+function table:removeArrayItem(item)
+	for i, val in ipairs(self) do
+		if (val == item) then
+			table.remove(self, i)
+			return vale
+		end
+	end
+
+	return nil
+end
+
 function table:append(item)
 	self[#self+1] = item
 end
+
+function table:containsArrayItem(item)
+	for _, val in ipairs(self) do
+		if (val == item) then
+			return true
+		end
+	end
+	return false
+end
+
 
 function string:appendPadded(str, width)
 	local spaces = width - str:len()
@@ -81,7 +131,8 @@ end
 
 
 Room = LuaObj:new {
-	
+	longDescription = " ",
+	description = " "
 }
 
 
@@ -117,13 +168,20 @@ function Room:OnEnterRoom()
 end
 
 function Room:OnFirstEnter()
-	print("Room:OnFirstEnter")
-	ShowMessage(self.longDescription)
+print("long desc -", self.longDescription,"-")
+	if (self.onEnterConversation ~= nil) then
+		ShowMessage(self.longDescription, function() Talk(self.onEnterConversation) end)
+	else
+		ShowMessage(self.longDescription)
+	end
 end
 
 function Room:OnEnter()
-	print("Room:OnEnter")
+print("short desk -", self.description,"-")
 	ShowMessage(self.description)
+	if (self.onEnterConversation ~= nil) then
+		Talk(self.onEnterConversation)
+	end
 end
 
 function Room:OnExitRoom()
@@ -140,6 +198,10 @@ end
 function Room:UseItem(item)
 end
 
+function Room:GetConnectingRoom(direction)
+print("getting room for ", direction, self[direction], self.name, self["name"])--, _G[self[direction]], _G[self[direction]].background)
+	return _G[self[direction]];
+end
 
 
 
@@ -171,13 +233,27 @@ function Gridbox:GetEntries()
 	return {}
 end
 
+function Gridbox:ShouldIgnoreAllInput()
+	return false
+end
+
 function Gridbox:HandleClickedEntry(id)
+end
+
+function Gridbox:HandleClickedGridEntry(id)
+	-- check if input needs to be tossed
+	if (self:ShouldIgnoreAllInput()) then
+		return
+	end
+
 	-- -1 is always the "exit" option
 	if id == -1 then
 		self:HandleClickedExit()
 	-- -2 is always the "more" option
 	elseif id == -2 then
 		self:HandleClickedMore()
+	else
+		self:HandleClickedEntry(id)
 	end
 end
 
@@ -481,28 +557,17 @@ end
 function Site:HandleClickedEntry(id)
 	local page = self:GetCurrentPage()
 
-	-- check if input needs to be tossed
-	if (self:ShouldIgnoreAllInput()) then
-		return
-	end
-
 print("Handle cliecked entry", self, page.type, id)
 
-	-- handle non-zero ids
-	if (id > 0) then
-		if page.type == "menu" then
-			-- menu click id is index
-			self:OnItemSelected(page, page.items[id])
-		elseif page.type == "list" then
-			self.detailsIndex = id
-		elseif page.type == "store" then
-			self:SelectStoreItem(id)
-		elseif page.type == "download" then
-			self:OnDownloadSelected(page, page.items[id])
-		end
-
-	else
-		Gridbox.HandleClickedEntry(id)
+	if page.type == "menu" then
+		-- menu click id is index
+		self:OnItemSelected(page, page.items[id])
+	elseif page.type == "list" then
+		self.detailsIndex = id
+	elseif page.type == "store" then
+		self:SelectStoreItem(id)
+	elseif page.type == "download" then
+		self:OnDownloadSelected(page, page.items[id])
 	end
 end
 

@@ -9,7 +9,6 @@
 #include "Textbox.h"
 #include "Ninebox.h"
 #include "Gridbox.h"
-#include "NeuroConfig.h"
 #include "NeuroScene.h"
 #include <algorithm>
 
@@ -20,12 +19,13 @@ WoflGame* GlobalGameInitialization()
 
 NeuroGame::NeuroGame()
 	: WoflGame("Neuromancer")
-	, State(&Config, this)
+	, State(this)
 {
 	WLOG("View size is: %f, %f\n", WoflRenderer::Renderer->GetViewSize().X, WoflRenderer::Renderer->GetViewSize().Y);
 		
 	WoflAtlases::LoadAtlas("Neuro1");
-	
+	WoflAtlases::LoadAtlas("Neuro2");
+
 	Background = new WoflSprite(0, 0, WoflRenderer::Renderer->GetViewSize().X, WoflRenderer::Renderer->GetViewSize().Y);
 	Background->AddImage(new WoflImage("background"));
 	
@@ -34,16 +34,14 @@ NeuroGame::NeuroGame()
 	MessageBox = new Textbox(nullptr, 693, 539, 556, 230, 0, true, false, WColor::Black);
 	MessageBox->SetInterfaceDelegate(&State);
 	
+	InfoBox = new Textbox(nullptr, 376, 600, 268, 36, 0, false, false, WColor::Black);
+	
+	
 	Background->AddChild(ScreenSprite);
 	Background->AddChild(MessageBox);
+	Background->AddChild(InfoBox);
 	
 	DialogBox = new Ninebox(Ninebox::Basic, 0, 0, ScreenSprite->GetSize().X, 150, Tag_Dialog);
-	
-//	Inventory = new InvBox(150, 480, 500, 280);
-	//	Inventory->SetDelegates(&State, &State);
-//
-//	WebSite = new SiteBox(100, 40, 1000, 600);
-//	WebSite->SetDelegates(&State, &State);
 	
 	int Top = 580;
 	int Left = 58;
@@ -71,6 +69,26 @@ NeuroGame::NeuroGame()
 	WoflButton* SystemButton = new WoflButton(nullptr, "", Left + 2 * Size, Top + 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSystem(); });
 	Background->AddChild(SystemButton);
 	SystemButton->SetKeycodeShortcut(WoflKeys::Escape);
+	
+	Top = 672;
+	Left = 446;
+	int SizeX = 66;
+	int SizeY = 46;
+	WoflButton* DateButton = new WoflButton(nullptr, "", Left + 0 * SizeX, Top + 0 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickDate(); });
+	Background->AddChild(DateButton);
+	DateButton->SetKeycodeShortcut(WoflKeys::One);
+	
+	WoflButton* TimeButton = new WoflButton(nullptr, "", Left + 1 * SizeX, Top + 0 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickTime(); });
+	Background->AddChild(TimeButton);
+	TimeButton->SetKeycodeShortcut(WoflKeys::Two);
+	
+	WoflButton* MoneyButton = new WoflButton(nullptr, "", Left + 0 * SizeX, Top + 1 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickMoney(); });
+	Background->AddChild(MoneyButton);
+	MoneyButton->SetKeycodeShortcut(WoflKeys::Three);
+	
+	WoflButton* HealthButton = new WoflButton(nullptr, "", Left + 1 * SizeX, Top + 1 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickHealth(); });
+	Background->AddChild(HealthButton);
+	HealthButton->SetKeycodeShortcut(WoflKeys::Four);
 
 	WoflWorld::Get()->SetRootSprite(Background);
 }
@@ -141,7 +159,7 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		ScreenSprite->ClearImages();
 		
 		string BackgroundImage;
-		State.CurrentRoom->LuaSystem->GetStringValue(State.CurrentRoom, "background", BackgroundImage);
+		State.CurrentRoom->LuaSystem->GetStringValue(State.CurrentRoom, "name", BackgroundImage);
 		ScreenSprite->AddImage(new WoflImage(BackgroundImage.c_str()));
 	}
 	
@@ -160,7 +178,13 @@ void NeuroGame::Invalidate(ZoneType Zone)
 			ScreenSprite->AddChild(DialogBox);
 		}
 	}
+
+	if ((Zone & ZoneType::Info) != ZoneType::None)
+	{
+		InfoBox->SetText(State.GetCurrentInfoText());
+	}
 	
+
 //	if ((Zone & ZoneType::Inventory) != ZoneType::None)
 //	{
 //		if (State.IsShowingInventory())

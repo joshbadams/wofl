@@ -36,8 +36,11 @@ NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate)
 
 	// default to initial room (LoadFromFile will set PendingRoom if loaded)
 	string InitialRoom;
-	Lua.GetStringValue("s", "savedroom", InitialRoom);
+	Lua.GetStringValue("c", "initialRoom", InitialRoom);
 	Lua.GetTableValue("", InitialRoom.c_str(), PendingRoom);
+	
+	Lua.GetFloatValue("c", "secondsPerMinute", SecondsPerMinute);
+	TimeTimer = SecondsPerMinute;
 
 	// loaded values here will override init values in tha
 	LoadFromFile(Utils::File->GetSavePath("game1.sav").c_str());
@@ -239,6 +242,13 @@ void NeuroState::Tick(float DeltaTime)
 			++it;
 		}
 	}
+	
+	TimeTimer -= DeltaTime;
+	while (TimeTimer <= 0)
+	{
+		Lua.CallFunction_NoReturn("", "IncrementTime");
+		TimeTimer += SecondsPerMinute;
+	}
 }
 
 void NeuroState::ClickInventory()
@@ -408,13 +418,14 @@ std::string NeuroState::GetCurrentInfoText()
 	switch (CurrentInfoType)
 	{
 		case InfoType::Date:
-			Lua.GetStringValue("s", "date", Info);
+			Lua.CallFunction_Return("string", "fromDate", Info);
 			break;
 		case InfoType::Time:
-			Lua.GetStringValue("s", "time", Info);
+			Lua.CallFunction_Return("string", "fromTime", Info);
 			break;
 		case InfoType::Money:
 			Lua.GetStringValue("s", "money", Info);
+			Info = string("$") + Info;
 			break;
 		case InfoType::Health:
 			Lua.GetStringValue("s", "hp", Info);

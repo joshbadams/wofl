@@ -1,8 +1,16 @@
 {"frames": [
 
 {
+	"filename": "background.png",
+	"frame": {"x":0,"y":0,"w":1280,"h":796},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1280,"h":796},
+	"sourceSize": {"w":1280,"h":796}
+},
+{
 	"filename": "bodyshop.png",
-	"frame": {"x":0,"y":0,"w":1213,"h":447},
+	"frame": {"x":1282,"y":0,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
@@ -10,7 +18,87 @@
 },
 {
 	"filename": "chatsubo.png",
-	"frame": {"x":0,"y":449,"w":1213,"h":447},
+	"frame": {"x":2497,"y":0,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "cheaphotel.png",
+	"frame": {"x":0,"y":798,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "donutworld.png",
+	"frame": {"x":1215,"y":798,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "gentlemanloser.png",
+	"frame": {"x":2430,"y":798,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "larrys.png",
+	"frame": {"x":0,"y":1247,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "massageparlor.png",
+	"frame": {"x":1215,"y":1247,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "shins.png",
+	"frame": {"x":2430,"y":1247,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "streetcenter1.png",
+	"frame": {"x":0,"y":1696,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "streetcenter2.png",
+	"frame": {"x":1215,"y":1696,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "streetcenter3.png",
+	"frame": {"x":2430,"y":1696,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "streetcenter4.png",
+	"frame": {"x":0,"y":2145,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
@@ -18,7 +106,7 @@
 },
 {
 	"filename": "streetwest1.png",
-	"frame": {"x":0,"y":898,"w":1213,"h":447},
+	"frame": {"x":1215,"y":2145,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
@@ -26,7 +114,7 @@
 },
 {
 	"filename": "streetwest2.png",
-	"frame": {"x":0,"y":1347,"w":1213,"h":447},
+	"frame": {"x":2430,"y":2145,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
@@ -37,9 +125,8 @@
 	"version": "1.0",
 	"image": "Neuro1.png",
 	"format": "RGBA8888",
-	"size": {"w":1213,"h":1794},
+	"size": {"w":4096,"h":4096},
 	"scale": "1",
-	"related_multi_packs": [ "Neuro2.json" ],
-	"smartupdate": "$TexturePacker:SmartUpdate:1b45762f878b68dad33798d573955dbb:b5d969594e4bf1c857d85eb8a74770fa:8e5f1c61dd1938f0ebcc3dab307fd743$"
+	"smartupdate": "$TexturePacker:SmartUpdate:77194f7eff11979397f88b7a1592a12f:d988889f04e1c97509bc280f3e7b74d4:5ac55c2b27e973ba365d9ff62d81c598$"
 }
 }

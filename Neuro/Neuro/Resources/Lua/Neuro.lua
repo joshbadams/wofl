@@ -1,7 +1,11 @@
 -- Globals, these will all be saved
 
+c = {
+	initialRoom = "chatsubo",
+	secondsPerMinute = 1,
+}
+
 s = {
-	savedroom = "chatsubo",
 	
 	money = 6,
 	hp = 2000,
@@ -16,37 +20,42 @@ s = {
 		200, -- Comlink 1.0
 	},
 	
+	-- all organs by default
 	organs = {
-		300,
-		301,
-		302,
-		303,
-		304,
-		305,
-		306,
-		307,
-		308,
-		309,
-		310,
-		311,
-		312,
-		313,
-		314,
-		315,
-		316,
-		317,
-		318,
-		319,
+		300, 301, 302, 303, 304,
+		305, 306, 307, 308, 309,
+		310, 311, 312, 313, 314,
+		315, 316, 317, 318, 319,
 	},
 
-	date = 111658,
+	month = 11,
+	day = 16,
+	year = 58,
+	date = 111558,
+	hour = 0,
+	minute = 0,
 	bankaccount = 1941,
 	name = "Badams",
 	bamaid = "056306118",
 
 }
 
--- print("inv: ", s.inventory)
+function IncrementTime()
+	s.minute = s.minute + 1
+	if (s.minute == 60) then
+		s.minute = 0
+		s.hour = s.hour + 1
+		if (s.hour == 24) then
+			s.hour = 0
+			s.day = s.day + 1
+			s.date = s.month * 1000 + s.day * 100 + s.year
+		end
+	end
+
+	-- make sure the UI is updated
+	UpdateInfo();
+end
+
 currentRoom = nil
 
 
@@ -113,12 +122,12 @@ function string:appendPadded(str, width)
 	return res
 end
 
-function string.fromDate(date)
-	month = math.floor((date % 1000000) / 10000)
-	day = math.floor((date % 10000) / 100)
-	year = math.floor((date % 100) / 1)
+function string.fromDate()
+	return string.format("%02d/%02d/%02d", s.month, s.day, s.year)
+end
 
-	return string.format("%02d/%02d/%02d", month, day, year)
+function string.fromTime()
+	return string.format("%02d:%02d", s.hour, s.minute)
 end
 
 LuaObj = { }
@@ -139,16 +148,18 @@ Room = LuaObj:new {
 
 function Room:GetNextConversation(tag)
 	if tag ~= nil then
-		for i,c in ipairs(self.conversations) do
-			if c.tag ~= nil and c.tag:lower() == tag:lower() then
-				return c
+		for i,v in ipairs(self.conversations) do
+			if v.tag ~= nil and v.tag:lower() == tag:lower() then
+				return v
 			end
 		end
 	end
 
-	for i,c in ipairs(self.conversations) do
-		if c.condition ~= nil and c:condition() then
-			return c
+	for i,v in ipairs(self.conversations) do
+		if (v.tag == nil) then
+			if (v.condtiion == null) or (v.condition ~= nil and v:condition()) then
+				return v
+			end
 		end
 	end
 

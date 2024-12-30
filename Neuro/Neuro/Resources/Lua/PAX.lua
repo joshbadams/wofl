@@ -182,7 +182,7 @@ end
 
 function PAX:GetSendMessageEntries(entries)
 	table.append(entries, { x = 5, y = 0, text = "Send Message" })
-	table.append(entries, { x = 0, y = 4, text = "date: " .. string.fromDate(s.date) })
+	table.append(entries, { x = 0, y = 4, text = "date: " .. string.fromDate() })
 	table.append(entries, { x = 0, y = 5, text = "to:   " })
 
 	if (self.currentPage == "bbs_send_verify") then

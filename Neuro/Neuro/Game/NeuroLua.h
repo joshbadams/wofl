@@ -94,6 +94,9 @@ public:
 	bool GetBoolValue(TableSpec Table, const char* Name, bool& Result) const;
 
 	template<typename TableSpec>
+	bool GetFloatValue(TableSpec Table, const char* Name, float& Result) const;
+
+	template<typename TableSpec>
 	bool GetStringValue(TableSpec Table, const char* Name, std::string& Result) const;
 
 	template<typename TableSpec>
@@ -237,6 +240,15 @@ bool Lua::GetBoolValue(TableSpec Table, const char* Name, bool& Result) const
 	GET_TABLE_VALUE_PREAMBLE(lua_isboolean, false)
 	
 	Result = lua_toboolean(L, -1);
+	return true;
+}
+
+template<typename TableSpec>
+bool Lua::GetFloatValue(TableSpec Table, const char* Name, float& Result) const
+{
+	GET_TABLE_VALUE_PREAMBLE(lua_isnumber, 0.0f)
+	
+	Result = (float)lua_tonumber(L, -1);
 	return true;
 }
 

@@ -206,6 +206,10 @@ private:
 
 	ZoneType PendingInvalidation;
 	InfoType CurrentInfoType;
+	
+	// how fast to increment a minute
+	float SecondsPerMinute;
+	float TimeTimer;
 
 	Lua Lua;
 	friend class NeuroGame;

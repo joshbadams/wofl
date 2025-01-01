@@ -137,18 +137,17 @@ MassageParlor = Room:new {
 			{
 				{
 					line = "I'm sure I'll think of something.",
-					response = " ",
-					onEnd = function() Talk("lawbot") end
+					onEnd = function(self) print("self", self); self:ActivateConversation("lawbot") end
 				},
 				{
 					line = "Uhh, excuse me, I'm just passing through...",
 					response = "You don't know what your missing, cowboy.",
-					onEnd = function() self.stoptalking = true end
+					onEnd = function(self) self.stoptalking = true end
 				},
 				{
 					line = "I wanna buy some info, babe.",
 					response = "Take a hike, meatball! You can't afford it!",
-					onEnd = function() Talk("lawbot") end
+					onEnd = function(self) print("self2", self); self:ActivateConversation("lawbot") end
 				},
 			}
 		},

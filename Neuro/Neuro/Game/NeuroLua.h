@@ -80,11 +80,14 @@ public:
 
 	bool RunCode(const string& Code);
 
-	template<typename TableSpec>
-	void SetIntValue(TableSpec Table, const char* Name, int Value) const;
+	template<typename TableSpec, typename KeyType>
+	void SetIntValue(TableSpec Table, KeyType Name, int Value) const;
 
-	template<typename TableSpec>
-	void SetStringValue(TableSpec Table, const char* Name, const string& Value) const;
+	template<typename TableSpec, typename KeyType>
+	void SetStringValue(TableSpec Table, KeyType Name, const string& Value) const;
+
+	template<typename TableSpecObject, typename KeyType, typename TableSpecValue>
+	void SetTableValue(TableSpecObject Table, KeyType Name, TableSpecValue Value) const;
 
 	
 	template<typename TableSpec>
@@ -148,7 +151,7 @@ private:
 
 
 int PushSpec(lua_State* L, LuaRef TableRef);
-//int PushSpec(lua_State* L, int TableStackLoc);
+int PushSpec(lua_State* L, int TableStackLoc);
 int PushSpec(lua_State* L, const char* TableName);
 
 int PushFuncSpec(lua_State* L, int TableStackLoc, LuaRef TableRef);
@@ -157,6 +160,7 @@ int PushFuncSpec(lua_State* L, int TableStackLoc, const char* TableName);
 int PushParam(lua_State* L, LuaRef Param);
 int PushParam(lua_State* L, int Param);
 int PushParam(lua_State* L, const char* Param);
+int PushParam(lua_State* L, bool Param);
 
 bool GetReturn(lua_State* L, LuaRef& Param);
 bool GetReturn(lua_State* L, int& Param);
@@ -171,7 +175,7 @@ void dumpstack (lua_State *L);
 #define SET_TABLE_VALUE(SetFunc, Val) \
 	SCOPE; \
 	PushSpec(L, Table); \
-	lua_pushstring(L, Name); \
+	PushParam(L, Name); \
 	SetFunc(L, Val); \
 	lua_settable(L, -3);
 
@@ -213,17 +217,28 @@ void dumpstack (lua_State *L);
 
 	
 
-template<typename TableSpec>
-void Lua::SetIntValue(TableSpec Table, const char* Name, int Value) const
+template<typename TableSpec, typename KeyType>
+void Lua::SetIntValue(TableSpec Table, KeyType Name, int Value) const
 {
 	SET_TABLE_VALUE(lua_pushinteger, Value);
 }
 
-template<typename TableSpec>
-void Lua::SetStringValue(TableSpec Table, const char* Name, const string& Value) const
+template<typename TableSpec, typename KeyType>
+void Lua::SetStringValue(TableSpec Table, KeyType Name, const string& Value) const
 {
 	SET_TABLE_VALUE(lua_pushstring, Value.c_str());
 }
+
+template<typename TableSpecObject, typename KeyType, typename TableSpecValue>
+void Lua::SetTableValue(TableSpecObject Table, KeyType Name, TableSpecValue Value) const
+{
+	SCOPE;
+	PushSpec(L, Table);
+	PushParam(L, Name);
+	PushSpec(L, Value);
+	lua_settable(L, -3);
+}
+
 
 template<typename TableSpec>
 bool Lua::GetIntValue(TableSpec Table, const char* Name, int& Result) const

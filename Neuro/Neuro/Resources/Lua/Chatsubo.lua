@@ -2,6 +2,7 @@ s.chatsubo = 0
 
 Chatsubo = Room:new {
 	name = "chatsubo",
+	onEnterConversation = "onEnterConversation",
 	hasPerson = true,
 	hasPax = true,
 	hasJack = true,
@@ -14,15 +15,13 @@ Chatsubo = Room:new {
 	
 	conversations = {
 		{
-			condition = function()
-				return s.chatsubo == 0
-			end,
+			tag = "onEnterConversation",
 			lines = {
 				"I don't care if you eat that spaghetti or sleep in it, you still gotta pay for it. 46 credits."
 			},
-			onEnd = function()
+			onEnd = function(self)
 				s.chatsubo = 1
-				Talk()
+				self:ActivateConversation()
 			end
 		},
 		
@@ -106,11 +105,6 @@ Chatsubo = Room:new {
 	}
 }
 
-function Chatsubo:OnFirstEnter()
-	s.chatsubo = 0
-	ShowMessage(self.longDescription, function() Talk() end)
-end
-
 -- comment
 
 function Chatsubo:GiveMoney(amount)
@@ -119,7 +113,7 @@ print("Give money, ", amount)
 		-- actually give the money away
 		Room:GiveMoney(amount)
 
-		Say("Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck.")
+		self:Say("Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck.")
 		s.chatsubo = 2
 	else
 print("Showing message")

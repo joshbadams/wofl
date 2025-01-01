@@ -14,7 +14,7 @@ BodyShopBuy = ShopBox:new {
 
 function BodyShopBuy:HandleClickedExit()
 	if (not self.boughtSold) then
-		Talk("onBoughtNothing")
+		currentRoom:ActivateConversation("onBoughtNothing")
 	end
 
 	ShopBox.HandleClickedExit(self)
@@ -42,9 +42,9 @@ BodyShopSell = ShopBox:new {
 
 function BodyShopSell:HandleClickedExit()
 	if (self.boughtSold) then
-		Talk("onSoldSomething")
+		currentRoom:ActivateConversation("onSoldSomething")
 	else
-		Talk("onSoldNothing")
+		currentRoom:ActivateConversation("onSoldNothing")
 	end
 
 	ShopBox.HandleClickedExit(self)
@@ -77,10 +77,7 @@ BodyShop = Room:new {
 			lines = {
 				"Can I be of service? Would you like to sell a body part?"
 			},
-			onEnd = function()
-				s.bodyshop = 1
-				Talk()
-			end
+			onEnd = function() s.bodyshop = 1 end
 		},
 
 		{
@@ -135,16 +132,6 @@ BodyShop = Room:new {
 		},
 	}
 }
-
-function BodyShop:OnFirstEnterXX()
-	s.chatsubo = 0
-	ShowMessage(self.longDescription, function() Talk("onEnterRoom") end)
-end
-
-function BodyShop:OnEnterXX()
-	Room:OnEnter()
-	Talk("onEnterRoom")
-end
 
 bodyshop = BodyShop
 

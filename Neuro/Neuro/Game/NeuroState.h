@@ -159,9 +159,6 @@ public:
 
 private:
 	
-	static int Lua_Trigger(lua_State* L);
-	static int Lua_Talk(lua_State* L);
-	static int Lua_Say(lua_State* L);
 	static int Lua_ShowMessage(lua_State* L);
 	static int Lua_OpenBox(lua_State* L);
 	static int Lua_CloseBox(lua_State* L);
@@ -172,22 +169,14 @@ private:
 	static int Lua_QuitGame(lua_State* L);
 	static int Lua_GoToRoom(lua_State* L);
 	static int Lua_UpdateInfo(lua_State* L);
+	static int Lua_UpdateDialog(lua_State* L);
 
 	void ActivateRoom(LuaRef OldRoom, LuaRef NewRoom);
-	void ActivateConversation(Conversation* Convo);
-	
-	Conversation* FindConversationWithTag(const char* Tag);
-	Conversation* FindActiveConversation();
-	
+		
 	map<std::string, std::vector<int>> UnlockedMessages;
 
 	IStateChangedDelegate* StateDelegate;
-	
-	Conversation LuaConversation;
-	Conversation* CurrentConversation;
-	int DialogIndex;
-	int ChoiceIndex;
-	
+		
 	struct Timer
 	{
 		float Time;
@@ -201,7 +190,6 @@ private:
 	LuaRef PendingRoom;
 	LuaRef Lua_OnMessageComplete;
 
-	Conversation* PendingConversation;
 	std::string PendingMessage;
 
 	ZoneType PendingInvalidation;

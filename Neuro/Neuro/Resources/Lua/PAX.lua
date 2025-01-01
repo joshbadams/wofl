@@ -105,6 +105,7 @@ PAX = Site:new {
 		['bbs_view'] = {
 			type = "list",
 			title = "Bulletin Board",
+			unlockid = "pax_bbs",
 			hasDetails = true,
 			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
 			formatDetails = function(item) return string.format("TO: %s\nFROM: %s\n%s", item.from, item.to, item.message) end,
@@ -212,6 +213,8 @@ function PAX:HandleClickedEntry(id)
 			self:ProcessMessage()
 		end
 		self:GoToPage("bbs_menu")
+	else
+		Site.HandleClickedEntry(self, id)
 	end
 end
 

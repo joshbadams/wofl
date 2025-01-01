@@ -69,9 +69,6 @@ protected:
 
 	void SetupTextEntry(const GridEntry& Entry);
 	
-	void SetupMessages(std::string MessageSourceID, std::string Title);
-	bool IsInMessagePhase() { return bIsShowingMessageList || bIsShowingMessage; }
-	
 	void OnClickMessageEntry(GridEntry& Entry);
 
 
@@ -93,16 +90,5 @@ protected:
 	
 	int TextEntryIndex;
 	bool bIgnoreUntilNextUp;
-
-private:
-	
-	// list of unlocked messages from the active message source
-	std::vector<class Message*> CurrentMessages;
-	class Message* ChosenMessage;
-	std::string MessagesTitle;
-	bool bIsShowingMessageList;
-	bool bIsShowingMessage;
-	int FirstMessage;
-	int NumMessagesPerPage;
 };
 

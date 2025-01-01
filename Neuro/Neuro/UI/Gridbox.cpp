@@ -9,9 +9,6 @@
 #include "Textbox.h"
 #include "NeuroState.h" // replace with InterfaceDelegate.h or similar
 
-const int Message_Exit = -1;
-const int Message_More = -2;
-
 void GridEntry::FromLua(LuaRef Ref)
 {
 	Lua* L = Ref->LuaSystem;
@@ -53,8 +50,6 @@ void Gridbox::Init()
 {
 	TextEntryIndex = -1;
 	bIgnoreUntilNextUp = false;
-	bIsShowingMessageList = false;
-	bIsShowingMessage = false;
 
 	Vector ClientLocation;
 	Vector ClientSize;
@@ -149,14 +144,7 @@ void Gridbox::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 		bool bWantsInput = Entry.ClickId != 0 || Entry.OnClick || Entry.OnClickEntry;
 		if (bWantsInput && Y == Entry.Y && X >= Entry.X && X < Entry.X + Entry.Text.length())
 		{
-			if (IsInMessagePhase())
-			{
-				OnClickMessageEntry(Entry);
-			}
-			else
-			{
-				OnClickEntry(Entry);
-			}
+			OnClickEntry(Entry);
 			bWasHandled = true;
 			break;
 		}
@@ -233,14 +221,7 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 			{
 				if (Entry.Key == tolower(Event.Char))
 				{
-					if (IsInMessagePhase())
-					{
-						OnClickMessageEntry(Entry);
-					}
-					else
-					{
-						OnClickEntry(Entry);
-					}
+					OnClickEntry(Entry);
 					bIgnoreUntilNextUp = true;
 					return true;
 				}
@@ -274,19 +255,6 @@ void Gridbox::OnTextEntryCancelled(const string& Tag)
 void Gridbox::OnGenericContinueInput()
 {
 	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnGenericContinueInput");
-	Update();
-}
-
-void Gridbox::SetupMessages(std::string MessageSourceID, std::string Title)
-{
-//	CurrentMessages = QueryStateDelegate->GetUnlockedMessages(MessageSourceID);
-	MessagesTitle = Title;
-	
-	FirstMessage = 0;
-	NumMessagesPerPage = GridsY - 6;
-	bIsShowingMessageList = true;
-	bIsShowingMessage = false;
-
 	Update();
 }
 
@@ -361,55 +329,3 @@ void Gridbox::OnClickEntry(GridEntry& Entry)
 	Update();
 }
 
-void Gridbox::OnClickMessageEntry(GridEntry& Entry)
-{
-	if (Entry.ClickId > 0)
-	{
-		ChosenMessage = CurrentMessages[Entry.ClickId - 1];
-		
-		bIsShowingMessage = true;
-		bIsShowingMessageList = false;
-		Update();
-	}
-	else if (Entry.ClickId == Message_More)
-	{
-		FirstMessage += NumMessagesPerPage;
-		if (FirstMessage >= (int)CurrentMessages.size())
-		{
-			FirstMessage = 0;
-		}
-		
-		Update();
-	}
-	else if (Entry.ClickId == Message_Exit)
-	{
-		bIsShowingMessage = false;
-		bIsShowingMessageList = false;
-
-		CloseMessages();
-	}
-	
-
-//	case Board_Exit:
-//		Phase = Phase_Menu;
-//		Update();
-//		break;
-//	case Board_ViewMessages:
-//		SubPhase = BoardPhase_ViewMessages;
-//		Update();
-//		break;
-//	case Board_More:
-//		FirstItem += NumItemsPerPage;
-//		if (FirstItem >= (int)CurrentBoardItems.size())
-//		{
-//			FirstItem = 0;
-//		}
-//		Update();
-//		break;
-//	case Board_SendMessage:
-//		SubPhase = BoardPhase_SendMessageTo;
-//		Update();
-//		break;
-//
-//	}
-}

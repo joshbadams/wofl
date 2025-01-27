@@ -4,6 +4,7 @@ Dialog = LuaObj:new {
 	speaker = 1,
 	thought = false,
 	onEnd = nil,
+	hasTextEntry = false,
 }
 
 
@@ -14,6 +15,7 @@ Room = LuaObj:new {
 	currentDialog = nil,
 	lineIndex = 0,
 	choiceIndex = 0,
+	isEnteringText = false,
 }
 
 function Room:GetDialog()
@@ -28,11 +30,28 @@ function Room:GetDialog()
 	end
 
 	if (self.currentChoice ~= nil) then
-		dialog.text = self.currentChoice.response
+		if (type(self.currentChoice.response) == 'function') then
+			dialog.text = self.currentChoice.response(self)
+		else
+			dialog.text = self.currentChoice.response
+		end
 	elseif (self.lineIndex > 0) then
-		dialog.text = convo.lines[self.lineIndex]
+		local line = convo.lines[self.lineIndex];
+		if (type(line) == 'function') then
+			dialog.text = line(self)
+		else
+			dialog.text = line
+		end
 	else
-		dialog.text = convo.options[self.choiceIndex].line
+		local option = convo.options[self.choiceIndex]
+		if (type(option.line) == 'function') then
+			dialog.text = option.line(self)
+		else
+			dialog.text = option.line
+		end
+		dialog.thought = true
+		dialog.hasTextEntry = option.hasTextEntry ~= nil and option.hasTextEntry
+		dialog.isEditing = self.isEnteringText
 	end
 
 	return dialog
@@ -44,84 +63,166 @@ function Room:ActivateConversation(tag)
 	self.lineIndex = 0
 	self.choiceIndex = 0
 	self.currentChoice = nil
+	self.isEnteringText = false
 
+	-- for non-tagged conversations, assume the user chose Talk option, so record we've done that
+	-- this is reset in OnEnterRoom
+	s.hasTalkedInRoom = true
+print("1")
 	-- find tagged or calculated convo
 	self.currentConversation = self:GetNextConversation(tag)
+print("2")
+	if (self.currentConversation == nil) then
+		return
+	end
+print("3", self.currentConversation)
 
 	-- init the list of lines or choices
 	if (self.currentConversation.lines ~= nil and #self.currentConversation.lines > 0) then
 		self.lineIndex = 1
+print("4")
+print("activate- ", self.currentConversation, self.currentConversation.tag, self.currentConversation.lines, self.lineIndex)
 	elseif (self.currentConversation.options ~= nil and #self.currentConversation.options > 0) then
-		self.choiceIndex = 1
+		repeat
+			self.choiceIndex = self.choiceIndex % #self.currentConversation.options + 1
+		until (self.currentConversation.options[self.choiceIndex].condition == nil or self.currentConversation.options[self.choiceIndex].condition(self))
 	end
 	UpdateDialog()
 end
+
+function Room:EndConversation()
+
+	local endingConversation = nil
+	local endingChoice = nil
+
+	-- after a reponse to a choice has been seen
+	if (self.currentChoice ~= nil) then
+		endingChoice = self.currentChoice
+	-- after a choice with no response has been seen
+	elseif (self.choiceIndex > 0) then
+		endingChoice = self.currentConversation.options[self.choiceIndex]
+	end
+
+
+	-- NEED TO RESET CURENTCONVO TO NULL BEFORE CALLING ONEND
+
+	-- for any type of conversation with an onEnd,
+	endingConversation = self.currentConversation
+
+	self.currentConversation = nil
+	self.currentChoice = nil
+	self.lineIndex = 0
+	self.choiceIndex = 0
+
+	-- run onEnd with the room as the self, not the choice/convo
+	if (endingChoice ~= nil and endingChoice.onEnd ~= nil) then
+		endingChoice.onEnd(self)
+	end
+	if (endingConversation ~= nil and endingConversation.onEnd ~= nil) then
+		endingConversation.onEnd(self)
+	end
+
+end
+
 
 function Room:HandleDialogClick(isOutsideBubble)
 	local convo = self.currentConversation
 	
 	-- clicking on a response to a choice
 	if (self.currentChoice ~= nil) then
-		local choice = self.currentChoice
-		self.currentChoice = nil
-		self.currentConversation = nil
-
-		-- run onEnd with the room as the self, not the choice
-		if (choice.onEnd ~= nil) then
-			choice.onEnd(self)
-		end
+		self:EndConversation()
 	
 	-- room character is just talking normally
 	elseif (self.lineIndex > 0) then
 		self.lineIndex = self.lineIndex + 1
 		if (self.lineIndex > #convo.lines) then
-			self.currentConversation = nil
-			-- run any onEnd function when the lines are done
-			if (convo.onEnd ~= nil) then
-				convo.onEnd(self)
-			end
-			
+			self:EndConversation()
 		end
 
 	-- player is thinking through options
 	elseif (self.choiceIndex > 0) then
 		if (isOutsideBubble) then
-			self.choiceIndex = self.choiceIndex % #self.currentConversation.options + 1
+			repeat
+				self.choiceIndex = self.choiceIndex % #self.currentConversation.options + 1
+			until (self.currentConversation.options[self.choiceIndex].condition == nil or self.currentConversation.options[self.choiceIndex].condition(self))
 		else
 			local choice = self.currentConversation.options[self.choiceIndex]
 			-- if there's no response, there should be an onEnd function; run it now
-			if (choice.response ~= nil) then
+			-- unless we have a text entry, handle that specially
+			if (choice.hasTextEntry) then
+				-- if (self.isEnteringText) then
+				--	self:ProcessTextEntry()
+				self.isEnteringText = true
+				OpenBox("DialogTextEntry")
+			elseif (choice.response ~= nil) then
 				self.currentChoice = choice
-			elseif (choice.onEnd ~= nil) then
-				choice.onEnd(self)
 			else
-				self.currentConversation = nil
+				self:EndConversation()
 			end
 		end
-	end
-
-	if (self.currentConversation == nil) then
-		self.lineIndex = 0
-		self.choiceIndex = 0
 	end
 
 	UpdateDialog()
 end
 
+function Room:DialogTextEntered(text)
+	-- run onEnd, close dialog, etc
+	self:EndConversation()
 
-function Room:GetNextConversation(tag)
-	if tag ~= nil then
-		for i,v in ipairs(self.conversations) do
-			if v.tag ~= nil and v.tag:lower() == tag:lower() then
-				return v
-			end
+	self:ActivateConversation("_" .. text)
+	if (self.currentConversation == nil) then
+		self:ActivateConversation("_unknownentry")
+	end
+end
+
+-- keycode 2 is Enter
+-- keycode 1 is Escape
+-- type 0 is KeyDown
+function Room:ConversationKey(char, keyCode, type)
+	if (type == 0) then
+		if (keyCode == 2) then
+			self:HandleDialogClick(false)
+		elseif (not self.currentConversation.noCancel and keyCode == 1) then
+			self.currentConversation = nil
+			UpdateDialog()
+		else
+			self:HandleDialogClick(true)
 		end
 	end
 
-	for i,v in ipairs(self.conversations) do
-		if (v.tag == nil) then
-			if (v.condtiion == null) or (v.condition ~= nil and v:condition()) then
-				return v
+	return true
+end
+
+function Room:GetNextConversation(tag)
+	if tag ~= nil then
+		local lowertag = tag:lower()
+		for i,v in ipairs(self.conversations) do
+			local tagMatches = false
+			if (v.tags ~= nil) then
+				for i2,v2 in ipairs(v.tags) do
+					if (v2:lower() == lowertag) then
+						tagMatches = true
+					end
+				end
+			else
+				if (v.tag ~= nil and v.tag:lower() == lowertag) then
+					tagMatches = true
+				end
+			end
+			if (tagMatches) then
+				if (v.condition == nil or v.condition(self)) then
+					return v
+				else
+					return nil
+				end
+			end
+		end
+	else
+		for i,v in ipairs(self.conversations) do
+			if (v.tag == nil) then
+				if (v.condition == nil or v.condition(self)) then
+					return v
+				end
 			end
 		end
 	end
@@ -132,6 +233,8 @@ end
 
 
 function Room:OnEnterRoom()
+	s.hasTalkedInRoom = true
+
 	local firstTimeKey = "__" .. self.name
 	if (s[firstTimeKey] ~= 1) then
 		self:OnFirstEnter()
@@ -144,7 +247,6 @@ function Room:OnEnterRoom()
 end
 
 function Room:OnFirstEnter()
-print("long desc -", self.longDescription,"-")
 	if (self.onEnterConversation ~= nil) then
 --		ShowMessage(self.longDescription, function() Talk(self.onEnterConversation) end)
 		ShowMessage(self.longDescription, function() self:ActivateConversation(self.onEnterConversation) end)
@@ -154,7 +256,6 @@ print("long desc -", self.longDescription,"-")
 end
 
 function Room:OnEnter()
-print("short desk -", self.description,"-")
 	ShowMessage(self.description)
 	if (self.onEnterConversation ~= nil) then
 		self:ActivateConversation(self.onEnterConversation)
@@ -173,6 +274,9 @@ function Room:GiveItem(item)
 end
 
 function Room:UseItem(item)
+end
+
+function Room:UseSkill(skill)
 end
 
 function Room:GetConnectingRoom(direction)

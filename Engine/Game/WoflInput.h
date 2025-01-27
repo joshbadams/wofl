@@ -103,6 +103,7 @@ class WoflInput
 public:
 	WoflInput()
 		: KeyCapturedSprite(nullptr)
+		, bKeyCapturedByGame(false)
 		, CapturedKeysDown(0)
 	{
 		// register ourself
@@ -160,5 +161,6 @@ protected:
 	CapturedTouch CapturedTouches[WOFL_MAX_FINGERS];
 	
 	class WoflSprite* KeyCapturedSprite;
+	bool bKeyCapturedByGame;
 	int CapturedKeysDown;
 };

@@ -294,7 +294,14 @@ void Gridbox::Update()
 	LuaRef EntriesTable;
 	vector<LuaRef> LuaEntries;
 	LuaBox->LuaSystem->CallFunction_Return(LuaBox, "GetEntries", EntriesTable);
-	LuaBox->LuaSystem->GetTableValues(EntriesTable, "", LuaEntries);
+	if (EntriesTable != nullptr)
+	{
+		LuaBox->LuaSystem->GetTableValues(EntriesTable, "", LuaEntries);
+	}
+	else
+	{
+		WLOG("Tailed to get an entries array. LIkely an exception in Lua");
+	}
 	for (LuaRef& LuaEntry : LuaEntries)
 	{
 		GridEntry Entry;

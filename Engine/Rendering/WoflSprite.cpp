@@ -20,6 +20,7 @@ WoflSprite::WoflSprite(float X, float Y, float SizeX, float SizeY, int InTag)
 	, AnimTime(0)
 	, Tag(InTag)
 	, bIsClickEnabled(false)
+	, bIsFullScreenInput(false)
 	, Next(NULL)
 	, Child(NULL)
 	, Parent(NULL)
@@ -279,6 +280,11 @@ bool WoflSprite::RunCollision(WoflSprite* Collider, Vector& OutPosition, Vector&
 
 bool WoflSprite::HitTest(const Vector& HitLoc)
 {
+	if (bIsFullScreenInput)
+	{
+		return true;
+	}
+	
 	// get rect
 	Vector TopLeft = GetPosition();
 	Vector BottomRight = TopLeft + GetSize();

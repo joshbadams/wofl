@@ -7,6 +7,7 @@ InvPhase = {
 	ConfirmGive = {},
 	Login = {},
 	LoginError = {},
+	UsedSkill = {},
 }
 
 InvAction = {
@@ -55,6 +56,8 @@ function InvBox:GetEntries()
 		self:GetLoginEntries(entries)
 	elseif (self.phase == InvPhase.LoginError) then
 		self:GetLoginErrorEntries(entries)
+	elseif (self.phase == InvPhase.UsedSkill) then
+		table.append(entries, { x = 1, y = 2, text = "Skill chip implanted"})
 	end
 
 	return entries
@@ -202,6 +205,8 @@ end
 function InvBox:OnGenericContinueInput()
 	if (self.phase == InvPhase.LoginError) then
 		self.phase = InvPhase.Login
+	elseif (self.phase == InvPhase.UsedSkill) then
+		self.phase = InvPhase.List
 	end
 end
 
@@ -219,6 +224,8 @@ function InvBox:PerformAction(action)
 	elseif (action == InvAction.Operate) then
 		if (item.type == "deck") then
 			self.phase = InvPhase.Software
+		elseif (item.type == "skill") then
+			self:UseSkill()
 		end
 	elseif (action == InvAction.Give) then
 		-- credits are special
@@ -250,4 +257,86 @@ function InvBox:UseSoftware(softwareItem)
 	end
 end
 
+function InvBox:UseSkill()
+	local skillId = s.inventory[self.invItem]
+	-- add to skills list if not there (fast lookup in the skillLevels map to know if we ever unlocked it)
+	if (s.skillLevels[skillId] == nil) then
+		table.append(s.skills, skillId)
+		-- when unlocking from an item, start level at 1
+		s.skillLevels[skillId] = 1
+	end
+	self.phase = InvPhase.UsedSkill
 
+	table.remove(s.inventory, self.invItem)
+end
+
+
+
+
+
+
+SkillBox = Gridbox:new {
+	x = 150,
+	y = 480,
+	w = 500,
+	h = 280,
+}
+
+function SkillBox:OpenBox(width, height)
+	Gridbox.OpenBox(self, width, height)
+
+	self.page = 0
+	self.numSkillsPerPage = self.sizeY - 2;
+	self.numPages = math.ceil(#s.inventory / self.numSkillsPerPage);
+end
+
+function SkillBox:HandleClickedEntry(id)
+	local skill = Items[s.skills[id]]
+	local lvel = s.skillLevels[s.skills[id]]
+	if (skill.scope == "room") then
+		currentRoom:UseSkill(skill, level)
+	end
+
+	self:Close()
+end
+
+
+function SkillBox:GetEntries()
+	local entries = {}
+
+	local centeredTitle = self:CenteredX("SKILLS")
+	table.append(entries, { x=centeredTitle, y=0, text="SKILLS" })
+	
+
+	local itemIndex = self.page * self.numSkillsPerPage + 1
+	for line=1, self.numSkillsPerPage do
+
+		if (itemIndex > #s.skills) then
+			break
+		end
+		
+		local skillId = s.skills[itemIndex];
+		local desc = string.format("%d. ", line)
+print("skill", desc, line, skillId)
+print(Items[skillId].name)
+print(s.skillLevels[skillId])
+		desc = string.appendPadded(desc, Items[skillId].name, self.sizeX - 5) .. s.skillLevels[skillId]
+		table.append(entries, { x = 0, y = line, text = desc, clickId = itemIndex, key = tostring(line) })
+
+		itemIndex = itemIndex + 1
+	end
+
+	-- exit / more buttons
+	needsMore = #s.skills > self.numSkillsPerPage
+	self:AddExitMoreEntries(entries, needsMore)
+
+	return entries
+end
+
+function SkillBox:HandleClickedExit()
+	self:Close()
+end
+
+function SkillBox:HandleClickedMore()
+	self.page = (self.page + 1) % self.numPages
+end

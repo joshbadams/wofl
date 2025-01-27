@@ -2,6 +2,7 @@ s.bodyshop = 0
 
 
 BodyShopBuy = ShopBox:new {
+	isBasicItemShop = false,
 	heading = "BUY PARTS",
 	items = {
 		300, 301, 302, 303,
@@ -30,6 +31,7 @@ end
 
 BodyShopSell = ShopBox:new {
 	isBuying = false,
+	isBasicItemShop = false,
 	heading = "SELL PARTS",
 	items = {
 		300, 301, 302, 303,

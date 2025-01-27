@@ -26,6 +26,7 @@ Chatsubo = Room:new {
 		},
 		
 		{
+			nocancel = true,
 			condition = function()
 				return s.chatsubo == 1
 			end,

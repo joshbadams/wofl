@@ -9,6 +9,7 @@
 #include "WoflInput.h"
 #include "WoflWorld.h"
 #include "WoflSprite.h"
+#include "WoflGame.h"
 
 void WoflInput::PreWorldTick(float DeltaTime)
 {
@@ -19,9 +20,13 @@ void WoflInput::PreWorldTick(float DeltaTime)
 			continue;
 		}
 		
-		if (KeyEvent.KeyCode != WoflKeys::None && KeyCapturedSprite != nullptr)
+		if (KeyEvent.KeyCode != WoflKeys::None && (KeyCapturedSprite != nullptr || bKeyCapturedByGame))
 		{
-			if (KeyCapturedSprite->IsRooted())
+			if (bKeyCapturedByGame)
+			{
+				WoflWorld::Get()->GetGame()->OnGlobalKey(KeyEvent);
+			}
+			else if (KeyCapturedSprite->IsRooted())
 			{
 				KeyCapturedSprite->OnKey(KeyEvent);
 			}
@@ -41,24 +46,70 @@ void WoflInput::PreWorldTick(float DeltaTime)
 			{
 				WLOG("clearning capture\n");
 				KeyCapturedSprite = nullptr;
+				bKeyCapturedByGame = false;
 			}
 		}
 		else if (KeyEvent.Type == KeyType::Down)
 		{
-			WoflWorld::Get()->VisitEx(true, false, nullptr, [this, &KeyEvent](WoflSprite* Sprite)
+			if (WoflWorld::Get()->GetGame()->OnGlobalKey(KeyEvent))
+			{
+				bKeyCapturedByGame = true;
+				CapturedKeysDown++;
+			}
+			else
+			{
+//				WLOG("Depth firwt, top down:\n");
+//				WoflWorld::Get()->Visit(true, true, false,	[](WoflSprite* Sprite)
+//				{
+//					int D = Sprite->GetDepth();
+//					for (int i = 0; i < D; i++) WLOG("  ");
+//					WLOG("%s\n", Sprite->Describe().c_str());
+//					return true;
+//				});
+				WLOG("Depth firwt, bottom up:\n");
+				WoflWorld::Get()->Visit(false, true, false,	[](WoflSprite* Sprite)
 				{
-					bool bWasHandled = Sprite->OnKey(KeyEvent);
-					if (bWasHandled)
-					{
-						WLOG("setting capture\n");
-						if (KeyEvent.KeyCode != WoflKeys::None)
-						{
-							KeyCapturedSprite = Sprite;
-							CapturedKeysDown++;
-						}
-					}
-					return !bWasHandled;
+					int D = Sprite->GetDepth();
+					for (int i = 0; i < D; i++) WLOG("  ");
+					WLOG("%s\n", Sprite->Describe().c_str());
+					return true;
 				});
+//				WLOG("Breadth firwt, top down:\n");
+//				WoflWorld::Get()->Visit(true, false, false, [](WoflSprite* Sprite)
+//				{
+//					int D = Sprite->GetDepth();
+//					for (int i = 0; i < D; i++) WLOG("  ");
+//					WLOG("%s\n", Sprite->Describe().c_str());
+//					return true;
+//				});
+//				WLOG("Breadth firwt, bottom up:\n");
+//				WoflWorld::Get()->Visit(false, false, false, [](WoflSprite* Sprite)
+//				{
+//					int D = Sprite->GetDepth();
+//					for (int i = 0; i < D; i++) WLOG("  ");
+//					WLOG("%s\n", Sprite->Describe().c_str());
+//					return true;
+//				});
+//
+//				
+//				
+				WoflWorld::Get()->Visit(false, true, false,	[this, &KeyEvent](WoflSprite* Sprite)
+					{
+					
+						bool bWasHandled = Sprite->OnKey(KeyEvent);
+						if (bWasHandled)
+						{
+							//						WLOG("setting capture\n");
+							if (KeyEvent.KeyCode != WoflKeys::None)
+							{
+								KeyCapturedSprite = Sprite;
+								CapturedKeysDown++;
+							}
+						}
+						return !bWasHandled;
+					},
+					nullptr);
+			}
 		}
 	}
 	QueuedKeys.clear();
@@ -82,7 +133,7 @@ void WoflInput::PreWorldTick(float DeltaTime)
 			Capture.LastRepeatTime = 0.0;
 			Capture.RepeatCount = 0;
 			
-			WLOG("loc %d %d\n", (int)Capture.Location.X, (int)Capture.Location.Y);
+//			WLOG("loc %d %d\n", (int)Capture.Location.X, (int)Capture.Location.Y);
 			
 			if (HitSprite)
 			{

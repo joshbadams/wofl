@@ -8,8 +8,9 @@
 
 #pragma once
 
+#include WOFL_INC(Image)
+
 class WoflRenderer;
-class WoflImage;
 
 enum class SpriteCaptureType
 {
@@ -44,6 +45,17 @@ public:
 	WoflSprite* GetParent() const
 	{
 		return Parent;
+	}
+	
+	int GetDepth() const
+	{
+		int Depth;
+		WoflSprite* Parent = GetParent();
+		for (Depth = 0; Parent; Parent = Parent->GetParent())
+		{
+			Depth++;
+		}
+		return Depth;
 	}
 
 	void AddSibling(WoflSprite* NewSprite);
@@ -147,6 +159,10 @@ public:
 	{
 		return bIsClickEnabled;
 	}
+	void SetFullScreenInput(bool bInFullScreenInput)
+	{
+		bIsFullScreenInput = bInFullScreenInput;
+	}
 	
 	// gets the current image to render
 	virtual WoflImage* GetImage() const;
@@ -192,7 +208,16 @@ public:
 	// called when key events happen, if this returns true, then it won't go up the sprite hierarchy
 	virtual bool OnKey(const KeyEvent& Event)
 	{
+		if (KeyHandlerFunc)
+		{
+			return KeyHandlerFunc(this, Event);
+		}
 		return false;
+	}
+	
+	void SetKeyHandler(const std::function<bool (WoflSprite*, const KeyEvent&)>& Handler)
+	{
+		KeyHandlerFunc = Handler;
 	}
 	
 
@@ -208,6 +233,15 @@ public:
 	// defaults to simple Box test
 	virtual bool HitTest(const Vector& HitLoc);
 
+	virtual std::string Describe()
+	{
+		if (Images.size() > 0)
+		{
+			return Images[0]->_Name;
+		}
+		return "Unknown sprite";
+	}
+
 protected:
 	
 	// animation frames
@@ -221,7 +255,12 @@ protected:
 	
 	// clickable
 	bool bIsClickEnabled;
+	bool bIsFullScreenInput;
 
+	std::function<bool (WoflSprite*, const KeyEvent&)> KeyHandlerFunc;
+//	std::function<void (WoflSprite*, )> ClickHandlerFunc;
+
+	
 	Vector Position;
 	Vector Size;
 	WColor Color;

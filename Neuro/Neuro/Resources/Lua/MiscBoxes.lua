@@ -77,6 +77,7 @@ ShopBox = Gridbox:new {
 	heading = "PRICE LIST",
 
 	isBuying = true,
+	isBasicItemShop = true,
 
 	items = {},
 }
@@ -95,11 +96,12 @@ function ShopBox:GetPrice(id)
 	local price = 0
 
 	if (template.type == "organ") then
-		print("buy", template.buy, "sell", template.sell)
 		price = template.sell
 		if (self.isBuying) then
 			price = template.buy
 		end
+	else --if (template.type == "skill" || template.type == ) then
+		price = template.cost
 	end
 
 	return price
@@ -145,7 +147,7 @@ print("num items", #self.items)
 		local priceString = string.format("%d", self:GetPrice(id))
 		label = label:appendPadded(priceString, 6)
 
-		table.append(entries, {x = 0, y = curY, text = label, clickId = listIndex, key = keyPress})
+		table.append(entries, {x = 0, y = curY, text = label, clickId = listIndex, key = tostring(localIndexl) })
 
 		listIndex = listIndex + 1
 		localIndex = localIndex + 1
@@ -172,6 +174,8 @@ function ShopBox:HandleClickedEntry(clickId)
 			s.money = s.money - price
 			self.boughtSold = true
 			self:OnBoughtSoldItem(clickId)
+		else
+			self:CannotAfford(itemIndex)
 		end
 	else
 		s.money = s.money + price
@@ -183,7 +187,17 @@ end
 function ShopBox:OnBoughtSoldNothing()
 end
 
-function ShopBox:OnBoughtSoldItem(itemIndex)
+function ShopBox:OnBoughtSoldItem(clickId)
+	if (self.isBasicItemShop) then
+		table.append(s.inventory, self.items[clickId])
+		CloseBox(self)
+	end
+end
+
+function ShopBox:CannotAfford(itemIndex)
+	if (self.isBasicItemShop) then
+		CloseBox(self)
+	end
 end
 
 function ShopBox:HandleClickedMore()
@@ -195,4 +209,38 @@ end
 
 function ShopBox:HandleClickedExit()
 	self:Close()
+end
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------
+-- TextEntry
+-----------------------------------------------------------------------------------------------------------------
+
+TextEntryBox = Gridbox:new {
+	x = 150,
+	y = 200,
+	w = 400,
+	h = 200,
+	
+	prompt = "Enter:"
+}
+
+function TextEntryBox:GetEntries()
+	local entries = {}
+
+	table.append(entries, {x = 0, y = 0, text = self.prompt})
+	table.append(entries, {x = 0, y = 1, entryTag = "entry"})
+
+	return entries
+end
+
+DialogTextEntry = TextEntryBox:new {
+	prompt = "Ask about:"
+}
+
+function DialogTextEntry:OnTextEntryComplete(text, tag)
+	currentRoom:DialogTextEntered(text)
+	CloseBox(self)
 end

@@ -18,7 +18,6 @@ function Site:OpenBox(width, height)
 	Gridbox.OpenBox(self, width, height)
 
 	for i,v in pairs(self.pages) do
-print("page name", i, v.type)
 		if (v.unlockid ~= nil) then
 			self:CheckForUnlocks(v)
 		end
@@ -27,31 +26,31 @@ print("page name", i, v.type)
 	self:GoToPage("main")
 end
 
+function Site:HasUnlocked(index)
+	for k,v in pairs(s.unlockedMessagesInfo) do
+		if (v.index == index) then
+			return true
+		end
+	end
+	return false
+end
+
 function Site:CheckForUnlocks(page)
 	local unlockedInfo = s.unlockedMessagesInfo[page.unlockid]
-	local unlockedTracker = s.unlockedMessagesTracker[page.unlockid]
 
 	if (unlockedInfo == nil) then
 		unlockedInfo = {}
-		unlockedTracker = {}
 		s.unlockedMessagesInfo[page.unlockid] = unlockedInfo
-		s.unlockedMessagesTracker[page.unlockid] = unlockedTracker
 	end
-print("unlocking things...", page.unlockid, s.unlockedMessagesInfo[page.unlockid])
 
 	for i,v in ipairs(page.items) do
-print("Unlock check", i, v.date, v.to, unlockedTracker[i], s.date >= v.date)
-		if (unlockedTracker[i] == nil and s.date >= v.date) then
+		if (self:HasUnlocked(i) == false and s.date >= v.date) then
 			-- for the pure date unlocks, remember it's original date
 			if (v.condition == nil) then
-print("Unlocked by date", i)
 				table.insert(unlockedInfo, { index = i, date = v.date })
-				unlockedTracker[i] = 1
 			-- for unlock callbacks, remember the current date was when it was unlocked
 			elseif (pcall(v.condition)) then
-print("Unlocked by func", i)
 				table.insert(unlockedInfo, { index = i, date = s.date })
-				unlockeTrackerd[i] = 1
 			end
 		end
 	end

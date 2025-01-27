@@ -23,10 +23,10 @@ Textbox::Textbox(const char* BackgroundImage, float X, float Y, float SizeX, flo
 		AddImage(new WoflImage(BackgroundImage, 0, 0, 1, 1));
 	}
 	
-	if (bClickToAdvance)
-	{
-		SetClickEnabled(true);
-	}
+//	if (bClickToAdvance)
+//	{
+//		SetClickEnabled(true);
+//	}
 	
 	TextColor = Color;
 }
@@ -48,6 +48,7 @@ void Textbox::SetText(const std::string& InText)
 	}
 
 	UpdateLines();
+
 	if (this->bPauseOnLastPage)
 	{
 		Lines.push_back("[END]");
@@ -58,6 +59,12 @@ void Textbox::SetText(const std::string& InText)
 	if (FullText != "" && InterfaceDelegate != nullptr && !NeedsShowMore() && !bPauseOnLastPage)
 	{
 		InterfaceDelegate->MessageComplete();
+	}
+	
+	if (NeedsShowMore())
+	{
+		SetFullScreenInput(true);
+		SetClickEnabled(NeedsShowMore());
 	}
 }
 
@@ -157,10 +164,23 @@ void Textbox::CustomRender()
 	}
 }
 
+bool Textbox::OnKey(const KeyEvent& Event)
+{
+	if (NeedsShowMore() && Event.Type == KeyType::Down)
+	{
+		OnClick();
+		return true;
+	}
+
+	return false;
+}
+
 void Textbox::OnClick()
 {
 	if (bPauseOnLastPage && !NeedsShowMore())
 	{
+		SetClickEnabled(false);
+		SetFullScreenInput(false);
 		InterfaceDelegate->MessageComplete();
 		return;
 	}
@@ -170,6 +190,8 @@ void Textbox::OnClick()
 		FirstLine = std::min(FirstLine + NumLinesToRender - 1, (int)Lines.size() - NumLinesToRender);
 		if (!NeedsShowMore() && InterfaceDelegate != nullptr && !bPauseOnLastPage)
 		{
+			SetClickEnabled(false);
+			SetFullScreenInput(false);
 			InterfaceDelegate->MessageComplete();
 		}
 	}

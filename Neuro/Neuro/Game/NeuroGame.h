@@ -24,7 +24,7 @@ public:
 
 	virtual void Invalidate(ZoneType Zone) override;
 	
-	virtual void OpenBoxByName(const char* Name) override;
+	virtual LuaRef OpenBoxByName(const char* Name) override;
 	virtual bool CloseBoxWithObj(LuaRef BoxObj) override;
 	
 	virtual bool AreBoxesShowing() override;
@@ -32,15 +32,20 @@ public:
 	virtual bool IsMessageActive() override;
 	virtual void RefreshUI() override;
 
+	virtual bool OnGlobalKey(const KeyEvent& Event) override;
+
 private:
 	
 	NeuroState State;
 		
 	WoflSprite* ScreenSprite;
 	WoflSprite* Background;
+	class WoflSprite* ButtonContainer;
 	class Textbox* MessageBox;
 	class Textbox* InfoBox;
+	class WoflSprite* DialogInputSorter;
 	class Ninebox* DialogBox;
+	class Ninebox* ThoughtBox;
 	vector<class Gridbox*> Boxes;
 	vector<class Gridbox*> BoxCache;
 

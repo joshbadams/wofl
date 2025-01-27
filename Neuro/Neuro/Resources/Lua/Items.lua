@@ -23,6 +23,11 @@ Comlink = Software:new {
 	desc = "Database access software"
 }
 
+Skill = Item:new {
+	type = "skill",
+	scope = nil, -- where it's usable, like room, site, etc
+}
+
 Organ = Item:new {
 	type = "organ",
 	hp = 0,
@@ -39,14 +44,15 @@ Items = {
 	[100] = Deck:new {
 		name = "UXB",
 		capacity = 5,
+		cost = 100,
 	},
 	
 	[200] = Comlink:new {
-		cast = 100,
+		cost = 100,
 		version = 1,
 	},
 	[201] = Comlink:new {
-		cast = 1,
+		cost = 0,
 		version = 2,
 	},
 	[210] = Software:new {
@@ -78,6 +84,8 @@ Items = {
 	[317] = Organ:new { name = "Bone Marrow", sell=45, buy=78, hp=10 },
 	[318] = Organ:new { name = "Spinal Fluid", sell=30, buy=33, hp=10 },
 	[319] = Organ:new { name = "Appendix", sell=3, buy=3, hp=10 },
+	
+	[400] = Skill:new { name = "CopTalk", cost = 100, scope = "room" },
 }
 
 function GetItemDesc(itemId)

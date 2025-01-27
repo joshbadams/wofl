@@ -39,6 +39,11 @@ public:
 		KeycodeShortcut = Keycode;
 	}
 
+	virtual std::string Describe() override
+	{
+		return std::string("Button, shortcut ") + std::to_string((int)KeycodeShortcut);
+	}
+
 	
 protected:
 	WoflLabel* Label;

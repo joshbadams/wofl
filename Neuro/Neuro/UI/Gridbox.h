@@ -57,6 +57,11 @@ public:
 	
 	virtual void MessageComplete() override;
 
+	virtual std::string Describe() override
+	{
+		return std::string("Gridbox");
+	}
+
 protected:
 	void Init();
 

@@ -27,9 +27,15 @@ s = {
 		310, 311, 312, 313, 314,
 		315, 316, 317, 318, 319,
 	},
+	
+	-- which skills we currently have learned, and their level (stored separately so the opened skills are in order by unlocking order)
+	skills = {
+		
+	},
+	skillLevels = {
+	},
 
 	unlockedMessagesInfo = {},
-	unlockedMessagesTracker = {},
 
 	month = 11,
 	day = 16,
@@ -40,8 +46,16 @@ s = {
 	bankaccount = 1941,
 	name = "Badams",
 	bamaid = "056306118",
-
+	
+	hasTalkedInRoom = false,
 }
+
+function s:ApplyLoadedGame(game)
+print("loading from save ", game)
+	for k,v in pairs(game) do
+		s[k] = v
+	end
+end
 
 function IncrementTime()
 	s.minute = s.minute + 1

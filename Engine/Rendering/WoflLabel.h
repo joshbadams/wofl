@@ -42,6 +42,11 @@ public:
 	
 	virtual WoflLabel* AsLabel() override { return this; }
 
+	virtual std::string Describe() override
+	{
+		return std::string("Label: ") + Text;
+	}
+
 	
 protected:
 	std::string Text;

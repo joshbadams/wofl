@@ -263,9 +263,19 @@ public:
 		
 	}
 	
+	// allow the game to process a key without going through sprites
+	// return true if the game handled the key event, which will then skip
+	// sending the event to sprites
+	virtual bool OnGlobalKey(const KeyEvent& Event)
+	{
+		return false;
+	}
+
 	// save
 	bool Save();
 	bool Load();
+	
+
 	
 protected:
 

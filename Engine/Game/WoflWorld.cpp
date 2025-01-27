@@ -99,13 +99,14 @@ void WoflWorld::Render()
 
 void WoflWorld::Visit(bool bVisitBeforeMoving, bool bDepthFirst, bool bForCollision, const std::function<bool(WoflSprite*)>& VisitFunction, WoflSprite* CurrentSprite)
 {
+//	if (!bDepthFirst) bVisitBeforeMoving = !bVisitBeforeMoving;
 	if (bVisitBeforeMoving)
 	{
 		VisitEx(bDepthFirst, bForCollision, VisitFunction, nullptr, CurrentSprite);
 	}
 	else
 	{
-		VisitEx(bDepthFirst, bForCollision, nullptr, VisitFunction, CurrentSprite);
+		VisitEx(!bDepthFirst, bForCollision, nullptr, VisitFunction, CurrentSprite);
 	}
 }
 
@@ -205,10 +206,13 @@ WoflSprite* WoflWorld::HitTest(Vector ScreenLocation)
 		WoflWorld::Get()->Visit(false, true, false,
 								[&](WoflSprite* Sprite)
 								{
+									WLOG("Checking: %s\n", Sprite->Describe().c_str());
+
 									if (Sprite->IsClickEnabled() && Sprite->HitTest(Loc))
 									{
+										WLOG("  Clicked on sprite: %s\n", Sprite->Describe().c_str());
 										HitSprite = Sprite;
-										return false;										
+										return false;
 									}
 									return true;
 								},

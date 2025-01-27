@@ -29,6 +29,10 @@ public:
 
 	virtual void CustomRender() override;
 	virtual void OnClick() override;
+	virtual bool OnKey(const KeyEvent& Event) override;
+	
+	virtual std::string Describe() override { return std::string("Textbox: ") + FullText; }
+
 
 protected:
 

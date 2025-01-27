@@ -16,6 +16,13 @@ const char* Ninebox::Basic[] =
    "BottomLeft", "BottomCenter", "BottomRight",
 };
 
+const char* Ninebox::Thinking[] =
+{
+   "ThinkTC", "ThinkTC", "ThinkTC",
+   "ThinkTC", "Center", "ThinkTC",
+   "ThinkBC", "ThinkBC", "ThinkBC",
+};
+
 const float BSize = 16;
 
 Ninebox::Ninebox(const char* Config[], float X, float Y, float SizeX, float SizeY, int Tag, WColor TextColor)

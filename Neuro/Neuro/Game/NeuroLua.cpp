@@ -136,11 +136,12 @@ void WalkOverTable(lua_State* L, const std::function<void()>& VisitFunction)
 static Json::Value LuaToJson(lua_State* L)
 {
 	// check to see the index types (all int = array, all strings = map, mixed = error)
-	bool bIsArrayType = true;
-	WalkOverTable(L, [&bIsArrayType, L]() { if (!lua_isinteger(L, -2)) { bIsArrayType = false; } });
+//	bool bIsArrayType = true;
+//	WalkOverTable(L, [&bIsArrayType, L]() { if (!lua_isinteger(L, -2)) { bIsArrayType = false; } });
 
 	// make an object or an array
-	Json::Value JsonObject(bIsArrayType ? Json::arrayValue : Json::objectValue);
+//	Json::Value JsonObject(bIsArrayType ? Json::arrayValue : Json::objectValue);
+	Json::Value JsonObject(Json::arrayValue);
 
 	// itrate over all entries in the table
 	
@@ -148,35 +149,32 @@ static Json::Value LuaToJson(lua_State* L)
 	lua_pushnil(L);  // first key
 	while (lua_next(L, Table) != 0)
 	{
-		string Key;
-		if (!bIsArrayType)
+		Json::Value Pair(Json::objectValue);
+		if (lua_isinteger(L, -2))
 		{
-			Key = lua_tostring(L, -2);
+			Pair["key"] = Json::Value(lua_tointeger(L, -2));
+		}
+		else
+		{
+			Pair["key"] = Json::Value(lua_tostring(L, -2));
 		}
 		
 		Json::Value SubValue;
 		if (lua_isinteger(L, -1))
 		{
-			SubValue = Json::Value(lua_tointeger(L, -1));
+			Pair["value"] = Json::Value(lua_tointeger(L, -1));
 		}
 		else if (lua_isstring(L, -1))
 		{
-			SubValue = Json::Value(lua_tostring(L, -1));
+			Pair["value"] = Json::Value(lua_tostring(L, -1));
 		}
 		else if (lua_istable(L, -1))
 		{
 			// recurse down for the object/array
-			SubValue = LuaToJson(L);
+			Pair["value"] = LuaToJson(L);
 		}
 		
-		if (bIsArrayType)
-		{
-			JsonObject.append(SubValue);
-		}
-		else
-		{
-			JsonObject[Key] = SubValue;
-		}
+		JsonObject.append(Pair);
 		
 		// move to next
 		lua_pop(L, 1);
@@ -201,108 +199,51 @@ int JsonToLua(Lua& Lua, lua_State* L, const Json::Value& JsonObject)
 	lua_newtable(L);
 	int TableStackLoc = lua_gettop(L);
 	
-//	auto ProcessMember = [Lua, L, TableStackLoc](const Json::Value& Val)
-//	{
-//		if (JsonObject[Name].isInt())
-//		{
-//			WLOG("Looading int value %s = %d\n", Name.c_str(), JsonObject[Name].asInt());
-//			Lua.SetIntValue(TableStackLoc, Name.c_str(), JsonObject[Name].asInt());
-//		}
-//		else if (JsonObject[Name].isString())
-//		{
-//			WLOG("Looading string value %s = %s\n", Name.c_str(), JsonObject[Name].asString().c_str());
-//			Lua.SetStringValue(TableStackLoc, Name.c_str(), JsonObject[Name].asString());
-//		}
-//		else if (JsonObject[Name].isArray() || JsonObject[Name].isObject())
-//		{
-//			int SubTableStackLoc = JsonToLua(Lua, L, JsonObject[Name]);
-//			assert(SubTableStackLoc == lua_gettop(L));
-//			lua_setfield(L, Name.c_str());
-//		}
-//	};
-	
-	if (JsonObject.isObject())
+	for (int Index = 0; Index < JsonObject.size(); Index++)
 	{
-		for (auto Name : JsonObject.getMemberNames())
+		Json::Value Key = JsonObject[Index]["key"];
+		Json::Value Value = JsonObject[Index]["value"];
+		if (Key.isString())
 		{
-			if (JsonObject[Name].isInt())
+			if (Value.isInt())
 			{
-				WLOG("Looading int value %s = %d\n", Name.c_str(), JsonObject[Name].asInt());
-				Lua.SetIntValue(TableStackLoc, Name.c_str(), JsonObject[Name].asInt());
+				WLOG("Looading int value %s = %d\n", Key.asString().c_str(), Value.asInt());
+				Lua.SetIntValue(TableStackLoc, Key.asString().c_str(), Value.asInt());
 			}
-			else if (JsonObject[Name].isString())
+			else if (Value.isString())
 			{
-				WLOG("Looading string value %s = %s\n", Name.c_str(), JsonObject[Name].asString().c_str());
-				Lua.SetStringValue(TableStackLoc, Name.c_str(), JsonObject[Name].asString());
+				WLOG("Looading string value %s = %s\n", Key.asString().c_str(), Value.asString().c_str());
+				Lua.SetStringValue(TableStackLoc, Key.asString().c_str(), Value.asString().c_str());
 			}
-			else if (JsonObject[Name].isArray() || JsonObject[Name].isObject())
+			else if (Value.isArray() || Value.isObject())
 			{
-				WLOG("Looading array/object value %s:\n", Name.c_str());
+				WLOG("Looading array/object value %s:\n", Key.asString().c_str());
 				SCOPE;
-				int SubTableStackLoc = JsonToLua(Lua, L, JsonObject[Name]);
-				Lua.SetTableValue(TableStackLoc, Name.c_str(), SubTableStackLoc);
+				int SubTableStackLoc = JsonToLua(Lua, L, Value);
+				Lua.SetTableValue(TableStackLoc, Key.asString().c_str(), SubTableStackLoc);
+			}
+		}
+		else
+		{
+			if (Value.isInt())
+			{
+				WLOG("Looading int value %d = %d\n", Key.asInt(), Value.asInt());
+				Lua.SetIntValue(TableStackLoc, Key.asInt(), Value.asInt());
+			}
+			else if (Value.isString())
+			{
+				WLOG("Looading string value %d = %s\n", Key.asInt(), Value.asString().c_str());
+				Lua.SetStringValue(TableStackLoc, Key.asInt(), Value.asString().c_str());
+			}
+			else if (Value.isArray() || Value.isObject())
+			{
+				WLOG("Looading array/object value %d:\n", Key.asInt());
+				SCOPE;
+				int SubTableStackLoc = JsonToLua(Lua, L, Value);
+				Lua.SetTableValue(TableStackLoc, Key.asString().c_str(), SubTableStackLoc);
 			}
 		}
 	}
-	else
-	{
-		for (int Index = 0; Index < JsonObject.size(); Index++)
-		{
-			if (JsonObject[Index].isInt())
-			{
-				WLOG("   Looading int value %d\n", JsonObject[Index].asInt());
-				Lua.SetIntValue(TableStackLoc, Index + 1, JsonObject[Index].asInt());
-//				SCOPE;
-//				PushSpec(L, TableStackLoc);
-//				lua_pushinteger(L, Index + 1);
-//				lua_pushinteger(L, JsonObject[Index].asInt());
-//				lua_settable(L, -3);
-		}
-			else if (JsonObject[Index].isString())
-			{
-				WLOG("   Looading string value %s\n", JsonObject[Index].asString().c_str());
-//					SetStringValue(Table, TableName.c_str(), LuaObject[Name][Index].asString());
-			}
-			else if (JsonObject[Index].isArray() || JsonObject[Index].isObject())
-			{
-				WLOG("  Looading array/object value for index %d\n", Index);
-				SCOPE;
-				int SubTableStackLoc = JsonToLua(Lua, L, JsonObject[Index]);
-				Lua.SetTableValue(TableStackLoc, Index + 1, SubTableStackLoc);
-			}
-		}
-	}
-	
-//
-//			WLOG("Looading array value %s:\n", Name.c_str());
-//			LuaRef SubTable;
-//			if (!Lua.GetTableValue(LuaTable, Name.c_str(), SubTable))
-//			{
-//				assert(0);
-//			}
-			
-//			for (int Index = 0; Index < JsonObject.size(); Index++)
-//			{
-//				if (JsonObject[Index].isInt())
-//				{
-//					WLOG("   Looading int value %d\n", JsonObject[Name][Index].asInt());
-//					
-//					SCOPE;
-//					PushSpec(L, SubTable);
-//					lua_pushinteger(L, Index + 1);
-//					lua_pushinteger(L, JsonObject[Name][Index].asInt());
-//					lua_settable(L, -3);
-//
-////					SetIntValue(Table, TableName.c_str(), LuaObject[Name][Index].asInt());
-//				}
-//				else if (JsonObject[Name][Index].isString())
-//				{
-//					WLOG("   Looading string value %s\n", JsonObject[Name][Index].asString().c_str());
-////					SetStringValue(Table, TableName.c_str(), LuaObject[Name][Index].asString());
-//				}
-//			}
-//		}
-//	}
 	
 	return TableStackLoc;
 }
@@ -310,28 +251,10 @@ int JsonToLua(Lua& Lua, lua_State* L, const Json::Value& JsonObject)
 void Lua::FromJsonObject(const Json::Value& LuaObject)
 {
 	// cfreate table and get it's stack location (it _should_ be on top of stack)
-	int NewTableStackLoc = JsonToLua(*this, L, LuaObject);
-	SetTableValue("", "s", NewTableStackLoc);
-	
-	// now assign it to the state table variable
-	
-	
-//	LuaRef StateTable;
-//	if (!GetTableValue("", "s", StateTable))
-//	{
-//		assert(0);
-//	}
-	
-//	JsonToLua(*this, L, StateTable, LuaObject);
-
-
-	//	Json::Value UnlockedMessageObject = Object["unlockedmessages"];
-	//	for (auto Name : UnlockedMessageObject.getMemberNames())
-	//	{
-	//		GetIntArrayFromObject(UnlockedMessages[Name], UnlockedMessageObject[Name], "unlockedmessages");
-	//	}
-
-}
+	JsonToLua(*this, L, LuaObject);
+	LuaRef Game = MakeRef();
+	CallFunction_NoReturn("s", "ApplyLoadedGame", Game);
+	}
 
 void Lua::RegisterFunction(const char* Name, lua_CFunction Func)
 {
@@ -351,8 +274,13 @@ void Lua::LoadScript(const char* ScriptName)
 }
 
 LuaRef Lua::MakeRef() const
-{	
-	return make_shared<LuaObjRef>(const_cast<Lua*>(this), luaL_ref(L, LUA_REGISTRYINDEX));
+{
+	int Ref = luaL_ref(L, LUA_REGISTRYINDEX);
+	if (Ref == LUA_REFNIL)
+	{
+		return nullptr;
+	}
+	return make_shared<LuaObjRef>(const_cast<Lua*>(this), Ref);
 }
 
 LuaRef Lua::GetGlobalTable() const

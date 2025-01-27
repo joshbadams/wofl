@@ -17,6 +17,79 @@ WoflGame* GlobalGameInitialization()
 	return new NeuroGame();
 }
 
+//class DialogInputCatcher : public WoflSprite
+//{
+//	DialogInputCatcher()
+//	{
+//		
+//	}
+//	
+//	bool OnKey(const KeyEvent& Event) override
+//	{
+////		if (IsConversationShowing())
+//		{
+//			bool bReturn;
+//			char Str[2] = { Event.Char, 0 };
+//			State.CurrentRoom->LuaSystem->CallFunction_Return(State.CurrentRoom, "ConversationKey", Str, (int)Event.KeyCode, (int)Event.Type, bReturn);
+//		}
+//
+//		return true;
+//	}
+//}
+//
+
+class DialogNineBox : public Ninebox
+{
+public:
+	DialogNineBox(NeuroState* InState, const char* Config[], WoflSprite* AlignWith)
+		: Ninebox(Config, AlignWith->GetPosition().X, AlignWith->GetPosition().Y, AlignWith->GetSize().X, 150, Tag_Dialog)
+		, State(InState)
+	{
+		SetClickEnabled(true);
+		SetFullScreenInput(true);
+	}
+	
+	// RepeatIndex: 0 is first, > 0 is repeat, < 0 is end)
+	virtual void OnInput(const Vector& ScreenLocation, int RepeatIndex) override
+	{
+		WoflKeys FakeKey = WoflKeys::Space;
+		const char* FakeChar = " ";
+		
+		if (Text->HitTest(ScreenLocation))
+		{
+			FakeKey = WoflKeys::Enter;
+			FakeChar = "\n";
+		}
+		State->Lua.CallFunction_NoReturn(State->CurrentRoom, "ConversationKey", FakeChar, (int)FakeKey, (int)KeyType::Down);
+
+	}
+
+	// called when key events happen, if this returns true, then it won't go up the sprite hierarchy
+	virtual bool OnKey(const KeyEvent& Event) override
+	{
+		// always suck up all presses that get to us
+		if (Event.Type == KeyType::Down)
+		{
+			//function Room:ConversationKey(char, keyCode, type)
+			bool bReturn;
+			char Str[2] = { Event.Char, 0 };
+			State->Lua.CallFunction_Return(State->CurrentRoom, "ConversationKey", Str, (int)Event.KeyCode, (int)Event.Type, bReturn);
+			return bReturn;
+		}
+		
+		return true;
+	}
+	
+	virtual std::string Describe() override
+	{
+		return std::string("DialogBox");
+	}
+
+private:
+	NeuroState* State;
+};
+
+
 NeuroGame::NeuroGame()
 	: WoflGame("Neuromancer")
 	, State(this)
@@ -36,67 +109,79 @@ NeuroGame::NeuroGame()
 	
 	InfoBox = new Textbox(nullptr, 376, 600, 268, 36, 0, false, false, WColor::Black);
 	
+	DialogInputSorter = new WoflSprite(0, 0, ScreenSprite->GetSize().X, ScreenSprite->GetSize().Y);
 	
 	Background->AddChild(ScreenSprite);
-	Background->AddChild(MessageBox);
-	Background->AddChild(InfoBox);
-	
-	DialogBox = new Ninebox(Ninebox::Basic, 0, 0, ScreenSprite->GetSize().X, 150, Tag_Dialog);
+	Background->AddChild(DialogInputSorter);
 	
 	int Top = 580;
 	int Left = 58;
 	int Size = 94;
-	WoflButton* InvButton    = new WoflButton(nullptr, "", Left + 0 * Size, Top + 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickInventory(); });
-	Background->AddChild(InvButton);
+	ButtonContainer = new WoflSprite(Left, Top, Size * 3, Size * 2);
+	DialogInputSorter->AddChild(ButtonContainer);
+	
+	WoflButton* InvButton    = new WoflButton(nullptr, nullptr, 0 * Size, 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickInventory(); });
+	ButtonContainer->AddChild(InvButton);
 	InvButton->SetKeycodeShortcut(WoflKeys::I);
 
-	WoflButton* PAXButton    = new WoflButton(nullptr, "", Left + 1 * Size, Top + 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickPAX(); });
-	Background->AddChild(PAXButton);
+	WoflButton* PAXButton    = new WoflButton(nullptr, nullptr, 1 * Size, 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickPAX(); });
+	ButtonContainer->AddChild(PAXButton);
 	PAXButton->SetKeycodeShortcut(WoflKeys::P);
 
-	WoflButton* TalkButton   = new WoflButton(nullptr, "", Left + 2 * Size, Top + 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickTalk(); });
-	Background->AddChild(TalkButton);
+	WoflButton* TalkButton   = new WoflButton(nullptr, nullptr, 2 * Size, 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickTalk(); });
+	ButtonContainer->AddChild(TalkButton);
 	TalkButton->SetKeycodeShortcut(WoflKeys::T);
 
-	WoflButton* SkillButton  = new WoflButton(nullptr, "", Left + 0 * Size, Top + 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSkill(); });
-	Background->AddChild(SkillButton);
+	WoflButton* SkillButton  = new WoflButton(nullptr, nullptr, 0 * Size, 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSkill(); });
+	ButtonContainer->AddChild(SkillButton);
 	SkillButton->SetKeycodeShortcut(WoflKeys::S);
 
-	WoflButton* ChipButton   = new WoflButton(nullptr, "", Left + 1 * Size, Top + 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickChip(); });
-	Background->AddChild(ChipButton);
+	WoflButton* ChipButton   = new WoflButton(nullptr, nullptr, 1 * Size, 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickChip(); });
+	ButtonContainer->AddChild(ChipButton);
 	ChipButton->SetKeycodeShortcut(WoflKeys::C);
 
-	WoflButton* SystemButton = new WoflButton(nullptr, "", Left + 2 * Size, Top + 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSystem(); });
-	Background->AddChild(SystemButton);
-	SystemButton->SetKeycodeShortcut(WoflKeys::Escape);
+	WoflButton* SystemButton = new WoflButton(nullptr, nullptr, 2 * Size, 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSystem(); });
+	ButtonContainer->AddChild(SystemButton);
+	SystemButton->SetKeycodeShortcut(WoflKeys::D);
 	
 	Top = 672;
 	Left = 446;
 	int SizeX = 66;
 	int SizeY = 46;
-	WoflButton* DateButton = new WoflButton(nullptr, "", Left + 0 * SizeX, Top + 0 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickDate(); });
+	WoflButton* DateButton = new WoflButton(nullptr, nullptr, Left + 0 * SizeX, Top + 0 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickDate(); });
 	Background->AddChild(DateButton);
 	DateButton->SetKeycodeShortcut(WoflKeys::One);
 	
-	WoflButton* TimeButton = new WoflButton(nullptr, "", Left + 1 * SizeX, Top + 0 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickTime(); });
+	WoflButton* TimeButton = new WoflButton(nullptr, nullptr, Left + 1 * SizeX, Top + 0 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickTime(); });
 	Background->AddChild(TimeButton);
 	TimeButton->SetKeycodeShortcut(WoflKeys::Two);
 	
-	WoflButton* MoneyButton = new WoflButton(nullptr, "", Left + 0 * SizeX, Top + 1 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickMoney(); });
+	WoflButton* MoneyButton = new WoflButton(nullptr, nullptr, Left + 0 * SizeX, Top + 1 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickMoney(); });
 	Background->AddChild(MoneyButton);
 	MoneyButton->SetKeycodeShortcut(WoflKeys::Three);
 	
-	WoflButton* HealthButton = new WoflButton(nullptr, "", Left + 1 * SizeX, Top + 1 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickHealth(); });
+	WoflButton* HealthButton = new WoflButton(nullptr, nullptr, Left + 1 * SizeX, Top + 1 * SizeY, SizeX, SizeY, 0, [this](WoflButton*) { State.ClickHealth(); });
 	Background->AddChild(HealthButton);
 	HealthButton->SetKeycodeShortcut(WoflKeys::Four);
+
+	Background->AddChild(MessageBox);
+	Background->AddChild(InfoBox);
+
+	
+	DialogBox = new DialogNineBox(&State, Ninebox::Basic, ScreenSprite);
+	ThoughtBox = new DialogNineBox(&State, Ninebox::Thinking, ScreenSprite);
 
 	WoflWorld::Get()->SetRootSprite(Background);
 }
 
-void NeuroGame::OpenBoxByName(const char* Name)
+LuaRef NeuroGame::OpenBoxByName(const char* Name)
 {
 	LuaRef NewBox;
 	State.Lua.GetTableValue("", Name, NewBox);
+	if (NewBox == nullptr)
+	{
+		return nullptr;
+	}
 	
 	Gridbox* Box;
 	if (BoxCache.size() > 0)
@@ -113,7 +198,16 @@ void NeuroGame::OpenBoxByName(const char* Name)
 	Box->Open(NewBox);
 	
 	Boxes.push_back(Box);
-	Background->AddChild(Box);
+//	if (DialogInputSorter->IsRooted())
+//	{
+//		DialogInputSorter->AddChild(Box);
+//	}
+//	else
+	{
+		Background->AddChild(Box);
+	}
+	
+	return NewBox;
 }
 
 bool NeuroGame::CloseBoxWithObj(LuaRef BoxObj)
@@ -136,7 +230,8 @@ bool NeuroGame::AreBoxesShowing()
 
 bool NeuroGame::IsConversationShowing()
 {
-	return DialogBox->GetParent() != nullptr;
+	return !!ThoughtBox->GetParent() || !!DialogBox->GetParent();
+//	return DialogInputCatcher->GetParent() != nullptr;
 }
 
 bool NeuroGame::IsMessageActive()
@@ -152,6 +247,24 @@ void NeuroGame::RefreshUI()
 	}
 }
 
+bool NeuroGame::OnGlobalKey(const KeyEvent& Event)
+{
+	return false;
+	
+	
+	// some things need to handle key presses outside of a singular sprite
+	// like [MORE] message box
+	
+	// any key while message box needs more iadvances it
+	if (IsMessageActive())
+	{
+		MessageBox->OnClick();
+		return true;
+	}
+	
+	return false;
+}
+
 void NeuroGame::Invalidate(ZoneType Zone)
 {
 	if ((Zone & ZoneType::Room) != ZoneType::None)
@@ -165,17 +278,35 @@ void NeuroGame::Invalidate(ZoneType Zone)
 	
 	if ((Zone & ZoneType::Message) != ZoneType::None)
 	{
-		MessageBox->SetText(State.GetCurrentMessage());
+		MessageBox->SetText(State.GetCurrentMessage());		
 	}
 	
 	if ((Zone & ZoneType::Dialog) != ZoneType::None)
 	{
+//		DialogInputSorter->RemoveFromParent();
 		DialogBox->RemoveFromParent();
-		std::string Dialog = State.GetCurrentDialogLine();
-		if (Dialog.length() > 0)
+		ThoughtBox->RemoveFromParent();
+		std::string Line;
+		int Speaker;
+		bool bIsThought;
+		bool bHasTextEntry;
+		if (State.GetCurrentDialogLine(Line, Speaker, bIsThought, bHasTextEntry))
 		{
-			DialogBox->Text->SetText(Dialog);
-			ScreenSprite->AddChild(DialogBox);
+			if (bHasTextEntry)
+			{
+				Line += "\n-----------------------";
+			}
+//			ScreenSprite->AddChild(DialogInputCatcher);
+			if (bIsThought)
+			{
+				ThoughtBox->Text->SetText(Line);
+				DialogInputSorter->AddChild(ThoughtBox);
+			}
+			else
+			{
+				DialogBox->Text->SetText(Line);
+				DialogInputSorter->AddChild(DialogBox);
+			}
 		}
 	}
 

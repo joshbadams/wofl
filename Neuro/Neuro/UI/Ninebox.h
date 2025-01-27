@@ -24,7 +24,8 @@ class Ninebox : public WoflSprite
 {
 public:
 	static const char* Basic[];
-	
+	static const char* Thinking[];
+
 	class Textbox* Text;
 	
 	Ninebox(const char* Config[], float X, float Y, float SizeX, float SizeY, int Tag, WColor TextColor=WColor::Black);
@@ -32,6 +33,12 @@ public:
 	void Move(float X, float Y, float SizeX, float SizeY);
 	
 	void GetClientGeometry(Vector& Position, Vector& Size);
+	
+	virtual std::string Describe() override
+	{
+		return std::string("Ninebox");
+	}
+
 	
 protected:
 	WoflSprite* Sprites[9];

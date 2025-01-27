@@ -67,7 +67,7 @@ class IStateChangedDelegate
 {
 public:
 	virtual void Invalidate(ZoneType Zone) = 0;
-	virtual void OpenBoxByName(const char* Name) = 0;
+	virtual LuaRef OpenBoxByName(const char* Name) = 0;
 	virtual bool CloseBoxWithObj(LuaRef BoxObj) = 0;
 	virtual bool AreBoxesShowing() = 0;
 	virtual bool IsConversationShowing() = 0;
@@ -107,10 +107,14 @@ public:
 class NeuroState : public IJsonObj, public IInterfaceChangingStateDelegate, public IQueryStateDelegate
 {
 public:
+	Lua Lua;
 	LuaRef CurrentRoom;
 		
 	NeuroState(IStateChangedDelegate* InStateDelegate);
-	virtual ~NeuroState() { }
+	virtual ~NeuroState()
+	{
+		
+	}
 	
 	// IJsonObj
 	virtual Json::Value ToJsonObject() override;
@@ -141,7 +145,7 @@ public:
 	void SetStringValue(const std::string& Key, const std::string& Value);
 	virtual LuaRef GetTableValue(const std::string& Key) const override;
 			
-	std::string GetCurrentDialogLine();
+	bool GetCurrentDialogLine(std::string& Line, int& Speaker, bool& bIsThought, bool& bHasTextEntry);
 	std::string GetCurrentMessage();
 	std::string GetCurrentInfoText();
 
@@ -198,8 +202,5 @@ private:
 	// how fast to increment a minute
 	float SecondsPerMinute;
 	float TimeTimer;
-
-	Lua Lua;
-	friend class NeuroGame;
 };
 

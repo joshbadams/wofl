@@ -44,6 +44,7 @@ FOUNDATION_EXPORT const unsigned char WoflVersionString[];
 #include <Wofl/WoflRenderer.h>
 #include <Wofl/WoflLabel.h>
 #include <Wofl/WoflImage.h>
+#include <Wofl/WoflSprite.h>
 #include <Wofl/WoflAtlases.h>
 
 #endif

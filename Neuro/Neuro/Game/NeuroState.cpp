@@ -245,16 +245,17 @@ void NeuroState::ClickTalk()
 
 void NeuroState::ClickSkill()
 {
-	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
-	{
-		CurrentState = State::InSite;
-		StateDelegate->OpenBoxByName("regfellow");
-	}
+	StateDelegate->OpenBoxByName("SkillBox");
 }
 
 void NeuroState::ClickChip()
 {
 //	LoadFromFile(Utils::File->GetSavePath("game.sav").c_str());
+	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
+	{
+		CurrentState = State::InSite;
+		StateDelegate->OpenBoxByName("regfellow");
+	}
 }
 
 void NeuroState::ClickSystem()
@@ -307,7 +308,7 @@ void NeuroState::ActivateRoom(LuaRef OldRoom, LuaRef NewRoom)
 	Lua.CallFunction_NoReturn(NewRoom, "OnEnterRoom");
 }
 
-std::string NeuroState::GetCurrentDialogLine()
+bool NeuroState::GetCurrentDialogLine(std::string& Line, int& Speaker, bool& bIsThought, bool& bHasTextEntry)
 {
 	LuaRef Dialog;
 	Lua.CallFunction_Return(CurrentRoom, "GetDialog", Dialog);
@@ -315,13 +316,15 @@ std::string NeuroState::GetCurrentDialogLine()
 	if (Dialog == nullptr)
 	{
 		CurrentState = State::Idle;
-		return "";
+		return false;
 	}
 	CurrentState = State::InDialog;
 	
-	string Text;
-	Lua.GetStringValue(Dialog, "text", Text);
-	return Text;
+	Lua.GetStringValue(Dialog, "text", Line);
+	Lua.GetIntValue(Dialog, "speaker", Speaker);
+	Lua.GetBoolValue(Dialog, "thought", bIsThought);
+	Lua.GetBoolValue(Dialog, "hasTextEntry", bHasTextEntry);
+	return true;
 }
 
 std::string NeuroState::GetCurrentMessage()
@@ -510,9 +513,18 @@ int NeuroState::Lua_OpenBox(lua_State* L)
 	NeuroState* NS = State(L);
 
 	// stack has the box name to open
-	NS->StateDelegate->OpenBoxByName(lua_tostring(L, -1));
+	LuaRef Box = NS->StateDelegate->OpenBoxByName(lua_tostring(L, -1));
 
-	return 0;
+	if (Box == nullptr)
+	{
+		lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_REFNIL);
+	}
+	else
+	{
+		// put the luraref on the stack
+		lua_rawgeti(L, LUA_REGISTRYINDEX, Box->Ref);
+	}
+	return 1;
 }
 
 int NeuroState::Lua_ShowMessage(lua_State* L)
@@ -533,8 +545,11 @@ int NeuroState::Lua_ShowMessage(lua_State* L)
 		return 0;
 	}
 
-	//
-	S->PendingMessage = lua_tostring(L, StackPos);
+	S->PendingMessage = lua_tostring(L, StackPos);	
+	if (S->PendingMessage == "")
+	{
+		S->Lua.CallFunction_NoReturn(S->CurrentRoom, "OnMessageComplete");
+	}
 //	S->CurrentState = State::ShowMessage;
 	
 	return 0;

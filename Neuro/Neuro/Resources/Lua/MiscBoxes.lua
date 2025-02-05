@@ -244,3 +244,8 @@ function DialogTextEntry:OnTextEntryComplete(text, tag)
 	currentRoom:DialogTextEntered(text)
 	CloseBox(self)
 end
+
+
+
+
+

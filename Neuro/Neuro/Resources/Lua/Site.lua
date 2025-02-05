@@ -12,6 +12,8 @@ Site = Gridbox:new {
 	firstVisibleIndex = 1,
 	
 	downloadPhase = 0,
+
+	passwords = {},
 }
 
 function Site:OpenBox(width, height)
@@ -23,7 +25,13 @@ function Site:OpenBox(width, height)
 		end
 	end
 
-	self:GoToPage("main")
+	self.passwordLevel = 0
+	self.passwordFailed = false
+	if (#self.passwords > 0) then
+		self:GoToPage("title")
+	else
+		self:GoToPage("main")
+	end
 end
 
 function Site:HasUnlocked(index)
@@ -83,9 +91,13 @@ end
 function Site:GetEntries()
 	local page = self:GetCurrentPage()
 
-	if page.type == "menu" then
+	if (page.type == "menu") then
 		return self:GetMenuEntries(page)
-	elseif page.type == "download" then
+	elseif (page.type == "title") then
+		return self:GetTitleEntries(page)
+	elseif (page.type == "password") then
+		return self:GetPasswordEntries(page)
+	elseif (page.type == "download") then
 		return self:GetDownloadEntries(page)
 	elseif (page.type == "list" or page.type == "store") then
 		return self:GetListEntries(page)
@@ -128,9 +140,20 @@ function Site:GetPageHeaderFooterEntries(page, entries)
 	table.append(entries, {x = self:CenteredX(self.title), y = 0, text = self.title} )
 end
 
+function Site:GetButtonOrSpaceEntries(entries)
+	local footer = "Button or [space] to continue"
+	table.append(entries, {x = self:CenteredX(footer), y = self.sizeY - 1, text = footer} )
+end
+
 function Site:GetMenuEntries(page)
 	local entries = {}
+
+	self:GetPageHeaderFooterEntries(page, entries)
+
 	for i,v in ipairs(page.items) do
+		if (v.level ~= nil and v.level > self.passwordLevel) then
+			break
+		end
 		table.append(entries, {
 			x = 10, y = 4 + i,
 			text = string.format("%s. %s", v.key:upper(), v.text),
@@ -139,6 +162,40 @@ function Site:GetMenuEntries(page)
 		})
 	end
 
+	return entries
+end
+
+function Site:GetTitleEntries(page)
+	local entries = {}
+	self:GetPageHeaderFooterEntries(page, entries)
+	self:GetButtonOrSpaceEntries(entries)
+
+	table.append(entries, {x=0, y=3, text=page.message, wrap=self.sizeX })
+
+	return entries
+
+--	local line = 2
+--	local lines = string.SplitLines(page.message, self.sizeX)
+--	for i,l in ipairs(lines) do
+--		table.append(entries, {x=0, y=line, text=l })
+--		line = line + 1
+--	end
+--	return entries
+end
+
+function Site:GetPasswordEntries(page)
+	local entries = {}
+
+	self:GetPageHeaderFooterEntries(page, entries)
+
+	local X = self:CenteredX("Enter password:")
+	table.append(entries, {x = X, y = 2, text = "Enter password:"})
+	if (self.passwordFailed) then
+		table.append(entries, {x = X + 4, y = 6, text = "Access denied."})
+		self:GetButtonOrSpaceEntries(entries)
+	else
+		table.append(entries, {x = X, y = 4, entryTag = "password"})
+	end
 	return entries
 end
 
@@ -259,8 +316,8 @@ function Site:GetListEntries(page)
 				elseif v.field == 'cost' then
 					field = string.format("$%d", item[v.field])
 				elseif v.field == 'in stock' then
-					local itemVar = string.format("purchased_%s", item.tag)
-					field = tostring(item[v.field] - _G[itemVar])
+					local numPurchased = s['purchased_' .. item.tag] or 0
+					field = tostring(item[v.field] - numPurchased)
 				else
 					field = tostring(item[v.field])
 				end
@@ -352,13 +409,14 @@ function Site:SelectStoreItem(id)
 
 	-- by default, we purchas it if able, and then call a function to manage it
 
-	local puchasedVarName = string.format("purchased_%s", item.tag)
+	local puchasedVarName = 'purchased_' .. item.tag
+	local numPurchased = s[puchasedVarName] or 0
 
-	if (s.money >= item.cost and item['in stock'] - _G[itemVar] > 0) then
+	if (s.money >= item.cost and item['in stock'] - numPurchased > 0) then
 		s.money = s.money - item.cost
 
 		-- mark one as purchased
-		_G[itemVar] = _G[itemVar] + 1
+		s[puchasedVarName] = numPurchased + 1
 
 		self:OnPurchasedStoreItem(item)
 	end
@@ -411,6 +469,35 @@ function Site:HandleClickedMore()
 	end
 end
 
+function Site:OnGenericContinueInput()
+print("GenerticCIntinue - ", self:GetCurrentPage().type, self.currentPage)
+	if (self.detailsIndex > 0) then
+		detailsIndex = 0
+	elseif (self.currentPage == "title") then
+		self:GoToPage("password")
+	elseif (self.currentPage == "password" and self.passwordFailed) then
+		self:Close()
+	end
+end
+
+function Site:HandleKeyInput(keyCode, type)
+print("Site:HandleKeyInput", type)
+	if (type > 0) then
+		return false
+	end
+
+	self:OnGenericContinueInput()
+	return true
+end
+
+
+function Site:HandleMouseInput(x, y) --, type)
+print("Site:HandleMouseInput")
+	self:OnGenericContinueInput()
+	return true
+end
+
+
 function Site:HandleInput(char)
 
 	error("unimplemented")
@@ -429,3 +516,44 @@ function Site:HandleInput(char)
 	end
 end
 
+function Site:OnTextEntryComplete(text, tag)
+	if (tag == "password") then
+		self.passwordFailed = true
+print("passwords", self.passwords)
+		for i,v in ipairs(self.passwords) do
+print("checking ", v)
+			if (v == string.lower(text)) then
+				self.passwordLevel = i
+				self.passwordFailed = falsde
+				self:GoToPage("main")
+			end
+		end
+	end
+end
+
+
+
+ComingSoon = Site:new {
+	title = "* UNDER CONSTRUCTION *",
+	comLinkLevel = 1,
+	
+	pages = {
+		['title'] = {
+			type = "title",
+			message = "Nothing to see here yet, it will be in the game eventually."
+		},
+		
+		['password'] = {
+			type = "password",
+		},
+		
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+			}
+		}
+	}
+}
+
+worldchess=ComingSoon

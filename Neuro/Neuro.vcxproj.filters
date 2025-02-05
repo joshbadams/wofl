@@ -92,9 +92,6 @@
     <CopyFileToFolders Include="Neuro\Resources\Lua\PAX.lua">
       <Filter>Resources\Lua</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\data.json">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\Neuro1.json">
       <Filter>Resources</Filter>
     </CopyFileToFolders>
@@ -139,6 +136,30 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Neuro\Resources\Lua\MiscBoxes.lua">
       <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\BodyShop.lua">
+      <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\Gridbox.lua">
+      <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\MiscRooms.lua">
+      <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\Room.lua">
+      <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\Lua\Site.lua">
+      <Filter>Resources\Lua</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\ThinkBC.png">
+      <Filter>Resources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\ThinkTC.png">
+      <Filter>Resources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Neuro\Resources\ThinkTL.png">
+      <Filter>Resources</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

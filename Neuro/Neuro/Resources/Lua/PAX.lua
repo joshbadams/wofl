@@ -73,7 +73,7 @@ PAX = Site:new {
 					message = "**** News In Brief ****\n\nSAVAGE NIGHT OF TORTURE\nStrange Chatsubo patron spends night sleeping in synth-spaghetti. Customers shocked.\n\nSON RETURNED TO FUJI PREZ\nChoked with emotion, Fuji Prez says, \"We must have misplaced him.\" As to his son's condition, the Prez reports, \"He's in one piece, more or less.\""
 				},
 				{
-					condition = function() return justice > 0 end,
+					condition = function() return s.justice > 0 end,
 					date = 110058,
 					subject = "CRIMINAL HITS CHIBA CITY",
 					message = "CRIMINAL HITS CHIBA CITY\n%name%, a notorious criminal who recently arrived in Chiba City, has been arrested and taken to the Justice Booth. This comes as no surprise to police, who have been watching this criminal ever since he arrived. \"We knew he'd break the law eventually,\" said Officer Watanabe. \"These habitual criminals can't go a whole day without committing a crime.\""

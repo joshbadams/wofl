@@ -102,7 +102,15 @@ Chatsubo = Room:new {
 					onEnd = function() s.chatsubo=5 end,
 				}
 			}
-		}
+		},
+		{
+			tag = "enoughmoney",
+			lines = { "Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck." }
+		},
+		{
+			tag = "notenoughmoney",
+			lines = { "I said 46 credits, buckwheat. Are you deaf?" }
+		},
 	}
 }
 
@@ -114,11 +122,10 @@ print("Give money, ", amount)
 		-- actually give the money away
 		Room:GiveMoney(amount)
 
-		self:Say("Thanks, friend artiste. Shin came by, but he didn't want to interrupt your beauty sleep. He still has your deck.")
+		self:ActivateConversation("enoughmoney")
 		s.chatsubo = 2
 	else
-print("Showing message")
-		ShowMessage("Ratz refuses to take your credits.", function() Say("I said 46 credits, buckwheat. Are you deaf?") end)
+		ShowMessage("Ratz refuses to take your credits.", function(self) self:ActivateConversation("notenoughmoney") end)
 	end
 end
 

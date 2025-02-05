@@ -15,11 +15,12 @@ Software = Item:new {
 	type = "software",
 	version = 0,
 	desc = "",
+	scope = nil, -- where it's usable, like deck, site, etc
 }
 
 Comlink = Software:new {
 	name = "Comlink",
-	subtype = "comlink",
+	scope = "jack",
 	desc = "Database access software"
 }
 
@@ -55,9 +56,20 @@ Items = {
 		cost = 0,
 		version = 2,
 	},
+	[205] = Software:new {
+		name = "Scout",
+		version = 1,
+		scope = "titlepage",
+	},
+	[206] = Software:new {
+		name = "Scout",
+		version = 2,
+		scope = "titlepage",
+	},
 	[210] = Software:new {
 		name = "BattleChess",
 		version = 2,
+		scope = "chess",
 	},
 
 	[300] = Organ:new { name = "Heart", sell=6000, buy=6600, hp = 200 },

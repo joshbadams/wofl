@@ -16,13 +16,26 @@ void GridEntry::FromLua(LuaRef Ref)
 
 	L->GetIntValue(Ref, "x", X);
 	L->GetIntValue(Ref, "y", Y);
+	L->GetIntValue(Ref, "wrap", WrapWidth);
 	L->GetStringValue(Ref, "text", Text);
 	L->GetIntValue(Ref, "clickId", ClickId);
 	std::string KeyStr;
 	L->GetStringValue(Ref, "key", KeyStr);
 	if (KeyStr.length() == 1)
 	{
-		Key = KeyStr[0];
+		char Shortcut = KeyStr[0];
+		if (Shortcut >= '0' && Shortcut <= '9')
+		{
+			Key = (WoflKeys)((int)WoflKeys::Zero + Shortcut - '0');
+		}
+		else if (Shortcut >= 'A' && Shortcut <= 'Z')
+		{
+			Key = (WoflKeys)((int)WoflKeys::A + Shortcut - 'A');
+		}
+		if (Shortcut >= 'a' && Shortcut <= 'z')
+		{
+			Key = (WoflKeys)((int)WoflKeys::Zero + Shortcut - 'a');
+		}
 	}
 	
 	L->GetStringValue(Ref, "entryTag", EntryTag);
@@ -115,7 +128,20 @@ void Gridbox::CustomPostChildrenRender()
 	
 	for (GridEntry& Entry : Entries)
 	{
-		WoflRenderer::Renderer->DrawString(Entry.Text.c_str(), BaseLoc + Vector(Entry.X * GRID_X, Entry.Y * GRID_Y), 1.0f, TextColor);
+		if (Entry.WrapWidth > 0)
+		{
+			std::vector<std::string> Lines = SplitLines(Entry.Text, Entry.WrapWidth * GRID_X);
+			int Index = 0;
+			for (const std::string& Line : Lines)
+			{
+				WoflRenderer::Renderer->DrawString(Line.c_str(), BaseLoc + Vector(Entry.X * GRID_X, (Entry.Y + Index) * GRID_Y), 1.0f, TextColor);
+				Index++;
+			}
+		}
+		else
+		{
+			WoflRenderer::Renderer->DrawString(Entry.Text.c_str(), BaseLoc + Vector(Entry.X * GRID_X, Entry.Y * GRID_Y), 1.0f, TextColor);
+		}
 	}
 }
 
@@ -153,7 +179,9 @@ void Gridbox::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 	// allow for full-widget click/space to continue type things
 	if (!bWasHandled)
 	{
-		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnGenericContinueInput");
+//		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnGenericContinueInput");
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleMouseInput", X, Y);
+		Update();
 	}
 }
 
@@ -169,15 +197,15 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 	}
 	
 
-	// we only want to handle char events and keydown of some special keycodes
 	if (Event.Type == KeyType::Up)
 	{
 		return true;
 	}
-	if (Event.Char == 0 && Event.KeyCode != WoflKeys::Enter && Event.KeyCode != WoflKeys::Backspace && Event.KeyCode != WoflKeys::Escape)
-	{
-		return true;
-	}
+	// we only want to handle char events and keydown of some special keycodes
+	//if (Event.Char == 0 && Event.KeyCode != WoflKeys::Enter && Event.KeyCode != WoflKeys::Backspace && Event.KeyCode != WoflKeys::Escape)
+	//{
+	//	return true;
+	//}
 	
 	if (TextEntryIndex != -1)
 	{
@@ -213,29 +241,30 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 			bIgnoreUntilNextUp = true;
 		}
 	}
-	else if (Event.Type == KeyType::Down)
+	// char events are only for text entry
+	else if (Event.Type == KeyType::Down && Event.KeyCode != WoflKeys::None)
 	{
-		if (Event.Char != 0)
+		for (GridEntry& Entry : Entries)
 		{
-			for (GridEntry& Entry : Entries)
+			if (Entry.Key == Event.KeyCode)
 			{
-				if (Entry.Key == tolower(Event.Char))
-				{
-					OnClickEntry(Entry);
-					bIgnoreUntilNextUp = true;
-					return true;
-				}
+				OnClickEntry(Entry);
+				bIgnoreUntilNextUp = true;
+			}
+		}
+		if (!bIgnoreUntilNextUp)
+		{
+			LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "HandleKeyInput", (int)Event.KeyCode, (int)Event.Type);
+			Update();
+			bIgnoreUntilNextUp = true;
+
+//			if (Event.Type == KeyType::Down && (Event.KeyCode == WoflKeys::Enter || Event.KeyCode == WoflKeys::Space || Event.KeyCode == WoflKeys::Escape))
+			{
+				//			OnGenericContinueInput();
 			}
 		}
 	}
 	
-	if (!bIgnoreUntilNextUp)
-	{
-		if (Event.Type == KeyType::Down && (Event.KeyCode == WoflKeys::Enter || Event.KeyCode == WoflKeys::Space || Event.KeyCode == WoflKeys::Escape))
-		{
-			OnGenericContinueInput();
-		}
-	}
 
 	return true;
 }

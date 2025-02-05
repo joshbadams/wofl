@@ -11,9 +11,15 @@ s.item_waiting_cheapo_sake = 0
 Cheapo = Site:new {
 	title = "* The Cheapo Hotel *",
 	comLinkLevel = 1,
+
+	passwords = {
+		"guest",
+		"cockroach",
+	},
 	
 	pages = {
 		['title'] = {
+			type = "title",
 			message = "Hey, it's better than sleeping in the streets!\nJust enter the password \"GUEST\" to enter our system."
 		},
 		
@@ -28,7 +34,7 @@ Cheapo = Site:new {
 				{ key = '1', text = "Room Service", target = "roomservice" },
 				{ key = '2', text = "Local Things to do", target = "thingstodo" },
 				{ key = '3', text = "Review Bill", target = "bill_view"  },
-				{ key = '4', text = "Edit Bill [level 2?]", target = "bill_edit", level = 2 }
+				{ key = '4', text = "Edit Bill", target = "bill_edit", level = 2 }
 			}
 		},
 		
@@ -89,8 +95,9 @@ cheapo = Cheapo
 
 -- mark one ready for pickup next trip to hotel
 function Cheapo:OnPurchasedStoreItem(item)
-	local itemVar = string.format("item_waiting_%s", item.tag)
-	_G[itemVar] = _G[itemVar] + 1
+	local itemVar = 'item_waiting_' .. item.tag
+	local numWaiting = s[itemVar] or 0
+	s[itemVar] = numWaiting + 1
 end
 
 
@@ -109,15 +116,15 @@ function Cheapo:GetBillEntries(entries)
 	
 	table.append(entries, { x = 5, y = 2, text = string.format("Room: 92   Name: %s", name) })
 	table.append(entries, { x = 0, y = 3, text = "--------------------------------------------------------------------------" })
-	table.append(entries, { x = 0, y = 4, text = string.appendPadded("   ", "Total charges:", 26) .. tostring(cheapo_charges) })
-	table.append(entries, { x = 0, y = 6, text = string.appendPadded("   ", "Balance:", 26) .. (cheapo_charges - cheapo_account) })
+	table.append(entries, { x = 0, y = 4, text = string.appendPadded("   ", "Total charges:", 26) .. s.cheapo_charges })
+	table.append(entries, { x = 0, y = 6, text = string.appendPadded("   ", "Balance:", 26) .. (s.cheapo_charges - s.cheapo_account) })
 	table.append(entries, { x = 0, y = 7, text = "--------------------------------------------------------------------------" })
 
 	-- the account line, optionally editable
 	if (self.currentPage == "bill_view") then
-		table.append(entries, { x = 0, y = 5, text = string.appendPadded("   ", "On account1:", 26) .. cheapo_account })
+		table.append(entries, { x = 0, y = 5, text = string.appendPadded("   ", "On account1:", 26) .. s.cheapo_account })
 	elseif (self.currentPage == "bill_edit") then
-		table.append(entries, { x = 0, y = 5, text = string.appendPadded("O. ", "On account2:", 26) .. cheapo_account, clickId = 10, key = "o" })
+		table.append(entries, { x = 0, y = 5, text = string.appendPadded("O. ", "On account2:", 26) .. s.cheapo_account, clickId = 10, key = "o" })
 	else
 		table.append(entries, { x = 0, y = 5, text = string.appendPadded("   ", "On account3:", 26) })
 		table.append(entries, { x = 29, y = 5, entryTag = "account", numeric = true })
@@ -135,7 +142,7 @@ function Cheapo:HandleClickedEntry(id)
 
 	if (string.sub(self.currentPage, 1, 5) == "bill_" and id > 0) then
 		if (id > 0 and id ~= 1 and id ~= 10) then
-			error("should only have id 1 (pay) or 10 (edit)")
+			error("should only have id 1 (pay) or 10 (edit)")			
 		end
 
 		if (id == 1) then
@@ -157,7 +164,8 @@ end
 
 function Cheapo:OnTextEntryComplete(text, tag)
 	if (tag ~= "account") then
-		error("textentry tag should only be 'account'")
+		Site.OnTextEntryComplete(self, text, tag)
+		return
 	end
 
 	local amount = tonumber(text)

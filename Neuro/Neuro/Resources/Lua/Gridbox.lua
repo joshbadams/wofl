@@ -83,3 +83,10 @@ end
 function Gridbox:OnGenericContinueInput()
 end
 
+function Gridbox:HandleKeyInput(keyCode, char, type)
+	return false
+end
+
+function Gridbox:HandleMouseInput(x, y, type)
+	return false
+end

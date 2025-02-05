@@ -268,6 +268,7 @@ void Lua::LoadScript(const char* ScriptName)
 	bool bError = luaL_dofile(L, Utils::File->GetResourcePath(FilePath.c_str()).c_str());
 	if (bError)
 	{
+		std::string Err = lua_tostring(L, -1);
 		WLOG("error loading lua file: %s\n", lua_tostring(L, -1));
 	}
 	assert(!bError);

@@ -129,6 +129,10 @@ bool UInitialize(int argc, char* argv[], GLFWwindow** window)
 	Keys[GLFW_KEY_ENTER] = WoflKeys::Enter;
 	Keys[GLFW_KEY_BACKSPACE] = WoflKeys::Backspace;
 	Keys[GLFW_KEY_SPACE] = WoflKeys::Space;
+	Keys[GLFW_KEY_UP] = WoflKeys::UpArrow;
+	Keys[GLFW_KEY_DOWN] = WoflKeys::DownArrow;
+	Keys[GLFW_KEY_LEFT] = WoflKeys::LeftArrow;
+	Keys[GLFW_KEY_RIGHT] = WoflKeys::RightArrow;
 	for (int K = 'A'; K <= 'Z'; K++)
 	{
 		Keys[K] = (WoflKeys)K;
@@ -137,6 +141,7 @@ bool UInitialize(int argc, char* argv[], GLFWwindow** window)
 	{
 		Keys[K] = (WoflKeys)K;
 	}
+//	Keys[' '] = WoflKeys::Space;
 
 	return true;
 }

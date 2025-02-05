@@ -254,7 +254,9 @@ void NeuroState::ClickChip()
 	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
 	{
 		CurrentState = State::InSite;
-		StateDelegate->OpenBoxByName("regfellow");
+		std::string LastSite;
+		Lua.GetStringValue("s", "lastSite", LastSite);
+		StateDelegate->OpenBoxByName(LastSite.c_str());
 	}
 }
 

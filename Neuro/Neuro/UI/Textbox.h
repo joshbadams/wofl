@@ -8,9 +8,11 @@
 #pragma once
 
 #include <Wofl/Wofl.h>
+#include <vector>
 
 #define DEFUALT_LINE_HEIGHT 30
 
+extern std::vector<std::string> SplitLines(const std::string& FullText, int Width);
 
 class Textbox : public WoflSprite
 {

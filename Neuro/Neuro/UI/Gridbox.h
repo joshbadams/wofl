@@ -18,8 +18,9 @@ struct GridEntry
 {
 	std::string Text;
 	int X, Y;
+	int WrapWidth;
 	int ClickId = -1;
-	char Key=0;
+	WoflKeys Key = WoflKeys::None;
 	bool bWrapText=false;
 	
 	std::string EntryTag;

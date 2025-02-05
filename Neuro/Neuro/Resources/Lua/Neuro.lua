@@ -159,6 +159,47 @@ function string.fromTime()
 	return string.format("%02d:%02d", s.hour, s.minute)
 end
 
+function string.SplitLines(s, width)
+	local lines = {}
+	local index = 1
+	local len = string.len(s)
+
+    for paragraph in string.gmatch(s, "[^\n]+") do
+		-- trim any spaces
+		local p = string.gsub(paragraphs, '^%s*(.-)%s*$', '%1')
+		print("para", p, "width", width)
+		if (p.len() <= width) then
+			table.insert(lines, p)
+		else
+			local line = ""
+			repeat
+				local wrapped = false
+				for w in string.gmatch(p, "(%a+)") do
+					print("word:", w)
+					local line2 = line .. w .. " "
+					if (line2:len() > width + 1) then
+						table.insert(lines, line)
+						print("line:", line)
+						print("p before", p)
+						p = string.sub(p, string.len(line) + 1, -1)
+						print("p after", p)
+						wrapped = true
+						break
+					end
+					line = line2
+				end
+			until not wrapped
+			table.insert(lines, line)
+		end
+
+--      table.insert(paragraphs, p)
+    end
+
+	return lines
+
+end
+
+
 LuaObj = { }
 function LuaObj:new (obj)
   obk = obk or {}

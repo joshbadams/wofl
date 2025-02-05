@@ -61,10 +61,10 @@ void Textbox::SetText(const std::string& InText)
 		InterfaceDelegate->MessageComplete();
 	}
 	
-	if (NeedsShowMore())
+	if (NeedsShowMore() || bPauseOnLastPage)
 	{
 		SetFullScreenInput(true);
-		SetClickEnabled(NeedsShowMore());
+		SetClickEnabled(true);
 	}
 }
 
@@ -74,26 +74,28 @@ bool Textbox::NeedsShowMore()
 	return FirstLine + NumLinesToRender < Lines.size();
 }
 
-void Textbox::UpdateLines()
+std::vector<std::string> SplitLines(const std::string& FullText, int Width)
 {
+	std::vector<std::string> Lines;
+
 	int Travel = 0;
 	int LineStart = 0;
 	Lines.clear();
-	
+
 	while (true)
 	{
 		int NewlineIndex = (int)FullText.find('\n', Travel);
 		if (NewlineIndex != std::string::npos)
 		{
 			Vector StrSize = WoflRenderer::Renderer->GetStringSize(FullText.substr(LineStart, NewlineIndex - LineStart).c_str());
-			if (StrSize.X <= GetSize().X)
+			if (StrSize.X <= Width)
 			{
 				Lines.push_back(FullText.substr(LineStart, NewlineIndex - LineStart));
 				Travel = LineStart = NewlineIndex + 1;
 				continue;
 			}
 		}
-				
+
 		int SpaceIndex = (int)FullText.find(' ', Travel);
 		bool bIsLastWord = false;
 		if (SpaceIndex == std::string::npos)
@@ -108,10 +110,10 @@ void Textbox::UpdateLines()
 				SpaceIndex++;
 			}
 		}
-		
+
 		// check if we are going over the
 		Vector StrSize = WoflRenderer::Renderer->GetStringSize(FullText.substr(LineStart, SpaceIndex - LineStart).c_str());
-		if (StrSize.X > GetSize().X)
+		if (StrSize.X > Width)
 		{
 			Lines.push_back(FullText.substr(LineStart, Travel - LineStart));
 			if (LineStart == Travel)
@@ -127,13 +129,21 @@ void Textbox::UpdateLines()
 		{
 			Travel = SpaceIndex + 1;
 		}
-		
+
 		if (bIsLastWord)
 		{
 			Lines.push_back(FullText.substr(LineStart));
 			break;
 		}
 	}
+
+	return Lines;
+}
+
+
+void Textbox::UpdateLines()
+{
+	Lines = SplitLines(FullText, GetSize().X);
 }
 
 void Textbox::CustomRender()
@@ -166,7 +176,7 @@ void Textbox::CustomRender()
 
 bool Textbox::OnKey(const KeyEvent& Event)
 {
-	if (NeedsShowMore() && Event.Type == KeyType::Down)
+	if ((NeedsShowMore() || bPauseOnLastPage) && Event.Type == KeyType::Down)
 	{
 		OnClick();
 		return true;

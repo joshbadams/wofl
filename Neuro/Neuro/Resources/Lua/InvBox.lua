@@ -8,6 +8,7 @@ InvPhase = {
 	Login = {},
 	LoginError = {},
 	UsedSkill = {},
+	NothingHappens = {},
 }
 
 InvAction = {
@@ -58,6 +59,8 @@ function InvBox:GetEntries()
 		self:GetLoginErrorEntries(entries)
 	elseif (self.phase == InvPhase.UsedSkill) then
 		table.append(entries, { x = 1, y = 2, text = "Skill chip implanted"})
+	elseif (self.phase == InvPhase.NothingHappens) then
+		table.append(entries, { x = 1, y = 2, text = "Nothing happens."})
 	end
 
 	return entries
@@ -169,21 +172,22 @@ function InvBox:HandleClickedMore()
 end
 
 function InvBox:OnTextEntryComplete(text, tag)
+print("text enyry", text, tag)
 	if (self.phase == InvPhase.Login) then
 		if (text == "") then
 			self:Close()
 			return
 		end
 
-		local site = _G[text]
+		local siteName = string.lower(text)
+		local site = _G[siteName]
 		if (site == nil or site.comLinkLevel == nil) then
 			self.phase = InvPhase.LoginError
 		else
-			OpenBox(text)
+			OpenBox(siteName)
+			s.lastSite = siteName
 			self:Close()
 		end
-
-
 		return
 	end
 
@@ -249,11 +253,13 @@ end
 function InvBox:UseSoftware(softwareItem)
 	item = Items[s.software[softwareItem]]
 
-	if (item.subtype == "comlink") then
+	if (item.scope == "jack") then
 		self.activeSoftware = item
 		self.phase = InvPhase.Login
 --		OpenBox("Login")
 --		self:Close()
+	else
+		self.phase = InvPhase.NothingHappens
 	end
 end
 

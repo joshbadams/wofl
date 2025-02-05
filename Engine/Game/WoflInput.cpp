@@ -66,14 +66,14 @@ void WoflInput::PreWorldTick(float DeltaTime)
 //					WLOG("%s\n", Sprite->Describe().c_str());
 //					return true;
 //				});
-				WLOG("Depth firwt, bottom up:\n");
-				WoflWorld::Get()->Visit(false, true, false,	[](WoflSprite* Sprite)
-				{
-					int D = Sprite->GetDepth();
-					for (int i = 0; i < D; i++) WLOG("  ");
-					WLOG("%s\n", Sprite->Describe().c_str());
-					return true;
-				});
+				//WLOG("Depth firwt, bottom up:\n");
+				//WoflWorld::Get()->Visit(false, true, false,	[](WoflSprite* Sprite)
+				//{
+				//	int D = Sprite->GetDepth();
+				//	for (int i = 0; i < D; i++) WLOG("  ");
+				//	WLOG("%s\n", Sprite->Describe().c_str());
+				//	return true;
+				//});
 //				WLOG("Breadth firwt, top down:\n");
 //				WoflWorld::Get()->Visit(true, false, false, [](WoflSprite* Sprite)
 //				{

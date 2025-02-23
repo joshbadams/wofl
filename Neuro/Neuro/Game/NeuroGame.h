@@ -26,7 +26,8 @@ public:
 	
 	virtual LuaRef OpenBoxByName(const char* Name) override;
 	virtual bool CloseBoxWithObj(LuaRef BoxObj) override;
-	
+	virtual bool ReorderBoxWithObj(LuaRef BoxObj, int Mode) override;
+
 	virtual bool AreBoxesShowing() override;
 	virtual bool IsConversationShowing() override;
 	virtual bool IsMessageActive() override;
@@ -40,10 +41,12 @@ private:
 		
 	WoflSprite* ScreenSprite;
 	WoflSprite* Background;
+	class WoflButton* InvButton;
 	class WoflSprite* ButtonContainer;
 	class Textbox* MessageBox;
 	class Textbox* InfoBox;
 	class WoflSprite* DialogInputSorter;
+	class WoflSprite* SiteInputSorter;
 	class Ninebox* DialogBox;
 	class Ninebox* ThoughtBox;
 	vector<class Gridbox*> Boxes;

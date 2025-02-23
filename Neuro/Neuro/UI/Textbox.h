@@ -25,7 +25,7 @@ public:
 		InterfaceDelegate = Delegate;
 	}
 	
-	void SetText(const std::string& InText);
+	void SetText(const std::string& InText, bool bNeedsPauseAtEnd=false);
 	
 	bool NeedsShowMore();
 

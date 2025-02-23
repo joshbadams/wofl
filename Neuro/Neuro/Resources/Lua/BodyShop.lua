@@ -65,8 +65,6 @@ BodyShop = Room:new {
 	name = "bodyshop",
 	onEnterConversation = "onEnterRoom",
 	hasPerson = true,
-	hasPax = false,
-	hasJack = false,
 	
 	south = "streetwest2",
 

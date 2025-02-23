@@ -31,12 +31,14 @@ Textbox::Textbox(const char* BackgroundImage, float X, float Y, float SizeX, flo
 	TextColor = Color;
 }
 
-void Textbox::SetText(const std::string& InText)
+void Textbox::SetText(const std::string& InText, bool bNeedsPauseAtEnd)
 {
 	if (InText == "")
 	{
 		return;
 	}
+	
+	bPauseOnLastPage = bNeedsPauseAtEnd;
 		
 	if (InText[0] == '@')
 	{
@@ -49,7 +51,7 @@ void Textbox::SetText(const std::string& InText)
 
 	UpdateLines();
 
-	if (this->bPauseOnLastPage)
+	if (bPauseOnLastPage)
 	{
 		Lines.push_back("[END]");
 	}
@@ -191,6 +193,7 @@ void Textbox::OnClick()
 	{
 		SetClickEnabled(false);
 		SetFullScreenInput(false);
+		bPauseOnLastPage = false;
 		InterfaceDelegate->MessageComplete();
 		return;
 	}

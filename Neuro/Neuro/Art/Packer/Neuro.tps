@@ -190,6 +190,7 @@
             </struct>
             <key type="filename">bodyshop.png</key>
             <key type="filename">chatsubo.png</key>
+            <key type="filename">court.png</key>
             <key type="filename">streetcenter4.png</key>
             <key type="filename">streetwest1.png</key>
             <key type="filename">streetwest2.png</key>
@@ -220,6 +221,21 @@
                 <rect>670,248,1340,495</rect>
                 <key>scale9Paddings</key>
                 <rect>670,248,1340,495</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">deane.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>305,113,609,226</rect>
+                <key>scale9Paddings</key>
+                <rect>305,113,609,226</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -325,6 +341,21 @@
                 <rect>976,359,1951,717</rect>
                 <key>scale9Paddings</key>
                 <rect>976,359,1951,717</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streetcenter5.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,114,613,227</rect>
+                <key>scale9Paddings</key>
+                <rect>307,114,613,227</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

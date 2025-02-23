@@ -110,7 +110,8 @@ NeuroGame::NeuroGame()
 	InfoBox = new Textbox(nullptr, 376, 600, 268, 36, 0, false, false, WColor::Black);
 	
 	DialogInputSorter = new WoflSprite(0, 0, ScreenSprite->GetSize().X, ScreenSprite->GetSize().Y);
-	
+	SiteInputSorter = new WoflSprite(0, 0, ScreenSprite->GetSize().X, ScreenSprite->GetSize().Y);
+
 	Background->AddChild(ScreenSprite);
 	Background->AddChild(DialogInputSorter);
 	
@@ -120,9 +121,16 @@ NeuroGame::NeuroGame()
 	ButtonContainer = new WoflSprite(Left, Top, Size * 3, Size * 2);
 	DialogInputSorter->AddChild(ButtonContainer);
 	
-	WoflButton* InvButton    = new WoflButton(nullptr, nullptr, 0 * Size, 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickInventory(); });
+	InvButton    = new WoflButton(nullptr, nullptr, 0 * Size, 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickInventory(); });
 	ButtonContainer->AddChild(InvButton);
 	InvButton->SetKeycodeShortcut(WoflKeys::I);
+
+	WoflButton* SkillButton  = new WoflButton(nullptr, nullptr, 0 * Size, 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSkill(); });
+	ButtonContainer->AddChild(SkillButton);
+	SkillButton->SetKeycodeShortcut(WoflKeys::S);
+
+//	ButtonContainer->AddChild(SiteInputSorter);
+//	SiteInputSorter->SetPosition({0,0});
 
 	WoflButton* PAXButton    = new WoflButton(nullptr, nullptr, 1 * Size, 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickPAX(); });
 	ButtonContainer->AddChild(PAXButton);
@@ -131,10 +139,6 @@ NeuroGame::NeuroGame()
 	WoflButton* TalkButton   = new WoflButton(nullptr, nullptr, 2 * Size, 0 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickTalk(); });
 	ButtonContainer->AddChild(TalkButton);
 	TalkButton->SetKeycodeShortcut(WoflKeys::T);
-
-	WoflButton* SkillButton  = new WoflButton(nullptr, nullptr, 0 * Size, 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickSkill(); });
-	ButtonContainer->AddChild(SkillButton);
-	SkillButton->SetKeycodeShortcut(WoflKeys::S);
 
 	WoflButton* ChipButton   = new WoflButton(nullptr, nullptr, 1 * Size, 1 * Size, Size, Size, 0, [this](WoflButton*) { State.ClickChip(); });
 	ButtonContainer->AddChild(ChipButton);
@@ -194,8 +198,6 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name)
 		Box = new Gridbox();
 		Box->SetDelegates(&State, &State);
 	}
-
-	Box->Open(NewBox);
 	
 	Boxes.push_back(Box);
 //	if (DialogInputSorter->IsRooted())
@@ -204,23 +206,80 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name)
 //	}
 //	else
 	{
+//		SiteInputSorter->AddChild(Box);
 		Background->AddChild(Box);
 	}
-	
+
+	Box->Open(NewBox);
+
 	return NewBox;
+}
+
+static Gridbox* GetBoxFromObj(LuaRef BoxRef)
+{
+	void* BoxThis;
+	if (BoxRef->LuaSystem->GetUserDataValue(BoxRef, "cppthis", BoxThis))
+	{
+		return (Gridbox*)BoxThis;
+	}
+	
+	return nullptr;
 }
 
 bool NeuroGame::CloseBoxWithObj(LuaRef BoxObj)
 {
-	vector<Gridbox*>::iterator FoundPos = std::find_if(Boxes.begin(), Boxes.end(), [BoxObj](Gridbox* B) { return B->MatchesLuaBox(BoxObj); });
-	if (FoundPos != Boxes.end())
-	{
-		(*FoundPos)->RemoveFromParent();
-		BoxCache.push_back(*FoundPos);
-		Boxes.erase(FoundPos);
-	}
+	Gridbox* Box = GetBoxFromObj(BoxObj);
+
+	Box->RemoveFromParent();
+	BoxCache.push_back(Box);
+	Boxes.erase(std::find(Boxes.begin(), Boxes.end(), Box));
 	
 	return Boxes.size() == 0;
+}
+
+bool NeuroGame::ReorderBoxWithObj(LuaRef BoxObj, int Mode)
+{
+	Gridbox* Box = GetBoxFromObj(BoxObj);
+
+	if (Mode == 0)
+	{
+		Vector AbsPos = InvButton->GetPosition();
+		InvButton->RemoveFromParent();
+		ButtonContainer->AddChild(InvButton);
+		InvButton->SetPosition(AbsPos);
+	}
+	else if (Mode == 1)
+	{
+		WLOG("BEFORE:\n");
+		WoflWorld::Get()->Visit(false, true, false,	[](WoflSprite* Sprite)
+		{
+			int D = Sprite->GetDepth();
+			for (int i = 0; i < D; i++) WLOG("  ");
+			WLOG("%s\n", Sprite->Describe().c_str());
+			return true;
+		});
+
+		Vector AbsPos = InvButton->GetPosition();
+		InvButton->RemoveFromParent();
+		Box->AddChild(InvButton);
+		InvButton->SetPosition(AbsPos);
+
+		WLOG("AFTER:\n");
+		WoflWorld::Get()->Visit(false, true, false,	[](WoflSprite* Sprite)
+		{
+			int D = Sprite->GetDepth();
+			for (int i = 0; i < D; i++) WLOG("  ");
+			WLOG("%s\n", Sprite->Describe().c_str());
+			return true;
+		});
+
+	}
+//	Box->RemoveFromParent();
+//	BoxCache.push_back(Box);
+//	Boxes.erase(std::find(Boxes.begin(), Boxes.end(), Box));
+//	
+//	return Boxes.size() == 0;
+	return true;
 }
 
 bool NeuroGame::AreBoxesShowing()
@@ -278,7 +337,8 @@ void NeuroGame::Invalidate(ZoneType Zone)
 	
 	if ((Zone & ZoneType::Message) != ZoneType::None)
 	{
-		MessageBox->SetText(State.GetCurrentMessage());		
+		bool bNeedsPause;		
+		MessageBox->SetText(State.GetCurrentMessage(bNeedsPause), bNeedsPause);
 	}
 	
 	if ((Zone & ZoneType::Dialog) != ZoneType::None)

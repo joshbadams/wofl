@@ -470,6 +470,12 @@ int PushParam(lua_State* L, bool Param)
 	return lua_gettop(L);
 }
 
+int PushParam(lua_State* L, void* Param)
+{
+	lua_pushlightuserdata(L, Param);
+	return lua_gettop(L);
+}
+
 bool GetReturn(lua_State* L, LuaRef& Param)
 {
 	if (!lua_istable(L, -1) && !lua_isfunction(L, -1))

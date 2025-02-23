@@ -1,9 +1,6 @@
 
 StreetWest1 = Room:new {
 	name = "streetwest1",
-	hasPerson = false,
-	hasPax = false,
-	hasJack = false,
 	
 	east = "streetwest2",
 }
@@ -21,9 +18,6 @@ streetwest1 = StreetWest1
 
 StreetWest2 = Room:new {
 	name = "streetwest2",
-	hasPerson = false,
-	hasPax = false,
-	hasJack = false,
 	
 	west = "streetwest1",
 	east = "streetcenter1",
@@ -34,9 +28,6 @@ streetwest2 = StreetWest2
 
 StreetCenter1 = Room:new {
 	name = "streetcenter1",
-	hasPerson = false,
-	hasPax = false,
-	hasJack = false,
 	
 	east = "massageparlor",
 	west = "streetwest2",
@@ -47,9 +38,6 @@ streetcenter1 = StreetCenter1
 
 StreetCenter2 = Room:new {
 	name = "streetcenter2",
-	hasPerson = false,
-	hasPax = false,
-	hasJack = false,
 	
 	east = "shins",
 	north = "streetcenter1",
@@ -58,7 +46,6 @@ StreetCenter2 = Room:new {
 streetcenter2 = StreetCenter2
 
 function StreetCenter2:GetConnectingRoom(direction)
-print("dir,shins = ", direction, s.shins)
 	if (direction == "east" and s.shins > 0) then
 		return nil
 	end
@@ -68,9 +55,6 @@ end
 
 StreetCenter3 = Room:new {
 	name = "streetcenter3",
-	hasPerson = false,
-	hasPax = false,
-	hasJack = false,
 	
 	-- east = "streetmain1",
 	west = "cheaphotel",
@@ -81,17 +65,26 @@ streetcenter3 = StreetCenter3
 
 StreetCenter4 = Room:new {
 	name = "streetcenter4",
-	hasPerson = false,
-	hasPax = false,
-	hasJack = false,
 	
 	west = "gentlemanloser",
 	north = "streetcenter3",
-	-- south = "streetcenter5",
+	south = "streetcenter5",
 	
-	longDescription = "asd asd asd asd asd asd asd asd ff wef wef wef wf we fwe fwe fw efw ef wef wef wef we fwefwpiejfwoieufwaifoiwqfiowe qwfh qwiuefh iqwoeuhf ioqwuehf iwuhf iqwuhf iqwoehf iqwuhf iqweuhf qwihuf qwiouhf qwiuehf iqwehf iqweuhfqotyqwiougheiuhgoehgoehrg"
+	longDescription = ""
 }
 streetcenter4 = StreetCenter4
+
+StreetCenter5 = Room:new {
+	name = "streetcenter5",
+	
+	-- west = "maas",
+	east = "deane",
+	north = "streetcenter4",
+	-- south = "streetcenter6",
+	
+	longDescription = ""
+}
+streetcenter5 = StreetCenter5
 
 ----------------------------------------------------------------------------------
 
@@ -108,8 +101,6 @@ DonutWorld = Room:new {
 	name = "donutworld",
 	onEnterConversation = "onEnter",
 	hasPerson = true,
-	hasPax = false,
-	hasJack = false,
 	
 	north = "streetwest2",
 	
@@ -207,7 +198,7 @@ DonutWorld = Room:new {
 					response = "Wild Irish Rose is a hooker on Memory Lane! The coded SEA password is SMEEGLDIPO, remember?",
 				},
 				{
-					line = "O'Riley! I heard the changed the Fuji Electric passwird to \"Uisquebaugh.\" Is that right?",
+					line = "O'Riley! I heard the changed the Fuji Electric passwi=ord to \"Uisquebaugh.\" Is that right?",
 					response = "The coded Fuji password is ABURAKKOI. They haven't changed it in years.",
 				},
 			}
@@ -256,8 +247,6 @@ Larrys = Room:new {
 	name = "larrys",
 	onEnterConversation = "onEnterRoom",
 	hasPerson = true,
-	hasPax = false,
-	hasJack = false,
 	
 	south = "streetcenter1",
 	
@@ -385,7 +374,6 @@ Larrys = Room:new {
 }
 
 function Larrys:HandlePay(amount)
-print("pay", self, s, s.money, amount)
 	if (s.money >= amount) then
 		s.money = s.money - amount
 		self:ActivateConversation("paid")
@@ -403,13 +391,11 @@ larrys = Larrys
 
 -------------------------------------------------------------------------------------
 
-s.massageparlor = 0
+s.massageparlor = 1
 MassageParlor = Room:new {
 	name = "massageparlor",
 	onEnterConversation = "onEnterRoom",
 	hasPerson = true,
-	hasPax = false,
-	hasJack = false,
 	
 	west = "streetcenter1",
 	
@@ -428,7 +414,7 @@ MassageParlor = Room:new {
 			lines = {
 				"Look out! It's the lawbot!",
 			},
-			onEnd = function() ShowMessage("<You were arrested>") end
+			onEnd = function() ShowMessage("<You were arrested>", function() GoToRoom("streetcenter1") end, true) end
 		},
 
 		{
@@ -451,16 +437,19 @@ MassageParlor = Room:new {
 				},
 				{
 					line = "I wanna buy some info, babe.",
-					response = function(self) print("getting info response", self, self.BuyInfo); return self:BuyInfo() end,
-					onEnd = function(self) print("next convo", self.nextConvo); self:ActivateConversation(self.nextConvo) end
+					response = function(self) return self:BuyInfo() end,
+					onEnd = function(self) self:ActivateConversation(self.nextConvo) end
 				},
 			}
 		},
 	},
 	
 	info = {
-		[1] = "Here's a hot tip. The Panther Modern link code is \"CHAOS\". The password is \"MAINLINE\". They can help you.",
-		[2] = "placeholder",
+		[1] = { cost = 20, message = "Here's a hot tip. The Panther Modern link code is \"CHAOS\". The password is \"MAINLINE\". They can help you." },
+		[2] = { cost = 50, message = "The banking center is on the Freeside orbital colony, but the link number for the Bank of Zurich is \"BOZOBANK\"." },
+		[3] = { cost = 75, message = "Be careful when dealing with the Moderns. Not all of them will be your friends." },
+		[4] = { cost = 100, message = "Some cowboy said he avoids court fees when he gets arrested by setting up multiple bank accounts." },
+		[5] = { cost = 150, message = "Just heard that Mass Biolabs finished work on a cyberspace superdeck they call \"CyberEyes\". Apparently, with CyberEyes, you don't need a regular cyberdeck to get around in cyberspace. It stores programs in your head!" },
 	},
 
 	
@@ -470,18 +459,18 @@ MassageParlor = Room:new {
 
 function MassageParlor:BuyInfo()
 print("buy info", self);
-
-	if (s.money < 16) then
+	
+	if (s.money < self.info[s.massageparlor].cost) then
 		self.nextConvo = "lawbot"
 		return "Take a hike, meatball! You can't afford it!"
 	elseif (s.massageparlor <= #self.info) then
 		self.nextConvo = "moreinfo"
-		s.money = s.money - 16
+		s.money = s.money - self.info[s.massageparlor].cost
 		s.massageparlor = s.massageparlor + 1
-		return self.info[s.massageparlor]
+		return self.info[s.massageparlor - 1].message
 	else
 		self.nextConvo = "lawbot"
-		return "<out of info>!"
+		return "You know more than me now."
 	end
 end
 
@@ -507,8 +496,6 @@ s.shins = 0
 Shins = Room:new {
 	name = "shins",
 	hasPerson = true,
-	hasPax = false,
-	hasJack = false,
 	onEnterConversation = "onEnter",
 	
 	west = "streetcenter2",
@@ -537,8 +524,8 @@ Shins = Room:new {
 				},
 				{
 					line = "Okay. Give me the deck. I can't operate without one.",
-					response = function(self) if table.containsArrayItem(s.inventory, 1) then return "No have ticket? Shin give deck anyways." else
-						return "Give ticket and money. Shin busy. Many customer." end end,
+					response = function(self) if table.containsArrayItem(s.inventory, 1) then return "Give ticket and money. Shin busy. Many customer." else
+						return "No have ticket? Shin give deck anyways." end end,
 					onEnd = function(self)
 							table.removeArrayItem(s.inventory, 1)
 							local shop = OpenBox("ShinShop")
@@ -547,28 +534,28 @@ Shins = Room:new {
 				{
 					line = "I don't have the cash right now, I'll come back later.",
 					response = "What? I no want deck! Here! Take deck now! No charge! Go away!",
-					onEnd = function(self) ShowMessage("Shin gives you your deck."); table.append(s.inventory, 100); self:ActivateConversation("seocndChoice") end
+					onEnd = function(self) ShowMessage("Shin gives you your deck."); table.append(s.inventory, 100); self:ActivateConversation("secondChoice") end
 				},
 			}
 		},
 
 		{
-			tag = "seocndChoice",
+			tag = "secondChoice",
 			options =
 			{
 				{
 					condition = function(self) return self.boughtDeck end,
 					line = "Thanks for my deck, Shin. I really appreciate you looking after it.",
-					onEnd = function(self) GoToRoom("streetcenter2"); ShowMessage("Shin slams and bolts the door behind you.") end,
+					onEnd = function(self) self:KickedOut() end,
 				},
 				{
 					line = "Okay, pal! I'll go away! And I'll tell all my friends about this place!",
-					onEnd = function(self) GoToRoom("streetcenter2"); ShowMessage("Shin slams and bolts the door behind you.") end,
+					onEnd = function(self) self:KickedOut() end,
 				},
 				{
 					condition = function(self) return not self.boughtDeck end,
 					line = "Thanks, Shin. I knew you'd see it my way.",
-					onEnd = function(self) GoToRoom("streetcenter2"); ShowMessage("Shin slams and bolts the door behind you.") end,
+					onEnd = function(self) self:KickedOut() end,
 				},
 			}
 		},
@@ -587,6 +574,10 @@ Shins = Room:new {
 	}
 }
 shins = Shins
+
+function Shins:KickedOut()
+	ShowMessage("Shin slams and bolts the door behind you.", function() GoToRoom("streetcenter2") end, true)
+end
 
 function Shins:OnExitRoom()
 	s.shins = 1
@@ -608,25 +599,119 @@ function ShinShop:CannotAfford(itemIndex)
 	Shins:ActivateConversation("firstChoice")
 end
 
+function ShinShop:HandleClickedExit()
+	Shins:ActivateConversation("firstChoice")
+	self:Close()
+end
+
 
 --------------------------------------------------------------------------
 
-CheapHotel = Room:new {
-	name = "cheaphotel",
+s.deane = 1
+Deane = Room:new {
+	name = "deane",
 	hasPerson = true,
-	hasPax = false,
-	hasJack = false,
+	onEnterConversation = "onEnter",
 	
-	east = "streetcenter3",
-}
-cheaphotel = CheapHotel
+	west = "streetcenter5",
+	
+	longdescription = "You find Julius Deane's office in a warehouse behind Ninsei. You get the impression Julius has a gun pointed at you under the desk.",
+	description = "In Julius Deane's office.",
+	
+	conversation = {
+		{
+			tag = "onEnter",
+			lines = { "What brings you around, boyo? I deal in exotic hardware and information." },
+		},
+			
+		{
+			condition = function() return s.deane == 1; end,
+			options = {
+				{
+					line = "I'm just looking around right now.",
+					response = "Go hand around someone else's office. I'm a busy man.",
+					onEnd = function() GoToRoom("streetcenter5"); end
+				},
+				{
+					line = "My friends tell me that someone is trying to kill me. Heard anything?",
+					response = "Not always easy to know who your friends are, is it? I haven't heard anything about it.",
+					onEnd = function() s.deane = 2; end
+				},
+				{
+					line = "What do you know about",
+					hasTextEntry=true,
+					onEnd = function() s.deane = 3; end
+				}
 
-GentlemanLoser = Room:new {
-	name = "gentlemanloser",
-	hasPerson = true,
-	hasPax = false,
-	hasJack = false,
-	
-	east = "streetcenter4",
+			}
+		},
+		
+		{
+			condition = function() return s.deane == 2; end,
+			options = {
+				{
+					line = "What do you know about",
+					hasTextEntry=true,
+					onEnd = function() s.deane = 3; end
+				},
+				{
+					line = "Maybe the people from Cheap Hotel are after me? I ran up a big bill there.",
+					response = "Of course, if I did hear something, I might not be able to tell you. Biz being what it is, you understand.",
+					onEnd = function() s.deane = 1; end
+				},
+			}
+		},
+		
+		{
+			condition = function() return s.deane == 3; end,
+			options = {
+				{
+					line = "What do you know about",
+					hasTextEntry=true,
+				},
+			}
+		},
+		
+		{
+			tags = { "_cryptology", "_upgrade" },
+			lines = { "I can upgrade you in Cryptology for $2500 per level if you already have the skill chip." },
+			onEnd = function() OpenBox("DeaneCryptoShop") end
+		},
+		{
+			tags = { "_chip" },
+			lines = { "I've got Bargaining, Psychoanalysis, Philosophy, and Phenomenology at $1000 each. Or I can upgrade certin skills." },
+			onEnd = function() OpenBox("DeaneSkillShop") end
+		},
+		{
+			tags = { "_neuromancer" },
+			lines = { "It's an old novel by Willam Gibson." },
+		},
+		{
+			tags = { "_fuji" },
+			lines = { "I've heard the password is \"DUMBO\", but that's probably in code." },
+		},
+		{
+			tags = { "_hitachi" },
+			lines = { "Just one word you need to remember: \"GENESPLICE\"." },
+		},
+		{
+			tags = { "_hosaka" },
+			lines = { "I've heard the password is \"VULCAN\" but that's probably in code." },
+		},
+		{
+			tags = { "_musabori" },
+			lines = { "I've heard the password is \"PLEIADES\", but that's probavly in code." },
+		},
+		{
+			tags = { "_hardware" },
+			lines = { "Only have one thing right now. Maybe you're interested in it." },
+			onEnd = function() OpenBox("DeaneGasMaskShop") end
+		},
+		{
+			tags = { "_software" },
+			lines = { "Try the Finn at Metro Holografix for that sort of thing." },
+		},
+	}
 }
-gentlemanloser = GentlemanLoser
+
+deane = Deane

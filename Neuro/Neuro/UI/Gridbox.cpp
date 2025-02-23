@@ -34,13 +34,17 @@ void GridEntry::FromLua(LuaRef Ref)
 		}
 		if (Shortcut >= 'a' && Shortcut <= 'z')
 		{
-			Key = (WoflKeys)((int)WoflKeys::Zero + Shortcut - 'a');
+			Key = (WoflKeys)((int)WoflKeys::A + Shortcut - 'a');
 		}
 	}
 	
 	L->GetStringValue(Ref, "entryTag", EntryTag);
 	L->GetBoolValue(Ref, "numeric", bNumericEntry);
 	L->GetBoolValue(Ref, "multiline", bMultilineEntry);
+	if (bMultilineEntry && WrapWidth == 0)
+	{
+		WrapWidth = -1;
+	}
 
 	L->GetFunctionValue(Ref, "onClick", OnClick);
 	L->GetFunctionValue(Ref, "onClickEntry", OnClickEntry);
@@ -86,7 +90,7 @@ void Gridbox::Init()
 	
 	if (LuaBox)
 	{
-		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OpenBox", GridsX, GridsY);
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnOpenBox", GridsX, GridsY, this);
 	}
 
 	Update();
@@ -126,11 +130,18 @@ void Gridbox::CustomPostChildrenRender()
 
 	Vector BaseLoc = GetPosition() + ClientLocation;
 	
-	for (GridEntry& Entry : Entries)
+	for (const GridEntry& Entry : Entries)
 	{
-		if (Entry.WrapWidth > 0)
+		string Text = Entry.Text;
+		if (Entry.EntryTag != "")
 		{
-			std::vector<std::string> Lines = SplitLines(Entry.Text, Entry.WrapWidth * GRID_X);
+			Text = Text + "<";
+		}
+		
+		if (Entry.WrapWidth != 0)
+		{
+			int Wrap = Entry.WrapWidth < 0 ? (ClientSize.X + Entry.WrapWidth * GRID_X) : Entry.WrapWidth * GRID_X;
+			std::vector<std::string> Lines = SplitLines(Text, Wrap);
 			int Index = 0;
 			for (const std::string& Line : Lines)
 			{
@@ -140,7 +151,7 @@ void Gridbox::CustomPostChildrenRender()
 		}
 		else
 		{
-			WoflRenderer::Renderer->DrawString(Entry.Text.c_str(), BaseLoc + Vector(Entry.X * GRID_X, Entry.Y * GRID_Y), 1.0f, TextColor);
+			WoflRenderer::Renderer->DrawString(Text.c_str(), BaseLoc + Vector(Entry.X * GRID_X, Entry.Y * GRID_Y), 1.0f, TextColor);
 		}
 	}
 }
@@ -197,7 +208,7 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 	}
 	
 
-	if (Event.Type == KeyType::Up)
+	if (Event.Type != KeyType::Down)
 	{
 		return true;
 	}
@@ -232,6 +243,11 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 			OnTextEntryComplete(Entries[Index].Text, Entries[Index].EntryTag);
 			bIgnoreUntilNextUp = true;
 		}
+		// enter in mult line
+		else if (Event.KeyCode == WoflKeys::Enter)
+		{
+			Entries[TextEntryIndex].Text += '\n';
+		}
 		// cancel (escape for single line_
 		else if (Event.KeyCode == WoflKeys::Escape)
 		{
@@ -250,6 +266,7 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 			{
 				OnClickEntry(Entry);
 				bIgnoreUntilNextUp = true;
+				break;
 			}
 		}
 		if (!bIgnoreUntilNextUp)
@@ -316,7 +333,7 @@ void Gridbox::Update()
 	{
 		std::string DetailsString;
 		LuaBox->LuaSystem->CallFunction_Return(LuaBox, "GetDetailsString", DetailsString);
-		Messagebox->SetText(DetailsString);
+		Messagebox->SetText(DetailsString, true);
 		AddChild(Messagebox);
 	}
 	

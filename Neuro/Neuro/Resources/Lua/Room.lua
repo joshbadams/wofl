@@ -16,6 +16,9 @@ Room = LuaObj:new {
 	lineIndex = 0,
 	choiceIndex = 0,
 	isEnteringText = false,
+	hasPax = false,
+	hasPerson = false,
+	hasJack = false,
 }
 
 function Room:GetDialog()
@@ -58,7 +61,7 @@ function Room:GetDialog()
 end
 
 function Room:ActivateConversation(tag)
-
+print("activating convo with tag", tag, s.gentlemanloser)
 	-- reset
 	self.lineIndex = 0
 	self.choiceIndex = 0
@@ -68,20 +71,16 @@ function Room:ActivateConversation(tag)
 	-- for non-tagged conversations, assume the user chose Talk option, so record we've done that
 	-- this is reset in OnEnterRoom
 	s.hasTalkedInRoom = true
-print("1")
 	-- find tagged or calculated convo
 	self.currentConversation = self:GetNextConversation(tag)
-print("2")
+
 	if (self.currentConversation == nil) then
 		return
 	end
-print("3", self.currentConversation)
 
 	-- init the list of lines or choices
 	if (self.currentConversation.lines ~= nil and #self.currentConversation.lines > 0) then
 		self.lineIndex = 1
-print("4")
-print("activate- ", self.currentConversation, self.currentConversation.tag, self.currentConversation.lines, self.lineIndex)
 	elseif (self.currentConversation.options ~= nil and #self.currentConversation.options > 0) then
 		repeat
 			self.choiceIndex = self.choiceIndex % #self.currentConversation.options + 1
@@ -219,7 +218,7 @@ function Room:GetNextConversation(tag)
 		end
 	else
 		for i,v in ipairs(self.conversations) do
-			if (v.tag == nil) then
+			if (v.tag == nil and v.tags == nil) then
 				if (v.condition == nil or v.condition(self)) then
 					return v
 				end
@@ -235,6 +234,7 @@ end
 function Room:OnEnterRoom()
 	s.hasTalkedInRoom = true
 
+print("entering room", self.name)
 	local firstTimeKey = "__" .. self.name
 	if (s[firstTimeKey] ~= 1) then
 		self:OnFirstEnter()

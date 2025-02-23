@@ -51,6 +51,8 @@ public:
 		QueryStateDelegate = InQueryStateDelegate;
 		InterfaceChangingDelegate = InInterfaceChangingDelegate;
 	}
+	
+	void Reorder(int Mode);
 
 	virtual void CustomPostChildrenRender() override;
 	virtual void OnInput(const Vector& ScreenLocation, int RepeatIndex) override;

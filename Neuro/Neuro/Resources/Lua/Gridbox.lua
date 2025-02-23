@@ -7,19 +7,26 @@ Gridbox = LuaObj:new {
 	sizeY = 0
 }
 
-function Gridbox:OpenBox(width, height)
+function Gridbox:OpenBox()
+end
+
+function Gridbox:OnOpenBox(width, height, this)
 	self.detailsIndex = 0
 	self.sizeX = width
 	self.sizeY = height
-	
+	self.cppthis = this
+	self.blockInput = false
+
 	self.numMessagesPerPage = self.sizeY - 6
 	if self.numMessagesPerPage > 9 then
 		self.numMessagesPerPage = 9
 	end
+
+	self:OpenBox()
 end
 
 function Gridbox:Close()
-	print("closing ", self, self.title)
+	print("closing ", self)
 	CloseBox(self)
 end
 
@@ -28,7 +35,7 @@ function Gridbox:GetEntries()
 end
 
 function Gridbox:ShouldIgnoreAllInput()
-	return false
+	return self.blockInput
 end
 
 function Gridbox:HandleClickedEntry(id)
@@ -61,6 +68,14 @@ function Gridbox:AddExitMoreEntries(entries, needsMore)
 	end
 end
 
+function Gridbox:GetButtonOrSpaceEntries(entries)
+	local footer = "Button or [space] to continue"
+	if (string.len(footer) > self.sizeX) then
+		footer = "Button or [space]"
+	end
+	table.append(entries, {x = self:CenteredX(footer), y = self.sizeY - 1, text = footer} )
+end
+
 
 function Gridbox:CenteredX(str)
 	return math.floor((self.sizeX - str:len()) / 2)
@@ -83,10 +98,17 @@ end
 function Gridbox:OnGenericContinueInput()
 end
 
-function Gridbox:HandleKeyInput(keyCode, char, type)
-	return false
+function Gridbox:HandleKeyInput(keyCode, type)
+	if (type > 0) then
+		return false
+	end
+
+	self:OnGenericContinueInput()
+	return true
 end
 
-function Gridbox:HandleMouseInput(x, y, type)
-	return false
+
+function Gridbox:HandleMouseInput(x, y) --, type)
+	self:OnGenericContinueInput()
+	return true
 end

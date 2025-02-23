@@ -109,6 +109,9 @@ public:
 	bool GetFunctionValue(TableSpec Table, const char* Name, LuaRef& Result) const;
 
 	template<typename TableSpec>
+	bool GetUserDataValue(TableSpec Table, const char* Name, void*& Result) const;
+
+	template<typename TableSpec>
 	bool GetIntValues(TableSpec Table, const char* Name, std::vector<int>& Result) const;
 
 	template<typename TableSpec>
@@ -167,6 +170,7 @@ int PushParam(lua_State* L, LuaRef Param);
 int PushParam(lua_State* L, int Param);
 int PushParam(lua_State* L, const char* Param);
 int PushParam(lua_State* L, bool Param);
+int PushParam(lua_State* L, void* Param);
 
 bool GetReturn(lua_State* L, LuaRef& Param);
 bool GetReturn(lua_State* L, int& Param);
@@ -299,6 +303,14 @@ bool Lua::GetFunctionValue(TableSpec Table, const char* Name, LuaRef& Result) co
 
 	// this makes a ref to top of stack
 	Result = MakeRef();
+	return true;
+}
+
+template<typename TableSpec>
+bool Lua::GetUserDataValue(TableSpec Table, const char* Name, void*& Result) const
+{
+	GET_TABLE_VALUE_PREAMBLE(lua_islightuserdata, nullptr)
+	Result = lua_touserdata(L, -1);
 	return true;
 }
 

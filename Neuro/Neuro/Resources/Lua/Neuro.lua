@@ -1,5 +1,44 @@
 -- Globals, these will all be saved
 
+local level=0
+
+local function hook(event)
+ local t=debug.getinfo(3)
+ io.write(level," >>> ",string.rep(" ",level))
+ if t~=nil and t.currentline>=0 then io.write(t.short_src,":",t.currentline," ") end
+ t=debug.getinfo(2)
+ if event=="call" then
+  level=level+1
+ else
+  level=level-1 if level<0 then level=0 end
+ end
+ if t.what=="main" then
+  if event=="call" then
+   io.write("begin ",t.short_src)
+  else
+   io.write("end ",t.short_src)
+  end
+ elseif t.what=="Lua" then
+  io.write(event," ",t.name or "(Lua)"," <",t.linedefined,":",t.short_src,">")
+ else
+ io.write(event," ",t.name or "(C)"," [",t.what,"] ")
+ end
+ io.write("\n")
+end
+
+--debug.sethook(hook,"cr")
+level=0
+
+
+
+
+
+
+
+
+
+
+
 c = {
 	initialRoom = "chatsubo",
 	secondsPerMinute = 1,
@@ -70,10 +109,12 @@ function IncrementTime()
 	end
 
 	-- make sure the UI is updated
-	UpdateInfo();
+ 	UpdateInfo();
 end
 
 currentRoom = nil
+currentSite = nil
+currentDeck = nil
 
 
 GameScripts = {
@@ -89,12 +130,14 @@ GameScripts = {
 	"Chatsubo",
 	"BodyShop",
 	"MiscRooms",
+	"Loser",
 	
 	-- sites
 	"IRS",
 	"Cheapo",
 	"PAX",
 	"RegFellow",
+	"WorldChess",
 }
 
 function TablesMatch(g, a, b)
@@ -124,6 +167,13 @@ function table:append(item)
 	self[#self+1] = item
 end
 
+function table:concat(other)
+	for i=1,#other do
+		self[#self+1] = other[i]
+	end
+	return self
+end
+
 function table:containsArrayItem(item)
 	for _, val in ipairs(self) do
 		if (val == item) then
@@ -136,12 +186,12 @@ end
 
 function string:appendPadded(str, width)
 	local spaces = width - str:len()
-	local res = self .. str
-	for i=1,spaces do
-		res = res .. ' '
-	end
+	return self .. str .. string.rep(" ", spaces)
+end
 
-	return res
+function string:appendRightPadded(str, width)
+	local spaces = width - str:len()
+	return self .. string.rep(" ", spaces) .. str
 end
 
 function string.fromTodaysDate()

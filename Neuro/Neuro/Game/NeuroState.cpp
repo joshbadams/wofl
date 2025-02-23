@@ -6,7 +6,7 @@
 //
 
 #include "NeuroState.h"
-
+#include "Gridbox.h"
 
 NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate)
 	: StateDelegate(InStateDelegate)
@@ -23,6 +23,8 @@ NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate)
 	Lua.RegisterFunction("GoToRoom", Lua_GoToRoom);
 	Lua.RegisterFunction("UpdateInfo", Lua_UpdateInfo);
 	Lua.RegisterFunction("UpdateDialog", Lua_UpdateDialog);
+	Lua.RegisterFunction("ReorderBox", Lua_ReorderBox);
+	Lua.RegisterFunction("UpdateBoxes", Lua_UpdateBoxes);
 
 	std::vector<string> GameScripts;
 	Lua.GetStringValues("", "GameScripts", GameScripts);
@@ -216,7 +218,16 @@ void NeuroState::Tick(float DeltaTime)
 void NeuroState::ClickInventory()
 {
 	// @todo can also open when in site
-	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
+//	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
+	if (StateDelegate->IsConversationShowing())
+	{
+		StateDelegate->OpenBoxByName("InvBox_Convo");
+	}
+	else if (StateDelegate->AreBoxesShowing())
+	{
+		StateDelegate->OpenBoxByName("InvBox_Site");
+	}
+	else
 	{
 		StateDelegate->OpenBoxByName("InvBox");
 	}
@@ -229,8 +240,13 @@ void NeuroState::ClickPAX()
 //		CheckMessagesForActivation(this, Config->NewsItems, UnlockedMessages["news"]);
 //		CheckMessagesForActivation(this, Config->AllMessages["news"], UnlockedMessages["board"]);
 	
-		StateDelegate->OpenBoxByName("PAX");
-		CurrentState = State::InSite;
+		bool bHasPax;
+		Lua.GetBoolValue(CurrentRoom, "hasPax", bHasPax);
+		if (bHasPax)
+		{
+			StateDelegate->OpenBoxByName("PAX");
+			CurrentState = State::InSite;
+		}
 	}
 }
 
@@ -329,8 +345,9 @@ bool NeuroState::GetCurrentDialogLine(std::string& Line, int& Speaker, bool& bIs
 	return true;
 }
 
-std::string NeuroState::GetCurrentMessage()
+std::string NeuroState::GetCurrentMessage(bool& bNeedsPauseAtEnd)
 {
+	bNeedsPauseAtEnd = bPendingMessageNeedsPauseAtEnd;
 	return PendingMessage;
 //	if (CurrentConversation == nullptr)
 //	{
@@ -533,7 +550,13 @@ int NeuroState::Lua_ShowMessage(lua_State* L)
 {
 	NeuroState* S = State(L);
 	int StackPos = lua_gettop(L);
-	if (lua_isfunction(L, StackPos))
+	S->bPendingMessageNeedsPauseAtEnd = false;
+	if (lua_isboolean(L, StackPos))
+	{
+		S->bPendingMessageNeedsPauseAtEnd = lua_toboolean(L, StackPos);
+		StackPos--;
+	}
+	if (lua_isfunction(L, StackPos) || lua_isnil(L, StackPos))
 	{
 		// put it on top for MakeRef() (very annoying)
 		lua_pushvalue(L, StackPos);
@@ -628,6 +651,28 @@ int NeuroState::Lua_UpdateDialog(lua_State* L)
 {
 	NeuroState* S = State(L);
 	S->PendingInvalidation |= ZoneType::Dialog;
+	return 0;
+}
+
+int NeuroState::Lua_UpdateBoxes(lua_State* L)
+{
+	NeuroState* S = State(L);
+	S->StateDelegate->RefreshUI();
+
+	return 0;
+}
+
+int NeuroState::Lua_ReorderBox(lua_State* L)
+{
+	NeuroState* S = State(L);
+	
+	// push first param on top for MakeRef
+	lua_pushvalue(L, -2);
+	LuaRef BoxRef = S->Lua.MakeRef();
+	int Mode = (int)lua_tointeger(L, -1);
+	
+	S->StateDelegate->ReorderBoxWithObj(BoxRef, Mode);
+	
 	return 0;
 }
 

@@ -5,7 +5,6 @@ Chatsubo = Room:new {
 	onEnterConversation = "onEnterConversation",
 	hasPerson = true,
 	hasPax = true,
-	hasJack = true,
 	
 	south = "streetwest1",
 	
@@ -57,7 +56,7 @@ Chatsubo = Room:new {
 			{
 				{
 					line = "What deck does Shin have?",
-					response = "Your Yamamitsu UXB, Herr %name%. Shin says you pawned it at his shop."
+					response = "Your Yamamitsu UXB, Herr " .. s.name .. ". Shin says you pawned it at his shop."
 				},
 				{
 					line = "Anything else come up?",
@@ -66,7 +65,7 @@ Chatsubo = Room:new {
 				},
 				{
 					line = "Who you calling an artiste?",
-					response = "You are the artiste of the slighly funny deal, Herr %name%."
+					response = "You are the artiste of the slighly funny deal, Herr " .. s.name .. "."
 				}
 			}
 		},

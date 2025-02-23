@@ -2,9 +2,16 @@ RegFellow = Site:new {
 	title = "* Regular Fellows *",
 	comLinkLevel = 1,
 	
+	
+	passwords = {
+		"visitor",
+		"<cyberspace>",
+	},
+
 	pages = {
 		['title'] = {
-			message = "It's Showtime!\n\nWelcome to the Regular Fellows. We're a group of joeboys who consider themselves artists. If you think you're an artist as far as cranking warez are concerned, you're a Regular fellow. Just enter the password, \"VISITOR\". Have fun."
+			message = "It's Showtime!\n\nWelcome to the Regular Fellows. We're a group of joeboys who consider themselves artists. If you think you're an artist as far as cranking warez are concerned, you're a Regular fellow. Just enter the password, \"VISITOR\". Have fun.",
+			type = "title"
 		},
 		
 		['password'] = {
@@ -45,10 +52,12 @@ RegFellow = Site:new {
 			items = {
 				{ key = 'x', text = "Exit to Main", target = "main" },
 				{ key = '1', software = 210 },
-				{ key = '2', software = 200 },
+				{ key = '2', software = 206 },
 			}
 		},
-	}
+	},
+	
+	-- Coord.--0-208/32  AI--none
 }
 -- lowercase
 regfellow=RegFellow

@@ -147,7 +147,9 @@ void WoflSprite::RemoveFromParent()
 			Travel = Travel->Next;
 		}
 	}
+	Next = nullptr;
 	Parent = nullptr;
+	bIsAddedToWorld = false;
 }
 
 void WoflSprite::RemoveFromWorld()
@@ -158,7 +160,6 @@ void WoflSprite::RemoveFromWorld()
 	}
 		
 	// remove it!
-	bIsAddedToWorld = false;
 	
 	// make sure all children are tossed
 	while (Child)

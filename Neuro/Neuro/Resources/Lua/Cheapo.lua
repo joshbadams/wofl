@@ -11,7 +11,7 @@ s.item_waiting_cheapo_sake = 0
 Cheapo = Site:new {
 	title = "* The Cheapo Hotel *",
 	comLinkLevel = 1,
-
+	
 	passwords = {
 		"guest",
 		"cockroach",
@@ -88,6 +88,8 @@ Cheapo = Site:new {
 			type = "custom",
 		},
 	}
+	
+	-- Coord.--0-112/112  AI--none
 }
 -- lowercase
 cheapo = Cheapo
@@ -98,6 +100,7 @@ function Cheapo:OnPurchasedStoreItem(item)
 	local itemVar = 'item_waiting_' .. item.tag
 	local numWaiting = s[itemVar] or 0
 	s[itemVar] = numWaiting + 1
+	s.cheapo_charges = s.cheapo_charges + item.cost
 end
 
 
@@ -122,11 +125,11 @@ function Cheapo:GetBillEntries(entries)
 
 	-- the account line, optionally editable
 	if (self.currentPage == "bill_view") then
-		table.append(entries, { x = 0, y = 5, text = string.appendPadded("   ", "On account1:", 26) .. s.cheapo_account })
+		table.append(entries, { x = 0, y = 5, text = string.appendPadded("   ", "On account:", 26) .. s.cheapo_account })
 	elseif (self.currentPage == "bill_edit") then
-		table.append(entries, { x = 0, y = 5, text = string.appendPadded("O. ", "On account2:", 26) .. s.cheapo_account, clickId = 10, key = "o" })
+		table.append(entries, { x = 0, y = 5, text = string.appendPadded("O. ", "On account:", 26) .. s.cheapo_account, clickId = 10, key = "o" })
 	else
-		table.append(entries, { x = 0, y = 5, text = string.appendPadded("   ", "On account3:", 26) })
+		table.append(entries, { x = 0, y = 5, text = string.appendPadded("   ", "On account:", 26) })
 		table.append(entries, { x = 29, y = 5, entryTag = "account", numeric = true })
 	end
 
@@ -170,11 +173,62 @@ function Cheapo:OnTextEntryComplete(text, tag)
 
 	local amount = tonumber(text)
 
-	cheapo_account = math.min(amount, cheapo_charges)
+	if (amount <= s.cheapo_charges) then
+		s.cheapo_account = amount
+	end
 
 	self:GoToPage("bill_edit")
 end
 
 function Cheapo:OnTextEntryCancelled(tag)
 	self:GoToPage("bill_edit")
+end
+
+
+
+--------------
+
+CheapHotel = Room:new {
+	name = "cheaphotel",
+	hasPerson = false,
+	hasPax = true,
+	hasJack = true,
+	
+	longDescription = "Cheap Hotel smells of cigarettes and cheap perfume. The roof is made of thin laminated matting that rattles in the wind. White fiberglass coffins serve as the rooms, stacked like surplus Godzilla teeth. Your coffin number is 92, three meters long with an oval hatch at the end. There is also a PAX booth here.",
+	description = "You're at the Cheap Hotel.",
+		
+	east = "streetcenter3",
+}
+cheaphotel = CheapHotel
+
+
+function CheapHotel:HandleEnter(desc)
+	local message = desc
+	local postFunc = nil
+	
+	if (s.cheapo_charges > s.cheapo_account) then
+		message = message .. "\n\nThe management kicks you out for not paying your bill."
+		postFunc = function() GoToRoom("streetcenter3") end
+	elseif (s.item_waiting_cheapo_caviar > 0 or s.item_waiting_cheapo_sake > 0) then
+		if (s.item_waiting_cheapo_caviar > 0) then
+			table.append(s.inventory, 2)
+			s.item_waiting_cheapo_caviar = 0
+		end
+		if (s.item_waiting_cheapo_sake > 0) then
+			table.append(s.inventory, 3)
+			s.item_waiting_cheapo_sake = 0
+		end
+		message = message .. "\n\nYour room service order is delivered to you."
+	end
+
+	-- true means to pause before continuing
+	ShowMessage(message, postFunc, postFunc ~= nil)
+end
+
+function CheapHotel:OnFirstEnter()
+	self:HandleEnter(self.longDescription)
+end
+
+function CheapHotel:OnEnter()
+	self:HandleEnter(self.description)
 end

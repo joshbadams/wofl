@@ -69,6 +69,7 @@ public:
 	virtual void Invalidate(ZoneType Zone) = 0;
 	virtual LuaRef OpenBoxByName(const char* Name) = 0;
 	virtual bool CloseBoxWithObj(LuaRef BoxObj) = 0;
+	virtual bool ReorderBoxWithObj(LuaRef BoxObj, int Mode) = 0;
 	virtual bool AreBoxesShowing() = 0;
 	virtual bool IsConversationShowing() = 0;
 	virtual bool IsMessageActive() = 0;
@@ -146,7 +147,7 @@ public:
 	virtual LuaRef GetTableValue(const std::string& Key) const override;
 			
 	bool GetCurrentDialogLine(std::string& Line, int& Speaker, bool& bIsThought, bool& bHasTextEntry);
-	std::string GetCurrentMessage();
+	std::string GetCurrentMessage(bool& bNeedsPauseAtEnd);
 	std::string GetCurrentInfoText();
 
 	void ClickInventory();
@@ -174,6 +175,8 @@ private:
 	static int Lua_GoToRoom(lua_State* L);
 	static int Lua_UpdateInfo(lua_State* L);
 	static int Lua_UpdateDialog(lua_State* L);
+	static int Lua_ReorderBox(lua_State* L);
+	static int Lua_UpdateBoxes(lua_State* L);
 
 	void ActivateRoom(LuaRef OldRoom, LuaRef NewRoom);
 		
@@ -195,6 +198,7 @@ private:
 	LuaRef Lua_OnMessageComplete;
 
 	std::string PendingMessage;
+	bool bPendingMessageNeedsPauseAtEnd = false;
 
 	ZoneType PendingInvalidation;
 	InfoType CurrentInfoType;

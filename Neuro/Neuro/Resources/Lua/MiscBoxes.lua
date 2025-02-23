@@ -18,9 +18,7 @@ SystemBox = Gridbox:new {
 
 }
 
-function SystemBox:OpenBox(width, height)
-	Gridbox.OpenBox(self, width, height)
-
+function SystemBox:OpenBox()
 	self.Phase = SystemPhase.Menu
 end
 
@@ -82,9 +80,8 @@ ShopBox = Gridbox:new {
 	items = {},
 }
 
-function ShopBox:OpenBox(width, height)
+function ShopBox:OpenBox()
 	print("Opened a shop")
-	Gridbox:OpenBox(width, height)
 
 	self.firstVisibleIndex = 1
 	self.numItemsPerPage = self.sizeY - 2
@@ -147,7 +144,7 @@ print("num items", #self.items)
 		local priceString = string.format("%d", self:GetPrice(id))
 		label = label:appendPadded(priceString, 6)
 
-		table.append(entries, {x = 0, y = curY, text = label, clickId = listIndex, key = tostring(localIndexl) })
+		table.append(entries, {x = 0, y = curY, text = label, clickId = listIndex, key = tostring(localIndex) })
 
 		listIndex = listIndex + 1
 		localIndex = localIndex + 1
@@ -208,6 +205,10 @@ function ShopBox:HandleClickedMore()
 end
 
 function ShopBox:HandleClickedExit()
+	if (not self.boughtSold) then
+		self:OnBoughtSoldNothing()
+	end
+
 	self:Close()
 end
 
@@ -247,5 +248,91 @@ end
 
 
 
+-----------------------------------------------------------------------------------------------------------------
+-- MessageBox
+-----------------------------------------------------------------------------------------------------------------
+
+MessageBox = Gridbox:new {
+	x = 200,
+	y = 600,
+	w = 500,
+	h = 100,
+	
+	message = ""
+}
+
+function MessageBox:GetEntries()
+	local entries = {}
+	table.append(entries, {x = self:CenteredX(self.message), y = 0, text = self.message})
+	return entries
+end
+
+function MessageBox:SetMessage(msg)
+	self.message = msg
+	UpdateBoxes()
+end
+
+function MessageBox:OnGenericContinueInput()
+	self:Close()
+end
 
 
+
+DecodePhase = {
+	Prompt = {},
+	Success = {},
+	Failed = {},
+}
+
+DecodeBox = Gridbox:new {
+	x = 250,
+	y = 430,
+	w = 520,
+	h = 250,
+}
+
+function DecodeBox:OpenBox()
+	self.phase = DecodePhase.Prompt
+end
+
+function DecodeBox:GetEntries()
+	local entries = {}
+	table.append(entries, {x = self:CenteredX("Cryptology"), y = 0, text = "Cryptology"})
+	table.append(entries, {x = 0, y = 1, text = "Enter word to decode:"})
+	if (self.phase == DecodePhase.Prompt) then
+		table.append(entries, {x = 0, y = 2, entryTag = "encrypted" })
+	elseif (self.phase == DecodePhase.Success) then
+		table.append(entries, {x = 0, y = 2, text = self.input })
+		table.append(entries, {x = 0, y = 3, text = "Uncoded word is:" })
+		table.append(entries, {x = 0, y = 4, text = self.decoded })
+
+		self:GetButtonOrSpaceEntries(entries)
+	elseif (self.phase == DecodePhase.Failed) then
+		table.append(entries, {x = 0, y = 2, text = self.input })
+		table.append(entries, {x = 0, y = 3, text = "Unable to decode word." })
+
+		self:GetButtonOrSpaceEntries(entries)
+	end
+	return entries
+end
+
+function DecodeBox:OnGenericContinueInput()
+	self.phase = DecodePhase.Prompt
+end
+
+function DecodeBox:OnTextEntryComplete(text, tag)
+	self.input = text
+	local decodedEntry = CryptoDecode[string.lower(text)]
+	local cryptoLevel = s.skillLevels[401]
+print("dcodingL ", self.input, self.decoded, cryptoLevel)
+	if (decodedEntry == nil or cryptoLevel < decodedEntry.level) then
+		self.phase = DecodePhase.Failed
+	else
+		self.phase = DecodePhase.Success
+		self.decoded = decodedEntry.result
+	end
+end
+
+function DecodeBox:OnTextEntryCancelled()
+	self:Close()
+end

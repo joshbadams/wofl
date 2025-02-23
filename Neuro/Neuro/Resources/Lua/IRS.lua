@@ -1,9 +1,19 @@
 
-IRS = Site:new {
+IRS = Site:new {	
+	comLinkLevel = 3,
 	
 	title = "** Internal Revenue Service **",
 
+	passwords = {
+		"taxinfo",
+		"audit",
+		"<cyberspace>"
+	},
+
 	pages = {
+		['title'] = {
+			type = "title",
+		},
 		['password'] = {
 			type = "password",
 		},
@@ -78,7 +88,7 @@ IRS = Site:new {
 			columns = { { field = "Name", width = 15 } , { field = "BAMA ID", width = 0 } },
 			items = {
 				{
-					Name = "%name%",
+					Name = s.name,
 					['BAMA ID'] = s.bamaid,
 					message = "Reason: Tax evasion."
 				},
@@ -106,6 +116,8 @@ IRS = Site:new {
 		}
 		
 	}
+	
+	-- Coord.--1-272/64  AI--none
 }
 -- lowercase
 irs = IRS

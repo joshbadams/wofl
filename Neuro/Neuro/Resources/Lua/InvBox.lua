@@ -7,6 +7,8 @@ InvPhase = {
 	ConfirmGive = {},
 	Login = {},
 	LoginError = {},
+	Incompatible = {},
+	ShortMessage = {},
 	UsedSkill = {},
 	NothingHappens = {},
 }
@@ -28,10 +30,7 @@ InvBox = Gridbox:new {
 	h = 280,
 }
 
-function InvBox:OpenBox(width, height)
-	print("opening invbox", s.inventory, s.money)
-	Gridbox.OpenBox(self, width, height)
-
+function InvBox:OpenBox()
 	self.phase = InvPhase.List
 	self.page = 0
 	self.numInvPerPage = self.sizeY - 2;
@@ -57,6 +56,10 @@ function InvBox:GetEntries()
 		self:GetLoginEntries(entries)
 	elseif (self.phase == InvPhase.LoginError) then
 		self:GetLoginErrorEntries(entries)
+	elseif (self.phase == InvPhase.Incompatible) then
+		self:GetIncompatibleEntries(entries)
+	elseif (self.phase == InvPhase.ShortMessage) then
+		table.append(entries, { x = 0, y = 1, text = self.message })
 	elseif (self.phase == InvPhase.UsedSkill) then
 		table.append(entries, { x = 1, y = 2, text = "Skill chip implanted"})
 	elseif (self.phase == InvPhase.NothingHappens) then
@@ -67,7 +70,12 @@ function InvBox:GetEntries()
 end
 
 function InvBox:GetInvEntries(entries, inv, heading)
-	
+print("inv entries", self.page, self.numInvPerPage, #inv)
+
+	if (self.page > 0 and self.page * self.numInvPerPage >= #inv) then
+		self.page = self.page - 1
+	end
+
 	table.append(entries, { x = 1, y = 0, text = heading })
 
 	local itemIndex = self.page * self.numInvPerPage + 1
@@ -128,6 +136,11 @@ function InvBox:GetLoginErrorEntries(entries)
 	table.append(entries, { x = 0, y = 1, text = "Unknown link." })
 end
 
+function InvBox:GetIncompatibleEntries(entries)
+	table.append(entries, { x = 0, y = 0, text = string.format("%s %d.0", self.activeSoftware.name, self.activeSoftware.version) })
+	table.append(entries, { x = 0, y = 1, text = "Incompatible link." })
+end
+
 
 
 
@@ -135,6 +148,9 @@ end
 
 
 function InvBox:HandleClickedEntry(id)
+	if (self.blockInput) then
+		return
+	end
 
 	print("Inv clicked", self, self.phase, id)
 
@@ -172,7 +188,6 @@ function InvBox:HandleClickedMore()
 end
 
 function InvBox:OnTextEntryComplete(text, tag)
-print("text enyry", text, tag)
 	if (self.phase == InvPhase.Login) then
 		if (text == "") then
 			self:Close()
@@ -181,8 +196,10 @@ print("text enyry", text, tag)
 
 		local siteName = string.lower(text)
 		local site = _G[siteName]
-		if (site == nil or site.comLinkLevel == nil) then
+		if (site == nil) then
 			self.phase = InvPhase.LoginError
+		elseif (site.comLinkLevel > self.activeSoftware.version) then
+			self.phase = InvPhase.Incompatible
 		else
 			OpenBox(siteName)
 			s.lastSite = siteName
@@ -207,8 +224,14 @@ function InvBox:OnTextEntryCancelled(tag)
 end
 
 function InvBox:OnGenericContinueInput()
-	if (self.phase == InvPhase.LoginError) then
+	if (self.blockInput) then
+		return
+	end
+
+	if (self.phase == InvPhase.LoginError or self.phase == InvPhase.Incompatible) then
 		self.phase = InvPhase.Login
+	elseif (self.phase == InvPhase.ShortMessage or self.phase == InvPhase.NothingHappens) then
+		self.phase = self:Close()
 	elseif (self.phase == InvPhase.UsedSkill) then
 		self.phase = InvPhase.List
 	end
@@ -228,6 +251,7 @@ function InvBox:PerformAction(action)
 	elseif (action == InvAction.Operate) then
 		if (item.type == "deck") then
 			self.phase = InvPhase.Software
+			s.currentDeckId = s.inventory[self.invItem]
 		elseif (item.type == "skill") then
 			self:UseSkill()
 		end
@@ -254,10 +278,13 @@ function InvBox:UseSoftware(softwareItem)
 	item = Items[s.software[softwareItem]]
 
 	if (item.scope == "jack") then
-		self.activeSoftware = item
-		self.phase = InvPhase.Login
---		OpenBox("Login")
---		self:Close()
+		if (currentRoom.hasJack) then
+			self.activeSoftware = item
+			self.phase = InvPhase.Login
+		else
+			self.phase = InvPhase.ShortMessage
+			self.message = "No jack here."
+		end
 	else
 		self.phase = InvPhase.NothingHappens
 	end
@@ -280,6 +307,45 @@ end
 
 
 
+InvBox_Site = InvBox:new {
+	
+}
+
+function InvBox_Site:OpenBox()
+	InvBox.OpenBox(self)
+
+	self.phase = InvPhase.Software
+end
+
+function InvBox_Site:UseSoftware(softwareItem)
+	software = Items[s.software[softwareItem]]
+print("using software: ", currentSite, software, software.scope)
+
+	-- todo: make a title page specific one maybe?
+	if (currentSite ~= nil) then
+		local error = currentSite:CanUseSoftware(software)
+		if (error == "") then
+			self:Close()
+		elseif (error ~= nil) then
+			self.phase = InvPhase.ShortMessage
+			self.message = error
+		else
+			self:Close()
+			currentSite:UseSoftware(software)
+		end
+	else
+		self.phase = InvPhase.NothingHappens
+	end
+end
+
+function InvBox_Site:HandleClickedExit()
+	currentSite:UseSoftware(nil)
+	self:Close()
+end
+
+
+
+
 
 SkillBox = Gridbox:new {
 	x = 150,
@@ -288,9 +354,7 @@ SkillBox = Gridbox:new {
 	h = 280,
 }
 
-function SkillBox:OpenBox(width, height)
-	Gridbox.OpenBox(self, width, height)
-
+function SkillBox:OpenBox()
 	self.page = 0
 	self.numSkillsPerPage = self.sizeY - 2;
 	self.numPages = math.ceil(#s.inventory / self.numSkillsPerPage);
@@ -298,9 +362,14 @@ end
 
 function SkillBox:HandleClickedEntry(id)
 	local skill = Items[s.skills[id]]
-	local lvel = s.skillLevels[s.skills[id]]
+	local level = s.skillLevels[s.skills[id]]
+print("skill", skill.scope, skill.box, level)
 	if (skill.scope == "room") then
 		currentRoom:UseSkill(skill, level)
+	elseif (skill.scope == "anytime") then
+		if (skill.box ~= nil) then
+			OpenBox(skill.box)
+		end
 	end
 
 	self:Close()
@@ -323,9 +392,7 @@ function SkillBox:GetEntries()
 		
 		local skillId = s.skills[itemIndex];
 		local desc = string.format("%d. ", line)
-print("skill", desc, line, skillId)
-print(Items[skillId].name)
-print(s.skillLevels[skillId])
+
 		desc = string.appendPadded(desc, Items[skillId].name, self.sizeX - 5) .. s.skillLevels[skillId]
 		table.append(entries, { x = 0, y = line, text = desc, clickId = itemIndex, key = tostring(line) })
 

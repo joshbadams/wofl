@@ -18,6 +18,10 @@ Software = Item:new {
 	scope = nil, -- where it's usable, like deck, site, etc
 }
 
+FakeSoftware = Software:new {
+	scope = "fake",
+}
+
 Comlink = Software:new {
 	name = "Comlink",
 	scope = "jack",
@@ -41,12 +45,42 @@ Items = {
 	[1] = Item:new {
 		name = "pawn ticket"
 	},
-	
-	[100] = Deck:new {
-		name = "UXB",
-		capacity = 5,
-		cost = 100,
+	[2] = Item:new {
+		name = "caviar"
 	},
+	[3] = Item:new {
+		name = "sake"
+	},
+	[4] = Item:new {
+		name = "guest pass",
+		cost = 0
+	},
+
+	[100] = Deck:new { capacity =  5, buggy = true,  cyberspace = false, manufacturer = "Yamamitsu", name = "UXB" },
+	[101] = Deck:new { capacity =  6, buggy = false, cyberspace = false, manufacturer = "Yamamitsu", name = "XXB" },
+	[102] = Deck:new { capacity = 10, buggy = false, cyberspace = false, manufacturer = "Yamamitsu", name = "ZXB" },
+	[103] = Deck:new { capacity = 10, buggy = false, cyberspace = false, manufacturer = nil, name = "Blue Light Special" },
+	[104] = Deck:new { capacity =  5, buggy = false, cyberspace = false, manufacturer = "Ausgezeichnet", name = "188 BJB" },
+	[105] = Deck:new { capacity = 11, buggy = false, cyberspace = false, manufacturer = "Ausgezeichnet", name = "350 SL" },
+	[106] = Deck:new { capacity = 15, buggy = false, cyberspace = false, manufacturer = "Ausgezeichnet", name = "440 SDI" },
+	[107] = Deck:new { capacity = 20, buggy = false, cyberspace = false, manufacturer = "Ausgezeichnet", name = "550 GT" },
+	[108] = Deck:new { capacity =  5, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Hiki-Gaeru" },
+	[109] = Deck:new { capacity = 10, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Gaijin" },
+	[110] = Deck:new { capacity = 12, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Bushido" },
+	[111] = Deck:new { capacity = 15, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Edokko" },
+	[112] = Deck:new { capacity = 18, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Katana" },
+	[113] = Deck:new { capacity = 20, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Tofu" },
+	[114] = Deck:new { capacity = 24, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Shogun" },
+	[115] = Deck:new { capacity = 10, buggy = false, cyberspace = false, manufacturer = nil, name = "Ninja 2000" },
+	[116] = Deck:new { capacity = 12, buggy = false, cyberspace = false, manufacturer = nil, name = "Ninja 3000" },
+	[117] = Deck:new { capacity = 20, buggy = false, cyberspace = false, manufacturer = nil, name = "Ninja 4000" },
+	[118] = Deck:new { capacity = 25, buggy = false, cyberspace = false, manufacturer = nil, name = "Ninja 5000" },
+	[119] = Deck:new { capacity = 25, buggy = false, cyberspace = false, manufacturer = nil, name = "Samurai Seven" },
+	[120] = Deck:new { capacity = 11, buggy = false, cyberspace = false, manufacturer = "Ono-Sendai", name = "Cyberspace II" },
+	[121] = Deck:new { capacity = 15, buggy = false, cyberspace = false, manufacturer = "Ono-Sendai", name = "Cyberspace III" },
+	[122] = Deck:new { capacity = 20, buggy = false, cyberspace = false, manufacturer = "Ono-Sendai", name = "Cyberspace VI" },
+	[123] = Deck:new { capacity = 25, buggy = false, cyberspace = false, manufacturer = "Ono-Sendai", name = "Cyberspace VII" },
+
 	
 	[200] = Comlink:new {
 		cost = 100,
@@ -56,20 +90,39 @@ Items = {
 		cost = 0,
 		version = 2,
 	},
-	[205] = Software:new {
-		name = "Scout",
-		version = 1,
-		scope = "titlepage",
+	[202] = Comlink:new {
+		cost = 0,
+		version = 3,
+	},
+	[203] = Comlink:new {
+		cost = 0,
+		version = 4,
+	},
+	[204] = Comlink:new {
+		cost = 0,
+		version = 5,
+	},
+	[205] = Comlink:new {
+		cost = 0,
+		version = 6,
 	},
 	[206] = Software:new {
 		name = "Scout",
-		version = 2,
-		scope = "titlepage",
+		version = 1,
+		scope = "site",
 	},
 	[210] = Software:new {
 		name = "BattleChess",
 		version = 2,
-		scope = "chess",
+		scope = "site",
+	},
+	[280] = FakeSoftware:new {
+		name = "Mindbender",
+		version = 3,
+	},
+	[281] = FakeSoftware:new {
+		name = "Chaos Videosoft",
+		version = 3,
 	},
 
 	[300] = Organ:new { name = "Heart", sell=6000, buy=6600, hp = 200 },
@@ -98,6 +151,14 @@ Items = {
 	[319] = Organ:new { name = "Appendix", sell=3, buy=3, hp=10 },
 	
 	[400] = Skill:new { name = "CopTalk", cost = 100, scope = "room" },
+	[401] = Skill:new { name = "Cryptology", cost = 0, scope = "anytime", box = "DecodeBox" },
+	[402] = Skill:new { name = "Hwardware Repair", cost = 1000, scope = "room" },
+}
+
+CryptoDecode = {
+	['dumbo'] = { result = "ROMCARDS", level = 1 },
+	['vulcan'] = { result = "dunno", level = 2 },
+	
 }
 
 function GetItemDesc(itemId)

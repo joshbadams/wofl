@@ -161,7 +161,6 @@ public:
 protected:
 	NSBundle* WoflBundle;
 	NSBundle* MainBundle;
-
 };
 
 #endif

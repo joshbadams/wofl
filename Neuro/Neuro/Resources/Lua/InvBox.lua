@@ -3,7 +3,7 @@ InvPhase = {
 	Software = {},
 	Action = {},
 	Amount = {},
-	ConfirmDiscaard = {},
+	ConfirmDiscard = {},
 	ConfirmGive = {},
 	Login = {},
 	LoginError = {},
@@ -52,6 +52,8 @@ function InvBox:GetEntries()
 		self:GetActionEntries(entries)
 	elseif (self.phase == InvPhase.Amount) then
 		self:GetAmountEntries(entries)
+	elseif (self.phase == InvPhase.ConfirmDiscard) then
+		self:GetConfirmEntries(entries)
 	elseif (self.phase == InvPhase.Login) then
 		self:GetLoginEntries(entries)
 	elseif (self.phase == InvPhase.LoginError) then
@@ -70,9 +72,11 @@ function InvBox:GetEntries()
 end
 
 function InvBox:GetInvEntries(entries, inv, heading)
-print("inv entries", self.page, self.numInvPerPage, #inv)
+print("inv entries", self.page, self.numInvPerPage, numItems)
 
-	if (self.page > 0 and self.page * self.numInvPerPage >= #inv) then
+	local numItems = table.count(inv)
+
+	if (self.page > 0 and self.page * self.numInvPerPage >= numItems) then
 		self.page = self.page - 1
 	end
 
@@ -81,7 +85,7 @@ print("inv entries", self.page, self.numInvPerPage, #inv)
 	local itemIndex = self.page * self.numInvPerPage + 1
 	for line=1, self.numInvPerPage do
 
-		if (itemIndex > #inv) then
+		if (itemIndex > numItems) then
 			break
 		end
 		
@@ -92,7 +96,7 @@ print("inv entries", self.page, self.numInvPerPage, #inv)
 	end
 
 	-- exit / more buttons
-	needsMore = #inv > self.numInvPerPage
+	needsMore = numItems > self.numInvPerPage
 	self:AddExitMoreEntries(entries, needsMore)
 end
 
@@ -122,6 +126,18 @@ function InvBox:GetAmountEntries(entries)
 	table.append(entries, { x = 0, y = 1, text = "Give how much?" })
 	table.append(entries, { x = 0, y = 2, text = "> " })
 	table.append(entries, { x = 2, y = 2, entryTag = "amount", numeric = true })
+end
+
+function InvBox:GetConfirmEntries(entries)
+	local header = "Discard"
+	if (self.phase == InvPhase.ConfirmGive) then
+		header = "Give"
+	end
+	table.append(entries, { x = self:CenteredX(header), y = 0, text = header })
+	table.append(entries, { x = 2, y = 3, text = GetItemDesc(s.inventory[self.invItem]) })
+	table.append(entries, { x = 0, y = 5, text = "Are you sure ( / )" })
+	table.append(entries, { x = 14, y = 5, text = "Y", clickId = InvAction.Yes, key = "y" })
+	table.append(entries, { x = 16, y = 5, text = "N", clickId = InvAction.No, key = "n" })
 end
 
 function InvBox:GetLoginEntries(entries)
@@ -164,16 +180,16 @@ function InvBox:HandleClickedEntry(id)
 	elseif (self.phase == InvPhase.ConfirmGive) then
 		if (id == InvAction.Yes) then
 			currentRoom:GiveItem(self.invItem)
-			table:removeKey(s.inventory, self.invItem)
-		elseif (id == InvAction.No) then
-			self.phase = InvPhase.List
+			table.removeArrayItem(s.inventory, self.invItem)
 		end
+		self.phase = InvPhase.List
 	elseif (self.phase == InvPhase.ConfirmDiscard) then
 		if (id == InvAction.Yes) then
-			table:removeKey(s.inventory, self.invItem)
-		elseif (id == InvAction.No) then
-			self.phase = InvPhase.List
+print("size before rmeove", table.count(s.inventory))
+			table.removeArrayItem(s.inventory, self.invItem)
+print("size after rmeove", table.count(s.inventory))
 		end
+		self.phase = InvPhase.List
 	end
 end
 

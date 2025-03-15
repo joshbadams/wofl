@@ -178,6 +178,16 @@ NeuroGame::NeuroGame()
 	WoflWorld::Get()->SetRootSprite(Background);
 }
 
+void NeuroGame::ResetLua()
+{
+	vector<class Gridbox*> Copy = Boxes;
+	for (Gridbox* Box : Copy)
+	{
+		CloseBoxWithObj(Box->LuaBox);
+	}
+	BoxCache.clear();
+}
+
 LuaRef NeuroGame::OpenBoxByName(const char* Name)
 {
 	LuaRef NewBox;
@@ -308,6 +318,12 @@ void NeuroGame::RefreshUI()
 
 bool NeuroGame::OnGlobalKey(const KeyEvent& Event)
 {
+	if (Event.KeyCode == WoflKeys::F1)
+	{
+		State.ReloadLua();
+		return true;
+	}
+	
 	return false;
 	
 	

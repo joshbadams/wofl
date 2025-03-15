@@ -74,6 +74,7 @@ public:
 	virtual bool IsConversationShowing() = 0;
 	virtual bool IsMessageActive() = 0;
 	virtual void RefreshUI() = 0;
+	virtual void ResetLua() = 0;
 
 };
 
@@ -120,12 +121,14 @@ public:
 	// IJsonObj
 	virtual Json::Value ToJsonObject() override;
 	virtual void FromJsonObject(const Json::Value& Object) override;
-	
+
 	
 	// IInterfaceChangingStateDelegate
 	virtual void MessageComplete() override;
 	virtual void GridboxClosed(LuaRef Box) override;
 
+	
+	void ReloadLua();
 	
 	
 	void Tick(float DeltaTime);
@@ -177,6 +180,8 @@ private:
 	static int Lua_UpdateDialog(lua_State* L);
 	static int Lua_ReorderBox(lua_State* L);
 	static int Lua_UpdateBoxes(lua_State* L);
+	
+	void InitLua();
 
 	void ActivateRoom(LuaRef OldRoom, LuaRef NewRoom);
 		

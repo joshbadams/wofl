@@ -49,10 +49,15 @@ RegFellow = Site:new {
 		
 		['checkout'] = {
 			type = "download",
+			title = "Checkout Counter",
 			items = {
 				{ key = 'x', text = "Exit to Main", target = "main" },
 				{ key = '1', software = 210 },
 				{ key = '2', software = 206 },
+				{ key = '3', software = 201 },
+			},
+			entries = {
+				{ x = 0, y = 11, text = "** NOTE: ComLink 2.0 is only here for the proof of concept, until the location where you get it normally is coded :)", wrap = -1}
 			}
 		},
 	},

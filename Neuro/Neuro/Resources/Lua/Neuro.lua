@@ -144,9 +144,15 @@ function TablesMatch(g, a, b)
 	return a == b
 end
 
+function table:count()
+	local size = 0
+	for k,v in pairs(self) do
+		size = size + 1
+	end
+	return size
+end
 
-
-function table:removekey(key)
+function table:removeKey(key)
 	local element = self[key]
 	self[key] = nil
 	return element

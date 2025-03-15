@@ -49,6 +49,12 @@
             ReferencedContainer = "container:Neuro.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-lua /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Resources/Lua"
+            isEnabled = "NO">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

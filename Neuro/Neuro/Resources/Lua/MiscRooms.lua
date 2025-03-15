@@ -56,7 +56,7 @@ end
 StreetCenter3 = Room:new {
 	name = "streetcenter3",
 	
-	-- east = "streetmain1",
+	east = "streetmain1",
 	west = "cheaphotel",
 	north = "streetcenter2",
 	south = "streetcenter4",
@@ -86,16 +86,45 @@ StreetCenter5 = Room:new {
 }
 streetcenter5 = StreetCenter5
 
+
+s.main1Count = 0
+StreetMain1 = Room:new {
+	name = "streetmain1",
+	
+	west = "streetcenter3",
+	east = "streetmain2",
+	
+	girlMessage = "One of Lonny Zone's working girls is standing here in the street, leaning against a light tower. She carefully looks you over.",
+	
+	conversations = {
+		condition = function(self) return self.hasPerson end,
+		tag = "girlstart",
+		lines = {
+			"Hey, sailer. New in town?"
+		}
+	}
+}
+
+function StreetMain1:OnEnterRoom()
+	Room.OnEnterRoom(self)
+
+--	if (s.mainCount == 2)
+	
+end
+
+streetmain1 = StreetMain1
+
+
 ----------------------------------------------------------------------------------
 
 -- state:
 -- 0: walking in first time, or after using coptalk
 -- 1: has chosen "I came in for a donut. Is there some law against that?", which activates some options without kicking out
 -- 2: has left room and come back, angering cop
--- 3: used CopTalk in state 0
--- 4: used CopTalk in state 2
--- 5: has used CopTalk and is talking cop stuff
+-- 11: said CopTalk level 1 line
+-- 12: said CopTalk level 2 line
 s.donutworld = 0
+s.usingCopTalk = 0
 DonutWorld = Room:new {
 	
 	name = "donutworld",
@@ -115,20 +144,25 @@ DonutWorld = Room:new {
 		},
 				
 		{
-			condition = function() return s.donutworld < 2 or s.donutworld == 3 end,
+			condition = function() return s.donutworld < 2 end,
 			options = {
 				{
-					condition = function() return s.donutworld == 3 or s.donutworkd == 4 end,
-					line = function() if (s.donutworld == 3) then return "Sure and begorrah, O'Riley. If you don't recognize me, you'll get my Irish up." else
-						return "Well, now! My Irish eyes are smiling, O'Riley! Corned beef and cabbage! Got any news?" end end,
+					condition = function() return s.donutworld == 0 and s.usingCopTalk >= 2 end,
+					line = "Saint Patty's Day. I'm looking for the Little People, don't you know..",
+					response = "Mulligan! I can barely understand your thick Irish accent! And I almost didn't recognize you!",
+					onEnd = function() s.donutworld = 12; end
+				},
+				{
+					condition = function() return s.donutworld == 0 and s.usingCopTalk >= 1; end,
+					line = "Sure and begorrah, O'Riley. If you don't recognize me, you'll get my Irish up.",
 					response = "Finnegan, old pal! Top of the mornin' to you! I didn't recognize you!",
-					onEnd = function() s.donutworld = 5; end
+					onEnd = function() s.donutworld = 11; end
 				},
 				{
 					condition = function() return s.donutworld == 0 end,
 					line = "I came in for a donut. Is there some law against that?",
 					response = "This is a donut shop, citizen. Only cops are allowed in donut shops.",
-					onEnd = function() s.donutworld = 1; print("setting to 1") end
+					onEnd = function() s.donutworld = 1 end
 				},
 				{
 					condition = function() return s.donutworld == 0 end,
@@ -148,25 +182,31 @@ DonutWorld = Room:new {
 				},
 				{
 					line = "Forgive me, sir. I thoroughly despise myself for making such a blunder.",
-					response = "Just don't let me caatch you in here again. How get out of here.",
+					response = "Just don't let me catch you in here again. How get out of here.",
 					onEnd = function() GoToRoom("streetwest2") end
 				},
 				{
 					condition = function() return s.donutworld == 1 end,
 					line = "Am I ever going to catch a break in this game?",
-					response = "Just don't let me caatch you in here again. How get out of here.",
+					response = "Just don't let me catch you in here again. How get out of here.",
 					onEnd = function() GoToRoom("streetwest2") end
 				},
 			}
 		},
 		{
-			condition = function() return s.donutworld == 2 or s.donutworld == 4 end,
+			condition = function() return s.donutworld == 2 end,
 			options = {
 				{
-					condition = function() return s.donutworld == 4 end,
+					condition = function() return s.usingCopTalk >= 2; end,
+					line = "Sure and begorrah, O'Riley. If you don't recognize me, you'll get my Irish up.",
+					response = "FMulligan! I can barely understand your thick Irish accent! And I almost didn't recognize you!",
+					onEnd = function() s.donutworld = 12; end
+				},
+				{
+					condition = function() return s.usingCopTalk >= 1 end,
 					line = "Well, now! My Irish eyes are smiling, O'Riley! Corned beef and cabbage! Got any news?",
 					response = "Finnegan, old pal! Top of the mornin' to you! I didn't recognize you!",
-					onEnd = function() s.donutworld = 5; end
+					onEnd = function() s.donutworld = 11; end
 				},
 				{
 					line = "Can't a man get a donut in this town without getting arrested?",
@@ -187,7 +227,7 @@ DonutWorld = Room:new {
 		},
 		
 		{
-			condition = function() return s.donutworld == 5 end,
+			condition = function() return s.donutworld >= 11 end,
 			options = {
 				{
 					line = "Begorrah! I forgot the comlink number for the Chiba Tactical Police!",
@@ -198,8 +238,18 @@ DonutWorld = Room:new {
 					response = "Wild Irish Rose is a hooker on Memory Lane! The coded SEA password is SMEEGLDIPO, remember?",
 				},
 				{
-					line = "O'Riley! I heard the changed the Fuji Electric passwi=ord to \"Uisquebaugh.\" Is that right?",
+					line = "O'Riley! I heard the changed the Fuji Electric password to \"Uisquebaugh.\" Is that right?",
 					response = "The coded Fuji password is ABURAKKOI. They haven't changed it in years.",
+				},
+				{
+					condition = function() return s.donutworld >= 12 end,
+					line = "Have you heard any news, then, O'Riley? Found out where the Little People keep their warez?",
+					response = "Just got through questioning Shiva. She says illegal warez are available on the Gentleman Loser DB.",
+				},
+				{
+					condition = function() return s.donutworld >= 12 end,
+					line = "Fergus gave me the second level password for the Chiba Tactical Police but I seem to have forgotten it again!",
+					response = "You seem to be forgetting a lot! The coded word is SNORSKEE.",
 				},
 			}
 		},
@@ -208,12 +258,10 @@ DonutWorld = Room:new {
 
 function DonutWorld:UseSkill(skill)
 	-- if using CopTalk before we've opened our mouth, active cop mode
-	if (skill.name == "CopTalk" and not s.hasTalkedInRom) then
-		if (s.donutworld < 2) then
-			s.donutworld = 3
-		else
-			s.donutworld = 4
-		end
+	if (skill.name == "CopTalk" and not s.hasTalkedInRoom) then
+		s.usingCopTalk = s.skillLevels[400]
+
+print("using coptalk", skill.name, s.usingCopTalk)
 
 		-- immediately talk
 		self:ActivateConversation()
@@ -222,15 +270,17 @@ function DonutWorld:UseSkill(skill)
 end
 
 function DonutWorld:OnEnterRoom()
-	s.dw_usingCopTalk = false
+	s.usingCopTalk = 0
 	Room.OnEnterRoom(self)
 end
 
 function DonutWorld:OnExitRoom()
-	if (s.donutworld < 2) then
-		s.donutworld = 2
-	elseif (s.donutworld >= 3) then
+	-- if we used coptalk, reset to "happy cop" on next enter
+	if (s.usingCopTalk) then
 		s.donutworld = 0
+	-- otherwise use "angry cop" mode
+	else
+		s.donutworld = 2
 	end
 end
 

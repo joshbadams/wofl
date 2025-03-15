@@ -88,6 +88,20 @@
 	Keys[kVK_DownArrow] = WoflKeys::DownArrow;
 	Keys[kVK_LeftArrow] = WoflKeys::LeftArrow;
 	Keys[kVK_RightArrow] = WoflKeys::RightArrow;
+	
+	Keys[kVK_F1] = WoflKeys::F1;
+	Keys[kVK_F2] = WoflKeys::F2;
+	Keys[kVK_F3] = WoflKeys::F3;
+	Keys[kVK_F4] = WoflKeys::F4;
+	Keys[kVK_F5] = WoflKeys::F5;
+	Keys[kVK_F6] = WoflKeys::F6;
+	Keys[kVK_F7] = WoflKeys::F7;
+	Keys[kVK_F8] = WoflKeys::F8;
+	Keys[kVK_F9] = WoflKeys::F9;
+	Keys[kVK_F10] = WoflKeys::F10;
+	Keys[kVK_F11] = WoflKeys::F11;
+	Keys[kVK_F12] = WoflKeys::F12;
+
 
 	// for landscape view, swap the width and height
 //	UIDevice* Dev = [UIDevice currentDevice];

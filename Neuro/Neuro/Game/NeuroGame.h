@@ -16,6 +16,8 @@ class NeuroGame : public WoflGame, public IStateChangedDelegate
 {
 public:
 	NeuroGame();
+	
+	virtual void ResetLua() override;
 
 	virtual void Tick(float DeltaTime) override
 	{
@@ -55,6 +57,4 @@ private:
 	void LoadConfig();
 
 	void OnRoomChange(Room* Room);
-	void OnConversationChange(Conversation* Room);
-
 };

@@ -25,10 +25,11 @@ end
 
 function Site:OpenBox()
 
-	self.CheckAllPagesForUnlocks()
+	self:CheckAllPagesForUnlocks()
 
 	self.passwordLevel = 0
 	self.passwordFailed = false
+print("num passwrords = ", #self.passwords)
 	if (#self.passwords > 0) then
 		self:GoToPage("title")
 	else
@@ -93,6 +94,8 @@ function Site:GoToPage(pageName)
 	self.lastShownItem = -1
 	self.bShowingItemDetails = false
 	self.sendMessagePhase = 1
+	self.sequencing = false
+
 
 	-- go right into details mode for the message
 	if (page.type == "message") then
@@ -121,6 +124,8 @@ function Site:GetEntries()
 		entries = self:GetPasswordEntries(page)
 	elseif (page.type == "download") then
 		entries = self:GetDownloadEntries(page)
+	elseif (page.type == "skills") then
+		entries = self:GetSkillsEntries(page)
 	elseif (page.type == "list" or page.type == "store") then
 		entries = self:GetListEntries(page)
 	elseif (page.type == "sendmessage") then
@@ -151,7 +156,7 @@ end
 
 function Site:GetDetailsString()
 	local page = self:GetCurrentPage()
-
+print("getting details", self.currentPage, page, page.type, page.message)
 	if (page.type == "message") then
 		if (type(page.message) == 'function') then
 			return page.message(self)
@@ -240,9 +245,12 @@ function Site:GetPasswordEntries(page)
 		table.append(entries, {x = X + 4, y = 6, text = "Access denied."})
 		self:GetButtonOrSpaceEntries(entries)
 	elseif (self.passwordLevel > 0) then
+		table.append(entries, {x = X, y = 4, text = self.passwords[self.passwordLevel]})
 		local message = "Cleared for level " .. self.passwordLevel .. " access."
 		table.append(entries, {x = self:CenteredX(message), y = 6, text = message})
 		self:GetButtonOrSpaceEntries(entries)
+	elseif (self.sequencing) then
+		table.append(entries, {x = X, y = 4, text = "<sequencing...>"})
 	else
 		table.append(entries, {x = X, y = 4, entryTag = "password"})
 	end
@@ -251,6 +259,13 @@ end
 
 function Site:GetDownloadEntries(page)
 	local entries = {}
+
+	self:GetPageHeaderFooterEntries(page, entries)
+	if (page.title ~= nil) then
+		table.append(entries, { x = self:CenteredX(page.title), y = 2, text = page.title})
+	end
+
+
 	for i,v in ipairs(page.items) do
 		if (v.software == nil) then
 			table.append(entries, {
@@ -283,6 +298,43 @@ function Site:GetDownloadEntries(page)
 
 	return entries
 end
+
+function Site:GetSkillsEntries(page)
+	local entries = {}
+
+	self:GetPageHeaderFooterEntries(page, entries)
+	
+	for i,v in ipairs(page.items) do
+		if (v.skill == nil) then
+			table.append(entries, {
+				x = 10, y = 4 + i,
+				text = string.format("%s. %s", v.key:upper(), v.text),
+				clickId = i,
+				key = v.key,
+			})
+		else
+			local name = Items[v.skill].name
+			table.append(entries, {
+				x = 10, y = 4 + i,
+				text = string.format("%s. %s (lvl %d)", v.key, name, v.level),
+				clickId = i,
+				key = v.key,
+			})
+		end
+	end
+
+	if (self.downloadPhase == 1) then
+		table.append(entries, { x = 0, y = self.sizeY - 2, text = "Upgrading . . ."})
+	elseif (self.downloadPhase == 2) then
+		table.append(entries, { x = 0, y = self.sizeY - 2, text = "Upgrading . . . Upgrade complete."})
+	elseif (self.downloadPhase == 3) then
+		table.append(entries, { x = 0, y = self.sizeY - 2, text = "Upgrading . . . Unable to upgrade."})
+	end
+
+
+	return entries
+end
+
 
 
 function Site:GetGenericEntries(page)
@@ -415,8 +467,6 @@ function Site:GetListEntriesEx(page, entries, startY, numItemsPerPage, lineBefor
 		numTotalItems = #unlockTable
 	end
 
-print("getting items", numTotalItems, unlockTable, #unlockTable)
-
 	-- go until we are end of page or end of list
 	while listIndex <= numTotalItems and localIndex <= numItemsPerPage do
 		
@@ -525,6 +575,8 @@ function Site:HandleClickedEntry(id)
 		self:SelectStoreItem(id)
 	elseif page.type == "download" then
 		self:OnDownloadSelected(page, page.items[id])
+	elseif page.type == "skills" then
+		self:OnSkillUpgradeSelected(page, page.items[id])
 	elseif page.type == "sendmessage" then
 		self:OnSendMessageSelected(page, id)
 	end
@@ -577,13 +629,10 @@ function Site:OnDownloadSelected(page, item)
 
 	local deck = Items[s.currentDeckId]
 
-print("deck ", deck, deck.capacity, #s.software)
-
 	-- add the software item by index to the deck
 	if (Items[item.software].scope == "fake") then
 		StartTimer(2, self, function() self.downloadPhase = 4 end)
 	elseif (#s.software >= deck.capacity) then
-print("will set to 3")
 		StartTimer(2, self, function() self.downloadPhase = 3 end)
 	else
 		table.append(s.software, item.software)
@@ -595,6 +644,29 @@ print("will set to 3")
 
 end
 
+function Site:OnSkillUpgradeSelected(page, item)
+
+	if (item.target ~= nil) then
+		self:GoToPage(item.target)
+		return
+	end
+
+	self.downloadPhase = 1
+
+	-- add the software item by index to the deck
+--	if (Items[item.software].scope == "fake") then
+--		StartTimer(2, self, function() self.downloadPhase = 4 end)
+	if (s.skillLevels[item.skill] == 0 or s.skillLevels[item.skill] >= item.level) then
+		StartTimer(2, self, function() self.downloadPhase = 3 end)
+	else
+		s.skillLevels[item.skill] = item.level
+		StartTimer(2, self, function() self.downloadPhase = 2 end)
+	end
+	
+	-- allow input after a bit
+	StartTimer(3, self, function() self.downloadPhase = 0 end)
+
+end
 function Site:ProcessMessage(recipient, message)
 end
 
@@ -677,7 +749,7 @@ function Site:OnTextEntryComplete(text, tag)
 		for i,v in ipairs(self.passwords) do
 			if (v == string.lower(text)) then
 				self.passwordLevel = i
-				self.passwordFailed = falsde
+				self.passwordFailed = false
 			end
 		end
 	elseif (tag == "sendmessage_to") then
@@ -690,9 +762,13 @@ function Site:OnTextEntryComplete(text, tag)
 
 end
 
+-- returns error if it can't be used:
+--   nil: can be used now
+--   message: the error when trying to use it
+--   empty string: can't be used but don't show an error, just don't use it
 function Site:CanUseSoftware(software)
 	if (software.scope == "site") then
-		if (self.currentPage == "title" and software.name == "Scout") then
+		if (self.currentPage == "title" and (software.name == "Scout" or software.name == "Sequencer")) then
 			return nil
 		else
 			return "Nothing happens."
@@ -712,14 +788,27 @@ function Site:UseSoftware(software)
 			self.messageBox = OpenBox("MessageBox")
 			self.messageBox:SetMessage("scouting....")
 			self.messageBox.blockInput = true
-			StartTimer(3, self, function() self.messageBox.blockInput = false; self.messageBox:SetMessage("The are " .. #currentSite.passwords .. " level(s)."); end )
+			StartTimer(3, self, function() self.messageBox.blockInput = false; self.messageBox:SetMessage("The are " .. #self.passwords .. " level(s)."); end )
+		elseif (software.name == "Sequencer") then
+			self:StartSequencing()
 		end
 	else
-		self:Close()
+--		self:Close()
 	end
 
 end
 
+
+function Site:StartSequencing()
+	self:GoToPage("password")
+	self.sequencing = true
+	self.blockInput = true
+
+	local time = 10
+	StartTimer(time, self, function() self.sequencing = false; self.blockInput = false; self.passwordLevel = 1; end)
+
+	UpdateBoxes()
+end
 
 
 ComingSoon = Site:new {
@@ -813,26 +902,6 @@ EastSeaBod = ComingSoon:new {
 eastseabod=EastSeaBod
 -- Coord.--1-384/32  AI--none
 
-Fuji = ComingSoon:new {
-	comLinkLevel = 3,
-	passwords = {
-		"romcards",
-		"uchikatsu",
-	}
-}
-fuji=Fuji
--- Coord.--2-112/240  AI--none
-
-HitachiBio = ComingSoon:new {
-	comLinkLevel = 3,
-	passwords = {
-		"genesplice",
-		"biotech"
-	}
-}
-hitachibio=HitachiBio
--- Coord.--2-32/192  AI--none
-
 HosakaCorp = ComingSoon:new {
 	comLinkLevel = 5,
 	passwords = {
@@ -864,15 +933,6 @@ Voyager = ComingSoon:new {
 voyager=Voyager
 -- Coord.--1-448/32  AI--Hal weakness=Logic
 
-Soften = ComingSoon:new {
-	comLinkLevel = 3,
-	passwords = {
-		"permafrost",
-		"<cyberspace>"
-	}
-}
-soften=Soften
--- Coord.--1-352/64  AI--none
 
 Yakuza = ComingSoon:new {
 	comLinkLevel = 5,
@@ -887,6 +947,97 @@ yakuza = Yakuza
 
 
 --------------------------------------------------------------------
+
+Soften = Site:new {
+	title = "* Software Enforcement Agency *",
+	comLinkLevel = 3,
+	passwords = {
+		"permafrost",
+		"<cyberspace>"
+	},
+	
+	pages = {
+		['title'] = {
+			type = "title",
+			message = " ",
+		},
+
+		['password'] = { type = "password" },
+
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "Supervisor's Memo", target = "memo" },
+				{ key = '2', text = "Bulletin Board", target = "bbs" },
+				{ key = '3', text = "Software Library", target = "library" },
+				{ key = '4', text = "Skill Upgrade", target = "skills" },
+				{ key = '5', text = "View Arrest Warrant List", target = "warrants" },
+			}
+		},
+		
+		['memo'] = {
+			type = "message",
+			message = "\nSEA FIELD SUPERVISORS:\n\nField Supervisors should take note of the new matrix simulator protection softwarez that have just been made available on this system. It will be the responsibility of the Field Supervisors to disseminate copies of these warez to their qualified cyberspace operatives.\nDue to the high number of requests for current information, the Administrative Bureau has approved the activation of of a question-and-answer bulletin board service should increase the speed of response for Field Supervisor information-gathering purposes.\n\nSEA FIELD AGENTS:\n\nField agents who would like to improve their interrogation and conversational abilities would be well advisted to make use of the COPTALK tutorial. Fourth level CopTalk ability is required for Senior Field Agent status. While this tutorial has been available to download for the last eight months, our records show that usage has been light. Let's see more ambition out there!"
+		},
+		
+		['library'] = {
+			type = "download",
+			items = {
+				{ key = 'x', text = "Exit to Main", target = "main" },
+				{ key = '1', software = 203 },
+				{ key = '2', software = 215 },
+			}
+		},
+
+		['bbs'] = {
+			type = "list",
+			hasDetails = true,
+			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
+			formatDetails = function(item)
+				if (item.to == "SEA") then
+					return string.format("Date: %s\nFrom: Gibson, W.\n%s", string.fromDate(item.date), item.message)
+				else
+					return string.format("Date: %s\nTo: Gibson, W.\n%s", string.fromDate(item.date), item.message)
+				end
+			end,
+			items = {
+				{ date = 111658, to = "SEA", from = "W. Gibson", message = "One of my field agents, working undercover as a cyberspace cowboy known as \"MR. DOS,\" seems to have vanished. He was on the trail of some microsoft design thieves in cyberspace when I last heard from him. Now he's been missing for two weeks. Has he been reassigned to a deep cover on another operation? Is he on loan to the Turing people? And why wasn't I informed that he was off my team?" },
+				{ date = 111658, to = "W. Gibson", from = "SEA", message = "With regard to your missing field agent, operating as \"MR. DOS,\"we have no idea where he is. He has not been reassigned elsewhere. Maybe you misplaced him?" },
+				{ date = 111658, to = "SEA", from = "W. Gibson", message = "Regarding my field agent, \"MR. DOS,\" I respectfully request an explanation as to how you think I could have misplaced him. This isn't a piece of software we're talking about. MR. DOS is a human field agent." },
+				{ date = 111658, to = "W. Gibson", from = "SEA", message = "Solve your own problems. That's what we hired you for in the first place." },
+			}
+		},
+		['skills']  = {
+			type = "skills",
+			items = {
+				{ key = 'x', text = "Exit to Main", target = "main" },
+				{ key = '1', skill = 400, level = 2 }
+			}
+		},
+		['warrants'] = {
+			type = "list",
+--			title = "Arrest Warrants",
+			hasDetails = true,
+			columns = { { field = 'Name', width = 19 }, { field = 'BAMA ID', width = 0 } },
+			formatDetails = function(item) return string.format("\n\nName: %s\nID:   %s\n%s", item.Name, item['BAMA ID'], item.message) end,
+			items = {
+				{ Name = "MATSUMOTU MIKI", ['BAMA ID'] = "781346759", message = "Wanted for Smuggling." },
+				{ Name = "PARSIFAL", ['BAMA ID'] = "673638269", message = "Wanted for Piracy." },
+				{ Name = "FARGO FERGUS", ['BAMA ID'] = "666999666", message = "Wanted for Supercode programming." },
+				{ Name = "STACKPOLNIK MIKL", ['BAMA ID'] = "426813202", message = "Wanted for Software pandering." },
+				{ Name = "ROBINSON ASHLEY", ['BAMA ID'] = "042385003", message = "Wanted for Smuggling." },
+			}
+		}
+
+	},
+	
+	-- Coord.--1-352/64  AI--none
+}
+soften=Soften
+
+
+
 
 function MakeRAMColumn(id)
 	return string.appendRightPadded("", tostring(Items[id].capacity), 3)
@@ -1271,3 +1422,107 @@ function Psycho:ProcessMessage(recipient, message)
 	s.psychosentmessage = true
 end
 
+
+Fuji = Site:new {
+	title = "* Fuji Electric *",
+	comLinkLevel = 3,
+	passwords = {
+		"romcards",
+		"uchikatsu",
+	},
+	
+	pages = {
+		['title'] = {
+			type = "title",
+			message = " ",
+			entries = {
+				{ x = 10, y = 10, text = "Our Romcards Never Forget"}
+			}
+		},
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "Company News", target = "news" },
+				{ key = '2', text = "Executive Survival Kit", target = "survival" },
+				{ key = '3', text = "Press Releases", target = "press" },
+				{ key = '4', text = "Personnel Management", target = "personnel", level = 2 },
+				{ key = '5', text = "Memo", target = "memo", level = 2 },
+			}
+		},
+		['news'] = {
+			type = "message",
+			message = "\nCompany News\n\n***3rd quarter profits are up! Thanks to the effort of each and every one of you, our employees, we've increased productivity. This drives our costs down and jacks our profits ever higher. With the demand for quality products out there as insatiable as it is, we;ve going to be on top of the world. Management has increased meat puppt breaks from 10 to 11.5 minutes for all line employees just to show you they care.\n\n***R and D's Esther Radklif and Andy Raymod have finally gotten married. THey had planned a skiing honeymoon in the Alps, but Andy would have had to have sold both legs to afford it, so they decided to forego that please. They'll just remain here in Chiba City and cozy up their nest a bit. I know we all wish them well.\n\n***New Hires:\n\nMishiji, Takoda  Securty\nO'Brien, Akira   Management\nKharkov, Sven    Line production\nBord, Melissa    Employee Services\nWang, P. Ryan    Acquisitions\nBear, M. C.      Legal\nMoe, Larry       Consultant"
+		},
+		['survival'] = {
+			type = "message",
+			message = "\nExecutive Survival Kit\nWelcome.\nWe have two rules around here:\n1) Mr. Watkins is always right\n2) see rule  #1\n\nFollow the rules and we'll get along fine. Remember to cover your ass with paper, but never stray far from a paper shredder and you'll have a long career with Fuji Electric.\nWelcome aboard -- don't rock the boat.\n(signed)\nHarry Watkins"
+		},
+		['press'] = {
+			type = "message",
+			message = "\n***For Immediate Release\nNASA and FUJI ELECTRIC DO BUSINESS\n\nIn anticipation of next century's manned shot at Alpha Centuri, NASA signed a multi-trillion dollar contract with Fuji Electric to provide ROMcards and software development for the Prometheus ship. Fuji Spokesman Harry Watkins said, \"This is the smartest move NASA has made since the dawn of their program.\"\nFuji anticipates unparalleled growth over the next decare. \"We'll have new employees coming on every day. If not for our own computer system, we'd have no way to keep track of them. Technology has made the human race great, and we want to lead the pack,\" said Watkins.\n\nFor further information contact Watkins at FUJI or Bob Shepherd at VOYAGER.\n\n(Just want you to know, my fellow employees, this contract was awarded on the strength of your work. Thanks, Harry...)"
+		},
+		['personnel'] = {
+			type = "list",
+			title = "New Employees List",
+			hasDetails = true,
+			columns = { { field = 'Name', width = 19 }, { field = 'BAMA ID', width = 0 } },
+			formatDetails = function(item) return string.format("\n\nName: %s\nID:   %s\n%s", item.Name, item['BAMA ID'], item.message) end,
+			items = {
+				{ Name = "LYNENE ROBINSON", ['BAMA ID'] = "211149931", message = "Position -  Security" },
+				{ Name = "LISA ARNOLD", ['BAMA ID'] = "230057291", message = "Position - Management" },
+				{ Name = "BILL DUGAN", ['BAMA ID'] = "199455756", message = "Position - Line production" },
+				{ Name = "TOM DECKER", ['BAMA ID'] = "217453565", message = "Position - Employee services" },
+				{ Name = "JAY PATEL", ['BAMA ID'] = "454781171", message = "Position - Acquisitions" },
+				{ Name = "BRUCE SCHLICKBERND", ['BAMA ID'] = "175385636", message = "Legal" },
+				{ Name = "LARRY MOE", ['BAMA ID'] = "062788138", message = "Position - Consultant" },
+			}
+		},
+		['memo'] = {
+			type = "message",
+			message = "\nTo:Management Level Employees\nFromL Harry Watkins\nRE: TOZOKU merger\n\nIt is true that TOZOKU has made us an offer we have accepted concerning the ownership of FUJI. The days of a dynastic company have ended and I gladly consider turning control over to the people of TOZOKU I know of you think of them as common criminals, but I can assure you there is nothing common about them at all. I think all of you who were concerned about my wife and child. They've been returned to me and we've found all of little Harry's parts. The doctors say he's got an excellent chance of recovery and I agree that he doesn't really look like the Frankenstein monster at all.\n\nHarry"
+		}
+
+	}
+	-- Coord.--2-112/240  AI--none
+}
+fuji=Fuji
+
+HitachiBio = ComingSoon:new {
+	title = "* Hitachi Biotech *",
+	comLinkLevel = 3,
+	passwords = {
+		"genesplice",
+		"biotech"
+	},
+	pages = {
+		['title'] = { type = "title", message = "<editor note: this is a totally pointless site>" },
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "Lung Report", target = "report" },
+				{ key = '2', text = "Personnel File", target = "personnel", level = 2 },
+			}
+		},
+		['report'] = {
+			type = "message",
+			message = "Imagine a long winded description of how lung experiments work..."
+		},
+		['personnel'] = {
+			type = "list",
+			title = "Personnel File",
+			hasDetails = true,
+			columns = { { field = 'Name', width = 19 }, { field = 'BAMA ID', width = 0 } },
+			formatDetails = function(item) return string.format("\n\nName: %s\nID:   %s\nEmployee department - %s", item.Name, item['BAMA ID'], item.dept) end,
+			items = {
+				{ Name = "T. YOSHINOBU", ['BAMA ID'] = "132066340", dept = "C.E.O." },
+				{ Name = "...", ['BAMA ID'] = "...", dept = "..." },
+			}
+		},
+	}
+	-- Coord.--2-32/192  AI--none
+}
+hitachibio=HitachiBio

@@ -12,6 +12,23 @@ NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate)
 	: StateDelegate(InStateDelegate)
 	, Lua(this)
 {
+	InitLua();
+	
+	// loaded values here will override init values in tha
+	if (!LoadFromFile(Utils::File->GetSavePath("game1.sav").c_str()))
+	{
+		// if we don't load from a save, then we need to trigger the EnteredRoom function in the first room -
+		// when loading from a save, we have already entered the room, so we don't want to trigger conversations, etc
+		// this does mean that room state can't assume EnteredRoom will set up when loading from a save!!
+		CurrentState = State::EnteredRoom;
+	}
+	
+	CurrentInfoType = InfoType::Date;
+	PendingInvalidation |= ZoneType::Info;
+}
+
+void NeuroState::InitLua()
+{
 	Lua.RegisterFunction("OpenBox", Lua_OpenBox);
 	Lua.RegisterFunction("CloseBox", Lua_CloseBox);
 	Lua.RegisterFunction("ShowMessage", Lua_ShowMessage);
@@ -42,13 +59,6 @@ NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate)
 	Lua.GetFloatValue("c", "secondsPerMinute", SecondsPerMinute);
 	TimeTimer = SecondsPerMinute;
 
-	// loaded values here will override init values in tha
-	LoadFromFile(Utils::File->GetSavePath("game1.sav").c_str());
-	
-	CurrentState = State::EnteredRoom;
-	
-	CurrentInfoType = InfoType::Date;
-	PendingInvalidation |= ZoneType::Info;
 	
 	
 //	LuaRef IRS;
@@ -151,13 +161,12 @@ void NeuroState::FromJsonObject(const Json::Value& Object)
 //	Money = Object["money"].asInt();
 //	GetIntArrayFromObject(Inventory, Object, "inventory");
 	Lua.FromJsonObject(Object["lua"]);
-
-	// we don't want to perform any ExitRoom functionality
-	CurrentRoom = nullptr;
 	
 	// set next room to saved room
-	Lua.GetTableValue("", Object["room"].asString().c_str(), PendingRoom);
-	CurrentState = State::EnteredRoom;
+	Lua.GetTableValue("", Object["room"].asString().c_str(), CurrentRoom);
+
+	CurrentState = State::Idle;
+	PendingInvalidation |= ZoneType::Room;
 }
 
 void NeuroState::Tick(float DeltaTime)
@@ -215,6 +224,23 @@ void NeuroState::Tick(float DeltaTime)
 	}
 }
 
+
+void NeuroState::ReloadLua()
+{
+	SaveToFile(Utils::File->GetSavePath("tempgame").c_str());
+	
+	StateDelegate->ResetLua();
+	
+	Timers.clear();
+	CurrentRoom = nullptr;
+	PendingRoom = nullptr;
+	Lua_OnMessageComplete = nullptr;
+	Lua.Reset();
+	InitLua();
+	
+	LoadFromFile(Utils::File->GetSavePath("tempgame").c_str());
+}
+
 void NeuroState::ClickInventory()
 {
 	// @todo can also open when in site
@@ -266,14 +292,15 @@ void NeuroState::ClickSkill()
 
 void NeuroState::ClickChip()
 {
-//	LoadFromFile(Utils::File->GetSavePath("game.sav").c_str());
-	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
-	{
-		CurrentState = State::InSite;
-		std::string LastSite;
-		Lua.GetStringValue("s", "lastSite", LastSite);
-		StateDelegate->OpenBoxByName(LastSite.c_str());
-	}
+	ReloadLua();
+	
+//	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
+//	{
+//		CurrentState = State::InSite;
+//		std::string LastSite;
+//		Lua.GetStringValue("s", "lastSite", LastSite);
+//		StateDelegate->OpenBoxByName(LastSite.c_str());
+//	}
 }
 
 void NeuroState::ClickSystem()

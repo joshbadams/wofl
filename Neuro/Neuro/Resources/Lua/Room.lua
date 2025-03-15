@@ -70,7 +70,9 @@ print("activating convo with tag", tag, s.gentlemanloser)
 
 	-- for non-tagged conversations, assume the user chose Talk option, so record we've done that
 	-- this is reset in OnEnterRoom
-	s.hasTalkedInRoom = true
+	if (tag == nil) then
+		s.hasTalkedInRoom = true
+	end
 	-- find tagged or calculated convo
 	self.currentConversation = self:GetNextConversation(tag)
 
@@ -232,9 +234,9 @@ end
 
 
 function Room:OnEnterRoom()
-	s.hasTalkedInRoom = true
+	s.hasTalkedInRoom = false
 
-print("entering room", self.name)
+print("entering room", self.name, s.hasTalkedInRoom)
 	local firstTimeKey = "__" .. self.name
 	if (s[firstTimeKey] ~= 1) then
 		self:OnFirstEnter()

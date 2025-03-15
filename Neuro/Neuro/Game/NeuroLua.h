@@ -55,6 +55,9 @@ class Lua : public IJsonObj
 public:
 	Lua(void* Context);
 	~Lua();
+	
+	void Init();
+	void Reset();
 
 	// IJsonObj
 	virtual Json::Value ToJsonObject() override;
@@ -150,10 +153,10 @@ public:
 private:
 	friend struct LuaScope;
 	friend class LuaObjRef;
-	
+
+	void* Context;
 	mutable lua_State* L;
 	LuaRef Settings;
-	set<string> SystemVariables;
 };
 
 

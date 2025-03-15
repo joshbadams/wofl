@@ -81,23 +81,10 @@ bool operator==(const LuaRef& A, const LuaRef& B)
 }
 
 
-Lua::Lua(void* Context)
+Lua::Lua(void* InContext)
+	: Context(InContext)
 {
-	L = luaL_newstate();
-	luaL_openlibs(L);
-
-	SCOPE;
-	
-	lua_pushlightuserdata(L, Context);
-	lua_setglobal(L, "__neurostate");
-
-	lua_pushlightuserdata(L, this);
-	lua_setglobal(L, "__lua");
-
-	// load the main file
-	LoadScript("Neuro.lua");
-	
-	GetTableValue("", "s", Settings);
+	Init();
 
 //	int IntVal;
 //	std::string StringVal;
@@ -119,6 +106,32 @@ Lua::Lua(void* Context)
 Lua::~Lua()
 {
 	lua_close(L);
+}
+
+void Lua::Init()
+{
+	L = luaL_newstate();
+	luaL_openlibs(L);
+
+	SCOPE;
+	
+	lua_pushlightuserdata(L, Context);
+	lua_setglobal(L, "__neurostate");
+
+	lua_pushlightuserdata(L, this);
+	lua_setglobal(L, "__lua");
+
+	// load the main file
+	LoadScript("Neuro.lua");
+	
+	GetTableValue("", "s", Settings);
+}
+
+void Lua::Reset()
+{
+	Settings = nullptr;
+	lua_close(L);
+	Init();
 }
 
 // table must be on top of stack
@@ -263,9 +276,20 @@ void Lua::RegisterFunction(const char* Name, lua_CFunction Func)
 
 void Lua::LoadScript(const char* ScriptName)
 {
-	string FilePath = "Lua/";
-	FilePath += ScriptName;
-	bool bError = luaL_dofile(L, Utils::File->GetResourcePath(FilePath.c_str()).c_str());
+	std::string LuaPath = Utils::Platform->GetCommandLineOption("lua");
+	if (LuaPath != "")
+	{
+		LuaPath = LuaPath + "/" + ScriptName;
+	}
+	else
+	{
+		string FilePath = "Lua/";
+		FilePath += ScriptName;
+		
+		LuaPath = Utils::File->GetResourcePath(FilePath.c_str());
+	}
+		
+	bool bError = luaL_dofile(L, LuaPath.c_str());
 	if (bError)
 	{
 		std::string Err = lua_tostring(L, -1);

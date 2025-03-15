@@ -26,6 +26,22 @@ public:
 		return [NSDate timeIntervalSinceReferenceDate] - StartTime;
 	}
 	
+	virtual std::string GetCommandLineOption(const char* Option) override
+	{
+		NSString* Opt = [NSString stringWithFormat:@"-%s", Option];
+		
+		NSArray* Args = [[NSProcessInfo processInfo] arguments];
+		for (int i = 1; i < [Args count]; i++)
+		{
+			if ([[Args objectAtIndex:i] caseInsensitiveCompare:Opt] == 0)
+			{
+				return [[Args objectAtIndex:i + 1] UTF8String];
+			}
+		}
+		
+		return std::string();
+	}
+	
 protected:
 	
 	// this is "time 0" for the booted game

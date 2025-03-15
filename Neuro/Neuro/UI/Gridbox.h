@@ -84,7 +84,8 @@ protected:
 
 	IQueryStateDelegate* QueryStateDelegate;
 	IInterfaceChangingStateDelegate* InterfaceChangingDelegate;
-		
+
+	friend class NeuroGame;
 	LuaRef LuaBox;
 	
 	vector<GridEntry> Entries;

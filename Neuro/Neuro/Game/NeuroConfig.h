@@ -20,36 +20,6 @@ public:
 protected:
 };
 
-class Option : public NeuroConfigObj
-{
-public:
-	std::string Line;
-	std::string Response;
-	LuaRef Lua_OnEnd;
-
-	virtual void FromLua(Lua& L, LuaRef Object) override;
-};
-
-class Conversation : public NeuroConfigObj
-{
-public:
-	~Conversation();
-	
-	std::string Tag;
-	std::string Condition;
-	std::string Action;
-	
-	LuaRef Lua_OnStart;
-	LuaRef Lua_OnEnd;
-
-	std::vector<std::string> Lines;
-	std::vector<Option*> Options;
-
-	virtual void FromLua(Lua& L, LuaRef Object) override;
-};
-
-
-
 class Room : public NeuroConfigObj
 {
 public:
@@ -58,5 +28,4 @@ public:
 	bool bHasPAX;
 	bool bHasJack;
 
-	std::vector<Conversation*> Conversations;
 };

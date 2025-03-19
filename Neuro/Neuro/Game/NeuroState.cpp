@@ -164,6 +164,7 @@ void NeuroState::FromJsonObject(const Json::Value& Object)
 	
 	// set next room to saved room
 	Lua.GetTableValue("", Object["room"].asString().c_str(), CurrentRoom);
+	Lua.SetTableValue("", "currentRoom", CurrentRoom);
 
 	CurrentState = State::Idle;
 	PendingInvalidation |= ZoneType::Room;
@@ -292,15 +293,13 @@ void NeuroState::ClickSkill()
 
 void NeuroState::ClickChip()
 {
-	ReloadLua();
-	
-//	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
-//	{
-//		CurrentState = State::InSite;
-//		std::string LastSite;
-//		Lua.GetStringValue("s", "lastSite", LastSite);
-//		StateDelegate->OpenBoxByName(LastSite.c_str());
-//	}
+	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
+	{
+		CurrentState = State::InSite;
+		std::string LastSite;
+		Lua.GetStringValue("s", "lastSite", LastSite);
+		StateDelegate->OpenBoxByName(LastSite.c_str());
+	}
 }
 
 void NeuroState::ClickSystem()

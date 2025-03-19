@@ -52,7 +52,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-lua /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Resources/Lua"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

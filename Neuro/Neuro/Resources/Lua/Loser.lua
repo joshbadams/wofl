@@ -2,6 +2,8 @@ s.gentlemanloser = 0
 
 LoserCryptoShop = ShopBox:new {
 	items = { 401 },
+	
+	closeOnBuySell = true,
 }
 
 function LoserCryptoShop:OnBoughtSoldNothing()
@@ -30,7 +32,7 @@ LoserGuestPassShop = ShopBox:new {
 
 function LoserGuestPassShop:OnBoughtSoldItem(clickId)
 	ShopBox.OnBoughtSoldItem(self, clickId)
-	ShowMessage("Shive gives you a guest pass for the Matrix Restaurant.")
+	ShowMessage("Shiva gives you a guest pass for the Matrix Restaurant.")
 	s.losergotpass = true
 end
 

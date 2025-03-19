@@ -1,0 +1,37 @@
+{"frames": [
+
+{
+	"filename": "background.png",
+	"frame": {"x":0,"y":0,"w":1280,"h":796},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1280,"h":796},
+	"sourceSize": {"w":1280,"h":796}
+},
+{
+	"filename": "streeetcenter6.png",
+	"frame": {"x":0,"y":798,"w":1226,"h":464},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":464},
+	"sourceSize": {"w":1226,"h":464}
+},
+{
+	"filename": "streetmain6.png",
+	"frame": {"x":0,"y":1264,"w":1226,"h":462},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":462},
+	"sourceSize": {"w":1226,"h":462}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Neuro2.png",
+	"format": "RGBA8888",
+	"size": {"w":2048,"h":2048},
+	"scale": "1",
+	"related_multi_packs": [ "Neuro1.json" ],
+	"smartupdate": "$TexturePacker:SmartUpdate:50836e06d7e48145fcf707f142e81b98:ca1400c6a440a35eca947ad48af443f8:8e5f1c61dd1938f0ebcc3dab307fd743$"
+}
+}

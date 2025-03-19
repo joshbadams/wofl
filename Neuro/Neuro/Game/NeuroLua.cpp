@@ -114,7 +114,7 @@ void Lua::Init()
 	luaL_openlibs(L);
 
 	SCOPE;
-	
+		
 	lua_pushlightuserdata(L, Context);
 	lua_setglobal(L, "__neurostate");
 
@@ -253,7 +253,7 @@ int JsonToLua(Lua& Lua, lua_State* L, const Json::Value& JsonObject)
 				WLOG("Looading array/object value %d:\n", Key.asInt());
 				SCOPE;
 				int SubTableStackLoc = JsonToLua(Lua, L, Value);
-				Lua.SetTableValue(TableStackLoc, Key.asString().c_str(), SubTableStackLoc);
+				Lua.SetTableValue(TableStackLoc, Key.asInt(), SubTableStackLoc);
 			}
 		}
 	}
@@ -267,7 +267,7 @@ void Lua::FromJsonObject(const Json::Value& LuaObject)
 	JsonToLua(*this, L, LuaObject);
 	LuaRef Game = MakeRef();
 	CallFunction_NoReturn("s", "ApplyLoadedGame", Game);
-	}
+}
 
 void Lua::RegisterFunction(const char* Name, lua_CFunction Func)
 {

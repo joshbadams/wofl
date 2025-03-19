@@ -140,7 +140,15 @@ print("num items", #self.items)
 		end
 
 		label = string.format("%d %s", localIndex, prefix)
-		label = label:appendPadded(template.name, self.sizeX - 9)
+		if (template.type == "software") then
+			label = label:appendPadded(template.name, self.sizeX - 17)
+			label = label:appendPadded(string.format("%2d.0", template.version), 8)
+		elseif (template.type == "deck") then
+			label = label:appendPadded(template.name, self.sizeX - 13)
+			label = label:appendPadded(string.format("%2d", template.capacity), 4)
+		else
+			label = label:appendPadded(template.name, self.sizeX - 9)
+		end
 		local priceString = string.format("%d", self:GetPrice(id))
 		label = label:appendPadded(priceString, 6)
 
@@ -166,7 +174,11 @@ function ShopBox:HandleClickedEntry(clickId)
 	local price = self:GetPrice(id)
 	print("clicked on ", item.name, id, price)
 
-	if (self.isBuying) then
+	-- makre sure we have enough space
+	if (item.type == "software" and #s.software >= GetMaxDeckStorage()) then
+		print("Not enough space, not buying")
+		return
+	elseif (self.isBuying) then
 		if (s.money >= price) then
 			s.money = s.money - price
 			self.boughtSold = true
@@ -186,13 +198,19 @@ end
 
 function ShopBox:OnBoughtSoldItem(clickId)
 	if (self.isBasicItemShop) then
-		table.append(s.inventory, self.items[clickId])
-		CloseBox(self)
+		if (Items[self.items[clickId]].type == "software") then
+			table.append(s.software, self.items[clickId])
+		else
+			table.append(s.inventory, self.items[clickId])
+		end
+		if (#self.items == 1) then
+			CloseBox(self)
+		end
 	end
 end
 
 function ShopBox:CannotAfford(itemIndex)
-	if (self.isBasicItemShop) then
+	if (self.isBasicItemShop and #self.items == 1) then
 		CloseBox(self)
 	end
 end

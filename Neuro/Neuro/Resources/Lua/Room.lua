@@ -60,8 +60,14 @@ function Room:GetDialog()
 	return dialog
 end
 
-function Room:ActivateConversation(tag)
-print("activating convo with tag", tag, s.gentlemanloser)
+function Room:ActivateConversation(inTag)
+	
+	local tag = inTag
+	if (type(tag) == 'function') then
+		tag = tag(self)
+	end
+
+print("activating convo with tag", tag)
 	-- reset
 	self.lineIndex = 0
 	self.choiceIndex = 0
@@ -109,7 +115,7 @@ function Room:EndConversation()
 
 	-- for any type of conversation with an onEnd,
 	endingConversation = self.currentConversation
-
+print("ending convo")
 	self.currentConversation = nil
 	self.currentChoice = nil
 	self.lineIndex = 0
@@ -180,6 +186,7 @@ end
 -- keycode 1 is Escape
 -- type 0 is KeyDown
 function Room:ConversationKey(char, keyCode, type)
+print("keycode: ", keyCode, self.currentConversation)
 	if (type == 0) then
 		if (keyCode == 2) then
 			self:HandleDialogClick(false)
@@ -213,11 +220,10 @@ function Room:GetNextConversation(tag)
 			if (tagMatches) then
 				if (v.condition == nil or v.condition(self)) then
 					return v
-				else
-					return nil
 				end
 			end
 		end
+		return nil
 	else
 		for i,v in ipairs(self.conversations) do
 			if (v.tag == nil and v.tags == nil) then
@@ -250,7 +256,6 @@ end
 
 function Room:OnFirstEnter()
 	if (self.onEnterConversation ~= nil) then
---		ShowMessage(self.longDescription, function() Talk(self.onEnterConversation) end)
 		ShowMessage(self.longDescription, function() self:ActivateConversation(self.onEnterConversation) end)
 	else
 		ShowMessage(self.longDescription)

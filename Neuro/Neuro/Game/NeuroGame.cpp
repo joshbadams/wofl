@@ -97,7 +97,7 @@ NeuroGame::NeuroGame()
 	WLOG("View size is: %f, %f\n", WoflRenderer::Renderer->GetViewSize().X, WoflRenderer::Renderer->GetViewSize().Y);
 		
 	WoflAtlases::LoadAtlas("Neuro1");
-	//WoflAtlases::LoadAtlas("Neuro2");
+	WoflAtlases::LoadAtlas("Neuro2");
 
 	Background = new WoflSprite(0, 0, WoflRenderer::Renderer->GetViewSize().X, WoflRenderer::Renderer->GetViewSize().Y);
 	Background->AddImage(new WoflImage("background"));

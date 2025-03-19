@@ -67,6 +67,15 @@ s = {
 		315, 316, 317, 318, 319,
 	},
 	
+	-- modifiable arrest warrants
+	arrestWarrants = {
+		{ Name = "ROY MILESTONE",  ['BAMA ID'] = "812547724", crime = "Smuggling" },
+		{ Name = "BAL 4",          ['BAMA ID'] = "551703288", crime = "Piracy" },
+		{ Name = "KRISTOFFER ULM", ['BAMA ID'] = "188864202", crime = "Supercode programming" },
+		{ Name = "KIM TYGER"   ,   ['BAMA ID'] = "159217329", crime = "Software pandering" },
+		{ Name = "ASHLEY ROBIN",   ['BAMA ID'] = "042385003", crime = "Smuggling" },
+	},
+	
 	-- which skills we currently have learned, and their level (stored separately so the opened skills are in order by unlocking order)
 	skills = {
 		
@@ -88,6 +97,20 @@ s = {
 	
 	hasTalkedInRoom = false,
 }
+
+function GetMaxDeckStorage()
+	local max = 0
+	for i,v in ipairs(s.inventory) do
+		local template = Items[v]
+		if (template.type == "deck") then
+			if (template.capacity > max) then
+				max = template.capacity
+			end
+		end
+	end
+
+	return max
+end
 
 function s:ApplyLoadedGame(game)
 print("loading from save ", game)

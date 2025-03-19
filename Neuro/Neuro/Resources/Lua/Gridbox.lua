@@ -41,8 +41,16 @@ end
 function Gridbox:HandleClickedEntry(id)
 end
 
+function Gridbox:HandleClickedExit()
+end
+
+function Gridbox:HandleClickedMore()
+end
+
+function Gridbox:HandleClickedEdit()
+end
+
 function Gridbox:HandleClickedGridEntry(id)
-print("ClickedGridEntry")
 	-- check if input needs to be tossed
 	if (self:ShouldIgnoreAllInput()) then
 		return
@@ -54,8 +62,10 @@ print("ClickedGridEntry")
 	-- -2 is always the "more" option
 	elseif id == -2 then
 		self:HandleClickedMore()
+	-- -3 is always the "edit" option
+	elseif id == -3 then
+		self:HandleClickedEdit()
 	else
-print("calling clickedentry", self, id)
 		self:HandleClickedEntry(id)
 	end
 end
@@ -65,6 +75,14 @@ function Gridbox:AddExitMoreEntries(entries, needsMore)
 	table.append(entries, {x = exitmoreCenter, y = self.sizeY - 1, text = "exit", clickId = -1, key = "x" } )
 	if needsMore then
 		table.append(entries, {x = exitmoreCenter + 5, y = self.sizeY - 1, text = "more", clickId = -2, key = "m" } )
+	end
+end
+
+function Gridbox:AddExitEditEntries(entries, needsEdit)
+	local exiteditCenter = self:CenteredX("exit edit")
+	table.append(entries, {x = exiteditCenter, y = self.sizeY - 1, text = "exit", clickId = -1, key = "x" } )
+	if needsEdit then
+		table.append(entries, {x = exiteditCenter + 5, y = self.sizeY - 1, text = "edit", clickId = -3, key = "e" } )
 	end
 end
 

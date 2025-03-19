@@ -115,6 +115,49 @@ end
 streetmain1 = StreetMain1
 
 
+StreetMain2 = Room:new {
+	name = "streetmain2",
+	
+	west = "streetmain1",
+	east = "streetmain3",
+	north = "metro"
+}
+streetmain2 = StreetMain2
+
+StreetMain3 = Room:new {
+	name = "streetmain3",
+	
+	west = "streetmain2",
+	east = "streetmain4",
+	south = "crazyedos",
+}
+streetmain3 = StreetMain3
+
+StreetMain4 = Room:new {
+	name = "streetmain4",
+	
+	west = "streetmain3",
+	east = "streetmain5",
+	south = "matrix",
+}
+streetmain4 = StreetMain4
+
+StreetMain5 = Room:new {
+	name = "streetmain5",
+	
+	west = "streetmain4",
+	east = "streetmain6",
+}
+streetmain5 = StreetMain5
+
+StreetMain6 = Room:new {
+	name = "streetmain6",
+	
+	west = "streetmain5",
+	--east = "streetmain7",
+}
+streetmain6 = StreetMain6
+
 ----------------------------------------------------------------------------------
 
 -- state:
@@ -293,10 +336,11 @@ LarryCopTalkShop = ShopBox:new {
 }
 
 s.larrys = 0
+s.larry_arrested = false
 Larrys = Room:new {
 	name = "larrys",
 	onEnterConversation = "onEnterRoom",
-	hasPerson = true,
+	hasPerson = function() return s.larry_arrested == false end,
 	
 	south = "streetcenter1",
 	
@@ -657,6 +701,14 @@ end
 
 --------------------------------------------------------------------------
 
+DeaneCryptoShop = ShopBox:new {
+	items = { 400 },
+}
+
+DeaneSkillShop = ShopBox:new {
+	items = { 400 },
+}
+
 s.deane = 1
 Deane = Room:new {
 	name = "deane",
@@ -668,10 +720,11 @@ Deane = Room:new {
 	longdescription = "You find Julius Deane's office in a warehouse behind Ninsei. You get the impression Julius has a gun pointed at you under the desk.",
 	description = "In Julius Deane's office.",
 	
-	conversation = {
+	conversations = {
 		{
 			tag = "onEnter",
 			lines = { "What brings you around, boyo? I deal in exotic hardware and information." },
+			onEnd = function() s.deane = 1 end
 		},
 			
 		{
@@ -728,7 +781,7 @@ Deane = Room:new {
 			onEnd = function() OpenBox("DeaneCryptoShop") end
 		},
 		{
-			tags = { "_chip" },
+			tags = { "_chip", "_skill", "_skills", "_chips" },
 			lines = { "I've got Bargaining, Psychoanalysis, Philosophy, and Phenomenology at $1000 each. Or I can upgrade certin skills." },
 			onEnd = function() OpenBox("DeaneSkillShop") end
 		},
@@ -758,10 +811,403 @@ Deane = Room:new {
 			onEnd = function() OpenBox("DeaneGasMaskShop") end
 		},
 		{
-			tags = { "_software" },
+			tags = { "_software", "_rom" },
 			lines = { "Try the Finn at Metro Holografix for that sort of thing." },
 		},
 	}
 }
 
 deane = Deane
+
+
+s.moderns = 1
+PantherModerns = Room:new {
+	name = "panthermoderns",
+	hasPerson = true,
+	onEnterConversation = "onEnter",
+	
+	south = "larrys",
+	
+	longdescription = "The meeting room of the Panther Moderns, presently occupied by their leader, Lupus Yonderboy. He's dressed in a polycarbon suit and his eyes have been modified to catch the light like a cat's. Lupus is watching you with a slight smile on hit lips. Tattooed on his hand is the word, \"CHAOS\"",
+	description = "The meeting room of the Panther Moderns.",
+	
+	conversations = {
+		{
+			tag = "onEnter",
+			lines = { "You got past Larry. That's good. You won't get past me. That's business." },
+			onEnd = function() s.moderns = 1 end
+		},
+		
+		{
+			condition = function() return s.moderns == 1; end,
+			options = {
+				{
+					line = "Lupus, my man! I hear you're the kind of guy who helps stray cowboys. Can you answer some questions for me?",
+					response = "aadsd",
+				},
+				{
+					line = "Geez, you're really a funny-looking dweeb, aren't you?",
+					response = "asdasd",
+--					onEnd = function() s.deane = 2; end
+				},
+				{
+					line = "Exactly what is a Panther Modern?",
+					response = "Chaos. That is our mode and modus. That is our central kick. Believe it.",
+					onEnd = function(self) s.moderns = 2; self:ActivateConversation(); end
+				},
+			}
+		},
+
+		{
+			condition = function() return s.moderns == 2; end,
+			lines = { "Matt Shaw says you're all right. So talk. What do you want to know?" },
+		},
+		
+		{
+			condition = function() return s.moderns == 3; end,
+			options = {
+				{
+					line = "What do you know about",
+					hasTextEntry=true,
+				},
+			}
+		},
+
+
+		{
+			tags = { "_skill", "_skills", "_chip", "_chips", "_evasion" },
+			lines = { "I can sell you an Evasion chip for $2000. You'll need it for protection in Cyberspace." },
+			onEnd = function(self) OpenBox("ModernEvasionShop") end
+		},
+
+		{
+			tags = { "_software" },
+			lines = { "Try the Finn. I hear Drill 1.0 is a great icebreaker." },
+		},
+
+		{
+			tags = { "_neuromancer" },
+			lines = { "Sound familiar. It's an old computer game, or a book, or something like that, right?" },
+		},
+
+		{
+			tags = { "_ai" },
+			lines = { "Turing knows about them. Try cycling through your skills in combat. I hear that one is not enough." },
+		},
+
+		{
+			tags = { "_cyberspace" },
+			lines = { "Cyberspace is reality, wilson." },
+		},
+
+		{
+			tags = { "_bank" },
+			lines = { "I've been siphoning from account number 646328356481, for years." },
+		},
+
+		{
+			tags = { "_pass", "_sense/net", "_security" },
+			lines = { "If you want a ROM Construct from Sense/Net, I can sell you a Security Pass to get you into the building." },
+			onEnd = function(self) OpenBox("ModernPassShop") end
+		},
+
+		{
+			tags = { "_rom", "_rom construct" },
+			lines = { "Sense/Net has all the ROM Constructs in their Vault. Hard to get in there." },
+		},
+	}
+}
+pantermoderns = PantherModerns
+
+----------------------------------------------------
+
+MetroShop = ShopBox:new {
+	items = {
+		222, -- DECODER 1.0
+		215, -- BLOWTORCH 1.0
+		229, -- DRILL 1.0
+		253, -- PROBE 1.0
+		200, -- COMLINK 1.0
+	}
+}
+
+MetroJoystickShop = ShopBox:new {
+	items = { 5 }
+}
+
+MetroSkillShop = ShopBox:new {
+	items = { 403, 404 }
+}
+
+s.metro = 0
+Metro = Room:new {
+	name = "metro",
+	hasPerson = true,
+	onEnterConversation = "onEnter",
+	
+	south = "streetmain2",
+	
+	longdescription = "You're in Metro Holografix.",
+	description = "You're in Metro Holografix.",
+
+	conversations = {
+		{
+			tag = "onEnter",
+			lines = { "Hey kid! You need some chips or software? I just got some new stuff from those bridge-and-tunnel kids in Jersey." },
+			onEnd = function() s.metro = 1 end
+		},
+		
+		{
+			condition = function() return s.metro == 1 end,
+			options =
+			{
+				{
+					line = "Yeah, Finn. I'm looking for some hot softwarez.",
+					response = "You want software, you got software.",
+					onEnd = function() s.metro = 4; OpenBox("MetroShop"); end
+				},
+				{
+					line = "I'm just browsing right now.",
+					response = "Hope you're not allergic to dust. Can I answer any questions?",
+					onEnd = function() s.metro = 2; end
+				},
+				{
+					line = "I need a scan, Finn. Then, maybe I'll buy something.",
+					response = "Scanned when you came in. No implants, no biologicals. You're clean.",
+					onEnd = function() s.metro = 3; end
+				}
+			}
+		},
+
+		{
+			condition = function() return s.metro == 2 end,
+			options =
+			{
+				{
+					line = "Hey, Finn, did anyone ever tell you your head looks like it was designed in a wind tunnel?",
+					response = "You got about as much class as those yahoos from Jersey. Get out of here!",
+					onEnd = function(self) GoToRoom(self.south) end
+				},
+				{
+					line = "Okay, what do you know about",
+					hasTextEntry=true,
+					onEnd = function() s.metro = 3; end
+				},
+			}
+		},
+		
+		{
+			condition = function() return s.metro >= 3 end,
+			options =
+			{
+				{
+					line = "Tell me about",
+					hasTextEntry=true,
+				},
+				{
+					condition = function() return s.metro == 3; end,
+					line = "Leave me alone! I said I'm just browsing!",
+					response = "Well, excuse me! Sounds like someone's having a rough day!",
+					onEnd = function(self) s.metro = 4; GoToRoom(self.south) end
+				},
+
+			}
+		},
+
+		{
+			tags = { "_software", "_warez" },
+			lines = { "You want software, you got software." },
+			onEnd = function() s.metro = 4; OpenBox("MetroShop"); end,
+		},
+		{
+			tags = { "_skill", "_skills", "_chip", "_chips" },
+			lines = { "You want software, you got software." },
+			onEnd = function() s.metro = 4; OpenBox("MetroShop"); end,
+		},
+		{
+			tags = { "_rom" },
+			lines = { "You'll have to hit Sense/Net for one of those." },
+		},
+		{
+			tags = { "_joystick" },
+			lines = { "So, you're on a holy mission, eh? I got what you need." },
+			onEnd = function() OpenBox("MetroJoystickShop"); end,
+		},
+		{
+			tags = { "_neuromancer" },
+			lines = { "It's an old novel by Willam Gibson." },
+		},
+		{
+			tags = { "_ai" },
+			lines = { "Artificial Intelligence. A smart computer. They design all the ice." },
+		},
+	}
+
+}
+metro = Metro
+
+------------------------------------------
+
+Matrix = Room:new {
+	name = "matrix",
+	hasPerson = true,
+	
+	north = "streetmain4",
+	
+	longDescription = "The Matrix Restaurant is the place to be if you're a wealthy cowboy in Chiba City. This is a club for Members Only. When you enter, you see Emperor Norton and King Osric, deep in a conversation. There are waiters around, but they're respectfully staying out of sight. There's also a PAX terminal here.",
+	description = "You're in the Matrix Restaurant."
+}
+matrix = Matrix
+
+function Matrix:HandleEnter(desc)
+	local message = desc
+	local postFunc = nil
+
+	if (not table.containsArrayItem(s.inventory, 4)) then
+		message = message .. "\n\nYou are kicked out for not having a pass."
+		postFunc = function(self) GoToRoom(self.north) end
+	end
+
+	-- true means to pause before continuing
+	ShowMessage(message, postFunc, postFunc ~= nil)
+end
+
+function Matrix:OnFirstEnter()
+	self:HandleEnter(self.longDescription)
+end
+
+function Matrix:OnEnter()
+	self:HandleEnter(self.description)
+end
+
+-------------------------------------------------
+
+EdosShop = ShopBox:new {
+	items = {
+		103,
+		108,
+		109,
+		102,
+		105,
+		110,
+		116,
+		111,
+	}
+}
+
+function EdosShop:OnBoughtSoldNothing()
+	currentRoom:ActivateConversation("boughtNothing")
+end
+
+s.edosGaveCaviar = false
+CrazyEdos = Room:new {
+	name = "crazyedos",
+	hasPerson = true,
+	onEnterConversation =
+		function(self)
+			if (s.edosGaveCavier) then
+				return "mainPrompt"
+			elseif (table.containsArrayItem(s.inventory, 2)) then
+				return "hasCaviar"
+			else
+				return "mentionCaviar"
+			end
+		end,
+
+	north = "streetmain3",
+	
+	longDescription = "You're in Crazy Edo's Used Hardware Emporium. Edo's eyes instantly light up as he recognizes you. A vast array of scratched, dented, twisted and dusty computer hardware lines the walls. Loose cables litter the floor.",
+	description = "Crazy Edo's Used Hardware Emporium",
+	
+	conversations = {
+		{
+			tag = "mentionCaviar",
+			lines = { "Hey! You said you'd bring me some caviar the next time you came in!" },
+			onEnd = function(self) self:ActivateConversation("caviarChoices") end
+		},
+
+		{
+			noCancel = true,
+			tag = "caviarChoices",
+			options = {
+				{
+					line = "Did I say that? Sorry. Guess I'm not thinking too clearly. I spent the night sleeping in spaaghetti.",
+					onEnd = function(self) self:ActivateConversation("caviarOffer") end
+				},
+				{
+					line = "Get your own caviar! Go squeeze a sturgeon! I'm no delivery boy!",
+					response = "You having a rough day or something?",
+					onEnd = function(self) self:ActivateConversation("caviarOffer") end
+				},
+			},
+		},
+		{
+			tag = "caviarOffer",
+			lines = { "For a can of caviar, I'll give you ComLink 2.0. It's great software!" },
+			onEnd = function(self) self:ActivateConversation("mainPrompt") end
+		},
+
+		{
+			tag = "hasCaviar",
+			lines = { "You brought the caviar, my old friend! Do you want to trade it?" },
+			onEnd = function(self) self:ActivateConversation("caviarTrade") end
+		},
+		{
+			noCancel = true,
+			tag = "caviarTrade",
+			options = {
+				{
+					line = "Of course I want to trade it!",
+					response = "Domo arigato gozaimasu! Here's your ComLink 2.0 software.",
+					onEnd = function(self)
+						edosGaveCaviar = true;
+						table.append(s.software, 201);
+						table.removeArrayItem(s.inventory, 2);
+						ShowMessage("Edo installs the software in your deck.");
+						self:ActivateConversation("mainChoices");
+					end
+				},
+				{
+					line = "I think I'll hang on to it right now.",
+					response = "All right. Maybe next time.",
+					onEnd = function(self) self:ActivateConversation("mainPrompt") end
+				},
+			}
+		},
+
+		{
+			tag = "mainPrompt",
+			lines = { "Can I interest you in some hardware? Remember, my prices are much better than that pig, Asano, can do." },
+			onEnd = function(self) self:ActivateConversation("mainChoices") end
+		},
+
+		{
+			noCancel = true,
+			tag = "mainChoices",
+			options = {
+				{
+					line = "Let me see what you've got.",
+					response = "Tbis is my current inventory. Of course, none of the decks are cyberspace-capable.",
+					onEnd = function(self) OpenBox("EdosShop") end
+				},
+				{
+					line = "I'm just browsing.",
+					response = "All right. Maybe next time.",
+					onEnd = function(self) GoToRoom(self.north) end
+				},
+			}
+		},
+
+		{
+			tag = "boughtNothing",
+			lines = { "Come back again when you feel like buying." },
+			onEnd = function(self) GoToRoom(self.north) end
+		},
+	}
+}
+crazyedos = CrazyEdos
+
+function CrazyEdos:OnEnterRoom()
+	Room.OnEnterRoom(self)
+
+end

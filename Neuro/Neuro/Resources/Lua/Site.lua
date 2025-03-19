@@ -373,7 +373,7 @@ function Site:GetListEntries(page)
 	self:GetPageHeaderFooterEntries(page, entries)
 
 	if (self.detailsIndex == 0) then
-		self:GetListEntriesEx(page, entries, 1, self.numMessagesPerPage, false, page.type == "store", page.type == "store" or page.hasDetails)
+		self:GetListEntriesEx(page, entries, 1, self.numMessagesPerPage, false, page.type == "store", page.type == "store" or page.hasDetails or page.targetOnClick ~= nil)
 	end
 
 	return entries
@@ -570,7 +570,12 @@ function Site:HandleClickedEntry(id)
 		-- menu click id is index
 		self:OnItemSelected(page, id, page.items[id])
 	elseif page.type == "list" then
-		self.detailsIndex = id
+		if (page.targetOnClick ~= nil) then
+			self.selectedListItem = id
+			self:GoToPage(page.targetOnClick)
+		else
+			self.detailsIndex = id
+		end
 	elseif page.type == "store" then
 		self:SelectStoreItem(id)
 	elseif page.type == "download" then
@@ -746,6 +751,19 @@ function Site:OnTextEntryComplete(text, tag)
 
 	if (tag == "password") then
 		self.passwordFailed = true
+		if (text == "1") then
+			self.passwordLevel = 1
+			self.passwordFailed = false
+		elseif (text == "2") then
+			self.passwordLevel = 2
+			self.passwordFailed = false
+		elseif (text == "3") then
+			self.passwordLevel = 3
+			self.passwordFailed = false
+		elseif (text == "4") then
+			self.passwordLevel = 4
+			self.passwordFailed = false
+		end
 		for i,v in ipairs(self.passwords) do
 			if (v == string.lower(text)) then
 				self.passwordLevel = i
@@ -862,16 +880,6 @@ Justice = ComingSoon:new {
 justice=Justice
 -- Coord.--1-416/112  AI--none
 
-Keisatsu = ComingSoon:new {
-	comLinkLevel = 4,
-	passwords = {
-		"warrants",
-		"supertac",
-	}
-}
-keisatsu=Keisatsu
--- Coord.--1-288/112  AI--none
-
 FreeMatrix = ComingSoon:new {
 	comLinkLevel = 5,
 	passwords = {
@@ -986,7 +994,7 @@ Soften = Site:new {
 			items = {
 				{ key = 'x', text = "Exit to Main", target = "main" },
 				{ key = '1', software = 203 },
-				{ key = '2', software = 215 },
+				{ key = '2', software = 259 }, -- SEQUENCER
 			}
 		},
 
@@ -1319,7 +1327,7 @@ Chaos = Site:new {
 				{ date = 111658, to = "Everyone", from = "Modern Yutaka", message = "Good one. Cuwboy named Chipdancer owed me a favor. Broke into the Hosaka base with Comlink 5.0, used \"FUNGEKI\", and then added my name to their employee list. Received paychecks for six weeks before anyone noticed. Only risk was walking in to pick up check." },
 				{ date = 111658, to = "All", from = "Modern Miles", message = "Julius Deane knows Cryptology. He also wanted to let people know he's got some hard to find skill chips, in case anyone's interested." },
 				{ date = 111658, to = "Everyone", from = "Polychrome", message = "Screaming Fist has Easy Rider 1.0 in their base. Lets you cross zones without having to go to another cyberjack." },
-				{ date = 111658, to = "Angelo", from = "Lupus", longfrom = "Lupus Yonderboy", message = "Mr. Who pauid us on the SENSE/NET gog. He'll remain a Mr. Who, not  Mr. Name. He understands now. Chaos is our mode and modus. Our central kick. Stories to be told, offline in the meeting room. All you have to do is ask." },
+				{ date = 111658, to = "Angelo", from = "Lupus", longfrom = "Lupus Yonderboy", message = "Mr. Who paid us on the SENSE/NET gog. He'll remain a Mr. Who, not  Mr. Name. He understands now. Chaos is our mode and modus. Our central kick. Stories to be told, offline in the meeting room. All you have to do is ask." },
 				{ date = 111658, to = "Everyone", from = "Modern Larry", longfrom = "Larry Moe", message = "Don't worry about the meet room, no wilsons will get past me. If you're Modern, you're in. Good place for biz. I've got CopTalk now, Lupus has Evasion. See you on the other side." },
 				{ date = 111658, to = "Modern Miles", from = "Polychrome", message = "Heard you were looking for a place. Cheap Hotel link code is CHEAPO." },
 				{ date = 111658, to = "Everyone", from = "Modern Bob", message = "I have the link code for Hitachi and the SEA. If anyone's interested, leave me a message." },
@@ -1489,7 +1497,7 @@ Fuji = Site:new {
 }
 fuji=Fuji
 
-HitachiBio = ComingSoon:new {
+HitachiBio = Site:new {
 	title = "* Hitachi Biotech *",
 	comLinkLevel = 3,
 	passwords = {
@@ -1526,3 +1534,107 @@ HitachiBio = ComingSoon:new {
 	-- Coord.--2-32/192  AI--none
 }
 hitachibio=HitachiBio
+
+Keisatsu = Site:new {
+	title = "* Chiba City Tactical Police *",
+	comLinkLevel = 4,
+	passwords = {
+		"warrants",
+		"supertac",
+	},
+	pages = {
+		['title'] = { type = "title", message = " " },
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "View Warrants", target = "warrants" },
+				{ key = '2', text = "Edit Warrants", target = "warrants", level = 2 },
+			}
+		},
+		['warrants'] = {
+			type = "list",
+			title = "Tactical Strike Warrants",
+			targetOnClick = 'warrant',
+--			hasDetails = true,
+--			canEditDetails = function(self) return self.comLinkLevel > 1 end,
+			columns = { { field = 'Name', width = 19 }, { field = 'BAMA ID', width = 0 } },
+--			formatDetails = function(item) return string.format("\n\nName: %s\nID:   %s\nWanted for %s.", item.Name, item['BAMA ID'], item.crime) end,
+			items = s.arrestWarrants,
+		},
+		['warrant'] = {
+			type = "custom",
+			exit = "warrants",
+		}
+
+	}
+	-- Coord.--1-288/112  AI--none
+}
+keisatsu=Keisatsu
+
+function Keisatsu:GoToPage(pageName)
+	if (pageName == 'warrants') then
+		self.pages['warrants'].items = s.arrestWarrants
+	end
+
+	Site.GoToPage(self, pageName)
+end
+
+function Keisatsu:HandleClickedEntry(id)
+	if (self.currentPage == 'main' and id > 0) then
+		self.editMode = id - 2
+	end
+
+	Site.HandleClickedEntry(self, id)
+end
+
+function Keisatsu:GetCustomEntries(page)
+	local entries = {}
+
+	self:GetPageHeaderFooterEntries(page, entries)
+
+	local title = "Tactical Strike Warrants"
+	local titleX = self:CenteredX(title)
+	table.append(entries, { x=titleX, y = 2, text = title})
+	
+	table.append(entries, { x = 0, y = 5, text = "Name:"})
+	table.append(entries, { x = 0, y = 6, text = "ID:"})
+	table.append(entries, { x = 0, y = 7, text = string.format("Wanted for %s.", s.arrestWarrants[self.selectedListItem].crime)})
+	
+	if (self.editMode == 2) then
+		table.append(entries, { x = 6, y = 5, entryTag = "name"})
+	else
+		table.append(entries, { x = 6, y = 5, text = s.arrestWarrants[self.selectedListItem].Name})
+	end
+	if (self.editMode == 3) then
+		table.append(entries, { x = 6, y = 6, entryTag = "id"})
+	else
+		table.append(entries, { x = 6, y = 6, text = s.arrestWarrants[self.selectedListItem]['BAMA ID']})
+	end
+
+	self:AddExitEditEntries(entries, self.editMode > 0)
+
+	return entries
+end
+
+function Keisatsu:HandleClickedEdit()
+	self.editMode = 2
+end
+
+
+function Keisatsu:OnTextEntryComplete(text, tag)
+
+	if (tag == "name") then
+		s.arrestWarrants[self.selectedListItem].Name = text
+		self.editMode = 3
+	elseif (tag == "id") then
+		s.arrestWarrants[self.selectedListItem]['BAMA ID'] = text
+		self.editMode = 1
+		if (string.lower(s.arrestWarrants[self.selectedListItem].Name) == "larry moe" and text == "062788138") then
+			s.larry_arrested = true
+		end
+	else
+		Site.OnTextEntryComplete(self, text, tag)
+	end
+end

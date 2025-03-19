@@ -55,31 +55,35 @@ Items = {
 		name = "guest pass",
 		cost = 0
 	},
+	[5] = Item:new {
+		name = "joystick",
+		cost = 20
+	},
 
-	[100] = Deck:new { capacity =  5, buggy = true,  cyberspace = false, manufacturer = "Yamamitsu", name = "UXB" },
-	[101] = Deck:new { capacity =  6, buggy = false, cyberspace = false, manufacturer = "Yamamitsu", name = "XXB" },
-	[102] = Deck:new { capacity = 10, buggy = false, cyberspace = false, manufacturer = "Yamamitsu", name = "ZXB" },
-	[103] = Deck:new { capacity = 10, buggy = false, cyberspace = false, manufacturer = nil, name = "Blue Light Special" },
-	[104] = Deck:new { capacity =  5, buggy = false, cyberspace = false, manufacturer = "Ausgezeichnet", name = "188 BJB" },
-	[105] = Deck:new { capacity = 11, buggy = false, cyberspace = false, manufacturer = "Ausgezeichnet", name = "350 SL" },
-	[106] = Deck:new { capacity = 15, buggy = false, cyberspace = false, manufacturer = "Ausgezeichnet", name = "440 SDI" },
-	[107] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  manufacturer = "Ausgezeichnet", name = "550 GT" },
-	[108] = Deck:new { capacity =  5, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Hiki-Gaeru" },
-	[109] = Deck:new { capacity = 10, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Gaijin" },
-	[110] = Deck:new { capacity = 12, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Bushido" },
-	[111] = Deck:new { capacity = 15, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Edokko" },
-	[112] = Deck:new { capacity = 18, buggy = false, cyberspace = false, manufacturer = "Moriyama", name = "Katana" },
-	[113] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  manufacturer = "Moriyama", name = "Tofu" },
-	[114] = Deck:new { capacity = 24, buggy = false, cyberspace = true,  manufacturer = "Moriyama", name = "Shogun" },
-	[115] = Deck:new { capacity = 10, buggy = false, cyberspace = false, manufacturer = nil, name = "Ninja 2000" },
-	[116] = Deck:new { capacity = 12, buggy = false, cyberspace = false, manufacturer = nil, name = "Ninja 3000" },
-	[117] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  manufacturer = nil, name = "Ninja 4000" },
-	[118] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  manufacturer = nil, name = "Ninja 5000" },
-	[119] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  manufacturer = nil, name = "Samurai Seven" },
-	[120] = Deck:new { capacity = 11, buggy = false, cyberspace = true,  manufacturer = "Ono-Sendai", name = "Cyberspace II" },
-	[121] = Deck:new { capacity = 15, buggy = false, cyberspace = true,  manufacturer = "Ono-Sendai", name = "Cyberspace III" },
-	[122] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  manufacturer = "Ono-Sendai", name = "Cyberspace VI" },
-	[123] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  manufacturer = "Ono-Sendai", name = "Cyberspace VII" },
+	[100] = Deck:new { capacity =  5, buggy = true,  cyberspace = false, cost = 0,     manufacturer = "Yamamitsu", name = "UXB" },
+	[101] = Deck:new { capacity =  6, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Yamamitsu", name = "XXB" },
+	[102] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 7200,  manufacturer = "Yamamitsu", name = "ZXB" },
+	[103] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 1000,  manufacturer = nil, name = "Blue Light Special" },
+	[104] = Deck:new { capacity =  5, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Ausgezeichnet", name = "188 BJB" },
+	[105] = Deck:new { capacity = 11, buggy = false, cyberspace = false, cost = 7500,  manufacturer = "Ausgezeichnet", name = "350 SL" },
+	[106] = Deck:new { capacity = 15, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Ausgezeichnet", name = "440 SDI" },
+	[107] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ausgezeichnet", name = "550 GT" },
+	[108] = Deck:new { capacity =  5, buggy = false, cyberspace = false, cost = 2000,  manufacturer = "Moriyama", name = "Hiki-Gaeru" },
+	[109] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 3600,  manufacturer = "Moriyama", name = "Gaijin" },
+	[110] = Deck:new { capacity = 12, buggy = false, cyberspace = false, cost = 7700,  manufacturer = "Moriyama", name = "Bushido" },
+	[111] = Deck:new { capacity = 15, buggy = false, cyberspace = false, cost = 10000, manufacturer = "Moriyama", name = "Edokko" },
+	[112] = Deck:new { capacity = 18, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Moriyama", name = "Katana" },
+	[113] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Moriyama", name = "Tofu" },
+	[114] = Deck:new { capacity = 24, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Moriyama", name = "Shogun" },
+	[115] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 0,     manufacturer = nil, name = "Ninja 2000" },
+	[116] = Deck:new { capacity = 12, buggy = false, cyberspace = false, cost = 8400,  manufacturer = nil, name = "Ninja 3000" },
+	[117] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = nil, name = "Ninja 4000" },
+	[118] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 0,     manufacturer = nil, name = "Ninja 5000" },
+	[119] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 0,     manufacturer = nil, name = "Samurai Seven" },
+	[120] = Deck:new { capacity = 11, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace II" },
+	[121] = Deck:new { capacity = 15, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace III" },
+	[122] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace VI" },
+	[123] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace VII" },
 
 	
 	[200] = Comlink:new {
@@ -106,21 +110,347 @@ Items = {
 		cost = 0,
 		version = 6,
 	},
-	[206] = Software:new {
-		name = "Scout",
+	[205] = Software:new {
+		name = "Acid",
 		version = 1,
-		scope = "site",
+		scope = "ice"
+	},
+	[206] = Software:new {
+		name = "Acid",
+		version = 3,
+		scope = "ice"
+	},
+	[207] = Software:new {
+		name = "Acid",
+		version = 4,
+		scope = "ice"
+	},
+	[208] = Software:new {
+		name = "ArmorAll",
+		version = 1,
+		scope = "ice"
+	},
+	[209] = Software:new {
+		name = "ArmorAll",
+		version = 2,
+		scope = "ice"
 	},
 	[210] = Software:new {
+		name = "ArmorAll",
+		version = 3,
+		scope = "ice"
+	},
+	[211] = Software:new {
+		name = "ArmorAll",
+		version = 4,
+		scope = "ice"
+	},
+	[212] = Software:new {
 		name = "BattleChess",
 		version = 2,
 		scope = "site",
 	},
+	[213] = Software:new {
+		name = "BattleChess",
+		version = 4,
+		scope = "site", -- TODO: Phantom also 'ai'?
+	},
+	[214] = Software:new {
+		name = "Blammo",
+		version = 1,
+		scope = "ice",
+	},
 	[215] = Software:new {
+		name = "BlowTorch",
+		cost = 750,
+		version = 1,
+		scope = "ice",
+	},
+	[216] = Software:new {
+		name = "BlowTorch",
+		version = 3,
+		scope = "ice",
+	},
+	[217] = Software:new {
+		name = "BlowTorch",
+		version = 4,
+		scope = "ice",
+	},
+	[218] = Software:new {
+		name = "Concrete",
+		version = 1,
+		scope = "jack",
+	},
+	[219] = Software:new {
+		name = "Concrete",
+		version = 2,
+		scope = "jack",
+	},
+	[220] = Software:new {
+		name = "Concrete",
+		version = 5,
+		scope = "jack",
+	},
+	[221] = Software:new {
+		name = "Cyberspace",
+		version = 1,
+		scope = "jack",
+	},
+	[222] = Software:new {
+		name = "Decoder",
+		cost = 750,
+		version = 1,
+		scope = "ice",
+	},
+	[223] = Software:new {
+		name = "Decoder",
+		version = 2,
+		scope = "ice",
+	},
+	[224] = Software:new {
+		name = "Decoder",
+		version = 4,
+		scope = "ice",
+	},
+	[225] = Software:new {
+		name = "DepthCharge",
+		version = 3,
+		scope = "ice",
+	},
+	[226] = Software:new {
+		name = "DepthCharge",
+		version = 8,
+		scope = "ice",
+	},
+	[227] = Software:new {
+		name = "DoorStop",
+		version = 1,
+		scope = "ice",
+	},
+	[228] = Software:new {
+		name = "DoorStop",
+		version = 4,
+		scope = "ice",
+	},
+	[229] = Software:new {
+		name = "Drill",
+		cost = 1500,
+		version = 1,
+		scope = "ice",
+	},
+	[230] = Software:new {
+		name = "Drill",
+		version = 2,
+		scope = "ice",
+	},
+	[231] = Software:new {
+		name = "Drill",
+		version = 3,
+		scope = "ice",
+	},
+	[232] = Software:new {
+		name = "EasyRider",
+		version = 1,
+		scope = "cyberspace",
+	},
+	[233] = Software:new {
+		name = "Hammer",
+		version = 1,
+		scope = "ice",
+	},
+	[234] = Software:new {
+		name = "Hammer",
+		version = 2,
+		scope = "ice",
+	},
+	[235] = Software:new {
+		name = "Hammer",
+		version = 4,
+		scope = "ice",
+	},
+	[236] = Software:new {
+		name = "Hammer",
+		version = 5,
+		scope = "ice",
+	},
+	[237] = Software:new {
+		name = "Hammer",
+		version = 6,
+		scope = "ice",
+	},
+	[238] = Software:new {
+		name = "Hemlock",
+		version = 1,
+		scope = "ai",
+	},
+	[239] = Software:new {
+		name = "Injector",
+		version = 1,
+		scope = "ice",
+	},
+	[240] = Software:new {
+		name = "Injector",
+		version = 2,
+		scope = "ice",
+	},
+	[241] = Software:new {
+		name = "Injector",
+		version = 3,
+		scope = "ice",
+	},
+	[242] = Software:new {
+		name = "Injector",
+		version = 5,
+		scope = "ice",
+	},
+	[243] = Software:new {
+		name = "Jammies",
+		version = 1,
+		scope = "ice",
+	},
+	[244] = Software:new {
+		name = "Jammies",
+		version = 2,
+		scope = "ice",
+	},
+	[245] = Software:new {
+		name = "Jammies",
+		version = 3,
+		scope = "ice",
+	},
+	[246] = Software:new {
+		name = "Jammies",
+		version = 4,
+		scope = "ice",
+	},
+	[247] = Software:new {
+		name = "KGB",
+		version = 1,
+		scope = "ice",
+	},
+	[248] = Software:new {
+		name = "KuangEleven",
+		version = 1,
+		scope = "ai",
+	},
+	[249] = Software:new {
+		name = "LogicBomb",
+		version = 3,
+		scope = "ice",
+	},
+	[250] = Software:new {
+		name = "LogicBomb",
+		version = 6,
+		scope = "ice",
+	},
+	[251] = Software:new {
+		name = "Mimic",
+		version = 1,
+		scope = "ice",
+	},
+	[252] = Software:new {
+		name = "Mimic",
+		version = 2,
+		scope = "ice",
+	},
+	[253] = Software:new {
+		name = "Probe",
+		cost = 500,
+		version = 1,
+		scope = "ice",
+	},
+	[254] = Software:new {
+		name = "Probe",
+		version = 3,
+		scope = "ice",
+	},
+	[255] = Software:new {
+		name = "Probe",
+		version = 4,
+		scope = "ice",
+	},
+	[256] = Software:new {
+		name = "Probe",
+		version = 10,
+		scope = "ice",
+	},
+	[257] = Software:new {
+		name = "Probe",
+		version = 15,
+		scope = "ice",
+	},
+	[258] = Software:new {
+		name = "Python",
+		version = 2,
+		scope = "ice",
+	},
+	[259] = Software:new {
+		name = "Python",
+		version = 3,
+		scope = "ice",
+	},
+	[260] = Software:new {
+		name = "Python",
+		version = 5,
+		scope = "ice",
+	},
+	[261] = Software:new {
+		name = "Scout",
+		version = 1,
+		scope = "site",
+	},
+	[262] = Software:new {
 		name = "Sequencer",
 		version = 1,
 		scope = "site",
 	},
+	[263] = Software:new {
+		name = "Slow",
+		version = 1,
+		scope = "ice",
+	},
+	[264] = Software:new {
+		name = "Slow",
+		version = 2,
+		scope = "ice",
+	},
+	[265] = Software:new {
+		name = "Slow",
+		version = 3,
+		scope = "ice",
+	},
+	[266] = Software:new {
+		name = "Slow",
+		version = 4,
+		scope = "ice",
+	},
+	[267] = Software:new {
+		name = "Slow",
+		version = 5,
+		scope = "ice",
+	},
+	[268] = Software:new {
+		name = "ThunderHead",
+		version = 1,
+		scope = "ice",
+	},
+	[269] = Software:new {
+		name = "ThunderHead",
+		version = 2,
+		scope = "ice",
+	},
+	[270] = Software:new {
+		name = "ThunderHead",
+		version = 3,
+		scope = "ice",
+	},
+	[271] = Software:new {
+		name = "ThunderHead",
+		version = 4,
+		scope = "ice",
+	},
+
+	
 	[280] = FakeSoftware:new {
 		name = "Mindbender",
 		version = 3,
@@ -155,9 +485,13 @@ Items = {
 	[318] = Organ:new { name = "Spinal Fluid", sell=30, buy=33, hp=10 },
 	[319] = Organ:new { name = "Appendix", sell=3, buy=3, hp=10 },
 	
+	
+	
 	[400] = Skill:new { name = "CopTalk", cost = 100, scope = "room" },
 	[401] = Skill:new { name = "Cryptology", cost = 0, scope = "anytime", box = "DecodeBox" },
-	[402] = Skill:new { name = "Hwardware Repair", cost = 1000, scope = "room" },
+	[402] = Skill:new { name = "Hardware Repair", cost = 1000, scope = "room" },
+	[403] = Skill:new { name = "Icebreaking", cost = 1000, scope = "cyberspace" },
+	[404] = Skill:new { name = "Debug", cost = 1000, scope = "room" },
 }
 
 CryptoDecode = {

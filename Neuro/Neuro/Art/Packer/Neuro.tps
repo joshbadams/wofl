@@ -299,6 +299,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">panthermoderns.png</key>
+            <key type="filename">streetcenter5.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,114,613,227</rect>
+                <key>scale9Paddings</key>
+                <rect>307,114,613,227</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">shins.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -311,6 +327,36 @@
                 <rect>669,246,1338,492</rect>
                 <key>scale9Paddings</key>
                 <rect>669,246,1338,492</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">spaceport.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>305,115,610,230</rect>
+                <key>scale9Paddings</key>
+                <rect>305,115,610,230</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streeetcenter6.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,116,613,232</rect>
+                <key>scale9Paddings</key>
+                <rect>307,116,613,232</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -344,7 +390,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">streetcenter5.png</key>
+            <key type="filename">streetmain1.png</key>
+            <key type="filename">streetmain3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -353,9 +400,69 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>307,114,613,227</rect>
+                <rect>306,112,611,224</rect>
                 <key>scale9Paddings</key>
-                <rect>307,114,613,227</rect>
+                <rect>306,112,611,224</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streetmain2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>304,113,608,225</rect>
+                <key>scale9Paddings</key>
+                <rect>304,113,608,225</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streetmain4.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>306,115,611,229</rect>
+                <key>scale9Paddings</key>
+                <rect>306,115,611,229</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streetmain5.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,115,614,230</rect>
+                <key>scale9Paddings</key>
+                <rect>307,115,614,230</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streetmain6.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,116,613,231</rect>
+                <key>scale9Paddings</key>
+                <rect>307,116,613,231</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

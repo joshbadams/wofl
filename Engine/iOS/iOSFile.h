@@ -42,11 +42,20 @@ public:
 	virtual std::string GetSavePath(const char* Filename) override
 	{
 		// get doc dir location
-		NSArray* DocumentsDirs = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+		NSArray* DocumentsDirs = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
 		NSURL* DocDir = [DocumentsDirs objectAtIndex:0];
+
+		// append bundle id (to work with non-sandboxed)
+		DocDir = [DocDir URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
+		
+		// make sure the dir exists
+		NSString* Dir = [NSString stringWithCString:[DocDir fileSystemRepresentation] encoding:NSUTF8StringEncoding];
+		[[NSFileManager defaultManager] createDirectoryAtPath:Dir withIntermediateDirectories:YES attributes:nil error:nil];
 		
 		// append filename to it
-		return [[DocDir URLByAppendingPathComponent:[NSString stringWithUTF8String:Filename]] fileSystemRepresentation];
+		DocDir = [DocDir URLByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
+		
+		return [DocDir fileSystemRepresentation];
 	}
 	
 	virtual std::string LoadFileToString(const char* Path) override

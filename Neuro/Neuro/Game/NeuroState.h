@@ -75,7 +75,8 @@ public:
 	virtual bool IsMessageActive() = 0;
 	virtual void RefreshUI() = 0;
 	virtual void ResetLua() = 0;
-
+	virtual void AddAnimation(LuaRef AnimAObj) = 0;
+	virtual void RemoveAnimation(LuaRef AnimObj) = 0;
 };
 
 class IInterfaceChangingStateDelegate
@@ -171,6 +172,7 @@ private:
 	static int Lua_OpenBox(lua_State* L);
 	static int Lua_CloseBox(lua_State* L);
 	static int Lua_StartTimer(lua_State* L);
+	static int Lua_StopTimer(lua_State* L);
 	static int Lua_SaveGame(lua_State* L);
 	static int Lua_LoadGame(lua_State* L);
 	static int Lua_PauseGame(lua_State* L);
@@ -180,7 +182,9 @@ private:
 	static int Lua_UpdateDialog(lua_State* L);
 	static int Lua_ReorderBox(lua_State* L);
 	static int Lua_UpdateBoxes(lua_State* L);
-	
+	static int Lua_AddAnimation(lua_State* L);
+	static int Lua_RemoveAnimation(lua_State* L);
+
 	void InitLua();
 
 	void ActivateRoom(LuaRef OldRoom, LuaRef NewRoom);
@@ -195,7 +199,9 @@ private:
 		LuaRef Object;
 		LuaRef Callback;
 	};
-	vector<Timer> Timers;
+	unsigned int NextId = 0;
+	unsigned int AddTimer(const Timer& InTimer);
+	std::map<unsigned int, Timer> Timers;
 	
 	State CurrentState;
 

@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.5.0</string>
+        <string>7.6.3</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -224,6 +224,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">crazyedos.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>304,114,607,227</rect>
+                <key>scale9Paddings</key>
+                <rect>304,114,607,227</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">deane.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -269,6 +284,51 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">hitachi.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>304,117,607,234</rect>
+                <key>scale9Paddings</key>
+                <rect>304,117,607,234</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">larry.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>31,67,63,135</rect>
+                <key>scale9Paddings</key>
+                <rect>31,67,63,135</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">larrydoor.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>49,80,97,159</rect>
+                <key>scale9Paddings</key>
+                <rect>49,80,97,159</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">larrys.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -284,6 +344,36 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">laser1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>19,75,38,150</rect>
+                <key>scale9Paddings</key>
+                <rect>19,75,38,150</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">laser2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>18,80,35,159</rect>
+                <key>scale9Paddings</key>
+                <rect>18,80,35,159</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">massageparlor.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -296,6 +386,51 @@
                 <rect>672,250,1344,500</rect>
                 <key>scale9Paddings</key>
                 <rect>672,250,1344,500</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">matrix.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,114,614,227</rect>
+                <key>scale9Paddings</key>
+                <rect>307,114,614,227</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">metro.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,115,614,229</rect>
+                <key>scale9Paddings</key>
+                <rect>307,115,614,229</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">nurse.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>34,67,69,133</rect>
+                <key>scale9Paddings</key>
+                <rect>34,67,69,133</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -387,6 +522,36 @@
                 <rect>976,359,1951,717</rect>
                 <key>scale9Paddings</key>
                 <rect>976,359,1951,717</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streeteast1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>304,113,607,226</rect>
+                <key>scale9Paddings</key>
+                <rect>304,113,607,226</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streeteast2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>305,114,609,227</rect>
+                <key>scale9Paddings</key>
+                <rect>305,114,609,227</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

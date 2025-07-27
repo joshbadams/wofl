@@ -9,16 +9,48 @@
 	"sourceSize": {"w":1280,"h":796}
 },
 {
+	"filename": "hitachi.png",
+	"frame": {"x":0,"y":798,"w":1214,"h":468},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":468},
+	"sourceSize": {"w":1214,"h":468}
+},
+{
+	"filename": "spaceport.png",
+	"frame": {"x":0,"y":1268,"w":1220,"h":460},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1220,"h":460},
+	"sourceSize": {"w":1220,"h":460}
+},
+{
 	"filename": "streeetcenter6.png",
-	"frame": {"x":0,"y":798,"w":1226,"h":464},
+	"frame": {"x":0,"y":1730,"w":1226,"h":464},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":464},
 	"sourceSize": {"w":1226,"h":464}
 },
 {
+	"filename": "streetmain4.png",
+	"frame": {"x":0,"y":2196,"w":1222,"h":458},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":458},
+	"sourceSize": {"w":1222,"h":458}
+},
+{
+	"filename": "streetmain5.png",
+	"frame": {"x":0,"y":2656,"w":1228,"h":460},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":460},
+	"sourceSize": {"w":1228,"h":460}
+},
+{
 	"filename": "streetmain6.png",
-	"frame": {"x":0,"y":1264,"w":1226,"h":462},
+	"frame": {"x":0,"y":3118,"w":1226,"h":462},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":462},
@@ -29,9 +61,9 @@
 	"version": "1.0",
 	"image": "Neuro2.png",
 	"format": "RGBA8888",
-	"size": {"w":2048,"h":2048},
+	"size": {"w":2048,"h":4096},
 	"scale": "1",
 	"related_multi_packs": [ "Neuro1.json" ],
-	"smartupdate": "$TexturePacker:SmartUpdate:50836e06d7e48145fcf707f142e81b98:ca1400c6a440a35eca947ad48af443f8:8e5f1c61dd1938f0ebcc3dab307fd743$"
+	"smartupdate": "$TexturePacker:SmartUpdate:5db2a830275b47fd234127743ad1cd05:32ba1eff835dbf64efd05dcd9517453b:8e5f1c61dd1938f0ebcc3dab307fd743$"
 }
 }

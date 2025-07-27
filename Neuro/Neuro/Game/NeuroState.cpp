@@ -33,6 +33,7 @@ void NeuroState::InitLua()
 	Lua.RegisterFunction("CloseBox", Lua_CloseBox);
 	Lua.RegisterFunction("ShowMessage", Lua_ShowMessage);
 	Lua.RegisterFunction("StartTimer", Lua_StartTimer);
+	Lua.RegisterFunction("StopTimer", Lua_StopTimer);
 	Lua.RegisterFunction("SaveGame", Lua_SaveGame);
 	Lua.RegisterFunction("LoadGame", Lua_LoadGame);
 	Lua.RegisterFunction("PauseGame", Lua_PauseGame);
@@ -42,6 +43,8 @@ void NeuroState::InitLua()
 	Lua.RegisterFunction("UpdateDialog", Lua_UpdateDialog);
 	Lua.RegisterFunction("ReorderBox", Lua_ReorderBox);
 	Lua.RegisterFunction("UpdateBoxes", Lua_UpdateBoxes);
+	Lua.RegisterFunction("AddAnimation", Lua_AddAnimation);
+	Lua.RegisterFunction("RemoveAnimation", Lua_RemoveAnimation);
 
 	std::vector<string> GameScripts;
 	Lua.GetStringValues("", "GameScripts", GameScripts);
@@ -199,24 +202,23 @@ void NeuroState::Tick(float DeltaTime)
 		PendingInvalidation = ZoneType::None;
 	}
 
-	vector<Timer>::iterator it = Timers.begin();
-	while (it != Timers.end())
+	vector<unsigned int> TimersToRemove;
+	for (auto& Pair : Timers)
 	{
-		it->Time -= DeltaTime;
-		if (it->Time <= 0)
+		Pair.second.Time -= DeltaTime;
+		if (Pair.second.Time <= 0)
 		{
-			Lua.CallFunction_NoReturn(it->Object, it->Callback);
+			Lua.CallFunction_NoReturn(Pair.second.Object, Pair.second.Callback);
 			StateDelegate->RefreshUI();
 			
-			Timers.erase(it);
-			break;
-		}
-		else
-		{
-			++it;
+			TimersToRemove.push_back(Pair.first);
 		}
 	}
-	
+	for (unsigned int Id : TimersToRemove)
+	{
+		Timers.erase(Id);
+	}
+
 	TimeTimer -= DeltaTime;
 	while (TimeTimer <= 0)
 	{
@@ -531,6 +533,13 @@ void NeuroState::IncrementIntValue(const std::string& Key)
 	SetIntValue(Key, GetIntValue(Key) + 1);
 }
 
+unsigned int NeuroState::AddTimer(const Timer& Timer)
+{
+	unsigned int Id = NextId++;
+	Timers[Id] = Timer;
+	return Id;
+}
+
 static NeuroState* State(lua_State* L)
 {
 	lua_getglobal(L, "__neurostate");
@@ -586,7 +595,19 @@ int NeuroState::Lua_ShowMessage(lua_State* L)
 	{
 		// put it on top for MakeRef() (very annoying)
 		lua_pushvalue(L, StackPos);
-		S->Lua_OnMessageComplete = S->Lua.MakeRef();
+		LuaRef OnCompleteFunc = S->Lua.MakeRef();
+		
+		if (!S->bPendingMessageNeedsPauseAtEnd)
+		{
+			if (OnCompleteFunc)
+			{
+				S->Lua.CallFunction_NoReturn(S->CurrentRoom, OnCompleteFunc);
+			}
+		}
+		else
+		{
+			S->Lua_OnMessageComplete = OnCompleteFunc;
+		}
 		
 		// move down one to get std::string
 		StackPos--;
@@ -621,10 +642,24 @@ int NeuroState::Lua_StartTimer(lua_State *L)
 	assert(lua_isinteger(L, -3));
 	float Time = lua_tonumber(L, -3);
 
-	S->Timers.push_back({Time, Obj, Func});
+	int Id = S->AddTimer({Time, Obj, Func});
 	
 	// @todo push the timer id
-	lua_pushinteger(L, 33);
+	lua_pushinteger(L, Id);
+	return 1;
+}
+
+int NeuroState::Lua_StopTimer(lua_State *L)
+{
+	NeuroState* S = State(L);
+	
+	assert(lua_isinteger(L, -1));
+	long long Id = lua_tointeger(L, -1);
+	if (Id >= 0)
+	{
+		S->Timers.erase((unsigned int)Id);
+	}
+	
 	return 1;
 }
 
@@ -701,6 +736,31 @@ int NeuroState::Lua_ReorderBox(lua_State* L)
 	
 	return 0;
 }
+
+int NeuroState::Lua_AddAnimation(lua_State* L)
+{
+	NeuroState* S = State(L);
+
+	lua_pushvalue(L, -1);
+	LuaRef AnimRef = S->Lua.MakeRef();
+
+	S->StateDelegate->AddAnimation(AnimRef);
+	
+	return 0;
+}
+
+int NeuroState::Lua_RemoveAnimation(lua_State* L)
+{
+	NeuroState* S = State(L);
+
+	lua_pushvalue(L, -1);
+	LuaRef AnimRef = S->Lua.MakeRef();
+
+	S->StateDelegate->RemoveAnimation(AnimRef);
+	
+	return 0;
+}
+
 
 //std::vector<Message*> NeuroState::GetUnlockedMessages(std::string ID)
 //{

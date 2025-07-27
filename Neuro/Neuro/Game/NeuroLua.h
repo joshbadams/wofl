@@ -26,12 +26,12 @@ public:
 	LuaObjRef(Lua* LuaObj, int RefIndex);
 	
 	lua_State* L;
-	int Ref;
+	int Ref = -1;
 };
 
 using LuaRef = shared_ptr<LuaObjRef>;
 bool operator==(const LuaRef& A, const LuaRef& B);
-
+bool operator<(const LuaRef& A, const LuaRef& B);
 
 
 struct LuaScope
@@ -85,6 +85,9 @@ public:
 
 	template<typename TableSpec, typename KeyType>
 	void SetIntValue(TableSpec Table, KeyType Name, int Value) const;
+
+	template<typename TableSpec, typename KeyType>
+	void SetBoolValue(TableSpec Table, KeyType Name, bool Value) const;
 
 	template<typename TableSpec, typename KeyType>
 	void SetStringValue(TableSpec Table, KeyType Name, const string& Value) const;
@@ -234,6 +237,12 @@ template<typename TableSpec, typename KeyType>
 void Lua::SetIntValue(TableSpec Table, KeyType Name, int Value) const
 {
 	SET_TABLE_VALUE(lua_pushinteger, Value);
+}
+
+template<typename TableSpec, typename KeyType>
+void Lua::SetBoolValue(TableSpec Table, KeyType Name, bool Value) const
+{
+	SET_TABLE_VALUE(lua_pushboolean, Value);
 }
 
 template<typename TableSpec, typename KeyType>

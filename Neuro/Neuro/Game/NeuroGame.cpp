@@ -185,6 +185,11 @@ void NeuroGame::ResetLua()
 	{
 		CloseBoxWithObj(Box->LuaBox);
 	}
+
+	while (Anims.size() > 0)
+	{
+		RemoveAnimation(Anims.begin()->first);
+	}
 	BoxCache.clear();
 }
 
@@ -316,6 +321,48 @@ void NeuroGame::RefreshUI()
 	}
 }
 
+void NeuroGame::AddAnimation(LuaRef AnimObj)
+{
+	Lua* L = AnimObj->LuaSystem;
+	
+	std::string Name;
+	int X, Y, Width, Height;
+	float FrameRate;
+	std::vector<std::string> Frames;
+
+	L->GetStringValue(AnimObj, "name", Name);
+	L->GetStringValues(AnimObj, "frames", Frames);
+	L->GetIntValue(AnimObj, "x", X);
+	L->GetIntValue(AnimObj, "y", Y);
+	L->GetIntValue(AnimObj, "width", Width);
+	L->GetIntValue(AnimObj, "height", Height);
+	L->GetFloatValue(AnimObj, "framereate", FrameRate);
+
+	WoflSprite* Sprite = new WoflSprite(X, Y, Width, Height);
+	for (std::string& Frame : Frames)
+	{
+//		std::string ImageName;
+//		L->GetStringValue(Frame, "image", ImageName);
+
+		WoflImage* Image = new WoflImage(Frame.c_str());
+		Sprite->AddImage(Image);
+	}
+	Anims[AnimObj] = Sprite;
+	DialogInputSorter->AddChild(Sprite);
+}
+
+void NeuroGame::RemoveAnimation(LuaRef AnimObj)
+{
+	auto It = Anims.find(AnimObj);
+	if (It != Anims.end())
+	{
+		It->second->RemoveFromWorld();
+		delete It->second;
+		Anims.erase(It);
+	}
+}
+
+
 bool NeuroGame::OnGlobalKey(const KeyEvent& Event)
 {
 	if (Event.KeyCode == WoflKeys::F1)
@@ -344,6 +391,10 @@ void NeuroGame::Invalidate(ZoneType Zone)
 {
 	if ((Zone & ZoneType::Room) != ZoneType::None)
 	{
+		while (ScreenSprite->GetChild())
+		{
+			ScreenSprite->GetChild()->RemoveFromWorld();
+		}
 		ScreenSprite->ClearImages();
 		
 		string BackgroundImage;

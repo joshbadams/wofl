@@ -993,7 +993,7 @@ Soften = Site:new {
 			type = "download",
 			items = {
 				{ key = 'x', text = "Exit to Main", target = "main" },
-				{ key = '1', software = 203 },
+				{ key = '1', software = 202 }, -- COMLINK 4.0
 				{ key = '2', software = 259 }, -- SEQUENCER
 			}
 		},
@@ -1311,9 +1311,9 @@ Chaos = Site:new {
 			type = "download",
 			items = {
 				{ key = 'x', text = "Exit to Main", target = "main" },
-				{ key = '1', software = 202 },
-				{ key = '2', software = 280 },
-				{ key = '3', software = 281 },
+				{ key = '1', software = 201 }, -- COMLINK 3.0
+				{ key = '2', software = 280 }, -- MINDBENDER [fake]
+				{ key = '3', software = 281 }, -- VIDEOSOFT [fake]
 			}
 		},
 		['bbs_view'] = {

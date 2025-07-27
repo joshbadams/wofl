@@ -59,6 +59,10 @@ Items = {
 		name = "joystick",
 		cost = 20
 	},
+	[6] = Item:new {
+		name = "Security Pass",
+		cost = 4000
+	},
 
 	[100] = Deck:new { capacity =  5, buggy = true,  cyberspace = false, cost = 0,     manufacturer = "Yamamitsu", name = "UXB" },
 	[101] = Deck:new { capacity =  6, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Yamamitsu", name = "XXB" },
@@ -86,27 +90,27 @@ Items = {
 	[123] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace VII" },
 
 	
-	[200] = Comlink:new {
+	[199] = Comlink:new {
 		cost = 100,
 		version = 1,
 	},
-	[201] = Comlink:new {
+	[200] = Comlink:new {
 		cost = 0,
 		version = 2,
 	},
-	[202] = Comlink:new {
+	[201] = Comlink:new {
 		cost = 0,
 		version = 3,
 	},
-	[203] = Comlink:new {
+	[202] = Comlink:new {
 		cost = 0,
 		version = 4,
 	},
-	[204] = Comlink:new {
+	[203] = Comlink:new {
 		cost = 0,
 		version = 5,
 	},
-	[205] = Comlink:new {
+	[204] = Comlink:new {
 		cost = 0,
 		version = 6,
 	},
@@ -492,6 +496,7 @@ Items = {
 	[402] = Skill:new { name = "Hardware Repair", cost = 1000, scope = "room" },
 	[403] = Skill:new { name = "Icebreaking", cost = 1000, scope = "cyberspace" },
 	[404] = Skill:new { name = "Debug", cost = 1000, scope = "room" },
+	[405] = Skill:new { name = "Evasion", cost = 2000, scope = "cyberspace" },
 }
 
 CryptoDecode = {

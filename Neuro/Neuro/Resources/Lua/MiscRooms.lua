@@ -1,490 +1,4 @@
 
-StreetWest1 = Room:new {
-	name = "streetwest1",
-	
-	east = "streetwest2",
-}
-
-function StreetWest1:GetConnectingRoom(direction)
-	if (direction == "north") then
-		ShowMessage("Chatsubo is closed for good.")
-		return nil
-	end
-
-	return Room.GetConnectingRoom(self, direction)
-end
-streetwest1 = StreetWest1
-
-
-StreetWest2 = Room:new {
-	name = "streetwest2",
-	
-	west = "streetwest1",
-	east = "streetcenter1",
-	north = "bodyshop",
-	south = "donutworld",
-}
-streetwest2 = StreetWest2
-
-StreetCenter1 = Room:new {
-	name = "streetcenter1",
-	
-	east = "massageparlor",
-	west = "streetwest2",
-	north = "larrys",
-	south = "streetcenter2",
-}
-streetcenter1 = StreetCenter1
-
-StreetCenter2 = Room:new {
-	name = "streetcenter2",
-	
-	east = "shins",
-	north = "streetcenter1",
-	south = "streetcenter3",
-}
-streetcenter2 = StreetCenter2
-
-function StreetCenter2:GetConnectingRoom(direction)
-	if (direction == "east" and s.shins > 0) then
-		return nil
-	end
-
-	return Room.GetConnectingRoom(self, direction)
-end
-
-StreetCenter3 = Room:new {
-	name = "streetcenter3",
-	
-	east = "streetmain1",
-	west = "cheaphotel",
-	north = "streetcenter2",
-	south = "streetcenter4",
-}
-streetcenter3 = StreetCenter3
-
-StreetCenter4 = Room:new {
-	name = "streetcenter4",
-	
-	west = "gentlemanloser",
-	north = "streetcenter3",
-	south = "streetcenter5",
-	
-	longDescription = ""
-}
-streetcenter4 = StreetCenter4
-
-StreetCenter5 = Room:new {
-	name = "streetcenter5",
-	
-	-- west = "maas",
-	east = "deane",
-	north = "streetcenter4",
-	-- south = "streetcenter6",
-	
-	longDescription = ""
-}
-streetcenter5 = StreetCenter5
-
-
-s.main1Count = 0
-StreetMain1 = Room:new {
-	name = "streetmain1",
-	
-	west = "streetcenter3",
-	east = "streetmain2",
-	
-	girlMessage = "One of Lonny Zone's working girls is standing here in the street, leaning against a light tower. She carefully looks you over.",
-	
-	conversations = {
-		condition = function(self) return self.hasPerson end,
-		tag = "girlstart",
-		lines = {
-			"Hey, sailer. New in town?"
-		}
-	}
-}
-
-function StreetMain1:OnEnterRoom()
-	Room.OnEnterRoom(self)
-
---	if (s.mainCount == 2)
-	
-end
-
-streetmain1 = StreetMain1
-
-
-StreetMain2 = Room:new {
-	name = "streetmain2",
-	
-	west = "streetmain1",
-	east = "streetmain3",
-	north = "metro"
-}
-streetmain2 = StreetMain2
-
-StreetMain3 = Room:new {
-	name = "streetmain3",
-	
-	west = "streetmain2",
-	east = "streetmain4",
-	south = "crazyedos",
-}
-streetmain3 = StreetMain3
-
-StreetMain4 = Room:new {
-	name = "streetmain4",
-	
-	west = "streetmain3",
-	east = "streetmain5",
-	south = "matrix",
-}
-streetmain4 = StreetMain4
-
-StreetMain5 = Room:new {
-	name = "streetmain5",
-	
-	west = "streetmain4",
-	east = "streetmain6",
-}
-streetmain5 = StreetMain5
-
-StreetMain6 = Room:new {
-	name = "streetmain6",
-	
-	west = "streetmain5",
-	--east = "streetmain7",
-}
-streetmain6 = StreetMain6
-
-----------------------------------------------------------------------------------
-
--- state:
--- 0: walking in first time, or after using coptalk
--- 1: has chosen "I came in for a donut. Is there some law against that?", which activates some options without kicking out
--- 2: has left room and come back, angering cop
--- 11: said CopTalk level 1 line
--- 12: said CopTalk level 2 line
-s.donutworld = 0
-s.usingCopTalk = 0
-DonutWorld = Room:new {
-	
-	name = "donutworld",
-	onEnterConversation = "onEnter",
-	hasPerson = true,
-	
-	north = "streetwest2",
-	
-	longDescription = "This is a Donut World. A SEA cop who looks like a sumo wrestler is eating donuts and caffeine at a table by the door. He gives you an ugly look when you walk in.",
-	description = "This is Donut World.",
-	
-	conversations = {
-		{
-			tag = "onEnter",
-			lines = { function() if (s.donutworld < 2) then return "Hey! We don't allow your kind in Donut World, hamsterhead." else
-				return "Back again? I warned you once. Looking for trouble, citizen?" end end }
-		},
-				
-		{
-			condition = function() return s.donutworld < 2 end,
-			options = {
-				{
-					condition = function() return s.donutworld == 0 and s.usingCopTalk >= 2 end,
-					line = "Saint Patty's Day. I'm looking for the Little People, don't you know..",
-					response = "Mulligan! I can barely understand your thick Irish accent! And I almost didn't recognize you!",
-					onEnd = function() s.donutworld = 12; end
-				},
-				{
-					condition = function() return s.donutworld == 0 and s.usingCopTalk >= 1; end,
-					line = "Sure and begorrah, O'Riley. If you don't recognize me, you'll get my Irish up.",
-					response = "Finnegan, old pal! Top of the mornin' to you! I didn't recognize you!",
-					onEnd = function() s.donutworld = 11; end
-				},
-				{
-					condition = function() return s.donutworld == 0 end,
-					line = "I came in for a donut. Is there some law against that?",
-					response = "This is a donut shop, citizen. Only cops are allowed in donut shops.",
-					onEnd = function() s.donutworld = 1 end
-				},
-				{
-					condition = function() return s.donutworld == 0 end,
-					line = "I'm looking for pirated software.",
-					response = "That's it your under arrest.",
-					onEnd = function() GoToRoom("streetwest2"); ShowMessage("<You were arrested>") end
-				},
-				{
-					line = "Drop dead, flatfoot.",
-					response = "That's it your under arrest.",
-					onEnd = function() ShowMessage("<You were arrested>"); GoToRoom("streetwest2") end
-				},
-				{
-					line = "You'll never take me alive, copper!",
-					response = "That's it your under arrest.",
-					onEnd = function() ShowMessage("<You were arrested>"); GoToRoom("streetwest2") end
-				},
-				{
-					line = "Forgive me, sir. I thoroughly despise myself for making such a blunder.",
-					response = "Just don't let me catch you in here again. How get out of here.",
-					onEnd = function() GoToRoom("streetwest2") end
-				},
-				{
-					condition = function() return s.donutworld == 1 end,
-					line = "Am I ever going to catch a break in this game?",
-					response = "Just don't let me catch you in here again. How get out of here.",
-					onEnd = function() GoToRoom("streetwest2") end
-				},
-			}
-		},
-		{
-			condition = function() return s.donutworld == 2 end,
-			options = {
-				{
-					condition = function() return s.usingCopTalk >= 2; end,
-					line = "Sure and begorrah, O'Riley. If you don't recognize me, you'll get my Irish up.",
-					response = "FMulligan! I can barely understand your thick Irish accent! And I almost didn't recognize you!",
-					onEnd = function() s.donutworld = 12; end
-				},
-				{
-					condition = function() return s.usingCopTalk >= 1 end,
-					line = "Well, now! My Irish eyes are smiling, O'Riley! Corned beef and cabbage! Got any news?",
-					response = "Finnegan, old pal! Top of the mornin' to you! I didn't recognize you!",
-					onEnd = function() s.donutworld = 11; end
-				},
-				{
-					line = "Can't a man get a donut in this town without getting arrested?",
-					response = "That's it your under arrest.",
-					onEnd = function() ShowMessage("<You were arrested>"); GoToRoom("streetwest2") end
-				},
-				{
-					line = "Yeah, I'm looking for trouble. Have you seen any?",
-					response = "That's it your under arrest.",
-					onEnd = function() ShowMessage("<You were arrested>"); GoToRoom("streetwest2") end
-				},
-				{
-					line = "Sorry, my mistake. I left my brain in my other pants.",
-					response = "I've warned you about this before! You're under arrest!",
-					onEnd = function() ShowMessage("<You were arrested>"); GoToRoom("streetwest2") end
-				},
-			}
-		},
-		
-		{
-			condition = function() return s.donutworld >= 11 end,
-			options = {
-				{
-					line = "Begorrah! I forgot the comlink number for the Chiba Tactical Police!",
-					response = "Don't worry. It's KEISATSU. Better write it down this time.",
-				},
-				{
-					line = "What's the password for the Software Enforcement Agency? Is it \"Wild Irish Rose?\"",
-					response = "Wild Irish Rose is a hooker on Memory Lane! The coded SEA password is SMEEGLDIPO, remember?",
-				},
-				{
-					line = "O'Riley! I heard the changed the Fuji Electric password to \"Uisquebaugh.\" Is that right?",
-					response = "The coded Fuji password is ABURAKKOI. They haven't changed it in years.",
-				},
-				{
-					condition = function() return s.donutworld >= 12 end,
-					line = "Have you heard any news, then, O'Riley? Found out where the Little People keep their warez?",
-					response = "Just got through questioning Shiva. She says illegal warez are available on the Gentleman Loser DB.",
-				},
-				{
-					condition = function() return s.donutworld >= 12 end,
-					line = "Fergus gave me the second level password for the Chiba Tactical Police but I seem to have forgotten it again!",
-					response = "You seem to be forgetting a lot! The coded word is SNORSKEE.",
-				},
-			}
-		},
-	}
-}
-
-function DonutWorld:UseSkill(skill)
-	-- if using CopTalk before we've opened our mouth, active cop mode
-	if (skill.name == "CopTalk" and not s.hasTalkedInRoom) then
-		s.usingCopTalk = s.skillLevels[400]
-
-print("using coptalk", skill.name, s.usingCopTalk)
-
-		-- immediately talk
-		self:ActivateConversation()
-	end
-
-end
-
-function DonutWorld:OnEnterRoom()
-	s.usingCopTalk = 0
-	Room.OnEnterRoom(self)
-end
-
-function DonutWorld:OnExitRoom()
-	-- if we used coptalk, reset to "happy cop" on next enter
-	if (s.usingCopTalk) then
-		s.donutworld = 0
-	-- otherwise use "angry cop" mode
-	else
-		s.donutworld = 2
-	end
-end
-
-donutworld = DonutWorld
-
--------------------------------------------------------------------------------------
-
-LarryCopTalkShop = ShopBox:new {
-	items = { 400 },
-}
-
-s.larrys = 0
-s.larry_arrested = false
-Larrys = Room:new {
-	name = "larrys",
-	onEnterConversation = "onEnterRoom",
-	hasPerson = function() return s.larry_arrested == false end,
-	
-	south = "streetcenter1",
-	
-	longDescription = "LARRY'S is one of Chiba's dubious software stores. The walls are lined with slivers of microsoft, spikes of colored silicon mounted on cardboard for display. The shaved head of Larry Moe, with dozens of Microsofts protruding from the carbon socket behind is left ear, is visible beside the counter.",
-	description = "LARRY'S is one of Chiba's dubious software stores.",
-
-	conversations = {
-		{
-			tag = "onEnterRoom",
-			lines = { "You looking to buy some softs?" },
-		},
-		
-		{
-			condition = function() return s.larrys == 0 end,
-			options = {
-				{
-					line = "Got anything good?",
-					response = "All my softs are top quality. Too bad I don't have any right now!"
-				},
-				{
-					line = "I'm looking for the Panther Moderns.",
-					response = "The Moderns don't like networking with strangers",
-					onEnd = function() s.larrys = 1 end
-				},
-				{
-					line = "I'm a cop. You're under arrest unless you answer some questions.",
-					response = "You're not a cop. You're a meatball. I'm calling the Lawbot.",
-					onEnd = function() ShowMessage("<You were arrested>"); GoToRoom("streetwest2") end
-				},
-				{
-					line = "It's cold outside. I just wanted to come in here and warm up.",
-					response = "I'll warm you up with a flamethrower if you don't get out of here, pal.",
-					onEnd = function() GoToRoom("streetcenter1") end
-				},
-				{
-					line = "Do you know anything about",
-					hasTextEntry=true,
-					onEnd = function() s.larrys = 3; print("larrry", s.larrys) end
-				}
-			}
-		},
-		
-		{
-			condition = function() return s.larrys == 1 end,
-			options = {
-				{
-					line = "Does that include wealthy strangers? I can pay for a meeting.",
-					response = "How much would you pay for a meeting with the Moderns?",
-					onEnd = function(self) s.larrys = 2; self:ActivateConversation() end
-				},
-				{
-					line = "You I have a sudden urge to buy something.",
-					response = "All my softs are top quality. Too bad I don't have any right now!"
-				},
-				{
-					line = "You're calling ME strange? Have you looked at yourself lately?",
-					response = "How much would you pay for a meeting with the Moderns?",
-					onEnd = function(self) s.larrys = 2; self:ActivateConversation() end
-				},
-				{
-					line = "Do you know anything about",
-					hasTextEntry=true,
-					onEnd = function() s.larrys = 3 end
-				}
-			}
-		},
-
-		{
-			condition = function() return s.larrys == 2 end,
-			options = {
-				{
-					line = "100 credits.",
-					onEnd = function(self) self:HandlePay(100) end
-				},
-				{
-					line = "200 credits.",
-					onEnd = function(self) self:HandlePay(200) end
-				},
-				{
-					line = "300 credits",
-					onEnd = function(self) self:HandlePay(300) end
-				},
-				{
-					line = "Whoops! I don't have any money!",
-					onEnd = function(self) self:HandlePay(99999999) end
-				}
-			}
-		},
-		
-		{
-			condition = function() return s.larrys == 3 end,
-			options = {
-				{
-					line = "Do you know anything about",
-					hasTextEntry=true,
-				}
-			}
-		},
-
-		{
-			tag = "getOut",
-			lines = { "No money, no meeting. Jack out, clown.", },
-			onEnd = function() GoToRoom("streetcenter1") end
-		},
-		
-		{
-			tag = "paid",
-			lines = {
-				"All right. Payment in advance. Let's have at it...",
-				"What a rube! You really think I'm going to let you just walk right in there? But thanks for the donation!",
-			},
-		},
-		
-		{
-			tag = "_unknownentry",
-			lines = { "You'd know more I would about that." }
-		},
-		
-		{
-			tags = { "_skills", "_skill", "_coptalk", "_chip" },
-			lines = { "I can seel you a CopTalk skill chip. $100." },
-			onEnd = function() OpenBox("LarryCopTalkShop") end,
-		},
-	},
-}
-
-function Larrys:HandlePay(amount)
-	if (s.money >= amount) then
-		s.money = s.money - amount
-		self:ActivateConversation("paid")
-	else
-		self:ActivateConversation("getOut")
-	end
-end
-
-function Larrys:OnEnterRoom()
-	s.larrys = 0
-	Room.OnEnterRoom(self)
-end
-
-larrys = Larrys
-
--------------------------------------------------------------------------------------
-
 s.massageparlor = 1
 MassageParlor = Room:new {
 	name = "massageparlor",
@@ -674,6 +188,7 @@ function Shins:KickedOut()
 end
 
 function Shins:OnExitRoom()
+	Room.OnExitRoom(self)
 	s.shins = 1
 end
 
@@ -820,6 +335,20 @@ Deane = Room:new {
 deane = Deane
 
 
+
+ModernUpsetEvasionShop = ShopBox:new {
+	items = { 400 },
+}
+
+ModernEvasionShop = ShopBox:new {
+	items = { 400 },
+}
+
+ModernPassShop = ShopBox:new {
+	items = { 400 },
+}
+
+
 s.moderns = 1
 PantherModerns = Room:new {
 	name = "panthermoderns",
@@ -834,7 +363,14 @@ PantherModerns = Room:new {
 	conversations = {
 		{
 			tag = "onEnter",
-			lines = { "You got past Larry. That's good. You won't get past me. That's business." },
+			lines = { function(self)
+				if (s.moderns == 3) then
+					return "Don't be s smart mouth this time."
+				else
+					return "You got past Larry. That's good. You won't get past me. That's business."
+				end
+			end
+			},
 			onEnd = function() s.moderns = 1 end
 		},
 		
@@ -843,34 +379,53 @@ PantherModerns = Room:new {
 			options = {
 				{
 					line = "Lupus, my man! I hear you're the kind of guy who helps stray cowboys. Can you answer some questions for me?",
-					response = "aadsd",
+					onEnd = function() self:ActivateConversation("mattshaw"); end
 				},
 				{
 					line = "Geez, you're really a funny-looking dweeb, aren't you?",
-					response = "asdasd",
---					onEnd = function() s.deane = 2; end
+					response = "Don't like you either. Not Modern. Biz will cost more now.",
+					onEnd = function() self:ActivateConversation("upset"); end
 				},
 				{
 					line = "Exactly what is a Panther Modern?",
 					response = "Chaos. That is our mode and modus. That is our central kick. Believe it.",
-					onEnd = function(self) s.moderns = 2; self:ActivateConversation(); end
+					onEnd = function(self) self:ActivateConversation("mattshaw"); end
 				},
 			}
 		},
 
 		{
 			condition = function() return s.moderns == 2; end,
-			lines = { "Matt Shaw says you're all right. So talk. What do you want to know?" },
-		},
-		
-		{
-			condition = function() return s.moderns == 3; end,
 			options = {
 				{
 					line = "What do you know about",
 					hasTextEntry=true,
 				},
 			}
+		},
+
+		{
+			tag = "mattshaw",
+			lines = { "Matt Shaw says you're all right. So talk. What do you want to know?" },
+			onEnd = function() s.moderns = 2 end
+		},
+		
+		{
+			tag = "upset",
+			lines = { "I can sell you an Evasion skill chip for $5000. You'll need it for protection in Cybersapce." },
+			onEnd = function() s.moderns = 3; OpenBox("ModernUpsetEvasionShop"); end
+		},
+
+		{
+			tag = "upsetBpughtNothing",
+			lines = { "Have it your way." },
+			onEnd = function() GoToRoom("streetcenter1"); end
+		},
+
+		{
+			tag = "upsetBpughtSomething",
+			lines = { "Maybe you're okay. Anything else you want to ask me?" },
+			onEnd = function() s.moderns = 2; end
 		},
 
 
@@ -917,7 +472,13 @@ PantherModerns = Room:new {
 		},
 	}
 }
-pantermoderns = PantherModerns
+panthermoderns = PantherModerns
+
+function PantherModerns:OnBoughtSoldNothing()
+	if (s.moderns == 3) then
+		currentRoom:ActivateConversation("upsetBpughtNothing")
+	end
+end
 
 ----------------------------------------------------
 
@@ -927,7 +488,7 @@ MetroShop = ShopBox:new {
 		215, -- BLOWTORCH 1.0
 		229, -- DRILL 1.0
 		253, -- PROBE 1.0
-		200, -- COMLINK 1.0
+		199, -- COMLINK 1.0
 	}
 }
 
@@ -1161,7 +722,7 @@ CrazyEdos = Room:new {
 					response = "Domo arigato gozaimasu! Here's your ComLink 2.0 software.",
 					onEnd = function(self)
 						edosGaveCaviar = true;
-						table.append(s.software, 201);
+						table.append(s.software, 200);
 						table.removeArrayItem(s.inventory, 2);
 						ShowMessage("Edo installs the software in your deck.");
 						self:ActivateConversation("mainChoices");
@@ -1210,4 +771,114 @@ crazyedos = CrazyEdos
 function CrazyEdos:OnEnterRoom()
 	Room.OnEnterRoom(self)
 
+end
+
+-------------------------------------------------------
+
+s.hitachi = 0
+Hitachi = Room:new {
+	
+	timer = -1,
+	
+	name = "hitachi",
+	onEnterConversation = "onEnter",
+
+	south = "streeteast1",
+	
+	longDescription = "Hitachi Biotech is occupied by a woman in a lab coat who seems happy to see you.",
+	description = "You're in Hitachi Biotech.",
+	
+	namedAnims =
+	{
+		{
+			name="nurse", x=660, y=134, width=136, height=266, framerate = 4,
+			frames = { "nurse" },
+		},
+	},
+	
+	conversations = {
+		{
+			tag = "onEnter",
+			lines = { "Hello! I'm the lab technician. You must be a volunteer for the lung experiment?" },
+			onEnd = function(self) self:ActivateConversation("experimentChoice") end
+		},
+		
+		{
+			noCancel = true,
+			tag = "experimentChoice",
+			options = {
+				{
+					line = "Err... yes. I suppose so...",
+					response = "Great! We're currently paying our volunteers $3000 a piece. Wait here and I'll be back in a few minutes.",
+					onEnd = function(self)
+						s.hitachi = 1;
+						RemoveAnimation("nurse");
+						self.timer = StartTimer(20, self, function(self) self:NurseReturn() end)
+					end,
+				},
+				{
+					line = "I'm so embarrassed. I just stumbled in here by mistake. Excuse me.",
+					response = "You should be embarrased, you fool! Get out of here!",
+					onEnd = function(self) GoToRoom(self.south) end
+				},
+				{
+					line = "Actually, I'm just here to steal some time on your cyberspace jack. I know it's illegal, but what the hell...",
+					response = "You're right. It is illegal. Have a nice trip to the Justice Booth.",
+					onEnd = function(self) ShowMessage("<You were arrested>", function(self) GoToRoom("streeteast1") end, true) end
+				},
+				{
+					line = "Actually, I'm just here to see you. I've heard you're the kind of woman who likes to have fun...",
+					response = "I've heard you're the kind of turnip-head who likes getting arrested.",
+					onEnd = function(self) ShowMessage("<You were arrested>", function(self) GoToRoom("streeteast1") end, true) end
+				},
+
+			},
+		},
+		
+		{
+			tag = "noLungs",
+			lines = { "Hey! You don't have organic lungs. Get out of here!" },
+			onEnd = function(self) ShowMessage("The technician kicks you out of the lab.", function(self) GoToRoom(self.south) end, true) end
+		},
+
+		{
+			tag = "hasLungs",
+			lines = {
+				"Thanks for waiting. This won't hurt a bit. Well, maybe a little bit, but you won't feel anything after the anesthetic takes effect.",
+				"At least, not while you're asleep. After you're awake, of course, that's another matter entirely. Then it'll hurt like hell.",
+				"But hey, you volunteered for this. Nobody forced you into it. Thank you, goodbye."
+			},
+			onEnd = function(self)
+				table.removeArrayItem(s.organs, 302);
+				s.money = s.money + 3000;
+				ShowMessage("The technician painfully removes both of your lungs.", function(self) GoToRoom("streeteast1") end, true)
+			end
+		},
+
+	},
+}
+
+hitachi = Hitachi
+
+function Hitachi:NurseReturn()
+	self:AddAnimation("nurse")
+	if (not table.containsArrayItem(s.organs, 302)) then
+		self:ActivateConversation("noLungs")
+	else
+		self:ActivateConversation("hasLungs")
+	end
+end
+
+function Hitachi:OnEnterRoom()
+	Room.OnEnterRoom(self)
+
+	s.hitachi = 0
+
+	self:AddAnimation("nurse")
+end
+
+function Hitachi:OnExitRoom()
+	Room.OnExitRoom(self)
+
+	StopTimer(self.timer);
 end

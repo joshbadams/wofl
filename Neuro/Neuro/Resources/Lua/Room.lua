@@ -67,7 +67,6 @@ function Room:ActivateConversation(inTag)
 		tag = tag(self)
 	end
 
-print("activating convo with tag", tag)
 	-- reset
 	self.lineIndex = 0
 	self.choiceIndex = 0
@@ -237,10 +236,68 @@ function Room:GetNextConversation(tag)
 	return nil
 end
 
+function Room:GetSprites()
+	return {}
+end
 
+function Room:AddAnimation(anim)
+	if (type(anim) == 'string') then
+		for _,v in ipairs(self.namedAnims) do
+			if (v.name == anim) then
+				table.append(self.addedAnimations, v)
+print("---> Adding anim", v)
+				AddAnimation(v)
+			end
+		end
+	else
+		table.append(self.addedAnimations, anim)
+print("---> Adding premade anim", v)
+		AddAnimation(anim)
+	end
+end
+
+function Room:RemoveAnimation(anim)
+print("---> REmoving anim?", anim)
+	for i,v in ipairs(self.addedAnimations) do
+		bMatches = false
+print("---> comparing to", v)
+
+		if (type(anim) == 'string' and v.name == anim) then
+			bMatches = true
+		elseif (type(anim) == 'table' and v == anim) then
+			bMatches = true
+		end
+
+		if (bMatches) then
+print("---> REmoving anim", v, i)
+			table.remove(self.addedAnimations, i)
+			RemoveAnimation(v)
+			return
+		end
+	end
+end
+
+function Room:AddAnimations()
+	if (self.animations ~= nil) then
+		for _,v in ipairs(self.animations) do
+			self:AddAnimation(v)
+		end
+	end
+end
+
+function Room:RemoveAnimations()
+print("num", #self.addedAnimations)
+	for _,v in ipairs(self.addedAnimations) do
+		RemoveAnimation(v)
+	end
+	self.addedAnimations = {}
+end
 
 function Room:OnEnterRoom()
 	s.hasTalkedInRoom = false
+
+	self.addedAnimations = {}
+	self:AddAnimations()
 
 print("entering room", self.name, s.hasTalkedInRoom)
 	local firstTimeKey = "__" .. self.name
@@ -256,7 +313,7 @@ end
 
 function Room:OnFirstEnter()
 	if (self.onEnterConversation ~= nil) then
-		ShowMessage(self.longDescription, function() self:ActivateConversation(self.onEnterConversation) end)
+		ShowMessage(self.longDescription, function() if (self.hasPerson) then self:ActivateConversation(self.onEnterConversation) end end)
 	else
 		ShowMessage(self.longDescription)
 	end
@@ -264,13 +321,13 @@ end
 
 function Room:OnEnter()
 	ShowMessage(self.description)
-	if (self.onEnterConversation ~= nil) then
+	if (self.onEnterConversation ~= nil and self.hasPerson) then
 		self:ActivateConversation(self.onEnterConversation)
 	end
 end
 
 function Room:OnExitRoom()
-
+	self:RemoveAnimations()
 end
 
 function Room:GiveMoney(amount)

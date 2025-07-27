@@ -54,11 +54,7 @@ RegFellow = Site:new {
 				{ key = 'x', text = "Exit to Main", target = "main" },
 				{ key = '1', software = 212 }, -- BATTELCHESS 2.0
 				{ key = '2', software = 261 }, -- SCOUT 1.0
-				{ key = '3', software = 201 }, -- COMLINK 2.0
 			},
-			entries = {
-				{ x = 0, y = 11, text = "** NOTE: ComLink 2.0 is only here for the proof of concept, until the location where you get it normally is coded :)", wrap = -1}
-			}
 		},
 	},
 	

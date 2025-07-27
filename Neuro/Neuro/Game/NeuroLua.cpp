@@ -65,12 +65,15 @@ LuaObjRef::LuaObjRef(Lua* LuaSys, int RefIndex)
 	, L(LuaSys->L)
 	, Ref(RefIndex)
 {
-		
+	
 }
 
 LuaObjRef::~LuaObjRef()
 {
-	luaL_unref(L, LUA_REGISTRYINDEX, Ref);
+	if (Ref != -1)
+	{
+		luaL_unref(L, LUA_REGISTRYINDEX, Ref);
+	}
 }
 
 bool operator==(const LuaRef& A, const LuaRef& B)
@@ -80,6 +83,14 @@ bool operator==(const LuaRef& A, const LuaRef& B)
 	return bResult;
 }
 
+bool operator<(const LuaRef& A, const LuaRef& B)
+{
+	if (A == B)
+	{
+		return false;
+	}
+	return A->Ref < B->Ref;
+}
 
 Lua::Lua(void* InContext)
 	: Context(InContext)
@@ -165,10 +176,12 @@ static Json::Value LuaToJson(lua_State* L)
 		Json::Value Pair(Json::objectValue);
 		if (lua_isinteger(L, -2))
 		{
+WLOG("saving %d as ", (int)lua_tointeger(L, -2));
 			Pair["key"] = Json::Value(lua_tointeger(L, -2));
 		}
 		else
 		{
+WLOG("saving %s as ", lua_tostring(L, -2));
 			Pair["key"] = Json::Value(lua_tostring(L, -2));
 		}
 		
@@ -176,13 +189,21 @@ static Json::Value LuaToJson(lua_State* L)
 		if (lua_isinteger(L, -1))
 		{
 			Pair["value"] = Json::Value(lua_tointeger(L, -1));
+WLOG("%d\n", (int)lua_tointeger(L, -1));
 		}
 		else if (lua_isstring(L, -1))
 		{
 			Pair["value"] = Json::Value(lua_tostring(L, -1));
+WLOG("%s\n", lua_tostring(L, -1));
+		}
+		else if (lua_isboolean(L, -1))
+		{
+WLOG("%s\n", lua_toboolean(L, -1) ? "true" : "false");
+			Pair["value"] = Json::Value((bool)lua_toboolean(L, -1));
 		}
 		else if (lua_istable(L, -1))
 		{
+WLOG("a table:\n");
 			// recurse down for the object/array
 			Pair["value"] = LuaToJson(L);
 		}
@@ -228,6 +249,11 @@ int JsonToLua(Lua& Lua, lua_State* L, const Json::Value& JsonObject)
 				WLOG("Looading string value %s = %s\n", Key.asString().c_str(), Value.asString().c_str());
 				Lua.SetStringValue(TableStackLoc, Key.asString().c_str(), Value.asString().c_str());
 			}
+			else if (Value.isBool())
+			{
+				WLOG("Looading bool value %s = %s\n", Key.asString().c_str(), Value.asBool() ? "true" : "false");
+				Lua.SetBoolValue(TableStackLoc, Key.asString().c_str(), Value.asBool());
+			}
 			else if (Value.isArray() || Value.isObject())
 			{
 				WLOG("Looading array/object value %s:\n", Key.asString().c_str());
@@ -247,6 +273,11 @@ int JsonToLua(Lua& Lua, lua_State* L, const Json::Value& JsonObject)
 			{
 				WLOG("Looading string value %d = %s\n", Key.asInt(), Value.asString().c_str());
 				Lua.SetStringValue(TableStackLoc, Key.asInt(), Value.asString().c_str());
+			}
+			else if (Value.isBool())
+			{
+				WLOG("Looading bool value %d = %s\n", Key.asInt(), Value.asBool() ? "true" : "false");
+				Lua.SetBoolValue(TableStackLoc, Key.asInt(), Value.asBool());
 			}
 			else if (Value.isArray() || Value.isObject())
 			{

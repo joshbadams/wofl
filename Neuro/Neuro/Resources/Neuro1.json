@@ -2,7 +2,7 @@
 
 {
 	"filename": "bodyshop.png",
-	"frame": {"x":0,"y":0,"w":1213,"h":447},
+	"frame": {"x":612,"y":0,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
@@ -10,7 +10,7 @@
 },
 {
 	"filename": "chatsubo.png",
-	"frame": {"x":1215,"y":0,"w":1213,"h":447},
+	"frame": {"x":1827,"y":0,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
@@ -18,14 +18,6 @@
 },
 {
 	"filename": "cheaphotel.png",
-	"frame": {"x":2430,"y":0,"w":1213,"h":447},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
-	"sourceSize": {"w":1213,"h":447}
-},
-{
-	"filename": "court.png",
 	"frame": {"x":0,"y":449,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -33,23 +25,7 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "crazyedos.png",
-	"frame": {"x":1220,"y":2697,"w":1214,"h":454},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":454},
-	"sourceSize": {"w":1214,"h":454}
-},
-{
-	"filename": "deane.png",
-	"frame": {"x":0,"y":2697,"w":1218,"h":452},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":452},
-	"sourceSize": {"w":1218,"h":452}
-},
-{
-	"filename": "donutworld.png",
+	"filename": "court.png",
 	"frame": {"x":1215,"y":449,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -57,7 +33,23 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "gentlemanloser.png",
+	"filename": "crazyedos.png",
+	"frame": {"x":0,"y":3149,"w":1214,"h":454},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":454},
+	"sourceSize": {"w":1214,"h":454}
+},
+{
+	"filename": "deane.png",
+	"frame": {"x":1218,"y":2695,"w":1218,"h":452},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":452},
+	"sourceSize": {"w":1218,"h":452}
+},
+{
+	"filename": "donutworld.png",
 	"frame": {"x":2430,"y":449,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -65,7 +57,7 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "larrys.png",
+	"filename": "gentlemanloser.png",
 	"frame": {"x":0,"y":898,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -73,7 +65,23 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "massageparlor.png",
+	"filename": "larry.png",
+	"frame": {"x":139,"y":0,"w":125,"h":269},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":269},
+	"sourceSize": {"w":125,"h":269}
+},
+{
+	"filename": "larrydoor.png",
+	"frame": {"x":344,"y":0,"w":194,"h":318},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":194,"h":318},
+	"sourceSize": {"w":194,"h":318}
+},
+{
+	"filename": "larrys.png",
 	"frame": {"x":1215,"y":898,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -81,31 +89,23 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "matrix.png",
-	"frame": {"x":1228,"y":3153,"w":1228,"h":454},
+	"filename": "laser1.png",
+	"frame": {"x":266,"y":0,"w":76,"h":300},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":454},
-	"sourceSize": {"w":1228,"h":454}
+	"spriteSourceSize": {"x":0,"y":0,"w":76,"h":300},
+	"sourceSize": {"w":76,"h":300}
 },
 {
-	"filename": "metro.png",
-	"frame": {"x":0,"y":3613,"w":1228,"h":458},
+	"filename": "laser2.png",
+	"frame": {"x":540,"y":0,"w":70,"h":318},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":458},
-	"sourceSize": {"w":1228,"h":458}
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":318},
+	"sourceSize": {"w":70,"h":318}
 },
 {
-	"filename": "panthermoderns.png",
-	"frame": {"x":2436,"y":2697,"w":1226,"h":454},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":454},
-	"sourceSize": {"w":1226,"h":454}
-},
-{
-	"filename": "shins.png",
+	"filename": "massageparlor.png",
 	"frame": {"x":2430,"y":898,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -113,15 +113,39 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "spaceport.png",
-	"frame": {"x":1230,"y":3613,"w":1220,"h":460},
+	"filename": "matrix.png",
+	"frame": {"x":1216,"y":3149,"w":1228,"h":454},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1220,"h":460},
-	"sourceSize": {"w":1220,"h":460}
+	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":454},
+	"sourceSize": {"w":1228,"h":454}
 },
 {
-	"filename": "streetcenter1.png",
+	"filename": "metro.png",
+	"frame": {"x":2448,"y":3605,"w":1228,"h":458},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":458},
+	"sourceSize": {"w":1228,"h":458}
+},
+{
+	"filename": "nurse.png",
+	"frame": {"x":0,"y":0,"w":137,"h":267},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":137,"h":267},
+	"sourceSize": {"w":137,"h":267}
+},
+{
+	"filename": "panthermoderns.png",
+	"frame": {"x":2446,"y":3149,"w":1226,"h":454},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":454},
+	"sourceSize": {"w":1226,"h":454}
+},
+{
+	"filename": "shins.png",
 	"frame": {"x":0,"y":1347,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -129,7 +153,7 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "streetcenter2.png",
+	"filename": "streetcenter1.png",
 	"frame": {"x":1215,"y":1347,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -137,7 +161,7 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "streetcenter3.png",
+	"filename": "streetcenter2.png",
 	"frame": {"x":2430,"y":1347,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -145,7 +169,7 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "streetcenter4.png",
+	"filename": "streetcenter3.png",
 	"frame": {"x":0,"y":1796,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -153,55 +177,7 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "streetcenter5.png",
-	"frame": {"x":0,"y":3153,"w":1226,"h":454},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":454},
-	"sourceSize": {"w":1226,"h":454}
-},
-{
-	"filename": "streetmain1.png",
-	"frame": {"x":0,"y":2245,"w":1222,"h":448},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":448},
-	"sourceSize": {"w":1222,"h":448}
-},
-{
-	"filename": "streetmain2.png",
-	"frame": {"x":2448,"y":2245,"w":1216,"h":450},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1216,"h":450},
-	"sourceSize": {"w":1216,"h":450}
-},
-{
-	"filename": "streetmain3.png",
-	"frame": {"x":1224,"y":2245,"w":1222,"h":448},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":448},
-	"sourceSize": {"w":1222,"h":448}
-},
-{
-	"filename": "streetmain4.png",
-	"frame": {"x":2458,"y":3153,"w":1222,"h":458},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":458},
-	"sourceSize": {"w":1222,"h":458}
-},
-{
-	"filename": "streetmain5.png",
-	"frame": {"x":2452,"y":3613,"w":1228,"h":460},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":460},
-	"sourceSize": {"w":1228,"h":460}
-},
-{
-	"filename": "streetwest1.png",
+	"filename": "streetcenter4.png",
 	"frame": {"x":1215,"y":1796,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
@@ -209,8 +185,64 @@
 	"sourceSize": {"w":1213,"h":447}
 },
 {
-	"filename": "streetwest2.png",
+	"filename": "streetcenter5.png",
+	"frame": {"x":0,"y":3605,"w":1226,"h":454},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":454},
+	"sourceSize": {"w":1226,"h":454}
+},
+{
+	"filename": "streeteast1.png",
+	"frame": {"x":2438,"y":2695,"w":1214,"h":452},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":452},
+	"sourceSize": {"w":1214,"h":452}
+},
+{
+	"filename": "streeteast2.png",
+	"frame": {"x":1228,"y":3605,"w":1218,"h":454},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":454},
+	"sourceSize": {"w":1218,"h":454}
+},
+{
+	"filename": "streetmain1.png",
+	"frame": {"x":1215,"y":2245,"w":1222,"h":448},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":448},
+	"sourceSize": {"w":1222,"h":448}
+},
+{
+	"filename": "streetmain2.png",
+	"frame": {"x":0,"y":2695,"w":1216,"h":450},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1216,"h":450},
+	"sourceSize": {"w":1216,"h":450}
+},
+{
+	"filename": "streetmain3.png",
+	"frame": {"x":2439,"y":2245,"w":1222,"h":448},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":448},
+	"sourceSize": {"w":1222,"h":448}
+},
+{
+	"filename": "streetwest1.png",
 	"frame": {"x":2430,"y":1796,"w":1213,"h":447},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
+	"sourceSize": {"w":1213,"h":447}
+},
+{
+	"filename": "streetwest2.png",
+	"frame": {"x":0,"y":2245,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
@@ -224,6 +256,6 @@
 	"size": {"w":4096,"h":4096},
 	"scale": "1",
 	"related_multi_packs": [ "Neuro2.json" ],
-	"smartupdate": "$TexturePacker:SmartUpdate:50836e06d7e48145fcf707f142e81b98:ca1400c6a440a35eca947ad48af443f8:8e5f1c61dd1938f0ebcc3dab307fd743$"
+	"smartupdate": "$TexturePacker:SmartUpdate:5db2a830275b47fd234127743ad1cd05:32ba1eff835dbf64efd05dcd9517453b:8e5f1c61dd1938f0ebcc3dab307fd743$"
 }
 }

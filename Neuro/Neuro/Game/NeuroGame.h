@@ -34,6 +34,8 @@ public:
 	virtual bool IsConversationShowing() override;
 	virtual bool IsMessageActive() override;
 	virtual void RefreshUI() override;
+	virtual void AddAnimation(LuaRef AnimObj) override;
+	virtual void RemoveAnimation(LuaRef AnimObj) override;
 
 	virtual bool OnGlobalKey(const KeyEvent& Event) override;
 
@@ -53,6 +55,8 @@ private:
 	class Ninebox* ThoughtBox;
 	vector<class Gridbox*> Boxes;
 	vector<class Gridbox*> BoxCache;
+//	map<LuaRef, WoflSprite*, LuaRef_Less> Anims;
+	map<LuaRef, WoflSprite*> Anims;
 
 	void LoadConfig();
 

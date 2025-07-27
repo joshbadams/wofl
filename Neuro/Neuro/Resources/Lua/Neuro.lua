@@ -56,7 +56,7 @@ s = {
 	},
 
 	software = {
-		200, -- Comlink 1.0
+		199, -- Comlink 1.0
 	},
 	
 	-- all organs by default
@@ -152,6 +152,9 @@ GameScripts = {
 	-- rooms
 	"Chatsubo",
 	"BodyShop",
+	"Streets",
+	"Larrys",
+	"DonutWorld",
 	"MiscRooms",
 	"Loser",
 	

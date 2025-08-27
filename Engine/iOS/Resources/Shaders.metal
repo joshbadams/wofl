@@ -58,7 +58,12 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
 	constexpr sampler mySampler (mag_filter::linear,
 								 address::repeat,
 								 min_filter::linear);
+	half4 spriteColor = abs((half4)modelUniforms.color);
     half4 colorSample   = (half4)modelUniforms.color * colorMap.sample(mySampler, in.texCoord.xy);
+	if (modelUniforms.color.a < 0)
+	{
+		colorSample.a = colorSample.a = 1 - colorSample.a;
+	}
 
 //    return float4(in.texCoord.xy, (float2)colorSample.zw);
 	return float4(colorSample);

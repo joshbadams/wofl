@@ -1,3 +1,4 @@
+s.cheapo_paid = false
 s.cheapo_charges = 1000
 s.cheapo_account = 0
 
@@ -153,6 +154,7 @@ function Cheapo:HandleClickedEntry(id)
 			if (owed > 0 and s.money >= owed) then
 				s.money = s.money - owed
 				s.cheapo_account = s.cheapo_charges
+				s.cheapo_paid = true
 			end
 		end
 
@@ -176,6 +178,10 @@ function Cheapo:OnTextEntryComplete(text, tag)
 	if (amount <= s.cheapo_charges) then
 		s.cheapo_account = amount
 	end
+	if (s.cheapo_account >= s.cheapo_charges) then
+		s.cheapo_paid = true
+	end
+	
 
 	self:GoToPage("bill_edit")
 end

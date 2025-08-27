@@ -107,7 +107,7 @@ NeuroGame::NeuroGame()
 	MessageBox = new Textbox(nullptr, 693, 539, 556, 230, 0, true, false, WColor::Black);
 	MessageBox->SetInterfaceDelegate(&State);
 	
-	InfoBox = new Textbox(nullptr, 376, 600, 268, 36, 0, false, false, WColor::Black);
+	InfoBox = new Textbox(nullptr, 376, 580, 268, 36, 0, false, false, WColor::Black);
 	
 	DialogInputSorter = new WoflSprite(0, 0, ScreenSprite->GetSize().X, ScreenSprite->GetSize().Y);
 	SiteInputSorter = new WoflSprite(0, 0, ScreenSprite->GetSize().X, ScreenSprite->GetSize().Y);
@@ -202,6 +202,8 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name)
 		return nullptr;
 	}
 	
+	bool bOverlayingDialog = strcasecmp(Name, "InlineTextEntry") == 0;
+
 	Gridbox* Box;
 	if (BoxCache.size() > 0)
 	{
@@ -210,22 +212,35 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name)
 	}
 	else
 	{
-		Box = new Gridbox();
+		if (bOverlayingDialog)
+		{
+			Box = new Gridbox(0);
+		}
+		else
+		{
+			Box = new Gridbox();
+		}
 		Box->SetDelegates(&State, &State);
 	}
 	
 	Boxes.push_back(Box);
+	
+	if (bOverlayingDialog)
+	{
+		ThoughtBox->Text->AddChild(Box);
+//		Background->AddChild(Box);
+	}
 //	if (DialogInputSorter->IsRooted())
 //	{
 //		DialogInputSorter->AddChild(Box);
 //	}
-//	else
+	else
 	{
 //		SiteInputSorter->AddChild(Box);
 		Background->AddChild(Box);
 	}
 
-	Box->Open(NewBox);
+	Box->Open(NewBox, bOverlayingDialog);
 
 	return NewBox;
 }
@@ -246,7 +261,7 @@ bool NeuroGame::CloseBoxWithObj(LuaRef BoxObj)
 	Gridbox* Box = GetBoxFromObj(BoxObj);
 
 	Box->RemoveFromParent();
-	BoxCache.push_back(Box);
+//	BoxCache.push_back(Box);
 	Boxes.erase(std::find(Boxes.begin(), Boxes.end(), Box));
 	
 	return Boxes.size() == 0;

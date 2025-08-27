@@ -88,12 +88,14 @@ s = {
 	month = 11,
 	day = 16,
 	year = 58,
-	date = 111558,
+	date = 111658,
 	hour = 0,
 	minute = 0,
 	bankaccount = 1941,
 	name = "Badams",
 	bamaid = "056306118",
+	
+	numTimesArrested = 0,
 	
 	hasTalkedInRoom = false,
 }
@@ -113,10 +115,12 @@ function GetMaxDeckStorage()
 end
 
 function s:ApplyLoadedGame(game)
-print("loading from save ", game)
 	for k,v in pairs(game) do
 		s[k] = v
 	end
+	s.date = s.month * 10000 + s.day * 100 + s.year
+
+print("loading from save ", game, s.date, s.month, s.day, s.year)
 end
 
 function IncrementTime()
@@ -127,7 +131,7 @@ function IncrementTime()
 		if (s.hour == 24) then
 			s.hour = 0
 			s.day = s.day + 1
-			s.date = s.month * 1000 + s.day * 100 + s.year
+			s.date = s.month * 10000 + s.day * 100 + s.year
 		end
 	end
 

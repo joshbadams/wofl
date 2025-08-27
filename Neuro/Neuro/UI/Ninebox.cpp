@@ -9,6 +9,13 @@
 #include "Textbox.h"
 #include <Wofl/Wofl.h>
 
+const char* Ninebox::NoBorder[] =
+{
+	nullptr, nullptr, nullptr,
+	nullptr, "Center", nullptr,
+	nullptr, nullptr, nullptr
+};
+
 const char* Ninebox::Basic[] =
 {
    "TopLeft", "TopCenter", "TopRight",
@@ -30,9 +37,16 @@ Ninebox::Ninebox(const char* Config[], float X, float Y, float SizeX, float Size
 {
 	for (int Index = 0; Index < 9; Index++)
 	{
-		Sprites[Index] = new WoflSprite(0, 0, 0, 0, Tag);
-		Sprites[Index]->AddImage(new WoflImage(Config[Index], 0, 0, 1, 1));
-		AddChild(Sprites[Index]);
+		if (Config[Index] != nullptr)
+		{
+			Sprites[Index] = new WoflSprite(0, 0, 0, 0, Tag);
+			Sprites[Index]->AddImage(new WoflImage(Config[Index], 0, 0, 1, 1));
+			AddChild(Sprites[Index]);
+		}
+		else
+		{
+			Sprites[Index] = nullptr;
+		}
 	}
 	
 	Text = new Textbox(nullptr, 0, 0, 0, 0, Tag, false, false, TextColor);
@@ -71,37 +85,45 @@ void Ninebox::Move(float X, float Y, float SizeX, float SizeY)
 	SetRelativePosition({X, Y});
 	SetSize({SizeX, SizeY});
 	
-	Sprites[TopLeft]->SetRelativePosition({0, 0});
-	Sprites[TopLeft]->SetSize({BSize, BSize});
+	if (Sprites[TopLeft])
+	{
+		Sprites[TopLeft]->SetRelativePosition({0, 0});
+		Sprites[TopLeft]->SetSize({BSize, BSize});
+		
+		Sprites[TopCenter]->SetRelativePosition({BSize, 0});
+		Sprites[TopCenter]->SetSize({SizeX - 2 * BSize, BSize});
+		TileImage(Sprites[TopCenter], true, false);
+		
+		Sprites[TopRight]->SetRelativePosition({SizeX - BSize, 0});
+		Sprites[TopRight]->SetSize({BSize, BSize});
+		
+		Sprites[LeftCenter]->SetRelativePosition({0, BSize});
+		Sprites[LeftCenter]->SetSize({BSize, SizeY - 2 * BSize});
+		TileImage(Sprites[LeftCenter], false, true);
 
-	Sprites[TopCenter]->SetRelativePosition({BSize, 0});
-	Sprites[TopCenter]->SetSize({SizeX - 2 * BSize, BSize});
-	TileImage(Sprites[TopCenter], true, false);
+		Sprites[Center]->SetRelativePosition({BSize, BSize});
+		Sprites[Center]->SetSize({SizeX - 2 * BSize, SizeY - 2 * BSize});
+		TileImage(Sprites[Center], true, true);
 
-	Sprites[TopRight]->SetRelativePosition({SizeX - BSize, 0});
-	Sprites[TopRight]->SetSize({BSize, BSize});
-
-	Sprites[LeftCenter]->SetRelativePosition({0, BSize});
-	Sprites[LeftCenter]->SetSize({BSize, SizeY - 2 * BSize});
-	TileImage(Sprites[LeftCenter], false, true);
-
-	Sprites[Center]->SetRelativePosition({BSize, BSize});
-	Sprites[Center]->SetSize({SizeX - 2 * BSize, SizeY - 2 * BSize});
-	TileImage(Sprites[Center], true, true);
-
-	Sprites[RightCenter]->SetRelativePosition({SizeX - BSize, BSize});
-	Sprites[RightCenter]->SetSize({BSize, SizeY - 2 * BSize});
-	TileImage(Sprites[RightCenter], false, true);
-
-	Sprites[BottomLeft]->SetRelativePosition({0, SizeY - BSize});
-	Sprites[BottomLeft]->SetSize({BSize, BSize});
-
-	Sprites[BottomCenter]->SetRelativePosition({BSize, SizeY - BSize});
-	Sprites[BottomCenter]->SetSize({SizeX - 2 * BSize, BSize});
-	TileImage(Sprites[BottomCenter], true, false);
-
-	Sprites[BottomRight]->SetRelativePosition({SizeX - BSize, SizeY - BSize});
-	Sprites[BottomRight]->SetSize({BSize, BSize});
+		Sprites[RightCenter]->SetRelativePosition({SizeX - BSize, BSize});
+		Sprites[RightCenter]->SetSize({BSize, SizeY - 2 * BSize});
+		TileImage(Sprites[RightCenter], false, true);
+		
+		Sprites[BottomLeft]->SetRelativePosition({0, SizeY - BSize});
+		Sprites[BottomLeft]->SetSize({BSize, BSize});
+		
+		Sprites[BottomCenter]->SetRelativePosition({BSize, SizeY - BSize});
+		Sprites[BottomCenter]->SetSize({SizeX - 2 * BSize, BSize});
+		TileImage(Sprites[BottomCenter], true, false);
+		
+		Sprites[BottomRight]->SetRelativePosition({SizeX - BSize, SizeY - BSize});
+		Sprites[BottomRight]->SetSize({BSize, BSize});
+	}
+	else
+	{
+		Sprites[Center]->SetSize({SizeX, SizeY});
+		TileImage(Sprites[Center], true, true);
+	}
 
 	Text->SetSize(Sprites[Center]->GetSize());
 }

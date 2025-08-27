@@ -170,9 +170,9 @@ function Larrys:OnEnterRoom()
 end
 
 function Larrys:GetConnectingRoom(direction)
-	if (direction == "north" and not s.larry_arrested) then
-		return nil
-	end
+--	if (direction == "north" and not s.larry_arrested) then
+--		return nil
+--	end
 
 	return Room.GetConnectingRoom(self, direction)
 end

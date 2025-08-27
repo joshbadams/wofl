@@ -9,6 +9,7 @@
 #include "Textbox.h"
 #include "NeuroState.h" // replace with InterfaceDelegate.h or similar
 
+const float InputDelay = 0.2f;
 void GridEntry::FromLua(LuaRef Ref)
 {
 	Lua* L = Ref->LuaSystem;
@@ -63,6 +64,13 @@ Gridbox::Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Col
 	Init();
 }
 
+Gridbox::Gridbox(int Tag, WColor Color)
+	: Ninebox(Ninebox::NoBorder, 0, 0, 0, 0, Tag, Color)
+	, TextColor(Color)
+{
+	Init();
+}
+
 void Gridbox::Init()
 {
 	TextEntryIndex = -1;
@@ -96,15 +104,25 @@ void Gridbox::Init()
 	Update();
 }
 
-void Gridbox::Open(LuaRef InLuaBox)
+void Gridbox::Open(LuaRef InLuaBox, bool bOverlayDialog)
 {
 	LuaBox = InLuaBox;
 
 	int X, Y, W, H;
-	LuaBox->LuaSystem->GetIntValue(LuaBox, "x", X);
-	LuaBox->LuaSystem->GetIntValue(LuaBox, "y", Y);
-	LuaBox->LuaSystem->GetIntValue(LuaBox, "w", W);
-	LuaBox->LuaSystem->GetIntValue(LuaBox, "h", H);
+	if (bOverlayDialog)
+	{
+		X = 0;
+		Y = GRID_Y;
+		W = GRID_X * 30 + 2;
+		H = GRID_Y + 2;
+	}
+	else
+	{
+		LuaBox->LuaSystem->GetIntValue(LuaBox, "x", X);
+		LuaBox->LuaSystem->GetIntValue(LuaBox, "y", Y);
+		LuaBox->LuaSystem->GetIntValue(LuaBox, "w", W);
+		LuaBox->LuaSystem->GetIntValue(LuaBox, "h", H);
+	}
 	
 	// resize to match
 	Move(X, Y, W, H);
@@ -137,6 +155,17 @@ void Gridbox::CustomPostChildrenRender()
 		{
 			Text = Text + "<";
 		}
+		WColor EntryColor = TextColor;
+		if (Entry.ClickId != 0 && ActivatingClickId == Entry.ClickId)
+		{
+			if (ActivatingCountdown > (InputDelay * 0.75) || ActivatingCountdown <= InputDelay * 0.25)
+			{
+				EntryColor.R = 1.0f - EntryColor.R;
+				EntryColor.G = 1.0f - EntryColor.G;
+				EntryColor.B = 1.0f - EntryColor.B;
+				EntryColor.A = -1.0f;
+			}
+		}
 		
 		if (Entry.WrapWidth != 0)
 		{
@@ -145,13 +174,13 @@ void Gridbox::CustomPostChildrenRender()
 			int Index = 0;
 			for (const std::string& Line : Lines)
 			{
-				WoflRenderer::Renderer->DrawString(Line.c_str(), BaseLoc + Vector(Entry.X * GRID_X, (Entry.Y + Index) * GRID_Y), 1.0f, TextColor);
+				WoflRenderer::Renderer->DrawString(Line.c_str(), BaseLoc + Vector(Entry.X * GRID_X, (Entry.Y + Index) * GRID_Y), 1.0f, EntryColor);
 				Index++;
 			}
 		}
 		else
 		{
-			WoflRenderer::Renderer->DrawString(Text.c_str(), BaseLoc + Vector(Entry.X * GRID_X, Entry.Y * GRID_Y), 1.0f, TextColor);
+			WoflRenderer::Renderer->DrawString(Text.c_str(), BaseLoc + Vector(Entry.X * GRID_X, Entry.Y * GRID_Y), 1.0f, EntryColor);
 		}
 	}
 }
@@ -163,8 +192,33 @@ void Gridbox::SetupTextEntry(const GridEntry& Entry)
 }
 
 
+void Gridbox::Tick(float DeltaTime)
+{
+	if (ActivatingCountdown > 0)
+	{
+		ActivatingCountdown -= DeltaTime;
+		if (ActivatingCountdown <= 0)
+		{
+			for (GridEntry& Entry : Entries)
+			{
+				if (Entry.ClickId == ActivatingClickId)
+				{
+					OnClickEntry(Entry);
+					break;
+				}
+			}
+			ActivatingCountdown = 0;
+			ActivatingClickId = 0;
+		}
+	}
+}
+
 void Gridbox::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 {
+	if (ActivatingClickId != 0)
+	{
+		return;
+	}
 	Vector ClientLocation;
 	Vector ClientSize;
 	GetClientGeometry(ClientLocation, ClientSize);
@@ -181,7 +235,8 @@ void Gridbox::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 		bool bWantsInput = Entry.ClickId != 0 || Entry.OnClick || Entry.OnClickEntry;
 		if (bWantsInput && Y == Entry.Y && X >= Entry.X && X < Entry.X + Entry.Text.length())
 		{
-			OnClickEntry(Entry);
+			ActivatingClickId = Entry.ClickId;
+			ActivatingCountdown = InputDelay;
 			bWasHandled = true;
 			break;
 		}
@@ -207,6 +262,10 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 		return true;
 	}
 	
+	if (ActivatingClickId != 0)
+	{
+		 return true;
+	}
 
 	if (Event.Type != KeyType::Down)
 	{
@@ -264,7 +323,15 @@ bool Gridbox::OnKey(const KeyEvent& Event)
 		{
 			if (Entry.Key == Event.KeyCode)
 			{
-				OnClickEntry(Entry);
+				if (Entry.ClickId == 0)
+				{
+					OnClickEntry(Entry);
+				}
+				else
+				{
+					ActivatingClickId = Entry.ClickId;
+					ActivatingCountdown = InputDelay;
+				}
 				bIgnoreUntilNextUp = true;
 				break;
 			}

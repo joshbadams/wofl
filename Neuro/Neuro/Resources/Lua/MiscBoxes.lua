@@ -29,24 +29,20 @@ function SystemBox:GetEntries()
 	if (self.Phase == SystemPhase.Menu) then
 		table.append(entries, {x = self:CenteredX("Disk Options"), y = 0, text = "Disk Options" } )
 	
-		local curY = 1
-		table.append(entries, {x = 1, y = curY, text = "L. Load", key = "l", onClick = function() self.Phase = SystemPhase.Load; end } )
-		curY = curY + 1
-		table.append(entries, {x = 1, y = curY, text = "S. Save", key = "s", onClick = function() self.Phase = SystemPhase.Save; end })
-		curY = curY + 1
-		table.append(entries, {x = 1, y = curY, text = "P. Pause", key = "p", onClick = function() self.Phase = SystemPhase.Pausing; end })
-		curY = curY + 1
-		table.append(entries, {x = 1, y = curY, text = "Q. Quit", key = "q", onClick = function() self.Phase = SystemPhase.Quit; end })
+		table.append(entries, {x = 1, y = 1, text = "L. Load", key = "l", clickId = 1, onClick = function() self.Phase = SystemPhase.Load; end } )
+		table.append(entries, {x = 1, y = 2, text = "S. Save", key = "s", clickId = 2, onClick = function() self.Phase = SystemPhase.Save; end })
+		table.append(entries, {x = 1, y = 3, text = "P. Pause", key = "p", clickId = 3, onClick = function() self.Phase = SystemPhase.Pausing; end })
+		table.append(entries, {x = 1, y = 4, text = "Q. Quit", key = "q", clickId = 4, onClick = function() self.Phase = SystemPhase.Quit; end })
 	elseif (self.Phase == SystemPhase.Load) then
-		table.append(entries, {x = 3, y = 2, text = "1", key = "1", onClick = function() LoadGame(1); self:Close() end })
-		table.append(entries, {x = 5, y = 2, text = "2", key = "2", onClick = function() LoadGame(2); self:Close() end })
-		table.append(entries, {x = 7, y = 2, text = "3", key = "3", onClick = function() LoadGame(3); self:Close() end })
-		table.append(entries, {x = 9, y = 2, text = "4", key = "4", onClick = function() LoadGame(4); self:Close() end })
+		table.append(entries, {x = 3, y = 2, text = "1", key = "1", clickId = 1, onClick = function() LoadGame(1); self:Close() end })
+		table.append(entries, {x = 5, y = 2, text = "2", key = "2", clickId = 2, onClick = function() LoadGame(2); self:Close() end })
+		table.append(entries, {x = 7, y = 2, text = "3", key = "3", clickId = 3, onClick = function() LoadGame(3); self:Close() end })
+		table.append(entries, {x = 9, y = 2, text = "4", key = "4", clickId = 4, onClick = function() LoadGame(4); self:Close() end })
 	elseif (self.Phase == SystemPhase.Save) then
-		table.append(entries, {x = 3, y = 2, text = "1", key = "1", onClick = function() SaveGame(1); self:Close() end })
-		table.append(entries, {x = 5, y = 2, text = "2", key = "2", onClick = function() SaveGame(2); self:Close() end })
-		table.append(entries, {x = 7, y = 2, text = "3", key = "3", onClick = function() SaveGame(3); self:Close() end })
-		table.append(entries, {x = 9, y = 2, text = "4", key = "4", onClick = function() SaveGame(4); self:Close() end })
+		table.append(entries, {x = 3, y = 2, text = "1", key = "1", clickId = 1, onClick = function() SaveGame(1); self:Close() end })
+		table.append(entries, {x = 5, y = 2, text = "2", key = "2", clickId = 2, onClick = function() SaveGame(2); self:Close() end })
+		table.append(entries, {x = 7, y = 2, text = "3", key = "3", clickId = 3, onClick = function() SaveGame(3); self:Close() end })
+		table.append(entries, {x = 9, y = 2, text = "4", key = "4", clickId = 4, onClick = function() SaveGame(4); self:Close() end })
 	end
 	
 	self:AddExitMoreEntries(entries, false)
@@ -81,8 +77,6 @@ ShopBox = Gridbox:new {
 }
 
 function ShopBox:OpenBox()
-	print("Opened a shop")
-
 	self.firstVisibleIndex = 1
 	self.numItemsPerPage = self.sizeY - 2
 	self.boughtSold = false
@@ -92,7 +86,9 @@ function ShopBox:GetPrice(id)
 	local template = Items[id]
 	local price = 0
 
-	if (template.type == "organ") then
+	if (self.overridePrices ~= nil and self.overridePrices[id] ~= nil) then
+		price = self.overridePrices[id]
+	elseif (template.type == "organ") then
 		price = template.sell
 		if (self.isBuying) then
 			price = template.buy
@@ -165,6 +161,18 @@ print("num items", #self.items)
 	return entries;
 end
 
+function ShopBox:IsPurchaseAllowed(clickId)
+	local id = self.items[clickId]
+	local item = Items[id];
+
+	if (item.type == "software" and #s.software >= GetMaxDeckStorage()) then
+		print("Not enough space, not buying")
+		return false
+	end
+
+	return true
+end
+
 function ShopBox:HandleClickedEntry(clickId)
 
 	print("shop clicked", self, clickId, self.isBuying)
@@ -174,9 +182,9 @@ function ShopBox:HandleClickedEntry(clickId)
 	local price = self:GetPrice(id)
 	print("clicked on ", item.name, id, price)
 
-	-- makre sure we have enough space
-	if (item.type == "software" and #s.software >= GetMaxDeckStorage()) then
-		print("Not enough space, not buying")
+	-- make we can purchase the item
+	if (not self:IsPurchaseAllowed(clickId)) then
+		print("Not allowed to purchase, not buying")
 		return
 	elseif (self.isBuying) then
 		if (s.money >= price) then
@@ -232,6 +240,37 @@ end
 
 
 
+UpgradeBox = ShopBox:new {
+}
+
+function UpgradeBox:MissingSkill()
+end
+
+function UpgradeBox:MaxLevel()
+end
+
+function UpgradeBox:IsPurchaseAllowed(clickId)
+	local skillId = self.items[clickId]
+	if (s.skillLevels[skillId] == nil) then
+		print("Don't know skill, unable to buy")
+		self:MissingSkill()
+		return false
+	elseif (s.skillLevels[skillId] >= self.maxLevels[skillId]) then
+		print("Maxed out, unable to buy")
+		self:MaxLevel()
+		return false
+	end
+
+	return ShopBox.IsPurchaseAllowed(self, clickId)
+end
+
+function UpgradeBox:OnBoughtSoldItem(clickId)
+	-- we have already verified it is allowed, so just do
+	local skillId = self.items[clickId]
+	s.skillLevels[skillId] = s.skillLevels[skillId] + 1
+end
+
+
 
 -----------------------------------------------------------------------------------------------------------------
 -- TextEntry
@@ -264,6 +303,20 @@ function DialogTextEntry:OnTextEntryComplete(text, tag)
 	CloseBox(self)
 end
 
+
+InlineTextEntry = Gridbox:new {
+}
+
+function InlineTextEntry:GetEntries()
+	local entries = {}
+	table.append(entries, {x = 0, y = 0, entryTag = "entry" })
+	return entries
+end
+
+function InlineTextEntry:OnTextEntryComplete(text, tag)
+	currentRoom:DialogTextEntered(text)
+	CloseBox(self)
+end
 
 
 -----------------------------------------------------------------------------------------------------------------

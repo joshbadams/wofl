@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.50)
+project(Neuro LANGUAGES CXX)
+
+file(GLOB GAME_SOURCES CONFIGURE_DEPENDS Neuro/Game/*.cpp)
+file(GLOB GAME_INCLUDES CONFIGURE_DEPENDS Neuro/Game/*.h)
+
+file(GLOB UI_SOURCES CONFIGURE_DEPENDS Neuro/UI/*.cpp)
+file(GLOB UI_INCLUDES CONFIGURE_DEPENDS Neuro/UI/*.h)
+
+add_executable(Neuro ${UI_SOURCES} ${GAME_SOURCES})

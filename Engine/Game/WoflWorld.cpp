@@ -193,8 +193,8 @@ WoflSprite* WoflWorld::HitTest(Vector ScreenLocation)
 	// convert screenspace to local
 	Vector Loc = ConvertToLocalSpace(ScreenLocation);
 
-	WLOG("ScreenLoc = [%.2f, %.2f], Local = [%.2f, %2.f]\n", ScreenLocation.X, ScreenLocation.Y, Loc.X, Loc.Y);
-	
+//	WLOG("ScreenLoc = [%.2f, %.2f], Local = [%.2f, %2.f]\n", ScreenLocation.X, ScreenLocation.Y, Loc.X, Loc.Y);
+
 	WoflSprite* HitSprite = NULL;
 	
 	// hit test orderand list
@@ -206,7 +206,7 @@ WoflSprite* WoflWorld::HitTest(Vector ScreenLocation)
 		WoflWorld::Get()->Visit(false, true, false,
 								[&](WoflSprite* Sprite)
 								{
-									WLOG("Checking: %s\n", Sprite->Describe().c_str());
+//									WLOG("Checking: %s\n", Sprite->Describe().c_str());
 
 									if (Sprite->IsClickEnabled() && Sprite->HitTest(Loc))
 									{

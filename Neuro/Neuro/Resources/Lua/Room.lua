@@ -19,6 +19,7 @@ Room = LuaObj:new {
 	hasPax = false,
 	hasPerson = false,
 	hasJack = false,
+	addedAnimations = {}
 }
 
 function Room:GetDialog()
@@ -114,7 +115,7 @@ function Room:EndConversation()
 
 	-- for any type of conversation with an onEnd,
 	endingConversation = self.currentConversation
-print("ending convo")
+
 	self.currentConversation = nil
 	self.currentChoice = nil
 	self.lineIndex = 0
@@ -159,7 +160,8 @@ function Room:HandleDialogClick(isOutsideBubble)
 				-- if (self.isEnteringText) then
 				--	self:ProcessTextEntry()
 				self.isEnteringText = true
-				OpenBox("DialogTextEntry")
+				OpenBox("InlineTextEntry")
+--				OpenBox("DialogTextEntry")
 			elseif (choice.response ~= nil) then
 				self.currentChoice = choice
 			else
@@ -185,7 +187,7 @@ end
 -- keycode 1 is Escape
 -- type 0 is KeyDown
 function Room:ConversationKey(char, keyCode, type)
-print("keycode: ", keyCode, self.currentConversation)
+-- print("keycode: ", keyCode, self.currentConversation)
 	if (type == 0) then
 		if (keyCode == 2) then
 			self:HandleDialogClick(false)
@@ -286,7 +288,6 @@ function Room:AddAnimations()
 end
 
 function Room:RemoveAnimations()
-print("num", #self.addedAnimations)
 	for _,v in ipairs(self.addedAnimations) do
 		RemoveAnimation(v)
 	end
@@ -313,7 +314,8 @@ end
 
 function Room:OnFirstEnter()
 	if (self.onEnterConversation ~= nil) then
-		ShowMessage(self.longDescription, function() if (self.hasPerson) then self:ActivateConversation(self.onEnterConversation) end end)
+		-- true param will make it wait for the long message to finish before kicking the convo
+		ShowMessage(self.longDescription, function() if (self.hasPerson) then self:ActivateConversation(self.onEnterConversation) end end, true)
 	else
 		ShowMessage(self.longDescription)
 	end

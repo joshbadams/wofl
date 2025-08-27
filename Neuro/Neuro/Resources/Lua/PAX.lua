@@ -44,6 +44,7 @@ PAX = Site:new {
 
 		['nightcity'] = {
 			type = "list",
+			unlockid = "pax_nightcity",
 			columns = { { field = 'date', width = 8 }, { field = 'subject', width = 0 } },
 			hasDetails = true,
 			items = {
@@ -103,19 +104,19 @@ PAX = Site:new {
 					message = "**** News In Brief ****\n\nRIOT AT CHIBA STADIUM\nAfter lecture by Tim Leary, crowd rots after making sudden decision to think for themselves."
 				},
 				{
-					condition = function() return s.justice > 0 end,
+					condition = function() return s.numTimesArrested > 0; end,
 					date = 110058,
 					subject = "CRIMINAL HITS CHIBA CITY",
 					message = "CRIMINAL HITS CHIBA CITY\n" .. s.name .. ", a notorious criminal who recently arrived in Chiba City, has been arrested and taken to the Justice Booth. This comes as no surprise to police, who have been watching this criminal ever since he arrived. \"We knew he'd break the law eventually,\" said Officer Watanabe. \"These habitual criminals can't go a whole day without committing a crime.\""
 				},
 				{
-					condition = function() return hotel > 100 end,
+					condition = function() return s.cheapo_paid; end,
 					date = 110058,
 					subject = "VAGRANT PAYS HOTEL BILL",
 					message = "VAGRANT PAYS HOTEL BILL\nPaul Stack, owner of Cheap Hotel, called a news conference this morning to report that Cowboy " .. s.name .. " has finally paid his hotel bill. Stack is referring to this payment as \"a momentous event in my life. Being the kind-hearted kind of guy that I am, I let that blll accumulate far too long before demanding payment. Imagine my surprise when the scum finally paid it. I was ready to call the Tactical Police.\""
 				},
 				{
-					condition = function() return s.chatsubo > 1 end,
+					condition = function() return s.chatsubo > 1; end,
 					date = 110058,
 					subject = "CHATSUBO DEBT",
 					message = "Thisis a story that will appear when chatsubo is paid off but not before."

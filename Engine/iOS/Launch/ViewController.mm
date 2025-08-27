@@ -187,7 +187,7 @@
 -(void)keyDown:(NSEvent *)event
 {
 	int Char = [[event characters] characterAtIndex:0];
-	NSLog(@"keydown %d / char %d\n", [event keyCode], Char);
+//	NSLog(@"keydown %d / char %d\n", [event keyCode], Char);
 
 	if (Char >= 0x7f)
 	{

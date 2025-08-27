@@ -173,7 +173,7 @@ void WoflSprite::RemoveFromWorld()
 bool WoflSprite::IsRooted()
 {
 	WoflSprite* Travel = this;
-	if (Travel->GetParent())
+	while (Travel->GetParent())
 	{
 		Travel = Travel->GetParent();
 	}

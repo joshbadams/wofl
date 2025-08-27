@@ -23,6 +23,7 @@ const int BottomRight=8;
 class Ninebox : public WoflSprite
 {
 public:
+	static const char* NoBorder[];
 	static const char* Basic[];
 	static const char* Thinking[];
 

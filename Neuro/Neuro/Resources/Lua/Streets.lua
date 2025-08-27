@@ -80,11 +80,21 @@ StreetCenter5 = Room:new {
 	-- west = "maas",
 	east = "deane",
 	north = "streetcenter4",
-	-- south = "streetcenter6",
+	south = "streetcenter6",
 	
 	longDescription = ""
 }
 streetcenter5 = StreetCenter5
+
+StreetCenter6 = Room:new {
+	name = "streetcenter6",
+	
+	west = "spaceport",
+	north = "streetcenter5",
+	
+	longDescription = ""
+}
+streetcenter6 = StreetCenter6
 
 
 s.main1Count = 0
@@ -235,3 +245,39 @@ StreetEast2 = Room:new {
 streeteast2 = StreetEast2
 
 
+FreesideStreet1 = Room:new {
+	name = "freesidestreet1",
+	
+	east = "freesidestreet2",
+	north = "straylight",
+}
+freesidestreet1 = FreesideStreet1
+
+FreesideStreet2 = Room:new {
+	name = "freesidestreet2",
+	
+	west = "freesidestreet1",
+	east = "freesidestreet3",
+	north = "freeside",
+}
+freesidestreet2 = FreesideStreet2
+
+FreesideStreet3 = Room:new {
+	name = "freesidestreet3",
+	
+	west = "freesidestreet2",
+	east = "freesidestreet4",
+--	north = "berne",
+}
+freesidestreet3 = FreesideStreet3
+
+FreesideStreet4 = Room:new {
+	name = "freesidestreet4",
+	
+	west = "freesidestreet3",
+--	north = "gemeinschaft",
+
+	longDescription = "You are outside of Bank Gemeinschaft. A sign on the wall reads, 'WARNING. SECURED AREA. Unauthorized entry punishable by termination'.",
+	description = "You are outside of Bank Gemeinschaft. A sign on the wall reads, 'WARNING. SECURED AREA. Unauthorized entry punishable by termination'.",
+}
+freesidestreet4 = FreesideStreet4

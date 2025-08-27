@@ -22,6 +22,7 @@ struct GridEntry
 	int ClickId = -1;
 	WoflKeys Key = WoflKeys::None;
 	bool bWrapText=false;
+	bool bFlash = false;
 	
 	std::string EntryTag;
 	bool bNumericEntry;
@@ -41,8 +42,9 @@ public:
 	
 	Gridbox();
 	Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Color=WColor::Black);
+	Gridbox(int Tag, WColor Color=WColor::Black);
 
-	void Open(LuaRef Box);
+	void Open(LuaRef Box, bool bOverlayDialog);
 	void RefreshUI();
 	bool MatchesLuaBox(LuaRef Box);
 
@@ -59,6 +61,8 @@ public:
 	virtual bool OnKey(const KeyEvent& Event) override;
 	
 	virtual void MessageComplete() override;
+	
+	virtual void Tick(float DeltaTime);
 
 	virtual std::string Describe() override
 	{
@@ -97,6 +101,8 @@ protected:
 	
 	int GridsX, GridsY;
 	
+	int ActivatingClickId = 0;
+	float ActivatingCountdown = 0;
 	int TextEntryIndex;
 	bool bIgnoreUntilNextUp;
 };

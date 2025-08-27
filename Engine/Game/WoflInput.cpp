@@ -33,18 +33,18 @@ void WoflInput::PreWorldTick(float DeltaTime)
 			
 			if (KeyEvent.Type == KeyType::Down)
 			{
-				WLOG("Increment capure\n");
+//				WLOG("Increment capure\n");
 				CapturedKeysDown++;
 			}
 			if (KeyEvent.Type == KeyType::Up)
 			{
-				WLOG("Decrement capure\n");
+//				WLOG("Decrement capure\n");
 				CapturedKeysDown--;
 			}
 			
 			if (CapturedKeysDown == 0)
 			{
-				WLOG("clearning capture\n");
+//				WLOG("clearning capture\n");
 				KeyCapturedSprite = nullptr;
 				bKeyCapturedByGame = false;
 			}

@@ -63,6 +63,7 @@ function Site:CheckForUnlocks(page)
 	end
 
 	for i,v in ipairs(page.items) do
+print("checking for item i to be unlocked", unlockedInfo, #unlockedInfo, s.date, v.date)
 		if (self:HasUnlocked(unlockedInfo, i) == false and s.date >= v.date) then
 			-- for the pure date unlocks, remember it's original date
 			if (v.condition == nil) then

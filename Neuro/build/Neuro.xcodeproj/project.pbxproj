@@ -1,0 +1,761 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		54F2A94144BB2A16BF743DED /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 997A080E010243CC892010B0 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				5D26DF6789A0AFC13A5A9BA3 /* Generate CMakeFiles/ZERO_CHECK */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+		BC5F180829AD8676DE1FAEF6 /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = CF083697B8574EFDA213CA1C /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				955C8DAC63F70F38B2563C12 /* Generate CMakeFiles/ALL_BUILD */,
+			);
+			dependencies = (
+				F12384AA0313416C8647CB69 /* PBXTargetDependency */,
+				50EA87F5A40546BF96EB01EA /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		2F88878FADC24381AE81E59A /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroLua.cpp */ = {isa = PBXBuildFile; fileRef = 58B3C558580F4E099C3F9A9D /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroLua.cpp */; };
+		4DEDBF5261104329B9A7D1A8 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 53957F85EA4D46559AFFD29E /* /Users/josh.adams/Documents/Dev/wofl/Neuro/CMakeLists.txt */; };
+		54066F1418934399A2BE187A /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroConfig.cpp */ = {isa = PBXBuildFile; fileRef = B9BF3019655B47BD9C884332 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroConfig.cpp */; };
+		A986E09DD1D14B4DBB0352CA /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroGame.cpp */ = {isa = PBXBuildFile; fileRef = F435C9F84B9F4E2695CF7238 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroGame.cpp */; };
+		B0C4CB1982744718A69D4D2F /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/NeuroScene.cpp */ = {isa = PBXBuildFile; fileRef = BE16C048A6944B9D8282C770 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/NeuroScene.cpp */; };
+		C0AB5EF4FEBB431D84CB8D7C /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroState.cpp */ = {isa = PBXBuildFile; fileRef = DD5DE6954ACD4ED780E0145A /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroState.cpp */; };
+		C622A50DABD54476B42C7EEE /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Textbox.cpp */ = {isa = PBXBuildFile; fileRef = EED358242A6F48F18034B6A2 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Textbox.cpp */; };
+		E96D2483905E4119A05753B1 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Gridbox.cpp */ = {isa = PBXBuildFile; fileRef = 1D49FF87050B4951AE8A6456 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Gridbox.cpp */; };
+		EE7A23BAAD4B4707813834A2 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Ninebox.cpp */ = {isa = PBXBuildFile; fileRef = 62F1BDAE2F9D4BBCB8CB16B6 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Ninebox.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		28F1B25E6ACD4966ACA9FB4D /* MinSizeRel */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = MinSizeRel;
+		};
+		AE6329757F4C4FB6B73ADD61 /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Release;
+		};
+		B7AF41DCC8ED4DF9B985DE40 /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		DFA57F8253704384951EC96D /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+		4107B5E935AA4FD0B890C027 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E0818968FDA431B8466DEBC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E084091EE24C8939BA8924D;
+			remoteInfo = Neuro;
+		};
+		60B1850CA06A42CDA4FBF61A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E0818968FDA431B8466DEBC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54F2A94144BB2A16BF743DED;
+			remoteInfo = ZERO_CHECK;
+		};
+		F4CCEE8864024995A36050A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E0818968FDA431B8466DEBC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54F2A94144BB2A16BF743DED;
+			remoteInfo = ZERO_CHECK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1D49FF87050B4951AE8A6456 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Gridbox.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Gridbox.cpp; path = Neuro/UI/Gridbox.cpp; sourceTree = SOURCE_ROOT; };
+		53957F85EA4D46559AFFD29E /* /Users/josh.adams/Documents/Dev/wofl/Neuro/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		58B3C558580F4E099C3F9A9D /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroLua.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = NeuroLua.cpp; path = Neuro/Game/NeuroLua.cpp; sourceTree = SOURCE_ROOT; };
+		62F1BDAE2F9D4BBCB8CB16B6 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Ninebox.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Ninebox.cpp; path = Neuro/UI/Ninebox.cpp; sourceTree = SOURCE_ROOT; };
+		B8D63B3F1A024EC8AF3C5496 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		B9BF3019655B47BD9C884332 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroConfig.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = NeuroConfig.cpp; path = Neuro/Game/NeuroConfig.cpp; sourceTree = SOURCE_ROOT; };
+		BE16C048A6944B9D8282C770 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/NeuroScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = NeuroScene.cpp; path = Neuro/UI/NeuroScene.cpp; sourceTree = SOURCE_ROOT; };
+		D2822882F3B2458FBFC179D3 /* Neuro */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = Neuro; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD5DE6954ACD4ED780E0145A /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroState.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = NeuroState.cpp; path = Neuro/Game/NeuroState.cpp; sourceTree = SOURCE_ROOT; };
+		EED358242A6F48F18034B6A2 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Textbox.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Textbox.cpp; path = Neuro/UI/Textbox.cpp; sourceTree = SOURCE_ROOT; };
+		F435C9F84B9F4E2695CF7238 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroGame.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = NeuroGame.cpp; path = Neuro/Game/NeuroGame.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		99CD96B88D674085A15B63D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		068220B944F647738239B645 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		07D607817E854BAF9A62DE31 /* Neuro */ = {
+			isa = PBXGroup;
+			children = (
+				EFC00CC7E1CD466DA3D3F285 /* Source Files */,
+				53957F85EA4D46559AFFD29E /* /Users/josh.adams/Documents/Dev/wofl/Neuro/CMakeLists.txt */,
+			);
+			name = Neuro;
+			sourceTree = "<group>";
+		};
+		23D36E4C91414895A698C65C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2822882F3B2458FBFC179D3 /* Neuro */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3B9E838210DD463AB82A7538 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		572F7D62D15E4BA9952EFB2B /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				3B9E838210DD463AB82A7538 /* CMake Rules */,
+				B8D63B3F1A024EC8AF3C5496 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		88211FD69B9945C280EDD623 = {
+			isa = PBXGroup;
+			children = (
+				07D607817E854BAF9A62DE31 /* Neuro */,
+				572F7D62D15E4BA9952EFB2B /* ALL_BUILD */,
+				23D36E4C91414895A698C65C /* Products */,
+				A04AC23D856D4EA8A3B6A2F5 /* Frameworks */,
+				068220B944F647738239B645 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		A04AC23D856D4EA8A3B6A2F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EFC00CC7E1CD466DA3D3F285 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				B9BF3019655B47BD9C884332 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroConfig.cpp */,
+				F435C9F84B9F4E2695CF7238 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroGame.cpp */,
+				58B3C558580F4E099C3F9A9D /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroLua.cpp */,
+				DD5DE6954ACD4ED780E0145A /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroState.cpp */,
+				1D49FF87050B4951AE8A6456 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Gridbox.cpp */,
+				BE16C048A6944B9D8282C770 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/NeuroScene.cpp */,
+				62F1BDAE2F9D4BBCB8CB16B6 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Ninebox.cpp */,
+				EED358242A6F48F18034B6A2 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Textbox.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1E084091EE24C8939BA8924D /* Neuro */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7904F4652DE145CE901B2F8C /* Build configuration list for PBXNativeTarget "Neuro" */;
+			buildPhases = (
+				7C0250F3E5014C0AA6D7B317 /* Sources */,
+				99CD96B88D674085A15B63D1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				50D16136BDC6408C94B26FE3 /* PBXTargetDependency */,
+			);
+			name = Neuro;
+			productName = Neuro;
+			productReference = D2822882F3B2458FBFC179D3 /* Neuro */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6E0818968FDA431B8466DEBC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1620;
+			};
+			buildConfigurationList = E7852B2FC3F243DFB04B9499 /* Build configuration list for PBXProject "Neuro" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				B7AF41DCC8ED4DF9B985DE40 /* Debug */,
+				AE6329757F4C4FB6B73ADD61 /* Release */,
+				28F1B25E6ACD4966ACA9FB4D /* MinSizeRel */,
+				DFA57F8253704384951EC96D /* RelWithDebInfo */,
+			);
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			mainGroup = 88211FD69B9945C280EDD623;
+			projectDirPath = /Users/josh.adams/Documents/Dev/wofl/Neuro;
+			projectRoot = "";
+			targets = (
+				BC5F180829AD8676DE1FAEF6 /* ALL_BUILD */,
+				1E084091EE24C8939BA8924D /* Neuro */,
+				54F2A94144BB2A16BF743DED /* ZERO_CHECK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3C0110FC8322DE7E50886E21 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		5D26DF6789A0AFC13A5A9BA3 /* Generate CMakeFiles/ZERO_CHECK */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ZERO_CHECK";
+			outputPaths = (
+/Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeFiles/ZERO_CHECK			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/josh.adams/Documents/Dev/wofl/Neuro/build
+  make -f /Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/josh.adams/Documents/Dev/wofl/Neuro/build
+  make -f /Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/josh.adams/Documents/Dev/wofl/Neuro/build
+  make -f /Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/josh.adams/Documents/Dev/wofl/Neuro/build
+  make -f /Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeScripts/ReRunCMake.make
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		955C8DAC63F70F38B2563C12 /* Generate CMakeFiles/ALL_BUILD */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ALL_BUILD";
+			outputPaths = (
+/Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeFiles/ALL_BUILD			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/josh.adams/Documents/Dev/wofl/Neuro/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/josh.adams/Documents/Dev/wofl/Neuro/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/josh.adams/Documents/Dev/wofl/Neuro/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/josh.adams/Documents/Dev/wofl/Neuro/build
+  echo Build\\ all\\ projects
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		9B50530E35CC49C82C2FACCF = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7C0250F3E5014C0AA6D7B317 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54066F1418934399A2BE187A /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroConfig.cpp */,
+				A986E09DD1D14B4DBB0352CA /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroGame.cpp */,
+				2F88878FADC24381AE81E59A /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroLua.cpp */,
+				C0AB5EF4FEBB431D84CB8D7C /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Game/NeuroState.cpp */,
+				E96D2483905E4119A05753B1 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Gridbox.cpp */,
+				B0C4CB1982744718A69D4D2F /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/NeuroScene.cpp */,
+				EE7A23BAAD4B4707813834A2 /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Ninebox.cpp */,
+				C622A50DABD54476B42C7EEE /* /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/UI/Textbox.cpp */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		50D16136BDC6408C94B26FE3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54F2A94144BB2A16BF743DED /* ZERO_CHECK */;
+			targetProxy = 60B1850CA06A42CDA4FBF61A /* PBXContainerItemProxy */;
+		};
+		50EA87F5A40546BF96EB01EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54F2A94144BB2A16BF743DED /* ZERO_CHECK */;
+			targetProxy = F4CCEE8864024995A36050A1 /* PBXContainerItemProxy */;
+		};
+		F12384AA0313416C8647CB69 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E084091EE24C8939BA8924D /* Neuro */;
+			targetProxy = 4107B5E935AA4FD0B890C027 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		03A8BB203449474295E359AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		03F20F3C9ECB4171B2B377A8 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = /Users/josh.adams/Documents/Dev/wofl/Neuro/build/build;
+			};
+			name = RelWithDebInfo;
+		};
+		1AC460EB95BD4D76B53FDE44 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/josh.adams/Documents/Dev/wofl/Neuro/build/MinSizeRel;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Neuro;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/josh.adams/Documents/Dev/wofl/Neuro/build/build/Neuro.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		461C50FAD1DE4194BBCFA99F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		4A0884A06EEF49EE91958566 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/josh.adams/Documents/Dev/wofl/Neuro/build/RelWithDebInfo;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "       -DNDEBUG ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Neuro;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/josh.adams/Documents/Dev/wofl/Neuro/build/build/Neuro.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		52301669882A46CA91925F65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		56D3EB46490F4191A32CC905 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = /Users/josh.adams/Documents/Dev/wofl/Neuro/build/build;
+			};
+			name = MinSizeRel;
+		};
+		56DA347F2A23468592A15E1C /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		6DEA94C6EE9D4A6F97E17703 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		A1EF0891219141408588A580 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		A48E212AF19C49D5ACF66273 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk;
+				SYMROOT = /Users/josh.adams/Documents/Dev/wofl/Neuro/build/build;
+			};
+			name = Debug;
+		};
+		B16C7AB4AC414A16ABF7F864 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/josh.adams/Documents/Dev/wofl/Neuro/build/Release;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Neuro;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/josh.adams/Documents/Dev/wofl/Neuro/build/build/Neuro.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		B6937821A1C848849D822769 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/josh.adams/Documents/Dev/wofl/Neuro/build/Debug;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "   ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Neuro;
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/josh.adams/Documents/Dev/wofl/Neuro/build/build/Neuro.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		C14DA5C7577C4510BB489562 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		D3F018BBD39146BB93154CB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = /Users/josh.adams/Documents/Dev/wofl/Neuro/build/build;
+			};
+			name = Release;
+		};
+		F17356AA2FC241DCAC10F7A8 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7904F4652DE145CE901B2F8C /* Build configuration list for PBXNativeTarget "Neuro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B6937821A1C848849D822769 /* Debug */,
+				B16C7AB4AC414A16ABF7F864 /* Release */,
+				1AC460EB95BD4D76B53FDE44 /* MinSizeRel */,
+				4A0884A06EEF49EE91958566 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		997A080E010243CC892010B0 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1EF0891219141408588A580 /* Debug */,
+				52301669882A46CA91925F65 /* Release */,
+				6DEA94C6EE9D4A6F97E17703 /* MinSizeRel */,
+				56DA347F2A23468592A15E1C /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CF083697B8574EFDA213CA1C /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03A8BB203449474295E359AF /* Debug */,
+				461C50FAD1DE4194BBCFA99F /* Release */,
+				C14DA5C7577C4510BB489562 /* MinSizeRel */,
+				F17356AA2FC241DCAC10F7A8 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E7852B2FC3F243DFB04B9499 /* Build configuration list for PBXProject "Neuro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A48E212AF19C49D5ACF66273 /* Debug */,
+				D3F018BBD39146BB93154CB1 /* Release */,
+				56D3EB46490F4191A32CC905 /* MinSizeRel */,
+				03F20F3C9ECB4171B2B377A8 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6E0818968FDA431B8466DEBC /* Project object */;
+}

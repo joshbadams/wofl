@@ -63,7 +63,7 @@ Items = {
 		name = "Security Pass",
 		cost = 4000
 	},
-
+	
 	[100] = Deck:new { capacity =  5, buggy = true,  cyberspace = false, cost = 0,     manufacturer = "Yamamitsu", name = "UXB" },
 	[101] = Deck:new { capacity =  6, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Yamamitsu", name = "XXB" },
 	[102] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 7200,  manufacturer = "Yamamitsu", name = "ZXB" },
@@ -88,7 +88,7 @@ Items = {
 	[121] = Deck:new { capacity = 15, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace III" },
 	[122] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace VI" },
 	[123] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace VII" },
-
+	
 	
 	[199] = Comlink:new {
 		cost = 100,
@@ -453,7 +453,7 @@ Items = {
 		version = 4,
 		scope = "ice",
 	},
-
+	
 	
 	[280] = FakeSoftware:new {
 		name = "Mindbender",
@@ -463,7 +463,7 @@ Items = {
 		name = "Chaos Videosoft",
 		version = 3,
 	},
-
+	
 	[300] = Organ:new { name = "Heart", sell=6000, buy=6600, hp = 200 },
 	[301] = Organ:new { name = "Eyes (2)", sell=5000, buy=6500, hp = 150 },
 	[302] = Organ:new { name = "Lungs (2)", sell=3000, buy=3300, hp = 150 },
@@ -478,12 +478,12 @@ Items = {
 	[309] = Organ:new { name = "Arms (2)", sell=300, buy=330, hp = 50 },
 	[310] = Organ:new { name = "Tpngue", sell=150, buy=165, hp = 25 },
 	[311] = Organ:new { name = "Larynx", sell=150, buy=165, hp = 25 },
-
+	
 	[312] = Organ:new { name = "Nose", sell=150, buy=165, hp=25 },
 	[313] = Organ:new { name = "Ears (2)", sell=100, buy=110, hp=25 },
 	[314] = Organ:new { name = "Intestine (large)", sell=50, buy=55, hp=10 },
 	[315] = Organ:new { name = "Intestine (small)", sell=50, buy=55, hp=10 },
-
+	
 	[316] = Organ:new { name = "Spleen", sell=45, buy=78, hp=10 },
 	[317] = Organ:new { name = "Bone Marrow", sell=45, buy=78, hp=10 },
 	[318] = Organ:new { name = "Spinal Fluid", sell=30, buy=33, hp=10 },
@@ -497,6 +497,10 @@ Items = {
 	[403] = Skill:new { name = "Icebreaking", cost = 1000, scope = "cyberspace" },
 	[404] = Skill:new { name = "Debug", cost = 1000, scope = "room" },
 	[405] = Skill:new { name = "Evasion", cost = 2000, scope = "cyberspace" },
+	[406] = Skill:new { name = "Bargaining", cost = 2000, scope = "???" },
+	[407] = Skill:new { name = "Psychoanalysis", cost = 2000, scope = "???" },
+	[408] = Skill:new { name = "Philosophy", cost = 2000, scope = "???" },
+	[409] = Skill:new { name = "Phenomenology", cost = 2000, scope = "???" },
 }
 
 CryptoDecode = {

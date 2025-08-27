@@ -53,7 +53,7 @@ void Textbox::SetText(const std::string& InText, bool bNeedsPauseAtEnd)
 
 	if (bPauseOnLastPage)
 	{
-		Lines.push_back("[END]");
+		Lines.push_back("[END - CLICK TO CONTINUE]");
 	}
 	FirstLine = 0;
 	NumLinesToRender = GetSize().Y / LineHeight;

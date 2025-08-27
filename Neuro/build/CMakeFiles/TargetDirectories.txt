@@ -1,0 +1,3 @@
+/Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeFiles/Neuro.dir
+/Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeFiles/ALL_BUILD.dir
+/Users/josh.adams/Documents/Dev/wofl/Neuro/build/CMakeFiles/ZERO_CHECK.dir

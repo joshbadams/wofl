@@ -18,9 +18,15 @@ public:
 		Utils::File = this;
 	}
 	
+	virtual void SetMainResourceSubdir(const char* ResourceDir) = 0;
+
+	virtual std::string GetResourceDir(const char* SubDir=nullptr) = 0;
 	virtual std::string GetResourcePath(const char* Filename) = 0;
 	virtual std::string GetSavePath(const char* Filename) = 0;
 
+	virtual std::vector<std::string> FindFiles(const char* Directory, const char* Ext, bool bIncludePath=true, bool bIncludeExtension=true) = 0;
+
+	
 	// @todo: Maybe this should have a default fopen implementation
 	virtual std::string LoadFileToString(const char* Path) = 0;
 	virtual std::vector<unsigned char> LoadFileToArray(const char* Path) = 0;

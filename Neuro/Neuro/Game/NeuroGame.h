@@ -40,6 +40,15 @@ public:
 	virtual bool OnGlobalKey(const KeyEvent& Event) override;
 
 private:
+	class SubGameInit
+	{
+	public:
+		SubGameInit(const char* SubgameName)
+		{
+			Utils::File->SetMainResourceSubdir(SubgameName);
+		}
+	};
+	SubGameInit _SubGameInit;
 	
 	NeuroState State;
 		

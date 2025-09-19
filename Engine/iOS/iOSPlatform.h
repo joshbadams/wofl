@@ -26,7 +26,7 @@ public:
 		return [NSDate timeIntervalSinceReferenceDate] - StartTime;
 	}
 	
-	virtual std::string GetCommandLineOption(const char* Option) override
+	virtual std::string GetCommandLineOption(const char* Option, const char* Default) override
 	{
 		NSString* Opt = [NSString stringWithFormat:@"-%s", Option];
 		
@@ -39,7 +39,7 @@ public:
 			}
 		}
 		
-		return std::string();
+		return Default;
 	}
 	
 protected:

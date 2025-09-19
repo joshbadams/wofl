@@ -20,7 +20,7 @@ public:
 	// get game time in seconds
 	virtual double GetTime() = 0;
 	
-	virtual std::string GetCommandLineOption(const char* Option) = 0;
+	virtual std::string GetCommandLineOption(const char* Option, const char* Default="") = 0;
 };
 
 #endif

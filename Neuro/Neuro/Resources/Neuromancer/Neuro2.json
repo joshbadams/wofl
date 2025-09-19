@@ -152,6 +152,6 @@
 	"size": {"w":4096,"h":4096},
 	"scale": "1",
 	"related_multi_packs": [ "Neuro1.json" ],
-	"smartupdate": "$TexturePacker:SmartUpdate:21c2967e16500da53685c1cd0132a5c1:73be601b783f558b68df3cc01b8f8b95:8e5f1c61dd1938f0ebcc3dab307fd743$"
+	"smartupdate": "$TexturePacker:SmartUpdate:d69a6ab89a5885314aee4385663fd338:73be601b783f558b68df3cc01b8f8b95:8e5f1c61dd1938f0ebcc3dab307fd743$"
 }
 }

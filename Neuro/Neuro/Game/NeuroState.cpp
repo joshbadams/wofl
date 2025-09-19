@@ -12,6 +12,9 @@ NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate)
 	: StateDelegate(InStateDelegate)
 	, Lua(this)
 {
+	// this would be better done in NeuroGame, but oh well
+	Utils::File->SetMainResourceSubdir(WoflGame::TheGame->GetGameName().c_str());
+
 	InitLua();
 	
 	// loaded values here will override init values in tha

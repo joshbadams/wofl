@@ -143,6 +143,9 @@ currentRoom = nil
 currentSite = nil
 currentDeck = nil
 
+Atlases = {
+	"Neuro1"
+}
 
 GameScripts = {
 	-- helpers

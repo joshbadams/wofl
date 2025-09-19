@@ -17,7 +17,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	WoflGame* Game = new NeuroGame;
+	WoflGame* Game = new NeuroGame();
 	WoflApplication::Initialize(Game);
 }
 

@@ -62,7 +62,7 @@ public:
 	
 	virtual void MessageComplete() override;
 	
-	virtual void Tick(float DeltaTime);
+	virtual void Tick(float DeltaTime) override;
 
 	virtual std::string Describe() override
 	{

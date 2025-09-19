@@ -56,3 +56,14 @@ void WoflAtlases::LoadAtlas(const char* AtlasName)
 		SubImageToInfoMap[ImageName] = Info;
 	}
 }
+
+void WoflAtlases::LoadAllAtlases()
+{
+	std::string ResourcesDir = Utils::File->GetResourceDir();
+	std::vector<std::string> Atlases = Utils::File->FindFiles(ResourcesDir.c_str(), "json", false, false);
+	
+	for (std::string& Atlas : Atlases)
+	{
+		LoadAtlas(Atlas.c_str());
+	}
+}

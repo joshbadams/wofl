@@ -91,13 +91,13 @@ private:
 
 
 NeuroGame::NeuroGame()
-	: WoflGame("Neuromancer")
+	: WoflGame(Utils::Platform->GetCommandLineOption("subgame", "Neuromancer").c_str())
+	, _SubGameInit(GetGameName().c_str())
 	, State(this)
 {
 	WLOG("View size is: %f, %f\n", WoflRenderer::Renderer->GetViewSize().X, WoflRenderer::Renderer->GetViewSize().Y);
 		
-	WoflAtlases::LoadAtlas("Neuro1");
-	WoflAtlases::LoadAtlas("Neuro2");
+	WoflAtlases::LoadAllAtlases();
 
 	Background = new WoflSprite(0, 0, WoflRenderer::Renderer->GetViewSize().X, WoflRenderer::Renderer->GetViewSize().Y);
 	Background->AddImage(new WoflImage("background"));

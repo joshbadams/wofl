@@ -51,7 +51,15 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-lua /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Resources/Lua"
+            argument = "-subgame Bettws"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-subgame Neuromancer"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-lua /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Resources/Bettws/Lua"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

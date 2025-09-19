@@ -12,6 +12,7 @@
 class WoflAtlases
 {
 public:
+	static void LoadAllAtlases();
 	static void LoadAtlas(const char* AtlasName);
 
 protected:

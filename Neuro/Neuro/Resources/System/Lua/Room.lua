@@ -98,15 +98,18 @@ function Room:ActivateConversation(inTag)
 end
 
 function Room:EndConversation()
+print("Room:EndConversation 1")
 
 	local endingConversation = nil
 	local endingChoice = nil
 
 	-- after a reponse to a choice has been seen
 	if (self.currentChoice ~= nil) then
+print("Room:EndConversation 2")
 		endingChoice = self.currentChoice
 	-- after a choice with no response has been seen
 	elseif (self.choiceIndex > 0) then
+print("Room:EndConversation 3")
 		endingChoice = self.currentConversation.options[self.choiceIndex]
 	end
 
@@ -120,12 +123,15 @@ function Room:EndConversation()
 	self.currentChoice = nil
 	self.lineIndex = 0
 	self.choiceIndex = 0
+print("Room:EndConversation 4")
 
 	-- run onEnd with the room as the self, not the choice/convo
 	if (endingChoice ~= nil and endingChoice.onEnd ~= nil) then
+print("Room:EndConversation 5", endingChoice, endingChoice.onEnd)
 		endingChoice.onEnd(self)
 	end
 	if (endingConversation ~= nil and endingConversation.onEnd ~= nil) then
+print("Room:EndConversation 6")
 		endingConversation.onEnd(self)
 	end
 
@@ -174,13 +180,17 @@ function Room:HandleDialogClick(isOutsideBubble)
 end
 
 function Room:DialogTextEntered(text)
+print("Room:DialogTextEntered 1")
 	-- run onEnd, close dialog, etc
 	self:EndConversation()
+print("Room:DialogTextEntered 2")
 
 	self:ActivateConversation("_" .. text)
+print("Room:DialogTextEntered 3")
 	if (self.currentConversation == nil) then
 		self:ActivateConversation("_unknownentry")
 	end
+print("Room:DialogTextEntered 4")
 end
 
 -- keycode 2 is Enter

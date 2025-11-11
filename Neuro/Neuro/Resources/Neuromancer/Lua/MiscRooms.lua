@@ -616,36 +616,120 @@ metro = Metro
 
 ------------------------------------------
 
+MatrixChipShop = ShopBox:new {
+	items = {
+		410,
+		411,
+		412,
+	}
+}
+
+
+s.matrix = 0
 Matrix = Room:new {
 	name = "matrix",
 	hasPerson = true,
-	
+	onEnterConversation = "onEnter",
+
 	north = "streetmain4",
 	
 	longDescription = "The Matrix Restaurant is the place to be if you're a wealthy cowboy in Chiba City. This is a club for Members Only. When you enter, you see Emperor Norton and King Osric, deep in a conversation. There are waiters around, but they're respectfully staying out of sight. There's also a PAX terminal here.",
-	description = "You're in the Matrix Restaurant."
+	
+	description = "You're in the Matrix Restaurant.",
+	
+	conversations = {
+		{
+			tag = "onEnter",
+			condition = function(self) print("x.matrix", s.matrix); return s.matrix == 0 end,
+			lines =
+			{
+				"... so I was larking around Rio heavy commerce sector when I see this white cube. It was an AI, listed on the",
+				"Turing Registry. Figured I'd try to cut the ice. Hit the first layer and flatlined. My joeboy smelled the skin",
+				"frying and pulled the trodes off me.",
+				
+				"I know what you mean. Tried it myself once. That ice was bad news. Maybe an AI got old Bosch. He was worried when",
+				"I last talked to him at Gridpoint. He thought some AI had found a way to make itself smarter! You believe it?",
+				
+				"No. Nobody trusts an AI. Every AI ever built has an electromagnetic shotgun wired to its forehead. Turing would",
+				"wipe it right away... Hey! Look who wandered in when we left the door open!"
+			},
+			onEnd = function(self) s.matrix = 1; end,
+		},
+		
+		{
+			options = {
+				{
+					line = "Got any old chips you want to sell?",
+					response = "Have I got chips! I've got Logic, Software Analysis, and Musicianship. For you, I'll charge $1000 each.",
+					onEnd = function(self) OpenBox("MatrixChipShop") end
+				},
+				{
+					line = "Hey what do you know about",
+					hasTextEntry=true,
+				},
+				{
+					line = "Hey what do you know about",
+					hasTextEntry=true,
+				},
+			}
+		},
+
+		{
+			tags = { "_unknownentry" },
+			lines = { "Some things you'll have to figure out for yourself. This is one of them." },
+		},
+		{
+			tags = { "_ai" },
+			lines = { "Artificial Intelligence. Hang around cyberspace long enough and you'll meet one. Never annoy an AI." },
+		},
+		{
+			tags = { "_rom", "_roms" },
+			lines = { "Sense/Net has 'em all. And the only people who ever got in there were the Panther Moderns." },
+		},
+		{
+			tags = { "_bosch" },
+			lines = { "Nobody's seen Bosch lately. We think maybe he hit some black ice out in cyberspace. Matt Shaw saw him last." },
+		},
+		{
+			tags = { "_matt shaw" },
+			lines = { "Great cuy. He's been real helpful in the past. Big ego, though." },
+		},
+		{
+			tags = { "_neuromancer" },
+			lines = { "Some kinda computer game, isn't it?" },
+		},
+		{
+			tags = { "_upgrade", "_upgrades" },
+			lines = { "Sure, we can raise a few of your skills to level 2, and Debug to level 4. $100 for each skill level." },
+			onEnd = function(self) OpenBox("MatrixSkillShop") end
+		},
+	}
 }
 matrix = Matrix
 
 function Matrix:HandleEnter(desc)
-	local message = desc
-	local postFunc = nil
-
 	if (not table.containsArrayItem(s.inventory, 4)) then
-		message = message .. "\n\nYou are kicked out for not having a pass."
-		postFunc = function(self) GoToRoom(self.north) end
+		local message = desc .. "\n\nYou are kicked out for not having a pass."
+
+		-- true means to pause before continuing
+		ShowMessage(message, function(self) GoToRoom(self.north) end, true)
+		
+		return false
 	end
 
-	-- true means to pause before continuing
-	ShowMessage(message, postFunc, postFunc ~= nil)
+	return true
 end
 
 function Matrix:OnFirstEnter()
-	self:HandleEnter(self.longDescription)
+	if (self:HandleEnter(self.longDescription)) then
+		Room.OnFirstEnter(self)
+	end
 end
 
 function Matrix:OnEnter()
-	self:HandleEnter(self.description)
+	if (self:HandleEnter(self.description)) then
+		Room.OnEnter(self)
+	end
 end
 
 -------------------------------------------------
@@ -986,289 +1070,3 @@ function Spaceport:BuyTicket(dest)
 		GoToRoom("shuttle")
 	end
 end
-
-
-------------------------------------------
-
-Shuttle = Room:new {
-	name = "shuttle",
-	onEnterConversation = "onEnter",
-	hasPerson = true,
-	
-	longDescription = "You have entered the JAL shuttle, now preparing for departure.",
-	description = "You have entered the JAL shuttle, now preparing for departure.",
-	
-	conversations = {
-		{
-			noCancel = true,
-			tag = "onEnter",
-			lines = {
-				"Welcome aboard! Our entire crew appreciates the fact that you chose to fly on our shuttle! Domo Arigato!",
-				"Please note there is only one exit. In the event of a fire on the ground, all passengers will have to fend for",
-				"themselves, because the crew and I will tbe the first ones out that door. In the event of a pressure loss while",
-				"we're in transit, we'll all be sucking cold vacuum in a matter of seconds, so we hope you bought flight insurance.",
-				"During the flight, we will not be be serving beverages or food of any kind. We used to serve food, but the",
-				"portions we server were getting so small that the passengers couldn't see them any more. Speaking of food,",
-				"if you are prone to space sickness, please do not throw upon the person next to you. In fact, we'd prefer that",
-				"you not throw up at all since it makes quite a mess in weightlessness. If you must, put your head in a bag.",
-				"You will note that our in-flight holo-mobie has just been zip-shot directy into your brain using psycho-graphics.",
-				"We hope you enjoyed it. There will be an additional charge if you'd like to 'see' the movie again. And now, I'm",
-				"sure it will come as a big surprise to you as it did to me that we have just arrived safely at our destination.",
-				
-			},
-			onEnd = function(self) GoToRoom(s.flightdest) end,
-		},
-	}
-}
-shuttle = Shuttle
-	
-Zion = Room:new {
-	name = "zion",
-	onEnterConversation = "onEnter",
-	hasPerson = true,
-	
-	longDescription = "On the thirty year old Rastafarian orbital colony known as Zion Cluster. The air is thick with resinous smoke. The walls are covered with Rastafarian symbols. You hear dub music playing in the distance. An old man, one of the original Founders who build Zion, is waiting here to speak with you.",
-	description = "On the thirty year old Rastafarian orbital colony known as Zion Cluster.",
-	
-	conversations = {
-		{
-			tag = "onEnter",
-			lines = {
-				"Measure twice, cut once, mon. Have you come up the gravity well out of Babylon to lead the Tribes home?",
-				"Or be you the tool o' the demons. A tool of the banks."
-			},
-			onEnd = function(self) s.zion = 0 end,
-		},
-
-		{
-			condition = function(self) return s.zion == 0; end,
-			options = {
-				{
-					line = "Excuse me?",
-					response = "Soon come the Final Days... Voices. Voices cryin' inna wilderness, prophesyin' ruin unto Babylon....",
-					onEnd = function(self) print("option 1: ", s.zion); s.zion = 1 end,
-				},
-				{
-					line = "Uh, yeah, sure...",
-					response = "You bring a scourge on Babylon, on its darkest heart, mon. You are the tool of the Final Days.",
-					onEnd = function(self) s.zion = 1 end,
-				},
-				{
-					line = "I think you've confused me with someone else.",
-					response = "Babylon mothers many demon, I an' I know. Multitude horde!",
-					onEnd = function(self) s.zion = 1 end,
-				},
-			},
-		},
-
-		{
-			condition = function(self) return s.zion == 1; end,
-			options = {
-				{
-					line = "Right. Can I get a ride to freeside from here?",
-					response = "This no' m' fight, mon. I an' I only sit here an' a list'n to the dub."
-				},
-				{
-					line = "I'd like to pay for a ride back to Chiba City.",
-					response = "For $500, the JAL shuttle take you back down the well, mon.",
-					onEnd = function(self) self:HandleFlight() end
-				},
-				{
-					line = "Do you speak English or what, you crusty old wilson!",
-					response = "Don' want you here no mo', mon. Back down the well wit' ya.",
-					onEnd = function(self) s.flightdest = "spaceport"; GoToRoom("shuttle"); end
-				},
-				{
-					line = "Do you know anything about",
-					hasTextEntry=true,
-				},
-			},
-		},
-		
-		{
-			tag = "nomoney",
-			lines = { "You don' have the cash, mon? Join us and play some dub, then." }
-		},
-		
-		{
-			tags = { "_unknownentry" },
-			lines = { "Don' know the answer to that one, mon." },
-		},
-		{
-			tags = { "_bank", "_banks", "_freeside" },
-			lines = { "Freeside a Babylon port, mon. Several banks, there, ya know? Which one you askin' bout?" },
-		},
-		{
-			tags = { "_zion" },
-			lines = { "Zion? Zion be home, mon." },
-		},
-		{
-			tags = { "_dub" },
-			lines = { "Dub be the music, mon. I an' I have great respect for dub musicians, ya know?" },
-		},
-		{
-			tags = { "_gemeinschaft" },
-			lines = { "Aerol seh BG1066 get him in th' fron' door there, mon." },
-		},
-
-	}
-}
-zion = Zion
-
-function Zion:HandleFlight()
-	if (s.money >= 500) then
-		s.money = s.money - 500
-		s.flightdest = "spaceport"
-		GoToRoom("shuttle")
-	else
-		self:ActivateConversation("nomoney")
-	end
-end
-
-s.freesideport = 0
-Freeside = Room:new {
-	name = "freeside",
-	onEnterConversation = "onEnter",
-	hasPerson = true,
-	
-	south = "freesidestreet2",
-	
-	longDescription = "Freeside Spacedock. A JAL shuttle is waiting in the docking bay. A ticket agent who looks like a clone of the Chiba ticket agent is waiting for you.",
-	description = "Freeside Spacedock.",
-	
-	conversations = {
-		{
-			tag = "onEnter",
-			lines = { "Konichiwa! Would you like to buy a ticket?" },
-			onEnd = function(self) s.freesideport = 0; self.waitmode = 0; end
-		},
-		
-		{
-			condition = function() return s.freesideport == 0; end,
-			options = {
-				{
-					line = "Yes! I'd like to buy a ticket!",
-					response = "We have a flight departing for Chiba City. The special low super maxi bargain big deal fare is $5.",
-					onEnd = function(self) s.freesideport = 1; end,
-				},
-				{
-					line = "No! I just like hanging around ticket agents for no apparent reason!",
-					response = "Okay.",
-					onEnd = function(self) GoToRoom(self.south); end
-				},
-			}
-		},
-
-		{
-			condition = function() return s.freesideport == 1; end,
-			options = {
-				{
-					condition = function(self) return self.waitmode == 0; end,
-					line = "Great! That sounds like a real bargain for a change!",
-					response = "You need to make a reservation 2 years in advance for that fair. All we have now is the regular fare for $1000.",
-					onEnd = function(self) self:ActivateConversation("buyticket") end,
-				},
-				{
-					condition = function(self) return self.waitmode == 0; end,
-					line = "I don't want to go to Chiba City. I want to go somewhere else.",
-					response = "If you'd like to wait, we'll have other flights departing for Paris, London, Amsterdam, and Moscow.",
-					onEnd = function(self) self.waitmode = 1; self:ActivateConversation(); end,
-				},
-				{
-					line = "I've changed my mind. I'm staying on Freeside for the rest of my life.",
-					response = "Okay.",
-					onEnd = function(self) GoToRoom(self.south) end,
-				},
-				{
-					condition = function(self) return self.waitmode == 1; end,
-					line = "How long would I have to wait?",
-					response = "About 3 years. We haven't started that service yet.",
-					onEnd = function(self) self.waitmode = 2; self:ActivateConversation(); end,
-				},
-				{
-					condition = function(self) return self.waitmode == 2; end,
-					line = "After careful consideration, I think I'll buy that ticket to Chiba City.",
-					response = "Enjoy your flight! The holo-movie is 'Airport 2000'.",
-					onEnd = function(self) self:BuyTicket() end,
-				},
-			}
-		},
-
-		{
-			tag = "buyticket",
-			options = {
-				{
-					line = "Fine! I'll pay the $1000!",
-					onEnd = function(self) self:BuyTicket() end,
-				},
-				{
-					line = "I've changed my mind. I'm staying on Freeside for the rest of my life.",
-					response = "Okay.",
-					onEnd = function(self) GoToRoom(self.south) end,
-				},
-			}
-		},
-		{
-			tag = "nomoney",
-			lines = { "Take a hike. You can't afford it." },
-			onEnd = function(self) GoToRoom(self.south) end,
-		},
-
-
-		{
-			tag = "wait",
-			options = {
-				{
-					line = "I've changed my mind. I'm staying on Freeside for the rest of my life.",
-					response = "Okay.",
-					onEnd = function(self) GoToRoom(self.south) end,
-				},
-				{
-					line = "How long would I have to wait?",
-					response = "About 3 years. We haven't started that service yet.",
-					onEnd = function(self) self:BuyTicket() end,
-				},
-			}
-		},
-	}
-
-}
-freeside = Freeside
-
-function Freeside:BuyTicket()
-print("Freeside buy ticket", s.money)
-	if (s.money < 1000) then
-		self:ActivateConversation("nomoney")
-	else
-		s.money = s.money - 1000
-		s.flightdest = "spaceport"
-print("Going to shuttle")
-		GoToRoom("shuttle")
-	end
-end
-
-
-Straylight = Room:new {
-	name = "straylight",
-	onEnterConversation = "onEnter",
-	hasPerson = true,
-	
-	south = "freesidestreet1",
-	
-	longDescription = "This is the Villa Straylight, home to the Tessier-Ashpool clan. A platinum bust of a human head sits on a pedestal, its cool ruby eyes staring at you with quiet menace. It speaks to you in a melodious voice generated from tiny organ pipes.",
-	description = "Freeside Spacedock.",
-	
-	conversations = {
-		{
-			tag = "onEnter",
-			lines = { "In this room lies death, my friend. This is the road to the land of the dead. Marie France, my lady, prepared",
-				"this road, but her lord choked her off before I could read the book of her days. Stay and become a ghost, a thing",
-				"of shadow in the land of the dead. Keep me company. Become a sphere of singing black on the extended crystal",
-				"nerves of the universe of data, your consciousness divided like beads of mercury.",
-				"Question authority, my friend, and dare to remain in the shadowlands forever..."
-			},
-			onEnd = function(self) s.freesideport = 0; self.waitmode = 0; end
-		},
-	}
-}
-straylight = Straylight

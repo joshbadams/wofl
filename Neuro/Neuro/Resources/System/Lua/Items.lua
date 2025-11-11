@@ -501,6 +501,10 @@ Items = {
 	[407] = Skill:new { name = "Psychoanalysis", cost = 2000, scope = "???" },
 	[408] = Skill:new { name = "Philosophy", cost = 2000, scope = "???" },
 	[409] = Skill:new { name = "Phenomenology", cost = 2000, scope = "???" },
+	[410] = Skill:new { name = "Logic", cost = 1000, scope = "???" },
+	[411] = Skill:new { name = "Warez Analysis", cost = 1000, scope = "???" },
+	[412] = Skill:new { name = "Musicianship", cost = 1000, scope = "???" },
+	[413] = Skill:new { name = "Zen", cost = 1000, scope = "???" },
 }
 
 CryptoDecode = {

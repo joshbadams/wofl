@@ -12,10 +12,10 @@ WoflGame* WoflGame::TheGame = NULL;
 
 bool WoflGame::Save()
 {
-	return SaveToFile(Utils::File->GetSavePath("game.sav").c_str());
+	return SaveToFile("game.sav", FileDomain::Save);
 }
 
 bool WoflGame::Load()
 {
-	return LoadFromFile(Utils::File->GetSavePath("game.sav").c_str());
+	return LoadFromFile("game.sav", FileDomain::Save);
 }

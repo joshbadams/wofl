@@ -45,7 +45,7 @@ private:
 	public:
 		SubGameInit(const char* SubgameName)
 		{
-			Utils::File->SetMainResourceSubdir(SubgameName);
+			Utils::File->SetGameDomainName(SubgameName);
 		}
 	};
 	SubGameInit _SubGameInit;

@@ -92,8 +92,9 @@ bool operator<(const LuaRef& A, const LuaRef& B)
 	return A->Ref < B->Ref;
 }
 
-Lua::Lua(void* InContext)
+Lua::Lua(void* InContext, const std::string& InGameName)
 	: Context(InContext)
+	, GameName(InGameName)
 {
 	Init();
 
@@ -134,7 +135,8 @@ void Lua::Init()
 
 	// load the main file
 	LoadScript("Neuro.lua");
-	
+	LoadScript("Game.lua");
+
 	GetTableValue("", "s", Settings);
 }
 
@@ -307,26 +309,35 @@ void Lua::RegisterFunction(const char* Name, lua_CFunction Func)
 
 void Lua::LoadScript(const char* ScriptName)
 {
-	std::string LuaPath = Utils::Platform->GetCommandLineOption("lua");
-	if (LuaPath != "")
+	std::string Contents;
+	std::string FilePath;
+	static std::string CmdLineLuaPath = Utils::Platform->GetCommandLineOption("lua");
+	if (CmdLineLuaPath != "")
 	{
-		LuaPath = LuaPath + "/" + ScriptName;
+		FilePath = CmdLineLuaPath + "/" + GameName + "/Lua/" + ScriptName;
+		Contents = Utils::File->LoadFileToString(FilePath.c_str(), FileDomain::Absolute);
+		if (Contents == "")
+		{
+			FilePath = CmdLineLuaPath + "System/Lua/" + ScriptName;
+			Contents = Utils::File->LoadFileToString(FilePath.c_str(), FileDomain::Absolute);
+		}
 	}
 	else
 	{
-		string FilePath = "Lua/";
+		FilePath = "Lua/";
 		FilePath += ScriptName;
 		
-		LuaPath = Utils::File->GetResourcePath(FilePath.c_str());
+		Contents = Utils::File->LoadFileToString(FilePath.c_str(), FileDomain::GameThenSystem);
 	}
 		
-	bool bError = luaL_dofile(L, LuaPath.c_str());
+	bool bError = luaL_dostring(L, Contents.c_str());
 	if (bError)
 	{
 		std::string Err = lua_tostring(L, -1);
-		WLOG("error loading lua file: %s\n", lua_tostring(L, -1));
+		WLOG("error loading lua file: %s [%s]\n", FilePath.c_str(), Err.c_str());
 	}
 	assert(!bError);
+	WLOG("Loaded lua file: %s\n", FilePath.c_str());
 }
 
 LuaRef Lua::MakeRef() const
@@ -490,6 +501,11 @@ int PushFuncSpec(lua_State* L, int TableStackLoc, const char* Func)
 {
 	lua_getfield(L, TableStackLoc, Func);
 	return lua_gettop(L);
+}
+
+int PushFuncSpec(lua_State* L, int TableStackLoc, int TableLoc)
+{
+	return TableLoc;
 }
 
 int PushFuncSpec(lua_State* L, int TableStackLoc, LuaRef Func)

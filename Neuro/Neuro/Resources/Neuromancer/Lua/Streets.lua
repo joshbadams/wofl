@@ -267,7 +267,7 @@ FreesideStreet3 = Room:new {
 	
 	west = "freesidestreet2",
 	east = "freesidestreet4",
---	north = "berne",
+	north = "berne",
 }
 freesidestreet3 = FreesideStreet3
 
@@ -275,7 +275,7 @@ FreesideStreet4 = Room:new {
 	name = "freesidestreet4",
 	
 	west = "freesidestreet3",
---	north = "gemeinschaft",
+	north = "gemeinschaft",
 
 	longDescription = "You are outside of Bank Gemeinschaft. A sign on the wall reads, 'WARNING. SECURED AREA. Unauthorized entry punishable by termination'.",
 	description = "You are outside of Bank Gemeinschaft. A sign on the wall reads, 'WARNING. SECURED AREA. Unauthorized entry punishable by termination'.",

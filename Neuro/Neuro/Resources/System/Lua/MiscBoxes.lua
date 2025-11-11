@@ -299,6 +299,7 @@ DialogTextEntry = TextEntryBox:new {
 }
 
 function DialogTextEntry:OnTextEntryComplete(text, tag)
+print("DialogTextEntry:OnTextEntryComplete")
 	currentRoom:DialogTextEntered(text)
 	CloseBox(self)
 end
@@ -314,6 +315,7 @@ function InlineTextEntry:GetEntries()
 end
 
 function InlineTextEntry:OnTextEntryComplete(text, tag)
+print("InlineTextEntry:OnTextEntryComplete")
 	currentRoom:DialogTextEntered(text)
 	CloseBox(self)
 end

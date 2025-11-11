@@ -59,7 +59,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-lua /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Resources/Bettws/Lua"
+            argument = "-lua /Users/josh.adams/Documents/Dev/wofl/Neuro/Neuro/Resources/"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

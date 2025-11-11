@@ -1,16 +1,16 @@
 {"frames": [
 
 {
-	"filename": "background.png",
-	"frame": {"x":0,"y":0,"w":1280,"h":796},
+	"filename": "bridge.png",
+	"frame": {"x":0,"y":0,"w":1536,"h":1024},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1280,"h":796},
-	"sourceSize": {"w":1280,"h":796}
+	"spriteSourceSize": {"x":0,"y":0,"w":1536,"h":1024},
+	"sourceSize": {"w":1536,"h":1024}
 },
 {
-	"filename": "bridge.png",
-	"frame": {"x":0,"y":798,"w":1536,"h":1024},
+	"filename": "bridgenorth.png",
+	"frame": {"x":1538,"y":0,"w":1536,"h":1024},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1536,"h":1024},
@@ -21,8 +21,8 @@
 	"version": "1.0",
 	"image": "Bettws1.png",
 	"format": "RGBA8888",
-	"size": {"w":2048,"h":2048},
+	"size": {"w":4096,"h":1024},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:920e4037472be851c57e8c8708b0bdc7:41566bb192b55f5cf406543ffe7ab38b:5f25324c54860768cc7c59e3a844d6f0$"
+	"smartupdate": "$TexturePacker:SmartUpdate:f8dd53e59cdd141c511af0ca6daa8779:26582fb8ac750ec9daeea752f0243817:5f25324c54860768cc7c59e3a844d6f0$"
 }
 }

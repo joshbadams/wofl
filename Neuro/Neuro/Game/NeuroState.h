@@ -113,7 +113,7 @@ public:
 	Lua Lua;
 	LuaRef CurrentRoom;
 		
-	NeuroState(IStateChangedDelegate* InStateDelegate);
+	NeuroState(IStateChangedDelegate* InStateDelegate, const std::string& GameName);
 	virtual ~NeuroState()
 	{
 		

@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.6.3</string>
+        <string>7.9.1</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -34,7 +34,7 @@
         <key>dataFormat</key>
         <string>json-array</string>
         <key>textureFileName</key>
-        <filename>../../Resources/Neuro{n1}.png</filename>
+        <filename>../../Resources/Neuruomancer/Neuro{n1}.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>pvrQualityLevel</key>
@@ -124,7 +124,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../../Resources/Neuro{n1}.json</filename>
+                <filename>../../Resources/Neuromancer/Neuro{n1}.json</filename>
             </struct>
         </map>
         <key>multiPackMode</key>
@@ -173,7 +173,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">background.png</key>
+            <key type="filename">berne.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -182,9 +182,9 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>320,199,640,398</rect>
+                <rect>304,114,608,228</rect>
                 <key>scale9Paddings</key>
-                <rect>320,199,640,398</rect>
+                <rect>304,114,608,228</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

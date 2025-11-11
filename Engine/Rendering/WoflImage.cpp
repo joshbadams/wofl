@@ -54,7 +54,7 @@ void WoflImage::Initialize(const std::string& TextureName, float U, float V, flo
 	{
 		// load in the texture!
 		std::string FinalTextureName = TextureName + ".png";
-		FinalTextureName = Utils::File->GetResourcePath(FinalTextureName.c_str());
+//		FinalTextureName = Utils::File->GetResourcePath(FinalTextureName.c_str());
 		void* ImageContents = Utils::File->LoadPNGToAllocatedBuffer(FinalTextureName.c_str(), Info.Width, Info.Height);
 		
 		if (ImageContents == NULL)

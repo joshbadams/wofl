@@ -53,7 +53,7 @@ private:
 class Lua : public IJsonObj
 {
 public:
-	Lua(void* Context);
+	Lua(void* Context, const std::string& InGameName);
 	~Lua();
 	
 	void Init();
@@ -157,7 +157,9 @@ private:
 	friend struct LuaScope;
 	friend class LuaObjRef;
 
+	std::string GameName;
 	void* Context;
+public:
 	mutable lua_State* L;
 	LuaRef Settings;
 };
@@ -170,6 +172,7 @@ int PushSpec(lua_State* L, int TableStackLoc);
 int PushSpec(lua_State* L, const char* TableName);
 
 int PushFuncSpec(lua_State* L, int TableStackLoc, LuaRef TableRef);
+int PushFuncSpec(lua_State* L, int TableStackLoc, int TableLoc);
 int PushFuncSpec(lua_State* L, int TableStackLoc, const char* TableName);
 
 int PushParam(lua_State* L, LuaRef Param);
@@ -186,7 +189,8 @@ bool GetReturn(lua_State* L, bool& Param);
 
 void dumpstack (lua_State *L);
 
-#define SCOPE LuaScope Scope(L);
+#define SCOPE \
+	LuaScope Scope(L);
 
 #define SET_TABLE_VALUE(SetFunc, Val) \
 	SCOPE; \

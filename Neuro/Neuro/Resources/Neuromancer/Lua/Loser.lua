@@ -190,7 +190,7 @@ GentlemanLoser = Room:new {
 			lines = { "Only a wilson would ask a question like that." },
 		},
 		{
-			tags = { "_guest pass", "_norton", "_emperor", "_emperor norton", "_matrix", "_restaurant",  },
+			tags = { "_pass", "_guest pass", "_norton", "_emperor", "_emperor norton", "_matrix", "_restaurant",  },
 			lines = {
 				function(self)
 					if (s.losergotpass) then return "I already gave it to you, cowboy."

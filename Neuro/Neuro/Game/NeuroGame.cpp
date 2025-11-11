@@ -93,7 +93,7 @@ private:
 NeuroGame::NeuroGame()
 	: WoflGame(Utils::Platform->GetCommandLineOption("subgame", "Neuromancer").c_str())
 	, _SubGameInit(GetGameName().c_str())
-	, State(this)
+	, State(this, GetGameName())
 {
 	WLOG("View size is: %f, %f\n", WoflRenderer::Renderer->GetViewSize().X, WoflRenderer::Renderer->GetViewSize().Y);
 		
@@ -227,8 +227,11 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name)
 	
 	if (bOverlayingDialog)
 	{
-		ThoughtBox->Text->AddChild(Box);
-//		Background->AddChild(Box);
+		//ThoughtBox->Text->AddChild(Box);
+		Background->AddChild(Box);
+		Box->Open(NewBox, bOverlayingDialog);
+		Vector Pos = Box->GetPosition();
+		Box->SetPosition(Pos + ThoughtBox->Text->GetPosition());
 	}
 //	if (DialogInputSorter->IsRooted())
 //	{
@@ -238,9 +241,9 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name)
 	{
 //		SiteInputSorter->AddChild(Box);
 		Background->AddChild(Box);
+		Box->Open(NewBox, bOverlayingDialog);
 	}
 
-	Box->Open(NewBox, bOverlayingDialog);
 
 	return NewBox;
 }
@@ -382,7 +385,10 @@ bool NeuroGame::OnGlobalKey(const KeyEvent& Event)
 {
 	if (Event.KeyCode == WoflKeys::F1)
 	{
-		State.ReloadLua();
+		if (Event.Type == KeyType::Up)
+		{
+			State.ReloadLua();
+		}
 		return true;
 	}
 	

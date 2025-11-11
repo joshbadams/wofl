@@ -39,10 +39,7 @@ level=0
 
 
 
-c = {
-	initialRoom = "chatsubo",
-	secondsPerMinute = 1,
-}
+
 
 s = {
 	
@@ -50,9 +47,6 @@ s = {
 	hp = 2000,
 
 	inventory = {
-		0, -- cash
-		1, -- pawn ticket
-		100, -- UXB
 	},
 
 	software = {
@@ -131,6 +125,14 @@ function IncrementTime()
 		if (s.hour == 24) then
 			s.hour = 0
 			s.day = s.day + 1
+			if (s.day == 31) then
+				s.day = 1
+				s.month = s.month + 1
+				if (s.month == 13) then
+					s.month = 1
+					s.year = s.year + 1
+				end
+			end
 			s.date = s.month * 10000 + s.day * 100 + s.year
 		end
 	end
@@ -143,11 +145,7 @@ currentRoom = nil
 currentSite = nil
 currentDeck = nil
 
-Atlases = {
-	"Neuro1"
-}
-
-GameScripts = {
+SystemScripts = {
 	-- helpers
 	"Items",
 	"Room",
@@ -155,22 +153,7 @@ GameScripts = {
 	"Site",
 	"InvBox",
 	"MiscBoxes",
-
-	-- rooms
-	"Chatsubo",
-	"BodyShop",
-	"Streets",
-	"Larrys",
-	"DonutWorld",
-	"MiscRooms",
-	"Loser",
-	
-	-- sites
-	"IRS",
-	"Cheapo",
 	"PAX",
-	"RegFellow",
-	"WorldChess",
 }
 
 function TablesMatch(g, a, b)
@@ -193,9 +176,10 @@ end
 
 function table:removeArrayItem(item)
 	for i, val in ipairs(self) do
+print("checking", val, item)
 		if (val == item) then
 			table.remove(self, i)
-			return vale
+			return val
 		end
 	end
 

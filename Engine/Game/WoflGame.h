@@ -188,21 +188,22 @@ protected:
 		}
 	}
 	
-	bool SaveToFile(const char* Filename)
+	bool SaveToFile(const char* Filename, FileDomain Domain)
 	{
 		std::string JsonString = ToJsonObject().toStyledString();
 		
-		return Utils::File->SaveStringToFile(JsonString, Filename);
+		return Utils::File->SaveStringToFile(JsonString, Filename, Domain);
 	}
 	
-	bool LoadFromFile(const char* Filename)
+	bool LoadFromFile(const char* Filename, FileDomain Domain)
 	{
 		WLOG("Loading save game %s...\n", Filename);
 		
-		std::string JsonString = Utils::File->LoadFileToString(Filename);
+		std::string JsonString = Utils::File->LoadFileToString(Filename, Domain);
 
 		if (JsonString.length() == 0)
 		{
+			WLOG("Failed to load save game %s...\n", Filename);
 			return false;
 		}
 		

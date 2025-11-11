@@ -102,7 +102,7 @@ end
 
 function InvBox:GetActionEntries(entries)
 	
-	table.append(entries, {x = 0, y = 0, text = GetItemDesc(s.inventory[self.invItem])})
+	table.append(entries, {x = 0, y = 0, text = GetItemDesc(self.invItemId)})
 	
 	local curY = 1
 	table.append(entries, {x = 0, y = curY, text = "X. Exit", clickId = InvAction.Exit, key = "x" })
@@ -115,14 +115,14 @@ function InvBox:GetActionEntries(entries)
 		table.append(entries, {x = 0, y = curY, text = "G. Give Item", clickId = InvAction.Give, key = "g" })
 		curY = curY + 1
 	end
-	if (Items[s.inventory[self.invItem]].type == "deck") then
+	if (Items[self.invItemId].type == "deck") then
 		table.append(entries, {x = 0, y = curY, text = "E. Erase Software", clickId = InvAction.Erase, key = "e" })
 		curY = curY + 1
 	end
 end
 
 function InvBox:GetAmountEntries(entries)
-	table.append(entries, { x = 0, y = 0, text = GetItemDesc(s.inventory[self.invItem]) })
+	table.append(entries, { x = 0, y = 0, text = GetItemDesc(self.invItemId) })
 	table.append(entries, { x = 0, y = 1, text = "Give how much?" })
 	table.append(entries, { x = 0, y = 2, text = "> " })
 	table.append(entries, { x = 2, y = 2, entryTag = "amount", numeric = true })
@@ -134,7 +134,7 @@ function InvBox:GetConfirmEntries(entries)
 		header = "Give"
 	end
 	table.append(entries, { x = self:CenteredX(header), y = 0, text = header })
-	table.append(entries, { x = 2, y = 3, text = GetItemDesc(s.inventory[self.invItem]) })
+	table.append(entries, { x = 2, y = 3, text = GetItemDesc(self.invItemId) })
 	table.append(entries, { x = 0, y = 5, text = "Are you sure ( / )" })
 	table.append(entries, { x = 14, y = 5, text = "Y", clickId = InvAction.Yes, key = "y" })
 	table.append(entries, { x = 16, y = 5, text = "N", clickId = InvAction.No, key = "n" })
@@ -172,6 +172,7 @@ function InvBox:HandleClickedEntry(id)
 
 	if (self.phase == InvPhase.List) then
 		self.invItem = id
+		self.invItemId = s.inventory[self.invItem]
 		self.phase = InvPhase.Action
 	elseif (self.phase == InvPhase.Action) then
 		self:PerformAction(id)
@@ -180,13 +181,13 @@ function InvBox:HandleClickedEntry(id)
 	elseif (self.phase == InvPhase.ConfirmGive) then
 		if (id == InvAction.Yes) then
 			currentRoom:GiveItem(self.invItem)
-			table.removeArrayItem(s.inventory, self.invItem)
+			table.removeArrayItem(s.inventory, self.invItemId)
 		end
 		self.phase = InvPhase.List
 	elseif (self.phase == InvPhase.ConfirmDiscard) then
 		if (id == InvAction.Yes) then
 print("size before rmeove", table.count(s.inventory))
-			table.removeArrayItem(s.inventory, self.invItem)
+			table.removeArrayItem(s.inventory, self.invItemId)
 print("size after rmeove", table.count(s.inventory))
 		end
 		self.phase = InvPhase.List
@@ -260,27 +261,27 @@ function InvBox:PerformAction(action)
 	end
 
 	-- item tamplate object
-	local item = Items[s.inventory[self.invItem]]
+	local item = Items[self.invItemId]
 
 	if (action == InvAction.Exit) then
 		self.phase = InvPhase.List
 	elseif (action == InvAction.Operate) then
 		if (item.type == "deck") then
 			self.phase = InvPhase.Software
-			s.currentDeckId = s.inventory[self.invItem]
+			s.currentDeckId = self.invItemId
 		elseif (item.type == "skill") then
 			self:UseSkill()
 		end
 	elseif (action == InvAction.Give) then
 		-- credits are special
-		if (s.inventory[self.invItem] == 0) then
+		if (self.invItemId == 0) then
 			self.phase = InvPhase.Amount
 		else
 			self.phase = InvPhase.ConfirmGive
 		end
 	elseif (action == InvAction.Discard) then
 		-- credits are special
-		if (s.inventory[self.invItem] == 0) then
+		if (self.invItemId == 0) then
 			self.phase = InvPhase.List
 		else
 			self.phase = InvPhase.ConfirmDiscard
@@ -307,7 +308,7 @@ function InvBox:UseSoftware(softwareItem)
 end
 
 function InvBox:UseSkill()
-	local skillId = s.inventory[self.invItem]
+	local skillId = self.invItemId
 	-- add to skills list if not there (fast lookup in the skillLevels map to know if we ever unlocked it)
 	if (s.skillLevels[skillId] == nil) then
 		table.append(s.skills, skillId)

@@ -22,82 +22,169 @@ public:
 		WoflBundle = [NSBundle bundleForClass:NSClassFromString(@"WoflViewController")];
 	}
 	
-	virtual void SetMainResourceSubdir(const char* ResourceDir) override
+	virtual std::string GetFinalPath(FileDomain Domain, const char* InSubPath) override
 	{
-		MainResourceSubdir = [NSString stringWithUTF8String:ResourceDir];
+		if (Domain == FileDomain::Absolute)
+		{
+			return InSubPath;
+		}
+
+		assert(Domain == FileDomain::Game || Domain == FileDomain::System || Domain == FileDomain::Save);
+
+		NSString* SubPath = InSubPath ? [NSString stringWithUTF8String:InSubPath] : nil;
+		NSString* Path;
+		if (Domain == FileDomain::Save)
+		{
+			// get doc dir location
+			NSArray* DocumentsDirs = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
+			NSURL* DocDir = [DocumentsDirs objectAtIndex:0];
+	
+			// append bundle id (to work with non-sandboxed)
+			DocDir = [DocDir URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
+			
+			Path = [NSString stringWithCString:[DocDir fileSystemRepresentation] encoding:NSUTF8StringEncoding];
+
+//			// make sure the dir exists
+//			[[NSFileManager defaultManager] createDirectoryAtPath:Dir withIntermediateDirectories:YES attributes:nil error:nil];
+	
+			// append the MainResourcesSubdir to differentiate saves
+			if (GameDomain.length() > 0)
+			{
+				Path = [Path stringByAppendingPathComponent:[NSString stringWithUTF8String:GameDomain.c_str()]];
+			}
+			if (SubPath)
+			{
+				Path = [Path stringByAppendingPathComponent:SubPath];
+			}
+			
+			// make sure the dir exists, if there's an extension to indicate a file
+			if ([Path pathExtension])
+			{
+				NSString* Dir = [Path stringByDeletingLastPathComponent];
+				[[NSFileManager defaultManager] createDirectoryAtPath:Dir withIntermediateDirectories:YES attributes:nil error:nil];
+			}
+			
+			return [Path UTF8String];
+		}
+		else
+		{
+//			// check if there's an extension, then we will use bundle magic to get it
+//			NSString* Ext = SubPath ? [SubPath pathExtension] : @"";
+						
+			NSString* Path = [MainBundle resourcePath];
+			Path = [Path stringByAppendingPathComponent:@"Resources"];
+			if (Domain == FileDomain::Game)
+			{
+				Path = [Path stringByAppendingPathComponent:[NSString stringWithUTF8String:GameDomain.c_str()]];
+			}
+			else
+			{
+				Path = [Path stringByAppendingPathComponent:@"System"];
+			}
+			if (SubPath)
+			{
+				Path = [Path stringByAppendingPathComponent:SubPath];
+			}
+			
+			BOOL bIsDir;
+			bool bExists = [[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&bIsDir];
+			
+			// for system files
+			if (!bExists && Domain == FileDomain::System)
+			{
+				Path = [WoflBundle resourcePath];
+				if (SubPath)
+				{
+					Path = [Path stringByAppendingPathComponent:SubPath];
+				}
+				bExists = [[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&bIsDir];
+			}
+			
+			if (bExists)
+			{
+				return Path.UTF8String;
+			}
+//			
+//			if (SubPath)
+//
+//			NSString* AppBundleFilenameStr = @"Resources";
+//			NSString* WoflBundleFilenameStr = @"Resources";
+//			if (MainResourceSubdir != nil)
+//			{
+//				AppBundleFilenameStr = [AppBundleFilenameStr stringByAppendingPathComponent:MainResourceSubdir];
+//			}
+//			AppBundleFilenameStr = [AppBundleFilenameStr stringByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
+//			WoflBundleFilenameStr = [WoflBundleFilenameStr stringByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
+//
+//			NSString* Path = [MainBundle
+//							  pathForResource:[AppBundleFilenameStr stringByDeletingPathExtension]
+//							  ofType:[AppBundleFilenameStr pathExtension]];
+		}
+
+//		if (SubPath)
+//		{
+//			Path = [Path stringByAppendingPathComponent:[NSString stringWithUTF8String:SubPath]];
+//		}
+
+		return "";
 	}
 	
-	virtual std::string GetResourceDir(const char* SubDir) override
-	{
-		NSString* Path = [MainBundle resourcePath];
-		Path = [Path stringByAppendingPathComponent:@"Resources"];
-		if (MainResourceSubdir != nil)
-		{
-			Path = [Path stringByAppendingPathComponent:MainResourceSubdir];
-		}
-		if (SubDir)
-		{
-			Path = [Path stringByAppendingPathComponent:[NSString stringWithUTF8String:SubDir]];
-		}
-
-		return [Path UTF8String];
-	}
+//	virtual std::string GetResourcePath(const char* Filename) override
+//	{
+//		NSString* AppBundleFilenameStr = @"Resources";
+//		NSString* WoflBundleFilenameStr = @"Resources";
+//		if (MainResourceSubdir != nil)
+//		{
+//			AppBundleFilenameStr = [AppBundleFilenameStr stringByAppendingPathComponent:MainResourceSubdir];
+//		}
+//		AppBundleFilenameStr = [AppBundleFilenameStr stringByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
+//		WoflBundleFilenameStr = [WoflBundleFilenameStr stringByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
+//
+//		NSString* Path = [MainBundle
+//						  pathForResource:[AppBundleFilenameStr stringByDeletingPathExtension]
+//						  ofType:[AppBundleFilenameStr pathExtension]];
+//		
+//		if (Path == nil)
+//		{
+//			Path = [WoflBundle
+//					pathForResource:[WoflBundleFilenameStr stringByDeletingPathExtension]
+//					ofType:[WoflBundleFilenameStr pathExtension]];
+//		}
+//
+//		return [Path UTF8String];
+//	}
 	
-	virtual std::string GetResourcePath(const char* Filename) override
-	{
-		NSString* AppBundleFilenameStr = @"Resources";
-		NSString* WoflBundleFilenameStr = @"Resources";
-		if (MainResourceSubdir != nil)
-		{
-			AppBundleFilenameStr = [AppBundleFilenameStr stringByAppendingPathComponent:MainResourceSubdir];
-		}
-		AppBundleFilenameStr = [AppBundleFilenameStr stringByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
-		WoflBundleFilenameStr = [WoflBundleFilenameStr stringByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
-
-		NSString* Path = [MainBundle
-						  pathForResource:[AppBundleFilenameStr stringByDeletingPathExtension]
-						  ofType:[AppBundleFilenameStr pathExtension]];
-		
-		if (Path == nil)
-		{
-			Path = [WoflBundle
-					pathForResource:[WoflBundleFilenameStr stringByDeletingPathExtension]
-					ofType:[WoflBundleFilenameStr pathExtension]];
-		}
-
-		return [Path UTF8String];
-	}
+//	virtual std::string GetSavePath(const char* Filename) override
+//	{
+//		// get doc dir location
+//		NSArray* DocumentsDirs = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
+//		NSURL* DocDir = [DocumentsDirs objectAtIndex:0];
+//
+//		// append bundle id (to work with non-sandboxed)
+//		DocDir = [DocDir URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
+//		
+//		// make sure the dir exists
+//		NSString* Dir = [NSString stringWithCString:[DocDir fileSystemRepresentation] encoding:NSUTF8StringEncoding];
+//		[[NSFileManager defaultManager] createDirectoryAtPath:Dir withIntermediateDirectories:YES attributes:nil error:nil];
+//		
+//		// append the MainResourcesSubdir to differentiate saves
+//		if (MainResourceSubdir != nil)
+//		{
+//			DocDir = [DocDir URLByAppendingPathComponent:MainResourceSubdir];
+//		}
+//
+//		// append filename to it
+//		DocDir = [DocDir URLByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
+//		
+//		return [DocDir fileSystemRepresentation];
+//	}
 	
-	virtual std::string GetSavePath(const char* Filename) override
-	{
-		// get doc dir location
-		NSArray* DocumentsDirs = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
-		NSURL* DocDir = [DocumentsDirs objectAtIndex:0];
-
-		// append bundle id (to work with non-sandboxed)
-		DocDir = [DocDir URLByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier];
-		
-		// make sure the dir exists
-		NSString* Dir = [NSString stringWithCString:[DocDir fileSystemRepresentation] encoding:NSUTF8StringEncoding];
-		[[NSFileManager defaultManager] createDirectoryAtPath:Dir withIntermediateDirectories:YES attributes:nil error:nil];
-		
-		// append the MainResourcesSubdir to differentiate saves
-		if (MainResourceSubdir != nil)
-		{
-			DocDir = [DocDir URLByAppendingPathComponent:MainResourceSubdir];
-		}
-
-		// append filename to it
-		DocDir = [DocDir URLByAppendingPathComponent:[NSString stringWithUTF8String:Filename]];
-		
-		return [DocDir fileSystemRepresentation];
-	}
-	
-	virtual std::vector<std::string> FindFiles(const char* Directory, const char* Ext, bool bIncludePath, bool bIncludeExtension) override
+	virtual std::vector<std::string> FindFiles(FileDomain Domain, const char* InDirectory, const char* Ext, bool bIncludePath, bool bIncludeExtension) override
 	{
 		std::vector<std::string> Results;
+		std::string Directory = GetFinalPath(Domain, InDirectory);
 		
-		NSDirectoryEnumerator *DirEnum = [[NSFileManager defaultManager] enumeratorAtPath:[NSString stringWithUTF8String:Directory]];
+		NSDirectoryEnumerator *DirEnum = [[NSFileManager defaultManager] enumeratorAtPath:[NSString stringWithUTF8String:Directory.c_str()]];
 		NSString* Extension = [NSString stringWithUTF8String:Ext];
 		NSString* File;
 		while ((File = [DirEnum nextObject]))
@@ -120,48 +207,54 @@ public:
 		return Results;
 	}
 
-	virtual std::string LoadFileToString(const char* Path) override
+	virtual bool LoadFile(const std::string& Path, std::string& OutString) override
 	{
-		NSString* PathStr =[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
+		NSString* PathStr =[NSString stringWithCString:Path.c_str() encoding:NSUTF8StringEncoding];
 		NSString* Contents = [NSString stringWithContentsOfFile:PathStr encoding:NSUTF8StringEncoding error:nil];
 		if (Contents && [Contents length] > 0)
 		{
-			return [Contents UTF8String];
+			OutString = [Contents UTF8String];
+			return true;
 		}
 
-		NSLog(@"Failed to load %@", PathStr);
-		return "";
+		return false;
 	}
 
-	virtual std::vector<unsigned char> LoadFileToArray(const char* Path) override
+	virtual bool LoadFile(const std::string& Path, std::vector<unsigned char>& OutArray) override
 	{
-		NSString* PathStr =[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
+		NSString* PathStr =[NSString stringWithCString:Path.c_str() encoding:NSUTF8StringEncoding];
 		NSMutableData* Contents = [NSMutableData dataWithContentsOfFile:PathStr];
 
 		if (Contents && Contents.length > 0)
 		{
 			// make a vector with the contents
-			std::vector<unsigned char> Array;
-			Array.resize(Contents.length);
+			OutArray.resize(Contents.length);
+			memcpy(OutArray.data(), [Contents bytes], Contents.length);
 			
 			// empty now to free memory before the return copy of the vector
 			[Contents setLength:0];
-			return Array;
+			return true;
 		}
 		
-		NSLog(@"Failed to load %@", PathStr);
-		return std::vector<unsigned char>();
+		return false;
 	}
 
 	
 	virtual void* LoadPNGToAllocatedBuffer(const char* ImageName, unsigned int& Width, unsigned int& Height) override
 	{
 		// load PNG
-		NSString* ImagePath = [NSString stringWithCString:ImageName encoding:NSUTF8StringEncoding];
+		std::vector<unsigned char> Bytes = LoadFileToArray(ImageName, FileDomain::GameThenSystem);
+		if (Bytes.size() == 0)
+		{
+			return nullptr;
+		}
+		NSData* Data = [NSData dataWithBytes:Bytes.data() length:Bytes.size()];
+//		std::string ImagePathStr = GetFinalPath(FileDomain::Game, ImageName);
+//		NSString* ImagePath = [NSString stringWithCString:ImagePathStr.c_str() encoding:NSUTF8StringEncoding];
 #if TARGET_OS_MAC
-		NSImage* Image = [[NSImage alloc] initWithContentsOfFile:ImagePath];
+		NSImage* Image = [[NSImage alloc] initWithData:Data];
 #else
-		UIImage* Image = [UIImage imageWithContentsOfFile:ImagePath];
+		UIImage* Image = [UIImage imageWithData:Data];
 #endif
 		if (Image == nullptr)
 		{
@@ -195,24 +288,25 @@ public:
 		return ImageData;
 	}
 	
-	virtual bool SaveStringToFile(const std::string& String, const char* Path) override
+	virtual bool SaveStringToFile(const std::string& String, const char* Path, FileDomain Domain) override
 	{
-		NSString* PathStr =[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
+		std::string PathStr = GetFinalPath(Domain, Path);
+//		NSString* PathStr = GetFina[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
 		NSString* Contents = [NSString stringWithCString:String.c_str() encoding:NSUTF8StringEncoding];
 
 		NSError* Error;
-		[Contents writeToFile:PathStr atomically:YES encoding:NSUTF8StringEncoding error:&Error];
+		[Contents writeToFile:[NSString stringWithUTF8String:PathStr.c_str()] atomically:YES encoding:NSUTF8StringEncoding error:&Error];
 
 		if (Error)
 		{
-			NSLog(@"Failed to save %@, error = %@", PathStr, [Error localizedDescription]);
+			NSLog(@"Failed to save %s, error = %@", PathStr.c_str(), [Error localizedDescription]);
 			return false;
 		}
 		
 		return true;
 	}
 	
-	virtual bool SaveArrayToFile(const std::vector<unsigned char>& Array, const char* Path) override
+	virtual bool SaveArrayToFile(const std::vector<unsigned char>& Array, const char* Path, FileDomain Domain) override
 	{
 		NSString* PathStr =[NSString stringWithCString:Path encoding:NSUTF8StringEncoding];
 		NSData* Contents = [NSData dataWithBytes:Array.data() length:Array.size()];
@@ -232,7 +326,6 @@ public:
 protected:
 	NSBundle* WoflBundle;
 	NSBundle* MainBundle;
-	NSString* MainResourceSubdir = nil;
 };
 
 #endif

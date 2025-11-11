@@ -14,8 +14,7 @@ std::map<std::string, WoflAtlases::SubImageInfo> WoflAtlases::SubImageToInfoMap;
 
 void WoflAtlases::LoadAtlas(const char* AtlasName)
 {
-	std::string AtlasMetaPath = Utils::File->GetResourcePath((std::string(AtlasName) + ".json").c_str());
-	std::string AtlasMetaContents = Utils::File->LoadFileToString(AtlasMetaPath.c_str());
+	std::string AtlasMetaContents = Utils::File->LoadFileToString((std::string(AtlasName) + ".json").c_str(), FileDomain::GameThenSystem);
 	
 	// parse a std::string using a Reader object
 	Json::Reader Reader;
@@ -59,9 +58,14 @@ void WoflAtlases::LoadAtlas(const char* AtlasName)
 
 void WoflAtlases::LoadAllAtlases()
 {
-	std::string ResourcesDir = Utils::File->GetResourceDir();
-	std::vector<std::string> Atlases = Utils::File->FindFiles(ResourcesDir.c_str(), "json", false, false);
+	std::vector<std::string> Atlases = Utils::File->FindFiles(FileDomain::System, "", "json", false, false);
 	
+	for (std::string& Atlas : Atlases)
+	{
+		LoadAtlas(Atlas.c_str());
+	}
+	
+	Atlases = Utils::File->FindFiles(FileDomain::Game, "", "json", false, false);
 	for (std::string& Atlas : Atlases)
 	{
 		LoadAtlas(Atlas.c_str());

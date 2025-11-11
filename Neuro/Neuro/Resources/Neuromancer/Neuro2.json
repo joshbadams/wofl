@@ -1,48 +1,104 @@
 {"frames": [
 
 {
+	"filename": "berne.png",
+	"frame": {"x":1220,"y":456,"w":1216,"h":456},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1216,"h":456},
+	"sourceSize": {"w":1216,"h":456}
+},
+{
+	"filename": "freeside.png",
+	"frame": {"x":0,"y":1374,"w":1220,"h":460},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1220,"h":460},
+	"sourceSize": {"w":1220,"h":460}
+},
+{
+	"filename": "freesidestreet1.png",
+	"frame": {"x":1222,"y":1374,"w":1216,"h":460},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1216,"h":460},
+	"sourceSize": {"w":1216,"h":460}
+},
+{
+	"filename": "freesidestreet3.png",
+	"frame": {"x":2438,"y":456,"w":1214,"h":456},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":456},
+	"sourceSize": {"w":1214,"h":456}
+},
+{
+	"filename": "freesidestreet4.png",
+	"frame": {"x":0,"y":914,"w":1222,"h":456},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":456},
+	"sourceSize": {"w":1222,"h":456}
+},
+{
+	"filename": "hitachi.png",
+	"frame": {"x":1228,"y":2300,"w":1214,"h":468},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":468},
+	"sourceSize": {"w":1214,"h":468}
+},
+{
+	"filename": "matrix.png",
+	"frame": {"x":0,"y":0,"w":1228,"h":454},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":454},
+	"sourceSize": {"w":1228,"h":454}
+},
+{
+	"filename": "metro.png",
+	"frame": {"x":1224,"y":914,"w":1228,"h":458},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":458},
+	"sourceSize": {"w":1228,"h":458}
+},
+{
+	"filename": "panthermoderns.png",
+	"frame": {"x":1230,"y":0,"w":1226,"h":454},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":454},
+	"sourceSize": {"w":1226,"h":454}
+},
+{
+	"filename": "shuttle.png",
+	"frame": {"x":2444,"y":2300,"w":1222,"h":470},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":470},
+	"sourceSize": {"w":1222,"h":470}
+},
+{
+	"filename": "spaceport.png",
+	"frame": {"x":2440,"y":1374,"w":1220,"h":460},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1220,"h":460},
+	"sourceSize": {"w":1220,"h":460}
+},
+{
 	"filename": "streeetcenter6.png",
-	"frame": {"x":2458,"y":2266,"w":1226,"h":464},
+	"frame": {"x":0,"y":2300,"w":1226,"h":464},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":464},
 	"sourceSize": {"w":1226,"h":464}
 },
 {
-	"filename": "streetcenter1.png",
-	"frame": {"x":1224,"y":0,"w":1213,"h":447},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
-	"sourceSize": {"w":1213,"h":447}
-},
-{
-	"filename": "streetcenter2.png",
-	"frame": {"x":2439,"y":0,"w":1213,"h":447},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
-	"sourceSize": {"w":1213,"h":447}
-},
-{
-	"filename": "streetcenter3.png",
-	"frame": {"x":0,"y":449,"w":1213,"h":447},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
-	"sourceSize": {"w":1213,"h":447}
-},
-{
-	"filename": "streetcenter4.png",
-	"frame": {"x":1215,"y":449,"w":1213,"h":447},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
-	"sourceSize": {"w":1213,"h":447}
-},
-{
 	"filename": "streetcenter5.png",
-	"frame": {"x":2434,"y":1348,"w":1226,"h":454},
+	"frame": {"x":2458,"y":0,"w":1226,"h":454},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":454},
@@ -50,55 +106,23 @@
 },
 {
 	"filename": "streetcenter6.png",
-	"frame": {"x":2444,"y":1804,"w":1228,"h":460},
+	"frame": {"x":0,"y":1836,"w":1228,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":460},
 	"sourceSize": {"w":1228,"h":460}
 },
 {
-	"filename": "streeteast1.png",
-	"frame": {"x":1218,"y":1348,"w":1214,"h":452},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":452},
-	"sourceSize": {"w":1214,"h":452}
-},
-{
 	"filename": "streeteast2.png",
-	"frame": {"x":0,"y":1804,"w":1218,"h":454},
+	"frame": {"x":0,"y":456,"w":1218,"h":454},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":454},
 	"sourceSize": {"w":1218,"h":454}
 },
 {
-	"filename": "streetmain1.png",
-	"frame": {"x":1215,"y":898,"w":1222,"h":448},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":448},
-	"sourceSize": {"w":1222,"h":448}
-},
-{
-	"filename": "streetmain2.png",
-	"frame": {"x":0,"y":1348,"w":1216,"h":450},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1216,"h":450},
-	"sourceSize": {"w":1216,"h":450}
-},
-{
-	"filename": "streetmain3.png",
-	"frame": {"x":2439,"y":898,"w":1222,"h":448},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":448},
-	"sourceSize": {"w":1222,"h":448}
-},
-{
 	"filename": "streetmain4.png",
-	"frame": {"x":1220,"y":1804,"w":1222,"h":458},
+	"frame": {"x":2454,"y":914,"w":1222,"h":458},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":458},
@@ -106,7 +130,7 @@
 },
 {
 	"filename": "streetmain5.png",
-	"frame": {"x":0,"y":2266,"w":1228,"h":460},
+	"frame": {"x":1230,"y":1836,"w":1228,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":460},
@@ -114,35 +138,11 @@
 },
 {
 	"filename": "streetmain6.png",
-	"frame": {"x":1230,"y":2266,"w":1226,"h":462},
+	"frame": {"x":2460,"y":1836,"w":1226,"h":462},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":462},
 	"sourceSize": {"w":1226,"h":462}
-},
-{
-	"filename": "streetwest1.png",
-	"frame": {"x":2430,"y":449,"w":1213,"h":447},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
-	"sourceSize": {"w":1213,"h":447}
-},
-{
-	"filename": "streetwest2.png",
-	"frame": {"x":0,"y":898,"w":1213,"h":447},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
-	"sourceSize": {"w":1213,"h":447}
-},
-{
-	"filename": "zion.png",
-	"frame": {"x":0,"y":0,"w":1222,"h":446},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":446},
-	"sourceSize": {"w":1222,"h":446}
 }],
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
@@ -152,6 +152,6 @@
 	"size": {"w":4096,"h":4096},
 	"scale": "1",
 	"related_multi_packs": [ "Neuro1.json" ],
-	"smartupdate": "$TexturePacker:SmartUpdate:d69a6ab89a5885314aee4385663fd338:73be601b783f558b68df3cc01b8f8b95:8e5f1c61dd1938f0ebcc3dab307fd743$"
+	"smartupdate": "$TexturePacker:SmartUpdate:1f930e012199964d5648d2debfb03179:17e191392a35d08ab0629a56edea2f50:8e5f1c61dd1938f0ebcc3dab307fd743$"
 }
 }

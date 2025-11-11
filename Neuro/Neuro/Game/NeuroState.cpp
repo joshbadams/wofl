@@ -8,17 +8,14 @@
 #include "NeuroState.h"
 #include "Gridbox.h"
 
-NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate)
+NeuroState::NeuroState(IStateChangedDelegate* InStateDelegate, const std::string& GameName)
 	: StateDelegate(InStateDelegate)
-	, Lua(this)
+	, Lua(this, GameName)
 {
-	// this would be better done in NeuroGame, but oh well
-	Utils::File->SetMainResourceSubdir(WoflGame::TheGame->GetGameName().c_str());
-
 	InitLua();
 	
 	// loaded values here will override init values in tha
-	if (!LoadFromFile(Utils::File->GetSavePath("game1.sav").c_str()))
+	if (!LoadFromFile("game1.sav", FileDomain::Save))
 	{
 		// if we don't load from a save, then we need to trigger the EnteredRoom function in the first room -
 		// when loading from a save, we have already entered the room, so we don't want to trigger conversations, etc
@@ -48,6 +45,14 @@ void NeuroState::InitLua()
 	Lua.RegisterFunction("UpdateBoxes", Lua_UpdateBoxes);
 	Lua.RegisterFunction("AddAnimation", Lua_AddAnimation);
 	Lua.RegisterFunction("RemoveAnimation", Lua_RemoveAnimation);
+
+	std::vector<string> SystemScripts;
+	Lua.GetStringValues("", "SystemScripts", SystemScripts);
+
+	for (string& R : SystemScripts)
+	{
+		Lua.LoadScript((R + ".lua").c_str());
+	}
 
 	std::vector<string> GameScripts;
 	Lua.GetStringValues("", "GameScripts", GameScripts);
@@ -233,7 +238,7 @@ void NeuroState::Tick(float DeltaTime)
 
 void NeuroState::ReloadLua()
 {
-	SaveToFile(Utils::File->GetSavePath("tempgame").c_str());
+	SaveToFile("tempgame.sav", FileDomain::Save);
 	
 	StateDelegate->ResetLua();
 	
@@ -244,7 +249,7 @@ void NeuroState::ReloadLua()
 	Lua.Reset();
 	InitLua();
 	
-	LoadFromFile(Utils::File->GetSavePath("tempgame").c_str());
+	LoadFromFile("tempgame.sav", FileDomain::Save);
 }
 
 void NeuroState::ClickInventory()
@@ -670,7 +675,7 @@ int NeuroState::Lua_SaveGame(lua_State* L)
 {
 	NeuroState* S = State(L);
 	int Index = (int)lua_tointeger(L, -1);
-	S->SaveToFile(Utils::File->GetSavePath((std::string("game") + (char)('0' + Index) + ".sav").c_str()).c_str());
+	S->SaveToFile((std::string("game") + (char)('0' + Index) + ".sav").c_str(), FileDomain::Save);
 
 	return 0;
 }
@@ -679,7 +684,7 @@ int NeuroState::Lua_LoadGame(lua_State* L)
 {
 	NeuroState* S = State(L);
 	int Index = (int)lua_tointeger(L, -1);
-	S->LoadFromFile(Utils::File->GetSavePath((std::string("game") + (char)('0' + Index) + ".sav").c_str()).c_str());
+	S->LoadFromFile((std::string("game") + (char)('0' + Index) + ".sav").c_str(), FileDomain::Save);
 	return 0;
 }
 

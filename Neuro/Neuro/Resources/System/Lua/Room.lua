@@ -63,11 +63,13 @@ end
 
 function Room:ActivateConversation(inTag)
 	
+print("1")
 	local tag = inTag
-	if (type(tag) == 'function') then
+	if (tag ~= nil and type(tag) == 'function') then
 		tag = tag(self)
 	end
 
+print("2")
 	-- reset
 	self.lineIndex = 0
 	self.choiceIndex = 0
@@ -79,12 +81,14 @@ function Room:ActivateConversation(inTag)
 	if (tag == nil) then
 		s.hasTalkedInRoom = true
 	end
+print("3")
 	-- find tagged or calculated convo
 	self.currentConversation = self:GetNextConversation(tag)
 
 	if (self.currentConversation == nil) then
 		return
 	end
+print("4")
 
 	-- init the list of lines or choices
 	if (self.currentConversation.lines ~= nil and #self.currentConversation.lines > 0) then
@@ -94,22 +98,20 @@ function Room:ActivateConversation(inTag)
 			self.choiceIndex = self.choiceIndex % #self.currentConversation.options + 1
 		until (self.currentConversation.options[self.choiceIndex].condition == nil or self.currentConversation.options[self.choiceIndex].condition(self))
 	end
+print("5")
 	UpdateDialog()
+print("6")
 end
 
 function Room:EndConversation()
-print("Room:EndConversation 1")
-
 	local endingConversation = nil
 	local endingChoice = nil
 
 	-- after a reponse to a choice has been seen
 	if (self.currentChoice ~= nil) then
-print("Room:EndConversation 2")
 		endingChoice = self.currentChoice
 	-- after a choice with no response has been seen
 	elseif (self.choiceIndex > 0) then
-print("Room:EndConversation 3")
 		endingChoice = self.currentConversation.options[self.choiceIndex]
 	end
 
@@ -123,15 +125,12 @@ print("Room:EndConversation 3")
 	self.currentChoice = nil
 	self.lineIndex = 0
 	self.choiceIndex = 0
-print("Room:EndConversation 4")
 
 	-- run onEnd with the room as the self, not the choice/convo
 	if (endingChoice ~= nil and endingChoice.onEnd ~= nil) then
-print("Room:EndConversation 5", endingChoice, endingChoice.onEnd)
 		endingChoice.onEnd(self)
 	end
 	if (endingConversation ~= nil and endingConversation.onEnd ~= nil) then
-print("Room:EndConversation 6")
 		endingConversation.onEnd(self)
 	end
 
@@ -213,6 +212,7 @@ function Room:ConversationKey(char, keyCode, type)
 end
 
 function Room:GetNextConversation(tag)
+print("a")
 	if tag ~= nil then
 		local lowertag = tag:lower()
 		for i,v in ipairs(self.conversations) do
@@ -236,11 +236,16 @@ function Room:GetNextConversation(tag)
 		end
 		return nil
 	else
+print("b", self.conversations)
 		for i,v in ipairs(self.conversations) do
+print("bb")
 			if (v.tag == nil and v.tags == nil) then
+print("c")
 				if (v.condition == nil or v.condition(self)) then
+print("d")
 					return v
 				end
+print("e")
 			end
 		end
 	end
@@ -306,6 +311,7 @@ end
 
 function Room:OnEnterRoom()
 	s.hasTalkedInRoom = false
+	s.usingCopTalk = 0
 
 	self.addedAnimations = {}
 	self:AddAnimations()
@@ -322,19 +328,32 @@ print("entering room", self.name, s.hasTalkedInRoom)
 	currentRoom = self
 end
 
+function Room:GetOnEnterConversation(firstEnter)
+	if (self.onEnterConversation == nil) then
+		return nil
+	elseif (type(self.onEnterConversation) == 'function') then
+		return self.onEnterConversation(firstEnter)
+	end
+
+	return self.onEnterConversation
+end
+
 function Room:OnFirstEnter()
-	if (self.onEnterConversation ~= nil) then
+	local convo = self:GetOnEnterConversation(true)
+	if (convo ~= nil) then
 		-- true param will make it wait for the long message to finish before kicking the convo
-		ShowMessage(self.longDescription, function() if (self.hasPerson) then self:ActivateConversation(self.onEnterConversation) end end, true)
+		-- TODO: only pass true if > 1 page long
+		ShowMessage(self.longDescription, function() if (self.hasPerson) then self:ActivateConversation(convo) end end, true)
 	else
 		ShowMessage(self.longDescription)
 	end
 end
 
 function Room:OnEnter()
+	local convo = self:GetOnEnterConversation(true)
 	ShowMessage(self.description)
-	if (self.onEnterConversation ~= nil and self.hasPerson) then
-		self:ActivateConversation(self.onEnterConversation)
+	if (convo ~= nil and self.hasPerson) then
+		self:ActivateConversation(convo)
 	end
 end
 
@@ -353,6 +372,16 @@ function Room:UseItem(item)
 end
 
 function Room:UseSkill(skill)
+	-- if using CopTalk before we've opened our mouth, active cop mode
+	if (skill.name == "CopTalk" and not s.hasTalkedInRoom) then
+		s.usingCopTalk = s.skillLevels[400]
+
+	print("using coptalk", skill.name, s.usingCopTalk)
+	
+		-- immediately talk
+		self:ActivateConversation()
+print("  done", skill.name, s.usingCopTalk)
+	end
 end
 
 function Room:GetConnectingRoom(direction)

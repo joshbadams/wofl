@@ -1,115 +1,67 @@
 
-BankGemein = ComingSoon:new {
-	comLinkLevel = 5,
-	passwords = {
-		"eintritt",
-		"verboten"
-	}
-}
-bankgemein=BankGemein
--- Coordinates--5-304/320  AI--none
-
 BozoBank = ComingSoon:new {
 	comLinkLevel = 6,
 	passwords = {
 		"<sequencer>"
-	}
+	},
+	
+	baseX = 336,
+	baseY = 368,
 }
 bozobank=BozoBank
--- Coord.--5-336/368  AI--none
 
 Justice = ComingSoon:new {
 	comLinkLevel = 6,
 	passwords = {
 		"<sequencer>"
-	}
+	},
+	
+	baseX = 416,
+	baseY = 112,
 }
 justice=Justice
--- Coord.--1-416/112  AI--none
 
 FreeMatrix = ComingSoon:new {
 	comLinkLevel = 5,
 	passwords = {
 		"CFM",
 		"<cyberspace>"
-	}
+	},
+	
+	baseX = 352,
+	baseY = 112,
 }
 freematrix=FreeMatrix
--- Coord.--1-352/112  AI--Sapphire weakness=Sophistry
 
-Brainstorm = ComingSoon:new {
-	comLinkLevel = 4,
-	passwords = {
-		"perilous",
-		"<cyberspace>"
-	}
-}
-brainstorm=Brainstorm
--- Coord.--1-320/32  AI--none
-
-EastSeaBod = ComingSoon:new {
-	comLinkLevel = 4,
-	passwords = {
-		"longisland",
-		"<cyberspace>"
-	}
-}
-eastseabod=EastSeaBod
--- Coord.--1-384/32  AI--none
-
-HosakaCorp = ComingSoon:new {
-	comLinkLevel = 5,
-	passwords = {
-		"biosoft",
-		"fungeki",
-		"<cyberspace>"
-	}
-}
-hosakacorp=HosakaCorp
--- Coord.--2-144/160  AI--none
-
-Musaborind = ComingSoon:new {
-	comLinkLevel = 5,
-	passwords = {
-		"subaru",
-		"<cyberspace>",
-	}
-}
-musaborind=Musaborind
--- Coord.--2-208/208  AI--Greystoke (badass!) weakness=hemlock 1.0
 
 Voyager = ComingSoon:new {
 	comLinkLevel = 6,
 	passwords = {
 		"apollo",
 		"<cyberspace>",
-	}
+	},
+	
+	baseX = 448,
+	baseY = 32,
 }
 voyager=Voyager
--- Coord.--1-448/32  AI--Hal weakness=Logic
 
 
-Yakuza = ComingSoon:new {
-	comLinkLevel = 5,
-	passwords = {
-		"yak",
-		"<cyberspace>"
-	}
-}
-yakuza = Yakuza
--- Coord.--1-480/80  AI--none
 
 
 
 --------------------------------------------------------------------
 
-Soften = Site:new {
+x = Site:new {
 	title = "* Software Enforcement Agency *",
 	comLinkLevel = 3,
 	passwords = {
 		"permafrost",
 		"<cyberspace>"
 	},
+	
+	baseX = 352,
+	baseY = 64,
 	
 	pages = {
 		['title'] = {
@@ -141,7 +93,7 @@ Soften = Site:new {
 			items = {
 				{ key = 'x', text = "Exit to Main", target = "main" },
 				{ key = '1', software = 202 }, -- COMLINK 4.0
-				{ key = '2', software = 259 }, -- SEQUENCER
+				{ key = '2', software = 262 }, -- SEQUENCER
 			}
 		},
 
@@ -186,8 +138,6 @@ Soften = Site:new {
 		}
 
 	},
-	
-	-- Coord.--1-352/64  AI--none
 }
 soften=Soften
 
@@ -196,6 +146,10 @@ soften=Soften
 
 function MakeRAMColumn(id)
 	return string.appendRightPadded("", tostring(Items[id].capacity), 3)
+end
+
+function MakeCostColumn(id)
+	return string.appendRightPadded("", tostring(Items[id].cost), 5)
 end
 
 function MakeNameColumn(id)
@@ -207,7 +161,7 @@ function MakeNameColumn(id)
 	return out
 end
 
-AsanoComp = ComingSoon:new {
+AsanoComp = Site:new {
 	title = "* Asano Computing *",
 
 	comLinkLevel = 1,
@@ -216,6 +170,9 @@ AsanoComp = ComingSoon:new {
 		"vendors",
 		"<cyberspace>"
 	},
+
+	baseX = 16,
+	baseY = 112,
 	
 	pages = {
 		['title'] = {
@@ -231,6 +188,7 @@ AsanoComp = ComingSoon:new {
 				{ key = 'x', text = "Exit System", target = "exit" },
 				{ key = '1', text = "Catalog", target = "catalog" },
 				{ key = '2', text = "Manufacturers", target = "vendors", level = 2 },
+				{ key = '3', text = "Inventory", target = "inventory", level = 3 },
 			}
 		},
 		
@@ -289,10 +247,39 @@ AsanoComp = ComingSoon:new {
 				{x = 7,  y = 12, text = "Ausgezeichnet"},
 				{x = 27, y = 12, text = "Ninja"},
 			}
-		}
+		},
 
+		['catalog'] = {
+			type = "custom",
+			columns = { { field = 'Manufacturer and Model', width = -4 }, { field = 'RAM', width = 5 } },
+			items = {
+				{ ['Manufacturer and Model'] = MakeNameColumn(100), COST = MakeCostColumn(100) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(101), COST = MakeCostColumn(101) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(102), COST = MakeCostColumn(102) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(103), COST = MakeCostColumn(103) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(104), COST = MakeCostColumn(104) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(105), COST = MakeCostColumn(105) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(106), COST = MakeCostColumn(106) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(107), COST = MakeCostColumn(107) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(108), COST = MakeCostColumn(108) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(109), COST = MakeCostColumn(109) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(110), COST = MakeCostColumn(110) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(111), COST = MakeCostColumn(111) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(112), COST = MakeCostColumn(112) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(113), COST = MakeCostColumn(113) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(114), COST = MakeCostColumn(114) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(115), COST = MakeCostColumn(115) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(116), COST = MakeCostColumn(116) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(117), COST = MakeCostColumn(117) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(118), COST = MakeCostColumn(118) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(119), COST = MakeCostColumn(119) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(120), COST = MakeCostColumn(120) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(121), COST = MakeCostColumn(121) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(122), COST = MakeCostColumn(122) },
+				{ ['Manufacturer and Model'] = MakeNameColumn(123), COST = MakeCostColumn(123) },
+			}
+		},
 	},
-	-- Coordinates-- 0-16/112  AI--none
 }
 asanocomp=AsanoComp
 
@@ -321,6 +308,9 @@ Consumerev = Site:new {
 		"review",
 		"<cyberspace>"
 	},
+	
+	baseX = 32,
+	baseY = 64,
 	
 	pages = {
 		['title'] = {
@@ -413,7 +403,6 @@ Consumerev = Site:new {
 			message = "YAMAMITSU:\nYamamitsu has been in the bix for four years under its current name, producing middle-of-the-road matrix simulators. They have turned mediocrity into a new art form with the introduction of two new models in their XB line of decks.:\n\nManufacturer: YAMAMITSU\nModel: UXB\nRAM: 5\n\nOur experts agreethat the Yamamitsu UXB is the absolute worst of the worst. When our test was powered up, it exploded and put our expert operator in hospital downtime for two weeks.\n\nOther YAMAMITSU models:\nModel: XXB  RAM: 6\nModel: ZXB  RAM: 10",
 		},
 	}
-	-- Coord.--0-32/64  AI--none
 }
 consumerev=Consumerev
 
@@ -439,6 +428,9 @@ Chaos = Site:new {
 		"<cyberspace>"
 	},
 	
+	baseX = 224,
+	baseY = 112,
+	
 	pages = {
 		['title'] = {
 			type = "title",
@@ -461,6 +453,10 @@ Chaos = Site:new {
 				{ key = '1', software = 201 }, -- COMLINK 3.0
 				{ key = '2', software = 280 }, -- MINDBENDER [fake]
 				{ key = '3', software = 281 }, -- VIDEOSOFT [fake]
+				{ key = '4', software = 216, passwordLevel = 2 }, -- BlowTorch 3.0
+				{ key = '5', software = 223, passwordLevel = 2 }, -- Decoder 2.0
+				{ key = '6', software = 268, passwordLevel = 2 }, -- ThunderHead 1.0
+				{ key = '7', software = 221, passwordLevel = 2 }, -- Cyberspace 1.0
 			}
 		},
 		['bbs_view'] = {
@@ -471,7 +467,7 @@ Chaos = Site:new {
 			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
 			formatDetails = function(item) return string.format("TO: %s\nFROM: %s\n%s", item.longfrom or item.from, item.longto or item.to, item.message) end,
 			items = {
-				{ date = 111658, to = "Everyone", from = "Modern Yutaka", message = "Good one. Cuwboy named Chipdancer owed me a favor. Broke into the Hosaka base with Comlink 5.0, used \"FUNGEKI\", and then added my name to their employee list. Received paychecks for six weeks before anyone noticed. Only risk was walking in to pick up check." },
+				{ date = 111658, to = "Everyone", from = "Mod Yutaka", longfrom = "Modern Yutaka", message = "Good one. Cuwboy named Chipdancer owed me a favor. Broke into the Hosaka base with Comlink 5.0, used \"FUNGEKI\", and then added my name to their employee list. Received paychecks for six weeks before anyone noticed. Only risk was walking in to pick up check." },
 				{ date = 111658, to = "All", from = "Modern Miles", message = "Julius Deane knows Cryptology. He also wanted to let people know he's got some hard to find skill chips, in case anyone's interested." },
 				{ date = 111658, to = "Everyone", from = "Polychrome", message = "Screaming Fist has Easy Rider 1.0 in their base. Lets you cross zones without having to go to another cyberjack." },
 				{ date = 111658, to = "Angelo", from = "Lupus", longfrom = "Lupus Yonderboy", message = "Mr. Who paid us on the SENSE/NET gog. He'll remain a Mr. Who, not  Mr. Name. He understands now. Chaos is our mode and modus. Our central kick. Stories to be told, offline in the meeting room. All you have to do is ask." },
@@ -487,7 +483,6 @@ Chaos = Site:new {
 			type = "sendmessage"
 		}
 	}
-	-- Coord.--0-224/112  AI--none
 }
 chaos=Chaos
 
@@ -501,7 +496,7 @@ function Chaos:ProcessMessage(recipient, message)
 end
 
 s.psychosentmessage = false
-Psycho = ComingSoon:new {
+Psycho = Site:new {
 	title = "* Psychologist *",
 	comLinkLevel = 2,
 	passwords = {
@@ -509,6 +504,9 @@ Psycho = ComingSoon:new {
 		"babylon",
 		"<cyberspace>"
 	},
+	
+	baseX = 96,
+	baseY = 32,
 
 	pages = {
 		['title'] = {
@@ -561,7 +559,6 @@ Psycho = ComingSoon:new {
 			message = "Yours was an interesting case. Whether you're aware of it or not, yoy have deep psychological problems. It's too deep for me to analyze all in one visit, but I think we're getting somewhere. Your reality-view seems to be bipolar, but further analysis will be required before I can reach a conclusion. I recommend that you stop your illegal actiities before your problems get worse. Thanks for stopping by. I hope I'll see you again... for your sake."
 		},
 	},
-	-- Coord.--0-96/32  AI--Chrome weakness=Philosophy
 }
 psycho=Psycho
 
@@ -585,6 +582,9 @@ Fuji = Site:new {
 		"romcards",
 		"uchikatsu",
 	},
+	
+	baseX = 112,
+	baseY = 240,
 	
 	pages = {
 		['title'] = {
@@ -640,7 +640,6 @@ Fuji = Site:new {
 		}
 
 	}
-	-- Coord.--2-112/240  AI--none
 }
 fuji=Fuji
 
@@ -651,6 +650,10 @@ HitachiBio = Site:new {
 		"genesplice",
 		"biotech"
 	},
+	
+	baseX = 32,
+	baseY = 192,
+	
 	pages = {
 		['title'] = { type = "title", message = "<editor note: this is a totally pointless site>" },
 		['password'] = { type = "password" },
@@ -678,17 +681,20 @@ HitachiBio = Site:new {
 			}
 		},
 	}
-	-- Coord.--2-32/192  AI--none
 }
 hitachibio=HitachiBio
 
 Keisatsu = Site:new {
 	title = "* Chiba City Tactical Police *",
-	comLinkLevel = 4,
+	comLinkLevel = 3,
 	passwords = {
 		"warrants",
 		"supertac",
 	},
+	
+	baseX = 288,
+	baseY = 112,
+
 	pages = {
 		['title'] = { type = "title", message = " " },
 		['password'] = { type = "password" },
@@ -716,7 +722,6 @@ Keisatsu = Site:new {
 		}
 
 	}
-	-- Coord.--1-288/112  AI--none
 }
 keisatsu=Keisatsu
 
@@ -785,3 +790,571 @@ function Keisatsu:OnTextEntryComplete(text, tag)
 		Site.OnTextEntryComplete(self, text, tag)
 	end
 end
+
+
+Brainstorm = Site:new {
+	title = "* Copenhagen University *",
+	comLinkLevel = 4,
+	passwords = {
+		"perilous",
+		"<cyberspace>",
+	},
+	
+	baseX = 320,
+	baseY = 32,
+	
+	pages = {
+		['title'] = { type = "title", message = "The Copenhagen Message base. We welcome all free thinkers and student of life." },
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "Notes of Interest", target = "notes" },
+				{ key = '2', text = "Message Base", target = "messages" },
+			}
+		},
+		['notes'] = {
+			type = "message",
+			message = "Notes of Interest\n\n        Copenhagen University\n\n  Our Polar Bears finished their Bloodsport season 12-3-1, winning the Pan European Championship in a hard fought contest against Leningrad University's Molotov Cocktails. Our star, Lars Mbutu, finished the final game despite nearly having his left leg severed halfway through the first day of competition. Doctors report his replacemnt will work almost like new, and we hope he'll beback for Cross-Country competition in the fall.\n\n\"Cyberspace and Addictive Peronalities\" was a paper delivered by our own Professor Marshe Sanderson at last month's Psychologists' Convention in Paris. She suggested that computers can be addictive and very time consuming, but she reports no hard evidence that computers are harmful. \"Computers are the soul of current society -- to embrace them is to embrace life itself.\" She also pointed out that the pseuodyms used by so-called \"Cyberspce Cowboys\" are merely a manifestation of their true selves and \"no different from the Japanese custom in which samurai would adopt new names repeatedly during their careers.\"\n\n  Copenhagen University is leading the effort to discover why numbers of very adept cyberspace operators have been dropping out of the communications network. Said Michael Austin, an aide to Dr. Marsha Sanderson, \"We're focusing our study on withdrawal symptoms and feelings of rejection on the networks. Something out there is alienating users, and we hope to determine what it is.\" The research, funded by a grant from Tessier-Ashpool funneled through their Allard Technologies subdivision, begins immediately.",
+		},
+		['messages'] = {
+			type = "list",
+			hasDetails = true,
+			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
+			formatDetails = function(item) return string.format("TO: %s\nFROM: %s\n\n  %s", item.longfrom or item.from, item.longto or item.to, item.message) end,
+			items = {
+				{ date = 111658, to = "Lars Mbutu", from = "Deathangel's", longfrom = "Deathangel's Shadow", message = "Great game, Lars. Sorry about those fingers you lost in the last period. I guess you won't be typing back a reply that quickly will you? Hope the spare parts shop in Copenhagen is better than the one in Chiba City. This pancreas I got sucks." },
+				{ date = 111658, to = "Dr.Sanderson", longto = "Dr. Marsha Sanderson", from = "Habitual", longfrom = "Habitual User", message = "Saw a vid of your paper delivery the other day. Think I got most of the French. Hit the nail on the head -- no harm in the decks. Promote intellectual development." },
+				{ date = 111658, to = "Deathangel's", longto = "Deathangel's Shadow", from = "Lars Mbutu", message = "Thnk you for your msg bout th gm. you r right tht loing fingr on my lft hn ill mk for iffikult riting, but i ill try. i njoy th gm. my lg i lot bttr no. on't brly limp. By for no." },
+				{ date = 111658, to = s.name, from = "Deathangel's", longfrom = "Deathangel's Shadow", message = "It's getting really spooky out here. Was supporsed to get some information from the Sumdiv Kid, but he's gone null. Have you seen him?" },
+				{ date = 111658, to = "All", from = "Deathangel's", longfrom = "Deathangel's Shadow", message = "All you new moes remember that all ICE breakers aren't created equal. So being the cool guy that I am, I leave the following info for all.\n\nGood:   Decoder, BlowTorch, Hammer\nBetter: DoorStop, Drill\nBest:   Concrete, DepthCharge, Logic Bomb\n\nGood Luck" },
+			},
+		}
+
+	}
+}
+
+brainstorm=Brainstorm
+
+
+
+EastSeaBod = Site:new {
+	title = "* Eastern Seaboard Fission Authority *",
+	comLinkLevel = 4,
+	passwords = {
+		"longisland",
+		"<cyberspace>"
+	},
+	
+	baseX = 384,
+	baseY = 32,
+	
+	pages = {
+		['title'] = { type = "title", message = "This is the Eastern Seaboard Fission Authority. Unquthorized access will be shut down and trespassers will be prosecuted to the full extend of the law." },
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "Company News", target = "newa" },
+				{ key = '2', text = "Software Library", target = "software" },
+				{ key = '3', text = "Messages", target = "messages" },
+			}
+		},
+		['news'] = {
+			type = "message",
+			message = "Company News\n  We recently completed a shift of computers in our main office which guarantees system security. This has required some changes in our methods of service, but nothing to alarm you. We still will respond to complains with our usual alacrity and accuracy. Rest assured, we have not changed.\n  We have determined that the power down in the K-7 sector was caused by sabotage. It seems one operator at the New Jersey Nuclear Power Station was using his computer to do some trolling on the Free Sex Union system. He left his access code hoping for some response. He got it. K-7 went down for three days before we found and destroyed the offending code. Three lines, that's all it took, and all the power was funneled info the Chernobyl/Kiev grid.",
+		},
+		['software'] = {
+			type = "download",
+			items = {
+				{ key = 'x', text = "Exit to Main", target = "main" },
+				{ key = '1', software = 203 }, -- COMLINK 5.0
+			}
+		},
+		['messages'] = {
+			type = "list",
+			hasDetails = true,
+			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
+			formatDetails = function(item) return string.format("TO: %s\nFROM: %s\n\n  %s", item.longfrom or item.from, item.longto or item.to, item.message) end,
+			items = {
+				{ date = 111658, to = "Inspector B.", longto = "Inspector Boggs", from = "The Chairman", message = "Re: Moving Allowance\n\n  The moving allowance you requested has been cleared and deposited in Bank Gemeinschaft. Codeword: \"AGABATUR\". Thanks for filling out the forms in triplicate." },
+				{ date = 111658, to = "The Chairmain", from = "GrnMtn Power", message = "We've been getting strange fluctuations from the New Hampshire/Seabrook plant. One of my engineers says it looks like the beginning of a runaway reaction. I'd not be concerned, but this time of the year the prevailing winds blow east to west, if you catch my drift." },
+				{ date = 111658, to = "GrnMtn Power", from = "The Chairman", longfrom = "Deathangel's Shadow", message = "We'll be sending an inspector up there real soon now." },
+				{ date = 111658, to = "Mrs. Waxman", longto = "Mrs. Edith Waxman", from = "Inspector B.", longfrom = "Inspector Boggs", message = "I resent being called an idiot, Madam. I merely suggested that the interference on your television COULD be the sort caused by a cracked shielding element at the Devil's Gorge powerplant beside your house. I did not say that WAS the cause, now did I? I've been to the plant and I assure you there is nothing to worry about.\n  As for your assertion that I and my family moved from the neighborhood last month because of the danger, well, I assure you that is utterly false. My wife Marie merely wanted a yellow house with black shutters so we move to one.\nYours,..." },
+				{ date = 111658, to = "Inspector B.", longto = "Inspector Boggs", from = "Mes. Waxman", longfrom = "Edith Waxman", message = "No Danger! Listen Boggs, my cat cglows in the dark and has lost all its fur. I expect you to get out here, and damn fast. This leak is beginning to affect everything! *%#kh&f texxd\\jjihbf# kj) 34 JVJ% hgff## 1}'\"|lk jeignbal dkj gljsn dxf -+" },
+				{ date = 111658, to = "The Chairman", from = "GrnMtn Power", message = "  You'll get an inspector over there soon? What do you think this is? It's not safe up here. I'm sending my kids to visit their grandmother down at Devil's Gorge. I know nothing's going to go wrong there -- one of your inspectors lives next to my mother-in-law.\n  Move it guys, this thing could be dangerous." },
+				{ date = 111658, to = "Mes. Waxman", longto = "Edith Waxman", from = "Inspector B.", longfrom = "Inspector Boggs", message = "I believe Mrs. Waxman, you have blown all of this out of proportion. Of course your cat has lost its fur -- cats shed at this time of year, and having three screaming grandchildren running aorund the house can't help. I have relayed your concerns to the DEvil's Gorge supervisor and he promises to contact you as soon as he gets a new rad suit." },
+				{ date = 111658, to = "All", from = "Deathangel's", longfrom = "Deathangel's Shadow", message = "The Eastern Seaboard Fission Authority doesn't know we're here! That's right, folks ESFA thinks they are safe. Little do they know we leeched this upper section onto their board. We're filling it with some great stuff, too. Check out the new addition to their software library." },
+				{ date = 111658, to = s.name, from = "Deathangel's", longfrom = "Deathangel's Shadow", message = "Be careful if you cruise new the Citizens for a Free Matrix db. I got some bad vibes off that one. Someone said they're running a Trojan Horse program, you know, with viruses in it, but I didn't see anything like that. Maybe they used to do that, or are gunna in the future. Forewarned is unflatlined. Later..." },
+				
+				{ date = 111658, to = "Matt Shaw", from = "Sumdiv Kid", message = "You gunna do another rev of BattleChess? Deuce was great -- kinda hoping you'd be on trey or four. Deathangel's Shadow, Bosch and I all tinkered with your logic in BattleChess deuce. I did the least mods -- just weighted pieces differently to suit my style, you know? -- and trashed them. Not enough to make a new rev. I leave that to you -- a master at work and all that." },
+				{ date = 111658, to = "All", from = "Modern Miles", message = "Invites to all cowboys, from the Gentleman Loser DB. There are warez to be had. The link code is \"LOSER\"m and so is the word." },
+				{ date = 111658, to = "Deathangel's", longto = "Deathangel's Shadow", from = "Gabby", message = "Thanks for the tip about Finn. He does have loads of stuff, he even has tried to sell me a joystick. Like what would I do with that?" },
+			},
+		}
+
+	}
+}
+eastseabod=EastSeaBod
+
+Musaborind = Site:new {
+	title = "* Musabori Industries *",
+	comLinkLevel = 5,
+	passwords = {
+		"subaru",
+		"<cyberspace>",
+	},
+	
+	baseX = 208,
+	baseY = 208,
+
+	pages = {
+		['title'] = { type = "title", message = "This is the Eastern Seaboard Fission Authority. Unquthorized access will be shut down and trespassers will be prosecuted to the full extend of the law." },
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "From the President", target = "president" },
+				{ key = '2', text = "New Products", target = "products" },
+				{ key = '3', text = "Answer Man", target = "answerman" },
+				{ key = '4', text = "Employee of the Month", target = "employee" },
+			}
+		},
+		['president'] = {
+			type = "message",
+			message = "Long winded thing",
+		},
+		['products'] = {
+			type = "message",
+			message = "Long winded thing",
+		},
+		['answerman'] = {
+			type = "message",
+			message = "Long winded thing",
+		},
+		['employee'] = {
+			type = "message",
+			message = "          Employee of the Month:\n               Stan Barlow\n\n  Stan is one of those amazing people that really makes Musabori what it has become today. For the last twenty years Stan has screwed the restraining bolt into the engine sub-structure for all our B-2a Swinging Bomber Assemblies.\n\n  Way to go, Stan. Hope you stay with use for another twenty.",
+		},
+	}
+}
+musaborind=Musaborind
+
+
+
+
+HosakaCorp = Site:new {
+	title = "* Hosaka Corporation *",
+	comLinkLevel = 5,
+	passwords = {
+		"biosoft",
+		"fungeki",
+		"<cyberspace>"
+	},
+	
+	baseX = 144,
+	baseY = 160,
+	
+	pages = {
+		['title'] = { type = "title", message = "Welcome to the Hosaka Corporation Database. We provide this database as a server to our customers, employees and stockholders." },
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "New Products", target = "products" },
+				{ key = '2', text = "Corporate Sales Figures", target = "sales" },
+				{ key = '3', text = "New Employee Listing", target = "employees", level = 2 },
+				{ key = '4', text = "Employee Memos", target = "memos", level = 2 },
+				{ key = '5', text = "Software Library", target = "software", level = 2 },
+				{ key = '6', text = "Upload Software", target = "upload", level = 2 },
+			}
+		},
+		['products'] = {
+			type = "message",
+			message = "    The 68000000 chip is finally in production, with the first batch heading off to Ono-Sendai for inclusion in their newest deck. Our research and development department is very proud of this new chip. \"The 68000000 has the capabilities of 1000 chips of older design, with them configured to run in sequential or parallel modes,\" said Dr. Nakamura, Nobel Laureate and head of R and D.\n\n    The latest two figures in our \"Masters of Cyberspace\" playset have been released with great success. \"The Jerk\" and \"Doctor Death\" are the newest characters to be immortalized in petrochemical form. These two figures are part of the \"Interplayers\" collection, but can used in conjunction with the \"Cyberenegades\" and \"Matrix Marauders\" figure sets. Added to the \"Interplayers\" before the end of the year, bringing that group up to the roster features in the \"Matrix Invasion\" season of video dramas in the ongoing \"Software Warriors\" series.",
+		},
+		['sales'] = {
+			type = "message",
+			message = "        Corporate Sales Figures\n" ..
+				" Item Name          Last year   to Date\n" ..
+				" ---------          ---------   -------\n" ..
+				" 1. Capt. Midnight  1350000     1377000\n" ..
+				" 2. Evil Albrect    1400000     1375000\n" ..
+				" 3. AZ482a          1200000      950000\n" ..
+				" 4. Spelldeck        822000      855230\n" ..
+				" 5. Safe Sex ROM    1200000      825000\n" ..
+				" 6. Blackjack ROM    800000      774321\n" ..
+				" 7. 68000000          ***        750500\n" ..
+				" 8. Nobel ROM         ***        650000\n" ..
+				" 9. The Jerk          ***        550000\n" ..
+				"10. Dr Death          ***        500000\n",
+		},
+		['employees'] = {
+			type = "list",
+			title = "New Eployees List",
+			targetOnClick = 'editEmployee',
+--			hasDetails = true,
+			columns = { { field = 'Name', width = 19 }, { field = 'BAMA ID', width = 0 } },
+			formatDetails = function(item) return string.format("\n\nName: %s\nID:   %s\n%s", item.Name, item['BAMA ID'], item.message) end,
+			items = s.hosakaEmployees
+		},
+		['memos'] = {
+			type = "list",
+			hasDetails = true,
+			columns = { { field = 'date', width = 8 }, { field = 'to', width = 20 }, { field = 'from', width = 0 } },
+			formatDetails = function(item) return string.format("TO: %s\nFROM: %s\n%s", item.longfrom or item.from, item.longto or item.to, item.message) end,
+			items = {
+				{ date = 111658, to = "All", from = "E. D. Cooper", message = "    I must once again urge all emplyees to avoid contact with the employees of Tozoku or any of its subsidiearies -- now including Fuji Electric. How much more plainly do I have to say it, people? Tozoku are YAKUZA, pure and simple. They're pumping tons of money into Matelbro's G.I. Akira figure set, to the detriment of our sales. Every time you buy something from Tozoku you're helping finance yourself out of a job. Think about it. They're turning out warez that allow for DB raiding, and they're behind our inability to get Comlink 6.0. It is's paranoia if they ARE out to get you." },
+				{ date = 111658, to = "All", from = "E. D. Cooper", message = "    I know some of you employees are in contact with certain \"cyberspace cowboys.\" Hosaka requires Comlinbnk 6.0. We are prepared to pay handsomely for it. Any employee who puts us in touc hwith someone who has the software will get a 10% bonus on the price we pay for the item." },
+			}
+		},
+		['software'] = {
+			type = "download",
+			items = {
+				{ key = 'x', text = "Exit to Main", target = "main" },
+				{ key = '1', software = 203 }, -- Comlink 5.0
+			}
+		},
+		['editEmployee'] = {
+			type = "custom",
+			exit = "employees",
+		}
+	}
+}
+hosakacorp=HosakaCorp
+
+function HosakaCorp:GoToPage(pageName)
+	if (pageName == 'employees') then
+		self.pages['employees'].items = s.hosakaEmployees
+
+	end
+
+	Site.GoToPage(self, pageName)
+end
+
+function HosakaCorp:HandleClickedEntry(id)
+	if (self.currentPage == 'main' and id > 0) then
+		self.editMode = 1
+	end
+
+	Site.HandleClickedEntry(self, id)
+end
+
+function HosakaCorp:GetCustomEntries(page)
+	local entries = {}
+
+	self:GetPageHeaderFooterEntries(page, entries)
+
+	local title = "New Eployees List"
+	local titleX = self:CenteredX(title)
+	table.append(entries, { x=titleX, y = 2, text = title})
+	
+	table.append(entries, { x = 0, y = 5, text = "Name:"})
+	table.append(entries, { x = 0, y = 6, text = "ID:"})
+	table.append(entries, { x = 0, y = 7, text = string.format("Wanted for %s.", s.hosakaEmployees[self.selectedListItem].message)})
+	
+	if (self.editMode == 2) then
+		table.append(entries, { x = 6, y = 5, entryTag = "name"})
+	else
+		table.append(entries, { x = 6, y = 5, text = s.hosakaEmployees[self.selectedListItem].Name})
+	end
+	if (self.editMode == 3) then
+		table.append(entries, { x = 6, y = 6, entryTag = "id"})
+	else
+		table.append(entries, { x = 6, y = 6, text = s.hosakaEmployees[self.selectedListItem]['BAMA ID']})
+	end
+
+	self:AddExitEditEntries(entries, self.editMode > 0)
+
+	return entries
+end
+
+function HosakaCorp:HandleClickedEdit()
+	self.editMode = 2
+end
+
+
+function HosakaCorp:OnTextEntryComplete(text, tag)
+	if (tag == "name") then
+		s.hosakaEmployees[self.selectedListItem].Name = text
+		self.editMode = 3
+	elseif (tag == "id") then
+		s.hosakaEmployees[self.selectedListItem]['BAMA ID'] = text
+		self.editMode = 1
+		if (string.lower(s.hosakaEmployees[self.selectedListItem].Name) == string.lower(s.name) and text == s.bamaid) then
+			s.employed = true
+		end
+	else
+		Site.OnTextEntryComplete(self, text, tag)
+	end
+end
+
+------------------------
+
+Yakuza = Site:new {
+	title = "* Tozoku Imports *",
+	comLinkLevel = 5,
+	passwords = {
+		"yak",
+		"<cyberspace>"
+	},
+	
+	baseX = 480,
+	baseY = 80,
+	
+	pages = {
+		['title'] = { type = "title", message = " " },
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "Order Status", target = "status" },
+				{ key = '2', text = "Specials Available", target = "specials" },
+				{ key = '3', text = "Software Library", target = "software" },
+			}
+		},
+		['status'] = {
+			type = "message",
+			message = "                Order Status\n  The Star of Iowa is reported to be on its way from the People's Republic of New Zealand. It has most of our mutton orders, as well as the Johnson sweater order. We expect it in dock soon.\n\n  The Popul Vox is due in port next week with its cargo hold full of pre-Columbian artwork. Some of the cargo has been damaged because of the shifting during a typhoon, but insurance will cover all damages. The crew has assured us that all damage is minor.",
+		},
+		['specials'] = {
+			type = "message",
+			message = "    Tozoku Imports Special Offers\n  We anticipate a certain number of cosmetically imperfect examples of pre-Columbian artwork to be made available in the near future. These works, crafted by long-dead workers, do show some signs of deterioration as caused by acid rain, but the original work is still visible and quite beautiful. Many of the pieces are hollow and make for a perfect place to hide valuables. Prices will vary depending upon condition of the piece, but each and every one of them would make a perfect addition to any home.",
+		},
+		['software'] = {
+			type = "download",
+			items = {
+				{ key = 'x', text = "Exit to Main", target = "main" },
+				{ key = '1', software = 204 }, -- COMLINK 6.0
+				{ key = '2', software = 215 }, -- BLOWtoRCH 1.0
+				{ key = '3', software = 222 }, -- DECODER 1.0
+			}
+		},
+	}
+}
+yakuza = Yakuza
+
+------------------------------------------
+
+GemeinPhase = {
+	None = {},
+	SourceAccount = {},
+	LinkCode = {},
+	Amount = {},
+	TargetAccount = {},
+	Transferring = {},
+	Transferred = {},
+}
+
+GemeinError = {
+	None = {},
+	UnknownAccount = {},
+	UnknownBank = {},
+}
+
+BankGemein = Site:new {
+	phase = GemeinPhase.None,
+	
+	title = "* Bank Gemeinschaft *",
+	comLinkLevel = 5,
+	passwords = {
+		"eintritt",
+		"verboten"
+	},
+	
+	baseX = 304,
+	baseY = 320,
+	
+	pages = {
+		['title'] = { type = "title", message = "  Welcome to Bank Gemeinschaft.\nWe are now in our 6th century of service to customers of discretion." },
+		['password'] = { type = "password" },
+		['main'] = {
+			type = "menu",
+			onEnterPage = function(self) self.phase = GemeinPhase.None end,
+			items = {
+				{ key = 'x', text = "Exit System", target = "exit" },
+				{ key = '1', text = "List of Services", target = "services" },
+				{ key = '2', text = "Current Rates", target = "rates" },
+				{ key = '3', text = "Recommended Securities", target = "securities" },
+				{ key = '4', text = "Message Base", target = "messages", level = 2 },
+				{ key = '5', text = "Software Library", target = "software", level = 2 },
+				{ key = '6', text = "Funds Transfer", target = "transfer", level = 2 },
+			}
+		},
+		['services'] = {
+			type = "message",
+			message = "    Bank Gemeinschaft prides itself on its long years of service to individuals and nations. The North family still draws a substantial \"pension\" fro the funds we hid from Congressional investigators and the funds entrusted to us by President Nkrumah are still gathering interest. Below is a list of our services.\n1) Automatic Funds Transfer: Our AFT program runs 3.7 nanoseconds faster than our competition, yet we credit you with interest including the time of the transfer.\n2) Investment Counciling: We maintain vast portfolios of securities making us a force within world markets. If we decide to rock the boat we will inform our customers.\n3) Full Automated Bank Transfers: Need an anonymous deposit in a discreet account at another bank? We do that eaier than pouring cash into a paper bag.",
+		},
+		['rates'] = {
+			type = "message",
+			message = "1) Automatic FUnds Transfer: .001%, charged against baee account.\n2) Investment Counciling: .05% commission charged on buying and selling securities, thouth they are held in our ultra-secure vaults at no charge.\n3) Fully Automated Bank Transfers: .002% on individuals, .01% on government and drug transactions.\n\n   Interest Rates paid:\n1) 10% on normal savings\n2) 15% on Money Market Funds\n3) 15-20% on Certificates of Deposit",
+		},
+		['securities'] = {
+			type = "message",
+			message = "    As always, we suggest Bank Gemeinschaft as a viable investment. Our investments have a 99.4% security rating, and show an annual return rate of 22.1% per year. Out stock reflects this. In the interest of those who wish to diversify their portfolios, we provide the following list of other solid investments, all of which can be access through our brokerage affiliate.\n\n1) Bell Europa\n2) Musabori\n3) Hitachi Biotech\n4) Maas Biolabs\n5) Hosaka\n6) Fuji Electric\n7) Tessier-Ashbppol\n8) Allard Technologies\n   (a T-A subsidiary)",
+		},
+		['messages'] = {
+			type = "list",
+			hasDetails = true,
+			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
+			formatDetails = function(item) return string.format("TO: %s\nFROM: %s\n\n  %s", item.longfrom or item.from, item.longto or item.to, item.message) end,
+			items = {
+				{ date = 111658, to = "Herr Geistjager", from = "M. Godot", message = "Thank you for the tip about Fuji Electric. I have transferred the $30,000 to your discretionary account as you requested." },
+				{ date = 111658, to = "Herr Geistjager", from = "R. Kaliban", longfrom = "Roger Kaliban", message = "I resent very stronglt your suggestion that I am in any way involved i banking irregularities, but I do appreciate your having brought your suspicions to me before taking them to banking officials. I have deposited a token of my appreciation in your discretionary account." },
+				{ date = 111658, to = "Epkot", longto = "Epkot Foundation", from = "R. Kaliban", longfrom = "Roger Kaliban", message = "I have looked into your complaint concerning the delay in cash transfers to the Kruo-sleep Corp. of Veracruz. I have apologixed to them on your behalf and have assured them there will be no further delays in forwarding payments to them. They said Walt had not begun to thaw anyway, so no hard was done.\nYour obedient servant,\nRK." },
+				{ date = 111658, to = "Adrian Finch", from = "T. Cole", longfrom = "Thomas Cole", message = "Adrian\n   I'm uneasy about the moves Musabori is making on the international scene. Phillip over at Bank of Zurich is uncovering all sorts of irregularities with their accounts. Musabori says it is because of cyberspace Cowboy meddling, but I am ont conviced. They've lost some money over there to an embezzler, if rumors are at all true. We should be careful." },
+				{ date = 111658, to = "T. Cole", longto = "Thomas Cole", from = "Adrian Finch", message = "I've foreseen the problem, Thomas, and have taken staps to correct it. Roger Kaliban is a security expert. If Zurich had had him on their staff, they'd not have had any problem." },
+			}
+		},
+		['software'] = {
+			type = "download",
+			items = {
+				{ key = 'x', text = "Exit to Main", target = "main" },
+				{ key = '1', software = 222 }, -- DECODER 1.0
+				{ key = '2', software = 283 }, -- BudgetPal 24.0 (fake)
+				{ key = '3', software = 284 }, -- Receipt Forger 7.0
+			}
+		},
+		['transfer'] = {
+			type = "custom",
+			onEnterPage = function(self)
+				self.phase = GemeinPhase.SourceAccount
+				self.error = GemeinError.None
+				self.staticSourceAccount = nil
+				self.staticLinkCode = nil
+				self.staticAmount = nil
+				self.staticTargetAccount = nil
+			end,
+		}
+	}
+
+}
+bankgemein=BankGemein
+
+
+
+
+
+function BankGemein:GetCustomEntries(page)
+	local entries = {}
+
+	self:GetPageHeaderFooterEntries(page, entries)
+
+	table.append(entries, {x = self:CenteredX("Funds Transfer"), y = 2, text = "Funds Transfer" } )
+
+	if (self.phase == GemeinPhase.SourceAccount) then
+		table.append(entries, {x = 0, y = 4, text = "Enter source account number:" } )
+		if (self.error == GemeinError.None) then
+			table.append(entries, {x = 0, y = 5, entryTag = "sourceaccount", numeric = true } )
+		else
+			table.append(entries, {x = 0, y = 5, text = self.staticSourceAccount } )
+		end
+	else
+		table.append(entries, {x = 0, y = 3, text = "account no#: 646328356481" } )
+		table.append(entries, {x = 0, y = 4, text = "    credits: " .. s.gemeinSourceFunds } )
+		table.append(entries, {x = 0, y = 5, text = "Enter destineation bank link code: "} )
+		if (self.phase == GemeinPhase.LinkCode and self.error == GemeinError.None) then
+			table.append(entries, {x = 0, y = 6, entryTag = "linkcode" } )
+		else
+			table.append(entries, {x = 0, y = 6, text = self.staticLinkCode } )
+			if (self.error == GemeinError.None or self.phase ~= GemeinPhase.LinkCode) then
+				table.append(entries, {x = 0, y = 7, text = "Enter amount to transfer:" } )
+
+				if (self.phase == GemeinPhase.Amount and self.error == GemeinError.None) then
+					table.append(entries, {x = 0, y = 8, entryTag = "amount", numeric = true } )
+				else
+					table.append(entries, {x = 0, y = 8, text = self.staticAmount } )
+					if (self.error == GemeinError.None or self.phase ~= GemeinPhase.Amount) then
+						table.append(entries, {x = 0, y = 9, text = "Enter destination account number:" } )
+
+						if (self.phase == GemeinPhase.TargetAccount and self.error == GemeinError.None) then
+							table.append(entries, {x = 0, y = 10, entryTag = "targetaccount", numeric = true } )
+						else
+							table.append(entries, {x = 0, y = 10, text = self.staticTargetAccount } )
+						end
+						if (self.phase == GemeinPhase.Transferring) then
+							table.append(entries, {x = self:CenteredX("Transferring...Transfer complete"), y = 12, text = "Transferring..." } )
+						elseif (self.phase == GemeinPhase.Transferred) then
+							table.append(entries, {x = self:CenteredX("Transferring...Transfer complete"), y = 12, text = "Transferring...Transfer complete" } )
+							self:GetButtonOrSpaceEntries(entries)
+						end
+					end
+				end
+			end
+		end
+	end
+
+	if (self.error == GemeinError.UnknownAccount) then
+		table.append(entries, {x = self:CenteredX("Unknown account"), y = self.sizeY - 3, text = "Unknown account" } )
+		self:GetButtonOrSpaceEntries(entries)
+	elseif (self.error == GemeinError.UnknownBank) then
+		table.append(entries, {x = self:CenteredX("Unknown bank"), y = self.sizeY - 3, text = "Unknown bank" } )
+		self:GetButtonOrSpaceEntries(entries)
+	end
+
+--	if (self.currentPage == "catalog") then
+--		local title = "Current Hardware For Sale"
+--		table.append(entries, {x = self:CenteredX(title), y = 2, text = title})
+--		table.append(entries, {x = 0, y = self.sizeY - 3, wrap = -1, text = "Come to our store for the latest in up to date software and hardware."})
+--
+--		self:GetListEntriesEx(page, entries, 3, self.sizeY - 10, true, true, false)
+--	end
+
+	return entries
+end
+
+function BankGemein:OnTextEntryComplete(text, tag)
+
+	if (tag == "sourceaccount") then
+		self.staticSourceAccount = text
+		if (text == "646328356481") then
+			self.phase = GemeinPhase.LinkCode
+		else
+			self.error = GemeinError.UnknownAccount
+		end
+	elseif (tag == "linkcode") then
+		self.staticLinkCode = text
+		if (text == "bozobank") then
+			self.phase = GemeinPhase.Amount
+		else
+			self.error = GemeinError.UnknownBank
+		end
+	elseif (tag == "amount") then
+		local amount = tonumber(text)
+		self.staticAmount = text
+		
+		if (amount > s.gemeinSourceFunds) then
+		else
+			self.phase = GemeinPhase.TargetAccount
+		end
+	elseif (tag == "targetaccount") then
+		self.staticTargetAccount = text
+		if (text == "712345450134") then
+			self.phase = GemeinPhase.Transferring
+			StartTimer(3, self, function(self)
+\				self.phase = GemeinPhase.Transferred
+				s.gemeinSourceFunds = s.gemeinSourceFunds - tonumber(self.staticAmount)
+				s.gemeinAccount = s.gemeinAccount + tonumber(self.staticAmount)
+			end)
+		else
+			self.error = GemeinError.UnknownAccount
+		end
+	else
+		Site.OnTextEntryComplete(self, text, tag)
+	end
+end
+
+function BankGemein:OnGenericContinueInput()
+	if (self.phase ~= GemeinPhase.None) then
+		self:GoToPage("main")
+		return
+	end
+
+	Site.OnGenericContinueInput(self)
+end
+

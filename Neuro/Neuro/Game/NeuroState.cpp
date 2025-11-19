@@ -303,13 +303,7 @@ void NeuroState::ClickSkill()
 
 void NeuroState::ClickChip()
 {
-	if (!StateDelegate->IsConversationShowing() && !StateDelegate->AreBoxesShowing() && !StateDelegate->IsMessageActive())
-	{
-		CurrentState = State::InSite;
-		std::string LastSite;
-		Lua.GetStringValue("s", "lastSite", LastSite);
-		StateDelegate->OpenBoxByName(LastSite.c_str());
-	}
+	// @todo ROMs
 }
 
 void NeuroState::ClickSystem()
@@ -453,6 +447,22 @@ bool NeuroState::HandleSceneKey(KeyEvent Event)
 			{
 				ActivateRoom(CurrentRoom, NewRoom);
 			}
+			bWasHandled = true;
+		}
+		
+		
+		if (Event.KeyCode == WoflKeys::F2)
+		{
+			CurrentState = State::InSite;
+			StateDelegate->OpenBoxByName("Cyberspace");
+			bWasHandled = true;
+		}
+		else if (Event.KeyCode == WoflKeys::F3)
+		{
+			CurrentState = State::InSite;
+			std::string LastSite;
+			Lua.GetStringValue("s", "lastSite", LastSite);
+			StateDelegate->OpenBoxByName(LastSite.c_str());
 			bWasHandled = true;
 		}
 	}

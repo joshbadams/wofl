@@ -6,7 +6,6 @@
 -- 11: said CopTalk level 1 line
 -- 12: said CopTalk level 2 line
 s.donutworld = 0
-s.usingCopTalk = 0
 DonutWorld = Room:new {
 	
 	name = "donutworld",
@@ -137,19 +136,6 @@ DonutWorld = Room:new {
 		},
 	}
 }
-
-function DonutWorld:UseSkill(skill)
-	-- if using CopTalk before we've opened our mouth, active cop mode
-	if (skill.name == "CopTalk" and not s.hasTalkedInRoom) then
-		s.usingCopTalk = s.skillLevels[400]
-
-print("using coptalk", skill.name, s.usingCopTalk)
-
-		-- immediately talk
-		self:ActivateConversation()
-	end
-
-end
 
 function DonutWorld:OnEnterRoom()
 	s.usingCopTalk = 0

@@ -70,6 +70,17 @@ s = {
 		{ Name = "ASHLEY ROBIN",   ['BAMA ID'] = "042385003", crime = "Smuggling" },
 	},
 	
+	-- modifiable hosaka employees
+	hosakaEmployees = {
+		{ Name = "TAKODA MISHIJI", ['BAMA ID'] = "883849931", message = "Position - Security" },
+		{ Name = "AKIRA O'BRIEN",  ['BAMA ID'] = "394857291", message = "Position - Management" },
+		{ Name = "SVEN KHARKHOV",  ['BAMA ID'] = "389455756", message = "Position - Line production" },
+		{ Name = "MELISSA BORS",   ['BAMA ID'] = "102938565", message = "Position - Employee services" },
+		{ Name = "P. RYAN WANG",   ['BAMA ID'] = "564987271", message = "Position - Acquisitions" },
+		{ Name = "M. C. BEAR",     ['BAMA ID'] = "129485636", message = "Position - Legal" },
+		{ Name = "S. Z. WATERS",   ['BAMA ID'] = "053656528", message = "Position - Legal" },
+	},
+	
 	-- which skills we currently have learned, and their level (stored separately so the opened skills are in order by unlocking order)
 	skills = {
 		
@@ -88,6 +99,8 @@ s = {
 	bankaccount = 1941,
 	name = "Badams",
 	bamaid = "056306118",
+	gemeinSourceFunds = 30000,
+	gemeinAccount = 0,
 	
 	numTimesArrested = 0,
 	
@@ -154,6 +167,7 @@ SystemScripts = {
 	"InvBox",
 	"MiscBoxes",
 	"PAX",
+	"Cyberspace",
 }
 
 function TablesMatch(g, a, b)

@@ -55,7 +55,7 @@ function Gridbox:HandleClickedGridEntry(id)
 	if (self:ShouldIgnoreAllInput()) then
 		return
 	end
-
+print("clicked entry, id", id)
 	-- -1 is always the "exit" option
 	if id == -1 then
 		self:HandleClickedExit()

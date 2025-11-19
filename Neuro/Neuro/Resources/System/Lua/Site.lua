@@ -16,6 +16,7 @@ Site = Gridbox:new {
 }
 
 function Site:CheckAllPagesForUnlocks()
+print("checking all pages for unlocks")
 	for i,v in pairs(self.pages) do
 		if (v.unlockid ~= nil) then
 			self:CheckForUnlocks(v)
@@ -27,9 +28,9 @@ function Site:OpenBox()
 
 	self:CheckAllPagesForUnlocks()
 
+	self.fromCyberspace = false
 	self.passwordLevel = 0
 	self.passwordFailed = false
-print("num passwrords = ", #self.passwords)
 	if (#self.passwords > 0) then
 		self:GoToPage("title")
 	else
@@ -42,6 +43,9 @@ end
 function Site:Close()
 	currentSite = nil
 	Gridbox.Close(self)
+	if (self.fromCyberspace) then
+		OpenBox("cyberspace")
+	end
 end
 
 
@@ -55,6 +59,7 @@ function Site:HasUnlocked(unlockedInfo, index)
 end
 
 function Site:CheckForUnlocks(page)
+print("checking for unlocks in page", page.unlockid)
 	local unlockedInfo = s.unlockedMessagesInfo[page.unlockid]
 
 	if (unlockedInfo == nil) then
@@ -77,9 +82,15 @@ print("checking for item i to be unlocked", unlockedInfo, #unlockedInfo, s.date,
 end
 
 function Site:GoToPage(pageName)
+print("going to ", pageName)
 	-- process leaving a page
 	if (self.currentPage == "title") then
 		ReorderBox(self, 0)
+	end
+
+	-- let the page run custom logic
+	if (self:GetCurrentPage() ~= nil and self:GetCurrentPage().onExitPage ~= nil) then
+		self:GetCurrentPage().onExitPage(self)
 	end
 
 	-- set next page
@@ -97,6 +108,11 @@ function Site:GoToPage(pageName)
 	self.sendMessagePhase = 1
 	self.sequencing = false
 
+
+	-- let the page run custom logic
+	if (page.onEnterPage ~= nil) then
+		page.onEnterPage(self)
+	end
 
 	-- go right into details mode for the message
 	if (page.type == "message") then
@@ -268,9 +284,12 @@ function Site:GetDownloadEntries(page)
 
 
 	for i,v in ipairs(page.items) do
-		if (v.software == nil) then
+		if (v.comLinkLevel ~= nil and self.passwordLevel >= v.passwordLevel) then
+			-- skip
+
+		elseif (v.software == nil) then
 			table.append(entries, {
-				x = 10, y = 4 + i,
+				x = 10, y = 3 + i,
 				text = string.format("%s. %s", v.key:upper(), v.text),
 				clickId = i,
 				key = v.key,
@@ -279,7 +298,7 @@ function Site:GetDownloadEntries(page)
 			local name = Items[v.software].name
 			local version = Items[v.software].version
 			table.append(entries, {
-				x = 10, y = 4 + i,
+				x = 10, y = 3 + i,
 				text = string.format("%s. %s %d.0", v.key, name, version),
 				clickId = i,
 				key = v.key,
@@ -288,13 +307,13 @@ function Site:GetDownloadEntries(page)
 	end
 
 	if (self.downloadPhase == 1) then
-		table.append(entries, { x = 0, y = self.sizeY - 2, text = "Transmitting . . ."})
+		table.append(entries, { x = 0, y = self.sizeY - 1, text = "Transmitting . . ."})
 	elseif (self.downloadPhase == 2) then
-		table.append(entries, { x = 0, y = self.sizeY - 2, text = "Transmitting . . . download complate"})
+		table.append(entries, { x = 0, y = self.sizeY - 1, text = "Transmitting . . . download complate"})
 	elseif (self.downloadPhase == 3) then
-		table.append(entries, { x = 0, y = self.sizeY - 2, text = "Transmitting . . . deck is full"})
+		table.append(entries, { x = 0, y = self.sizeY - 1, text = "Transmitting . . . deck is full"})
 	elseif (self.downloadPhase == 4) then
-		table.append(entries, { x = 0, y = self.sizeY - 2, text = "Transmitting . . . incompatible deck"})
+		table.append(entries, { x = 0, y = self.sizeY - 1, text = "Transmitting . . . incompatible deck"})
 	end
 
 	return entries
@@ -713,14 +732,19 @@ function Site:HandleClickedMore()
 end
 
 function Site:OnGenericContinueInput()
-	local page = self:GetCurrentPage()
+ 	local page = self:GetCurrentPage()
 
 	if (self.detailsIndex > 0) then
 		self.detailsIndex = 0
 	elseif (page.type == "generic" and page.exit ~= nil) then
 		self:GoToPage(page.exit)
 	elseif (self.currentPage == "title") then
-		self:GoToPage("password")
+		if (self.fromCyberspace) then
+			self.passwordLevel = #self.passwords
+			self:GoToPage("main")
+		else
+			self:GoToPage("password")
+		end
 	elseif (self.currentPage == "password") then
 		if (self.passwordFailed) then
 			self:Close()
@@ -823,7 +847,7 @@ function Site:StartSequencing()
 	self.sequencing = true
 	self.blockInput = true
 
-	local time = 10
+	local time = 8
 	StartTimer(time, self, function() self.sequencing = false; self.blockInput = false; self.passwordLevel = 1; end)
 
 	UpdateBoxes()

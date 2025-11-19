@@ -204,6 +204,9 @@ end
 function ShopBox:OnBoughtSoldNothing()
 end
 
+function ShopBox:OnBoughtSoldSomething()
+end
+
 function ShopBox:OnBoughtSoldItem(clickId)
 	if (self.isBasicItemShop) then
 		if (Items[self.items[clickId]].type == "software") then
@@ -231,7 +234,9 @@ function ShopBox:HandleClickedMore()
 end
 
 function ShopBox:HandleClickedExit()
-	if (not self.boughtSold) then
+	if (self.boughtSold) then
+		self:OnBoughtSoldSomething()
+	else
 		self:OnBoughtSoldNothing()
 	end
 

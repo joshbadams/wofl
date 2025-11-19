@@ -54,8 +54,11 @@ RegFellow = Site:new {
 				{ key = 'x', text = "Exit to Main", target = "main" },
 				{ key = '1', software = 212 }, -- BATTELCHESS 2.0
 				{ key = '2', software = 261 }, -- SCOUT 1.0
+				{ key = '3', software = 254, condition = function(self) return self.level == 2 end }, -- PROBE 3.0
 			},
 		},
+		
+		['critic'] = {},
 	},
 	
 	-- Coord.--0-208/32  AI--none

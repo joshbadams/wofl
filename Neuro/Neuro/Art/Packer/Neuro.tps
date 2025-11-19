@@ -34,7 +34,7 @@
         <key>dataFormat</key>
         <string>json-array</string>
         <key>textureFileName</key>
-        <filename>../../Resources/Neuruomancer/Neuro{n1}.png</filename>
+        <filename>../../Resources/Neuromancer/Neuro{n1}.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>pvrQualityLevel</key>
@@ -173,6 +173,37 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">Untitled 109.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>315,142,630,284</rect>
+                <key>scale9Paddings</key>
+                <rect>315,142,630,284</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">asano.png</key>
+            <key type="filename">streetmain2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>304,113,608,225</rect>
+                <key>scale9Paddings</key>
+                <rect>304,113,608,225</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">berne.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -185,6 +216,36 @@
                 <rect>304,114,608,228</rect>
                 <key>scale9Paddings</key>
                 <rect>304,114,608,228</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">bernegirl.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>27,33,54,66</rect>
+                <key>scale9Paddings</key>
+                <rect>27,33,54,66</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">bernemanager.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>303,114,605,227</rect>
+                <key>scale9Paddings</key>
+                <rect>303,114,605,227</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -240,6 +301,7 @@
                 <false/>
             </struct>
             <key type="filename">deane.png</key>
+            <key type="filename">gemeinschaft.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -345,6 +407,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">fujihq.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>305,113,609,225</rect>
+                <key>scale9Paddings</key>
+                <rect>305,113,609,225</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">gentlemanloser.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -372,6 +449,21 @@
                 <rect>304,117,607,234</rect>
                 <key>scale9Paddings</key>
                 <rect>304,117,607,234</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">hosaka.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>305,114,610,227</rect>
+                <key>scale9Paddings</key>
+                <rect>305,114,610,227</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -495,6 +587,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">musabori.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>306,115,611,230</rect>
+                <key>scale9Paddings</key>
+                <rect>306,115,611,230</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">nurse.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -523,6 +630,36 @@
                 <rect>307,114,613,227</rect>
                 <key>scale9Paddings</key>
                 <rect>307,114,613,227</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">pong.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>305,115,609,230</rect>
+                <key>scale9Paddings</key>
+                <rect>305,115,609,230</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">sensenet.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,117,613,234</rect>
+                <key>scale9Paddings</key>
+                <rect>307,117,613,234</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -678,21 +815,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">streetmain2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>304,113,608,225</rect>
-                <key>scale9Paddings</key>
-                <rect>304,113,608,225</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">streetmain4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -720,6 +842,36 @@
                 <rect>307,116,613,231</rect>
                 <key>scale9Paddings</key>
                 <rect>307,116,613,231</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streetmid1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>307,115,613,229</rect>
+                <key>scale9Paddings</key>
+                <rect>307,115,613,229</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">streetmid2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>309,115,617,230</rect>
+                <key>scale9Paddings</key>
+                <rect>309,115,617,230</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -756,6 +908,7 @@
         <key>ignoredWarnings</key>
         <array>
             <string>try-pro-features</string>
+            <string>large-max-texture-size</string>
         </array>
         <key>commonDivisorX</key>
         <uint>1</uint>

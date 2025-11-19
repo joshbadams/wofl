@@ -1,9 +1,11 @@
 InvPhase = {
 	List = {},
 	Software = {},
+	EraseSoftware = {},
 	Action = {},
 	Amount = {},
 	ConfirmDiscard = {},
+	ConfirmErase = {},
 	ConfirmGive = {},
 	Login = {},
 	LoginError = {},
@@ -46,13 +48,17 @@ function InvBox:GetEntries()
 
 	if (self.phase == InvPhase.List) then
 		self:GetInvEntries(entries, s.inventory, "Items")
-	elseif (self.phase == InvPhase.Software) then
+	elseif (self.phase == InvPhase.Software or self.phase == InvPhase.EraseSoftware) then
 		self:GetInvEntries(entries, s.software, "Software")
 	elseif (self.phase == InvPhase.Action) then
 		self:GetActionEntries(entries)
 	elseif (self.phase == InvPhase.Amount) then
 		self:GetAmountEntries(entries)
 	elseif (self.phase == InvPhase.ConfirmDiscard) then
+		self:GetConfirmEntries(entries)
+	elseif (self.phase == InvPhase.ConfirmErase) then
+		self:GetConfirmEntries(entries)
+	elseif (self.phase == InvPhase.ConfirmGive) then
 		self:GetConfirmEntries(entries)
 	elseif (self.phase == InvPhase.Login) then
 		self:GetLoginEntries(entries)
@@ -72,9 +78,10 @@ function InvBox:GetEntries()
 end
 
 function InvBox:GetInvEntries(entries, inv, heading)
-print("inv entries", self.page, self.numInvPerPage, numItems)
 
 	local numItems = table.count(inv)
+
+print("inv entries", self.page, self.numInvPerPage, numItems)
 
 	if (self.page > 0 and self.page * self.numInvPerPage >= numItems) then
 		self.page = self.page - 1
@@ -129,9 +136,13 @@ function InvBox:GetAmountEntries(entries)
 end
 
 function InvBox:GetConfirmEntries(entries)
+print("GetConfirmEntries", self.invItemId)
 	local header = "Discard"
 	if (self.phase == InvPhase.ConfirmGive) then
 		header = "Give"
+	end
+	if (self.phase == InvPhase.ConfirmErase) then
+		header = "Erase"
 	end
 	table.append(entries, { x = self:CenteredX(header), y = 0, text = header })
 	table.append(entries, { x = 2, y = 3, text = GetItemDesc(self.invItemId) })
@@ -168,7 +179,7 @@ function InvBox:HandleClickedEntry(id)
 		return
 	end
 
-	print("Inv clicked", self, self.phase, id)
+	print("Inv clicked", self, self.phase, id, self.invItem)
 
 	if (self.phase == InvPhase.List) then
 		self.invItem = id
@@ -178,19 +189,27 @@ function InvBox:HandleClickedEntry(id)
 		self:PerformAction(id)
 	elseif (self.phase == InvPhase.Software) then
 		self:UseSoftware(id)
+	elseif (self.phase == InvPhase.EraseSoftware) then
+		self.invItem = id
+		self.invItemId = s.software[self.invItem]
+		self.phase = InvPhase.ConfirmErase
 	elseif (self.phase == InvPhase.ConfirmGive) then
 		if (id == InvAction.Yes) then
+			self:Close()
 			currentRoom:GiveItem(self.invItem)
 			table.removeArrayItem(s.inventory, self.invItemId)
 		end
 		self.phase = InvPhase.List
 	elseif (self.phase == InvPhase.ConfirmDiscard) then
 		if (id == InvAction.Yes) then
-print("size before rmeove", table.count(s.inventory))
 			table.removeArrayItem(s.inventory, self.invItemId)
-print("size after rmeove", table.count(s.inventory))
 		end
 		self.phase = InvPhase.List
+	elseif (self.phase == InvPhase.ConfirmErase) then
+		if (id == InvAction.Yes) then
+			table.removeArrayItem(s.software, self.invItemId)
+		end
+		self.phase = InvPhase.EraseSoftware
 	end
 end
 
@@ -200,6 +219,7 @@ function InvBox:HandleClickedExit()
 end
 
 function InvBox:HandleClickedMore()
+print("clicked more", self.page, self.numPages)
 	self.page = self.page + 1
 	if (self.page == self.numPages) then self.page = 0 end
 end
@@ -266,13 +286,16 @@ function InvBox:PerformAction(action)
 	if (action == InvAction.Exit) then
 		self.phase = InvPhase.List
 	elseif (action == InvAction.Operate) then
+		self.page = 0
 		if (item.type == "deck") then
 			self.phase = InvPhase.Software
+			self.numPages = math.ceil(#s.software / self.numInvPerPage);
 			s.currentDeckId = self.invItemId
 		elseif (item.type == "skill") then
 			self:UseSkill()
 		end
 	elseif (action == InvAction.Give) then
+print("giving ", self.invItemId)
 		-- credits are special
 		if (self.invItemId == 0) then
 			self.phase = InvPhase.Amount
@@ -287,6 +310,10 @@ function InvBox:PerformAction(action)
 			self.phase = InvPhase.ConfirmDiscard
 		end
 	elseif (action == InvAction.Erase) then
+		self.page = 0
+		self.phase = InvPhase.EraseSoftware
+		self.numPages = math.ceil(#s.software / self.numInvPerPage);
+		s.currentDeckId = self.invItemId
 	end
 		
 end
@@ -374,7 +401,7 @@ SkillBox = Gridbox:new {
 function SkillBox:OpenBox()
 	self.page = 0
 	self.numSkillsPerPage = self.sizeY - 2;
-	self.numPages = math.ceil(#s.inventory / self.numSkillsPerPage);
+	self.numPages = math.ceil(#s.skills / self.numSkillsPerPage);
 end
 
 function SkillBox:HandleClickedEntry(id)
@@ -428,5 +455,6 @@ function SkillBox:HandleClickedExit()
 end
 
 function SkillBox:HandleClickedMore()
+print("clicked more", self.page, self.numPages, #s.skills, self.numSkillsPerPage)
 	self.page = (self.page + 1) % self.numPages
 end

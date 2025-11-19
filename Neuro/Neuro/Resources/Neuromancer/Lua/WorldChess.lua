@@ -2,12 +2,13 @@ s.chessMembership = 0
 s.chessOpponentLevel = 1
 WorldChess = Site:new {
 	title = "* World Chess Confederation *",
-	
 	passwords = {
 		"novice",
 		"member",
 		"<cyberspace>"
 	},
+	baseX = 160,
+	baseY = 80,
 	
 	pages = {
 		['title'] = {

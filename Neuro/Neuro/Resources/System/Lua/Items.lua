@@ -63,31 +63,35 @@ Items = {
 		name = "Security Pass",
 		cost = 4000
 	},
-	
-	[100] = Deck:new { capacity =  5, buggy = true,  cyberspace = false, cost = 0,     manufacturer = "Yamamitsu", name = "UXB" },
-	[101] = Deck:new { capacity =  6, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Yamamitsu", name = "XXB" },
+	[7] = Item:new {
+		name = "gas mask",
+		cost = 300
+	},
+
+	[100] = Deck:new { capacity =  5, buggy = true,  cyberspace = false, cost = 1000,  manufacturer = "Yamamitsu", name = "UXB" },
+	[101] = Deck:new { capacity =  6, buggy = false, cyberspace = false, cost = 3100,  manufacturer = "Yamamitsu", name = "XXB" },
 	[102] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 7200,  manufacturer = "Yamamitsu", name = "ZXB" },
 	[103] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 1000,  manufacturer = nil, name = "Blue Light Special" },
-	[104] = Deck:new { capacity =  5, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Ausgezeichnet", name = "188 BJB" },
+	[104] = Deck:new { capacity =  5, buggy = false, cyberspace = false, cost = 1400,  manufacturer = "Ausgezeichnet", name = "188 BJB" },
 	[105] = Deck:new { capacity = 11, buggy = false, cyberspace = false, cost = 7500,  manufacturer = "Ausgezeichnet", name = "350 SL" },
-	[106] = Deck:new { capacity = 15, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Ausgezeichnet", name = "440 SDI" },
-	[107] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ausgezeichnet", name = "550 GT" },
+	[106] = Deck:new { capacity = 15, buggy = false, cyberspace = false, cost = 18900, manufacturer = "Ausgezeichnet", name = "440 SDI" },
+	[107] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 22600, manufacturer = "Ausgezeichnet", name = "550 GT" },
 	[108] = Deck:new { capacity =  5, buggy = false, cyberspace = false, cost = 2000,  manufacturer = "Moriyama", name = "Hiki-Gaeru" },
 	[109] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 3600,  manufacturer = "Moriyama", name = "Gaijin" },
 	[110] = Deck:new { capacity = 12, buggy = false, cyberspace = false, cost = 7700,  manufacturer = "Moriyama", name = "Bushido" },
 	[111] = Deck:new { capacity = 15, buggy = false, cyberspace = false, cost = 10000, manufacturer = "Moriyama", name = "Edokko" },
-	[112] = Deck:new { capacity = 18, buggy = false, cyberspace = false, cost = 0,     manufacturer = "Moriyama", name = "Katana" },
-	[113] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Moriyama", name = "Tofu" },
-	[114] = Deck:new { capacity = 24, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Moriyama", name = "Shogun" },
-	[115] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 0,     manufacturer = nil, name = "Ninja 2000" },
+	[112] = Deck:new { capacity = 18, buggy = false, cyberspace = false, cost = 19200, manufacturer = "Moriyama", name = "Katana" },
+	[113] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 23100, manufacturer = "Moriyama", name = "Tofu" },
+	[114] = Deck:new { capacity = 24, buggy = false, cyberspace = true,  cost = 28900, manufacturer = "Moriyama", name = "Shogun" },
+	[115] = Deck:new { capacity = 10, buggy = false, cyberspace = false, cost = 4400,  manufacturer = nil, name = "Ninja 2000" },
 	[116] = Deck:new { capacity = 12, buggy = false, cyberspace = false, cost = 8400,  manufacturer = nil, name = "Ninja 3000" },
-	[117] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = nil, name = "Ninja 4000" },
-	[118] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 0,     manufacturer = nil, name = "Ninja 5000" },
-	[119] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 0,     manufacturer = nil, name = "Samurai Seven" },
-	[120] = Deck:new { capacity = 11, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace II" },
-	[121] = Deck:new { capacity = 15, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace III" },
-	[122] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace VI" },
-	[123] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 0,     manufacturer = "Ono-Sendai", name = "Cyberspace VII" },
+	[117] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 23300, manufacturer = nil, name = "Ninja 4000" },
+	[118] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 32000, manufacturer = nil, name = "Ninja 5000" },
+	[119] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 32500, manufacturer = nil, name = "Samurai Seven" },
+	[120] = Deck:new { capacity = 11, buggy = false, cyberspace = true,  cost = 18000, manufacturer = "Ono-Sendai", name = "Cyberspace II" },
+	[121] = Deck:new { capacity = 15, buggy = false, cyberspace = true,  cost = 22000, manufacturer = "Ono-Sendai", name = "Cyberspace III" },
+	[122] = Deck:new { capacity = 20, buggy = false, cyberspace = true,  cost = 48700, manufacturer = "Ono-Sendai", name = "Cyberspace VI" },
+	[123] = Deck:new { capacity = 25, buggy = false, cyberspace = true,  cost = 56000, manufacturer = "Ono-Sendai", name = "Cyberspace VII" },
 	
 	
 	[199] = Comlink:new {
@@ -436,22 +440,22 @@ Items = {
 	[268] = Software:new {
 		name = "ThunderHead",
 		version = 1,
-		scope = "ice",
+		scope = "ai",
 	},
 	[269] = Software:new {
 		name = "ThunderHead",
 		version = 2,
-		scope = "ice",
+		scope = "ai",
 	},
 	[270] = Software:new {
 		name = "ThunderHead",
 		version = 3,
-		scope = "ice",
+		scope = "ai",
 	},
 	[271] = Software:new {
 		name = "ThunderHead",
 		version = 4,
-		scope = "ice",
+		scope = "ai",
 	},
 	
 	
@@ -463,7 +467,19 @@ Items = {
 		name = "Chaos Videosoft",
 		version = 3,
 	},
-	
+	[282] = FakeSoftware:new {
+		name = "PikUpGirls",
+		version = 1,
+	},
+	[283] = FakeSoftware:new {
+		name = "BudgetPal",
+		version = 24,
+	},
+	[284] = FakeSoftware:new {
+		name = "Recipt Forger",
+		version = 7,
+	},
+
 	[300] = Organ:new { name = "Heart", sell=6000, buy=6600, hp = 200 },
 	[301] = Organ:new { name = "Eyes (2)", sell=5000, buy=6500, hp = 150 },
 	[302] = Organ:new { name = "Lungs (2)", sell=3000, buy=3300, hp = 150 },
@@ -504,7 +520,8 @@ Items = {
 	[410] = Skill:new { name = "Logic", cost = 1000, scope = "???" },
 	[411] = Skill:new { name = "Warez Analysis", cost = 1000, scope = "???" },
 	[412] = Skill:new { name = "Musicianship", cost = 1000, scope = "???" },
-	[413] = Skill:new { name = "Zen", cost = 1000, scope = "???" },
+	[413] = Skill:new { name = "Zen", cost = 0, scope = "???" },
+	[414] = Skill:new { name = "Sophistry", cost = 0, scope = "???" },
 }
 
 CryptoDecode = {

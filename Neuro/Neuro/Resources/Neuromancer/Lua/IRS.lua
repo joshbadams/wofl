@@ -24,7 +24,8 @@ IRS = Site:new {
 				{ key = '1', text = "TaxInfo Board", target = "irsboard" },
 				{ key = '2', text = "Supervisor's Notice", target = "notice", level = 2 },
 				{ key = '3', text = "Special Audit Report", target = "auditreport", level = 2 },
-				{ key = '4', text = "View Audit List", target = "auditlist", level = 2 }
+				{ key = '4', text = "View Audit List", target = "auditlist", level = 2 },
+				{ key = '5', text = "Software Library", target = "software", level = 3 },
 			}
 		},
 		
@@ -113,7 +114,17 @@ IRS = Site:new {
 					message = "Reason: Tax evasion."
 				},
 			}
-		}
+		},
+		['software'] = {
+			type = "download",
+			items = {
+				{ key = 'x', text = "Exit to Main", target = "main" },
+				{ key = '1', software = 243 }, -- Jammies 1.0
+				{ key = '2', software = 233 }, -- Hammer 2.0
+				{ key = '3', software = 251 }, -- Mimc 1.0
+			}
+		},
+
 		
 	}
 	

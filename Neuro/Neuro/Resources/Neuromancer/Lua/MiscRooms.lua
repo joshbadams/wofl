@@ -35,6 +35,12 @@ MassageParlor = Room:new {
 			options =
 			{
 				{
+					condition = function(self) return s.usingCopTalk >= 1 end,
+					line = "Top of the mornin'! You're under arrest unless you answer some questions.",
+					response = "I just remembered I have an urgent dentist appointment! Excuse me!",
+					onEnd = function(self) self.stoptalking = true end,
+				},
+				{
 					line = "I'm sure I'll think of something.",
 					onEnd = function(self) print("self", self); self:ActivateConversation("lawbot") end
 				},
@@ -85,7 +91,7 @@ end
 massageparlor = MassageParlor
 
 function MassageParlor:OnEnterRoom()
-	print("massage salf", self)
+	self.stoptalking = false
 	Room.OnEnter(self)
 end
 
@@ -226,6 +232,10 @@ DeaneSkillShop = ShopBox:new {
 	items = { 406, 407, 408, 409 },
 }
 
+DeaneGasMaskShop = ShopBox:new {
+	items = { 7 },
+}
+
 s.deane = 1
 Deane = Room:new {
 	name = "deane",
@@ -247,6 +257,12 @@ Deane = Room:new {
 		{
 			condition = function() return s.deane == 1; end,
 			options = {
+				{
+					condition = function(self) return s.usingCopTalk > 0 end,
+					line = "Sure and begorrah. I'm a cop.",
+					response = "You're no cop. You're a jerk. Get out of here!",
+					onEnd = function() GoToRoom(self.west); end
+				},
 				{
 					line = "I'm just looking around right now.",
 					response = "Go hand around someone else's office. I'm a busy man.",
@@ -294,7 +310,7 @@ Deane = Room:new {
 		
 		{
 			tags = { "_unknownentry" },
-			lines = { "TEMP TEXT" },
+			lines = { "That's something I don't know about. " },
 		},
 		{
 			tags = { "_cryptology", "_upgrade", "_upgrades" },
@@ -384,6 +400,12 @@ PantherModerns = Room:new {
 		{
 			condition = function() return s.moderns == 1; end,
 			options = {
+				{
+					condition = function(self) return s.usingCopTalk >= 1 end,
+					line = "Top of the mornin'! I arrested your friend and I'll do the same to you unless you answer some questions.",
+					response = "It's not the morning and you're not a cop. Drop the act and take a hike.",
+					onEnd = function(self) GoToRoom('streetcenter1') end,
+				},
 				{
 					line = "Lupus, my man! I hear you're the kind of guy who helps stray cowboys. Can you answer some questions for me?",
 					onEnd = function(self) self:ActivateConversation("mattshaw"); end
@@ -530,6 +552,12 @@ Metro = Room:new {
 			options =
 			{
 				{
+					condition = function(self) return s.usingCopTalk > 0 end,
+					line = "Sure and begorrah. You wouldn't be selling illegal software, would you?",
+					response = "Geez, my mistake, I'm fresh out of inventory today, officer! Sorry.",
+					onEnd = function() self:ActivateConversation(self.south); end
+				},
+				{
 					line = "Yeah, Finn. I'm looking for some hot softwarez.",
 					response = "You want software, you got software.",
 					onEnd = function() s.metro = 4; OpenBox("MetroShop"); end
@@ -624,6 +652,11 @@ MatrixChipShop = ShopBox:new {
 	}
 }
 
+-- TODO
+MatrixSkillShop = ShopBox:new {
+	
+}
+
 
 s.matrix = 0
 Matrix = Room:new {
@@ -662,10 +695,6 @@ Matrix = Room:new {
 					line = "Got any old chips you want to sell?",
 					response = "Have I got chips! I've got Logic, Software Analysis, and Musicianship. For you, I'll charge $1000 each.",
 					onEnd = function(self) OpenBox("MatrixChipShop") end
-				},
-				{
-					line = "Hey what do you know about",
-					hasTextEntry=true,
 				},
 				{
 					line = "Hey what do you know about",
@@ -976,6 +1005,123 @@ function Hitachi:OnExitRoom()
 	StopTimer(self.timer);
 end
 
+SenseNet = Room:new {
+	name = "sensenet",
+	onEnterConversation = "onEnter",
+	hasPerson = true,
+
+	north = "streeteast2",
+	
+	longDescription = "Lobby of the Sense/Net headquearters building. There is a Librarian computer terminal on one wall. The security scanner activates at your arrival.",
+	description = "Lobby of the Sense/Net headquearters building.",
+	
+	conversations = {
+		{
+			tag = "onEnter",
+			lines = { "You have 30 seconds to produce your security pass. Failure to comply will result in your removal." },
+			onEnd = function(self) self.timer = StartTimer(3, self, function(self) self:Timeout() end) end,
+		},
+		{
+			tag = "pass",
+			lines = { "Clearance approved. You know have limited access to the Librarian.",
+				"Please enter the identity number of the ROM Construct you require from the Sense/Net library vault:",			},
+			onEnd = function(self) self:ActivateConversation("id") end,
+		},
+		{
+			tag = "id",
+			noCancel = true,
+			options = {
+				line = "",
+				hasTextEntry = true
+			}
+		},
+		
+		{
+			tags = { "_unknownentry" },
+			lines = { "Identity number invalid. Try again if you made an error. You are allowed 3 library access attempts." },
+			onEnd = function(self)
+				self.attempts = self.attempts + 1
+				if (self.attempts < 3) then
+					self:ActivateConversation("id")
+				else
+					ShowMessage("You were arrested", function(self) GoToRoom(self.north) end, true)
+				end
+			end,
+		}
+	}
+}
+sensenet = SenseNet
+
+function SenseNet:Timeout()
+	ShowMessage("You are kicked out of Sense/Net for not producing a security pass. ", function() GoToRoom(self.north) end, true)
+end
+
+function SenseNet:GiveItem(id)
+	-- security pass
+	if (id == 6) then
+		self:ActivateConversation("pass")
+	end
+end
+
+
+
+Musabori = Room:new {
+	name = "musabori",
+	hasJack = true,
+
+	west = "streeteast2",
+	
+	longDescription = "You're in the corporate headquarters of the Musabori zaibatsu. There is a cyberspace jack on one wall.",
+	description = "You're in the corporate headquarters of the Musabori zaibatsu.",
+}
+musabori = Musabori
+
+FujiHQ = Room:new {
+	name = "fujihq",
+	hasJack = true,
+
+	east = "streeteast1",
+	
+	longDescription = "You're in the corporate headquarters of the Fuji Electric zaibatsu. There is a cyberspace jack on one wall.",
+	description = "You're in the corporate headquarters of the Fuji Electric zaibatsu.",
+}
+fujihq = FujiHQ
+
+s.paycheck = 0
+Hosaka = Room:new {
+	name = "hosaka",
+	hasJack = true,
+
+	west = "streeteast1",
+	
+	longDescription = "You're in the corporate headquarters of the Hosaka zaibatsu. There is a cyberspace jack on one wall.",
+	description = "You're in the corporate headquarters of the Hosaka zaibatsu.",
+}
+hosaka = Hosaka
+
+function Hosaka:HandleEnter(desc)
+	if (s.paycheck == 0) then
+		local message = desc .. "\n\nAs you pass through the doorway, the accounting computer recognizes you as an employee and generates your weekly paycheck, depositing the amount directly into your credit chip."
+		ShowMessage(message, function(self) s.money = s.money + 10000 end)
+		s.paycheck = s.date
+		
+		return false
+	end
+
+	return true
+end
+
+function Hosaka:OnFirstEnter()
+	if (self:HandleEnter(self.longDescription)) then
+		Room.OnFirstEnter(self)
+	end
+end
+
+function Hosaka:OnEnter()
+	if (self:HandleEnter(self.description)) then
+		Room.OnEnter(self)
+	end
+end
 
 --------------------------
 s.spaceport = 0
@@ -999,6 +1145,12 @@ Spaceport = Room:new {
 		
 		{
 			options = {
+				{
+					condition = function(self) return s.usingCopTalk > 0 end,
+					line = "Sure and begorrah, you're a fine looking lass. Have you got a special fare for police officers?",
+					response = "Of course, officer. We have flights to Freeside for $1000 and Zion Cluster for $500. Where would you like to go?",
+					onEnd = function(self) self:ActivateConversation("ticketoptions") end,
+				},
 				{
 					line = "I'd like to buy a ticket.",
 					onEnd = function(self) self:ActivateConversation("buyticket") end,
@@ -1068,5 +1220,377 @@ function Spaceport:BuyTicket(dest)
 		s.money = s.money - cost
 		s.flightdest = dest
 		GoToRoom("shuttle")
+	end
+end
+
+--------------------------
+-- STANDARD
+-- BLue Light, 10, 1000
+-- 188BJB, 5,  1400
+-- UXB, 5, 1800
+-- Hiki Gauru, 5, 2000
+-- Gaijin, 10, 3600
+-- Ninja 2000, 10, 4400
+-- Ninja 3000, 12, 8800
+-- Edokko, 15, 10000
+-- Cyberspace II, 11, 18000
+-- Katana, 18, 19200
+-- Cyberspace III, 15, 22000
+-- Tofu, 20, 23100
+-- Ninja 4000, 20, 23300
+-- Shogun, 24, 28900
+-- Ninja 5000, 32000
+-- Samurai Seven, 25, 32500
+-- Cyberspace Vii, 25, 56000
+
+AsanoShop = ShopBox:new {
+	items = {
+		103,
+		104,
+		100,
+		108,
+		109,
+		115,
+		116,
+		111,
+		120,
+		112,
+		121,
+		113,
+		117,
+		114,
+		118,
+		119,
+		123,
+	},
+}
+
+AsanoCopShop = ShopBox:new {
+	items = {
+		103,
+		104,
+		100,
+		108,
+		109,
+		115,
+		116,
+		111,
+	},
+}
+
+-- GNAT'S EYEBALL
+-- BLue Light, 10, 		800
+-- 188BJB, 5,  			1400
+-- UXB, 5, 				1440
+-- Hiki Gauru, 5, 		1120
+-- Gaijin, 10, 			2880
+-- Ninja 2000, 10, 		3520
+-- Ninja 3000, 12, 		6720
+-- Edokko, 15, 			8000
+-- Cyberspace II, 11, 	14400
+-- Katana, 18, 			15360
+-- Cyberspace III, 15, 	17600
+-- Tofu, 20, 			18480
+-- Ninja 4000, 20, 		18640
+-- Shogun, 24, 			23120
+-- Ninja 5000, 25, 		25600
+-- Samurai Seven, 25, 	26000
+-- Cyberspace Vii, 25, 	44800
+
+
+AsanoCheapShop = AsanoShop:new {
+	overridePrices = {
+		[103] = 800,
+		[104] = 1400,
+		[100] = 1440,
+		[108] = 1120,
+		[109] = 2880,
+		[115] = 3520,
+		[116] = 6720,
+		[111] = 8000,
+		[120] = 14400,
+		[112] = 15360,
+		[121] = 17600,
+		[113] = 18480,
+		[117] = 18640,
+		[114] = 23120,
+		[118] = 25600,
+		[119] = 26000,
+		[123] = 44800,
+	},
+}
+
+function AsanoShop:OnBoughtSoldNothing()
+	currentRoom:ActivateConversation("onBoughtNothing")
+end
+
+function AsanoShop:OnBoughtSoldSomething()
+	currentRoom:ActivateConversation("onBoughtSomething")
+end
+
+
+s.asano = 0
+Asano = Room:new {
+	name = "asano",
+	onEnterConversation = function()
+			if s.asano == 0 then return "onEnter" end
+			return "onEnterAnnoyed"
+		end,
+	hasPerson = true,
+	
+	west = "streetmid2",
+	
+	longDescription = "You're in Asano Computing.",
+	description = "You're in Asano Computing.",
+	
+	conversations = {
+		{
+			tag = "onEnter",
+			lines = { "Welcome to my humble shop! I have the best of everything for customers, such as yourself who appreciate quality." },
+		},
+		{
+			tag = "onEnterAnnoyed",
+			lines = { "I hope you have reconsidered who your friends are, now." },
+			onEnd = function(self) s.asano = 0; end,
+		},
+		{
+			tag = "onBoughtNothing",
+			lines = { function(self) if (s.usingCopTalk > 0) then return "Come back anytime, officer." end; return "Come back again when you feel like buying." end },
+			onEnd = function(self) GoToRoom(self.west); end,
+		},
+		{
+			tag = "onBoughtSomething",
+			lines = { "Try Metro Holografix for softwarez! Come back again soon!" },
+			onEnd = function(self) GoToRoom(self.west); end,
+		},
+		{
+			options = {
+				{
+					condition = function(self) return s.usingCopTalk > 0 end,
+					line = "Sure and begorrah. I'm looking for a new deck for the police station.",
+					response = "Police? I can sell you any legal non-cyberspace deck you require!",
+					onEnd = function(self) OpenBox("AsanoCopShop") end,
+				},
+				{
+					line = "Uhh, what's the, uh...cheapest...deck you carry?",
+					response = "Cheapest? The Blue Light Special. But you don't want one of those. Consider a real man's deck, like an Ono-Sendai!",
+					onEnd = function(self) OpenBox("AsanoShop") end,
+				},
+				{
+					line = "I'm just browsing right now.",
+					response = "Certainly. Can I answer any questions?",
+					onEnd = function(self) self:ActivateConversation("answerQuestions"); end,
+				},
+				{
+					line = "Why does Crazy Edo call you a pig?",
+					response = "A pig? Edo is the son of a turtle! May the gods poke him with pointed sticks when he dies!",
+					onEnd = function(self) self:ActivateConversation("edo"); end,
+				},
+			}
+		},
+		{
+			tag = "answerQuestions",
+			noCancel = true,
+			options = {
+				{
+					line = "Leave me alone! I said I'm just browsing! Get the hint?",
+					onEnd = function(self) GoToRoom(self.west); end,
+				},
+				{
+					line = "Tell me about this cyberdeck:",
+					hasTextEntry = true,
+				},
+			}
+		},
+		{
+			tag = "edo",
+			noCancel = true,
+			options = {
+				{
+					line = "You dpn't like Edo, do you? I'm pretty good at noticing these things.",
+					response = "Edo is a goat's armpit! You aren't a friend of his, are you?",
+					onEnd = function(self) self:ActivateConversation("edoFriend") end,
+				},
+				{
+					line = "I've heard Edo is a pretty good guy.",
+					response = "Edo is a goat's armpit! You aren't a friend of his, are you?",
+					onEnd = function(self) self:ActivateConversation("edoFriend") end,
+				},
+			}
+		},
+		{
+			tag = "mainOptions",
+			noCancel = true,
+			options = {
+				{
+					line = "Tell me about this cyberdeck:",
+					hasTextEntry = true,
+				},
+				{
+					line = "Uhh, what's the, uh...cheapest...deck you carry?",
+					response = "Cheapest? The Blue Light Special. But you don't want one of those. Consider a real man's deck, like an Ono-Sendai!",
+					onEnd = function(self) OpenBox("AsanoShop") end,
+				},
+				{
+					line = "Why does Crazy Edo call you a pig?",
+					response = "A pig? Edo is the son of a turtle! May the gods poke him with pointed sticks when he dies!",
+					onEnd = function(self) self:ActivateConversation("edo"); end,
+				},
+				{
+					line = "Thanks for your help. I'll check back with you later.",
+					onEnd = function(self) GoToRoom(self.west); end,
+				},
+			}
+		},
+		{
+			tag = "edoFriend",
+			noCancel = true,
+			options = {
+				{
+					line = "Well, yes, kind of...",
+					response = "Edo sleeps with small animals! Get out of my shop before I call a lawbot!",
+					onEnd = function(self) s.asano = 1; GoToRoom(self.west); end,
+				},
+				{
+					line = "Edo is my oldest and greatest friend!",
+					response = "Edo sleeps with small animals! Get out of my shop before I call a lawbot!",
+					onEnd = function(self) s.asano = 1; GoToRoom(self.west); end,
+				},
+				{
+					line = "Well, no, not really...",
+					response = "Good. I don't allow Crazy Edo's friends in my honorable establishment.",
+					onEnd = function(self) self:ActivateConversation("mainOptions"); end,
+				},
+				{
+					line = "Edo is a gnat's eyeball! He should be kicked in the head with a steel boot!",
+					response = "I see you are a wise person. It's an honor to have you in my shop.",
+					onEnd = function(self) OpenBox("AsanoCheapShop") end,
+				},
+			}
+		},
+
+		{
+			tags = { "_unknownentry" },
+			lines = { "Never heard of that deck." },
+			onEnd = function(self) self:ActivateConversation("mainOptions") end,
+		},
+		{
+			tags = { "_uxb", "_blue light", "_ninja 2000", "_ninja 3000", "_edokko",  },
+			lines = { "That's a low-end model. You can't get into cyberspace with it, but it will link into bulletin boards and such." },
+			onEnd = function(self) self:ActivateConversation("mainOptions") end,
+		},
+		{
+			tags = { "_cyberspace ii", "_cyberspace iii", "_katana", "_tofu", "_ninja 4000", "_shogun", "_ninja 5000", "_samurai seven", },
+			lines = { "That's a cyberspace deck. My personal favorite is the Ono-Sendai Cyberspace Seven with heavy shielding." },
+			onEnd = function(self) self:ActivateConversation("mainOptions") end,
+		},
+		{
+			tags = { "_cyberspace vii" },
+			lines = { "You can't do any better than that. It can carry 25 programs and has the best reliability of any deck." },
+			onEnd = function(self) self:ActivateConversation("mainOptions") end,
+		},
+	},
+}
+asano = Asano
+
+-----------------------------
+
+PongShop = ShopBox:new {
+	items = { 413, 414 }
+}
+
+Pong = Room:new {
+	name = "pong",
+	onEnterConversation = "onEnter",
+	hasPerson = true,
+	
+	south = "streetmid1",
+	
+	longDescription = "This is the House of Pong.",
+	description = "This is the House of Pong.",
+	
+	conversations = {
+		{
+			tag = "onEnter",
+			lines = { "Greetings, Pilgrim. Have you come to worship the One True Computer Game?" },
+		},
+		{
+			options = {
+				{
+					line = "I am but dust on your feet, O Great Nolan. I seek to learn the ways of the One True Computer Game.",
+					response = "Apprentice Monks must contemplate the mysteries of the One True Game for 20 years before they are allowed to play.",
+					onEnd = function(self) self:ActivateConversation("phase2") end,
+				},
+				{
+					line = "Worship a computer game? Get real!",
+					response = "Blasphemer! Heathen! Remove your unworthy self from this holy place!",
+					onEnd = function(self) GoToRoom(self.south); end,
+				},
+				{
+					line = "Oh, sorry. I thought this was the massage parlor.",
+					response = "Go in peace, wilson.",
+					onEnd = function(self) GoToRoom(self.south); end,
+				},
+			}
+		},
+		{
+			tag = "phase2",
+			noCancel = true,
+			options = {
+				{
+					line = "20 years! Are you out of your mind! It didn't take me that long to play Wasteland!",
+					response = "Then you are obviously unworth of an apprenticeship with the House of Pong. Good day!",
+					onEnd = function(self) self:ActivateConversation("contemplate") end,
+				},
+				{
+					line = "20 years. I see. That's a bit longer than I had planned to wait...",
+					response = "It is a long and hard road, but one that must be traveled. A caterpillar does not become a butterfly overnight.",
+					onEnd = function(self) self:ActivateConversation("phase3") end,
+				},
+			},
+		},
+		{
+			tag = "phase3",
+			noCancel = true,
+			options = {
+				{
+					line = "You're nuts! It already seems like I've been playing THIS game for 20 years!",
+					response = "Then you are obviously unworth of an apprenticeship with the House of Pong. Good day!",
+					onEnd = function(self) self:ActivateConversation("contemplate") end,
+				},
+				{
+					line = "All right. You must be leading up to something. What is it? I have to make a fool of myself, right?",
+					response = "Before you may become an apprentice Monk, you must go on a Great Quest for the Holy Joystick.",
+					onEnd = function(self) self:ActivateConversation("phase4") end,
+				},
+			},
+		},
+		{
+			tag = "phase4",
+			options = {
+				{
+					line = "Holy Joystick! Now I've heard everything. I'm leacing.",
+					response = "Then you are obviously unworth of an apprenticeship with the House of Pong. Good day!",
+					onEnd = function(self) GoToRoom(self.south) end,
+				},
+				{
+					line = "Okay, say I bring you this Holy Joystick. Then what happens?",
+					response = "Then the Masters can play Pong again. Our Joystick is worn down to a nub! Then I'll teach you Zen and Sophistry.",
+					onEnd = function(self) self:ActivateConversation("phase4") end,
+				},
+			},
+		},
+		{
+			tag = "joystick",
+			lines = { "You have the Holy Joystick! The Masters will be pleased! As a token of our gratitude, please accept these." },
+			onEnd = function(self) OpenBox("PongShop") end
+		},
+	},
+}
+pong = Pong
+
+function Pong:GiveItem(invIndex)
+	if (s.inventory[invIndex] == 5) then -- joystick
+		self:ActivateConversation("joystick")
 	end
 end

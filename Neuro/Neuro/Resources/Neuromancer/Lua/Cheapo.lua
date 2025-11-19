@@ -17,6 +17,9 @@ Cheapo = Site:new {
 		"guest",
 		"cockroach",
 	},
+	baseX = 112,
+	baseY = 112,
+
 	
 	pages = {
 		['title'] = {
@@ -89,8 +92,6 @@ Cheapo = Site:new {
 			type = "custom",
 		},
 	}
-	
-	-- Coord.--0-112/112  AI--none
 }
 -- lowercase
 cheapo = Cheapo
@@ -118,7 +119,7 @@ end
 
 function Cheapo:GetBillEntries(entries)
 	
-	table.append(entries, { x = 5, y = 2, text = string.format("Room: 92   Name: %s", name) })
+	table.append(entries, { x = 5, y = 2, text = string.format("Room: 92   Name: %s", s.name) })
 	table.append(entries, { x = 0, y = 3, text = "--------------------------------------------------------------------------" })
 	table.append(entries, { x = 0, y = 4, text = string.appendPadded("   ", "Total charges:", 26) .. s.cheapo_charges })
 	table.append(entries, { x = 0, y = 6, text = string.appendPadded("   ", "Balance:", 26) .. (s.cheapo_charges - s.cheapo_account) })
@@ -200,6 +201,11 @@ CheapHotel = Room:new {
 	hasPax = true,
 	hasJack = true,
 	
+	locX = 112,
+	locY = 96,
+	baseX = 112,
+	baseY = 112,
+
 	longDescription = "Cheap Hotel smells of cigarettes and cheap perfume. The roof is made of thin laminated matting that rattles in the wind. White fiberglass coffins serve as the rooms, stacked like surplus Godzilla teeth. Your coffin number is 92, three meters long with an oval hatch at the end. There is also a PAX booth here.",
 	description = "You're at the Cheap Hotel.",
 		

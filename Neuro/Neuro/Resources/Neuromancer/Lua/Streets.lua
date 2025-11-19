@@ -139,6 +139,7 @@ StreetMain3 = Room:new {
 	
 	west = "streetmain2",
 	east = "streetmain4",
+	north = "streetmid2",
 	south = "crazyedos",
 }
 streetmain3 = StreetMain3
@@ -211,6 +212,21 @@ StreetMain6 = Room:new {
 			tag = "_unknownentry",
 			lines = { "You appear to be lost. That company is not in the Chiba high-tech zone." }
 		},
+		{
+			tags = { "_fuji", "_musabori", "_sense/net" },
+			lines = { "You are not listed as an employee of the company you named. If you made a mistake, please try again." }
+		},
+		-- TODO:
+		-- "You are also not listed as an employee of that company. Please remain here while I summon the authorities"
+		{
+			tags = { "_hosaka", "_hosakacorp" },
+			lines = { function(self)
+				if (s.employed) then return "Domo arigato. You are cleared for entry." end
+				return "You are not listed as an employee of the company you named. If you made a mistake, please try again."
+				end
+			},
+			onEnd = function(self) if (s.employed) then s.securitybot = 2; self:RemoveAnimation("lasers"); end end,
+		},
 
 	},
 }
@@ -224,6 +240,22 @@ function StreetMain6:GetConnectingRoom(direction)
 	return Room.GetConnectingRoom(self, direction)
 end
 
+StreetMid1 = Room:new {
+	name = "streetmid1",
+	
+	north = "pong",
+	south = "streetmid2",
+}
+streetmid1 = StreetMid1
+
+StreetMid2 = Room:new {
+	name = "streetmid2",
+	
+	east = "asano",
+	north = "streetmid1",
+	south = "streetmain3",
+}
+streetmid2 = StreetMid2
 
 
 
@@ -232,6 +264,8 @@ StreetEast1 = Room:new {
 
 	north = "hitachi",
 	south = "streeteast2",
+	east = "hosaka",
+	west = "fujihq",
 }
 streeteast1 = StreetEast1
 
@@ -240,10 +274,19 @@ StreetEast2 = Room:new {
 	name = "streeteast2",
 
 	north = "streeteast1",
-	west = "streetmain6"
+	west = "streetmain6",
+	east = "musabori",
+	south = "sensenet",
 }
 streeteast2 = StreetEast2
 
+function StreetEast2:GetConnectingRoom(direction)
+	if ((direction == "south" or direction == "east") and not s.employed) then
+		return nil
+	end
+
+	return Room.GetConnectingRoom(self, direction)
+end
 
 FreesideStreet1 = Room:new {
 	name = "freesidestreet1",

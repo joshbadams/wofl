@@ -283,12 +283,12 @@ bool NeuroGame::ReorderBoxWithObj(LuaRef BoxObj, int Mode)
 	}
 	else if (Mode == 1)
 	{
-		WLOG("BEFORE:\n");
+//		WLOG("BEFORE:\n");
 		WoflWorld::Get()->Visit(false, true, false,	[](WoflSprite* Sprite)
 		{
 			int D = Sprite->GetDepth();
 			for (int i = 0; i < D; i++) WLOG("  ");
-			WLOG("%s\n", Sprite->Describe().c_str());
+//			WLOG("%s\n", Sprite->Describe().c_str());
 			return true;
 		});
 
@@ -297,12 +297,12 @@ bool NeuroGame::ReorderBoxWithObj(LuaRef BoxObj, int Mode)
 		Box->AddChild(InvButton);
 		InvButton->SetPosition(AbsPos);
 
-		WLOG("AFTER:\n");
+//		WLOG("AFTER:\n");
 		WoflWorld::Get()->Visit(false, true, false,	[](WoflSprite* Sprite)
 		{
 			int D = Sprite->GetDepth();
 			for (int i = 0; i < D; i++) WLOG("  ");
-			WLOG("%s\n", Sprite->Describe().c_str());
+//			WLOG("%s\n", Sprite->Describe().c_str());
 			return true;
 		});
 
@@ -442,7 +442,11 @@ void NeuroGame::Invalidate(ZoneType Zone)
 		{
 			if (bHasTextEntry)
 			{
-				Line += "\n-----------------------";
+				if (Line != "")
+				{
+					Line += "\n";
+				}
+				Line += "-----------------------";
 			}
 //			ScreenSprite->AddChild(DialogInputCatcher);
 			if (bIsThought)

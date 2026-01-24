@@ -12,13 +12,13 @@
 					<key>EndingColumnNumber</key>
 					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>403</string>
+					<string>410</string>
 					<key>StartingColumnNumber</key>
 					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>403</string>
+					<string>409</string>
 					<key>Timestamp</key>
-					<string>780116666.511292</string>
+					<string>785374731.793443</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,15 +34,16 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string></string>
+				<string>	// this will push the table
+</string>
 				<key>leading</key>
 				<string>bool Lua::CallFunction_NoReturn(TableSpec Table, FuncSpec Function) const
 {
 </string>
 				<key>trailing</key>
-				<string>	// this will push the table
-	CALL_FUNCTION_PREAMBLE();
+				<string>	CALL_FUNCTION_PREAMBLE();
 
+	CALL_FUNC(0, 0);
 </string>
 			</dict>
 			<key>type</key>

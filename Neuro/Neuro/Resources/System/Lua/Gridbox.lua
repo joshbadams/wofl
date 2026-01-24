@@ -10,12 +10,13 @@ Gridbox = LuaObj:new {
 function Gridbox:OpenBox()
 end
 
-function Gridbox:OnOpenBox(width, height, this)
+function Gridbox:OnOpenBox(width, height, this, tag)
 	self.detailsIndex = 0
 	self.sizeX = width
 	self.sizeY = height
 	self.cppthis = this
 	self.blockInput = false
+	self.openTag = tag
 
 	self.numMessagesPerPage = self.sizeY - 6
 	if self.numMessagesPerPage > 9 then

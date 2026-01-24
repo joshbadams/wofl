@@ -26,7 +26,7 @@ public:
 
 	virtual void Invalidate(ZoneType Zone) override;
 	
-	virtual LuaRef OpenBoxByName(const char* Name) override;
+	virtual LuaRef OpenBoxByName(const char* Name, const char* Tag=nullptr) override;
 	virtual bool CloseBoxWithObj(LuaRef BoxObj) override;
 	virtual bool ReorderBoxWithObj(LuaRef BoxObj, int Mode) override;
 

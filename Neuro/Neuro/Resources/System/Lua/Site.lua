@@ -28,7 +28,6 @@ function Site:OpenBox()
 
 	self:CheckAllPagesForUnlocks()
 
-	self.fromCyberspace = false
 	self.passwordLevel = 0
 	self.passwordFailed = false
 	if (#self.passwords > 0) then
@@ -43,8 +42,8 @@ end
 function Site:Close()
 	currentSite = nil
 	Gridbox.Close(self)
-	if (self.fromCyberspace) then
-		OpenBox("cyberspace")
+	if (self.openTag == "cyberspace") then
+		OpenBox("cyberspace", "exitsite")
 	end
 end
 
@@ -262,7 +261,10 @@ function Site:GetPasswordEntries(page)
 		table.append(entries, {x = X + 4, y = 6, text = "Access denied."})
 		self:GetButtonOrSpaceEntries(entries)
 	elseif (self.passwordLevel > 0) then
-		table.append(entries, {x = X, y = 4, text = self.passwords[self.passwordLevel]})
+		local displayPassword = self.passwords[self.passwordLevel]
+		if (displayPassword == "<sequencer>") then displayPassword = "no password" end
+
+		table.append(entries, {x = X, y = 4, text = displayPassword })
 		local message = "Cleared for level " .. self.passwordLevel .. " access."
 		table.append(entries, {x = self:CenteredX(message), y = 6, text = message})
 		self:GetButtonOrSpaceEntries(entries)
@@ -284,7 +286,7 @@ function Site:GetDownloadEntries(page)
 
 
 	for i,v in ipairs(page.items) do
-		if (v.comLinkLevel ~= nil and self.passwordLevel >= v.passwordLevel) then
+		if (v.level ~= nil and self.passwordLevel < v.level) then
 			-- skip
 
 		elseif (v.software == nil) then
@@ -739,7 +741,7 @@ function Site:OnGenericContinueInput()
 	elseif (page.type == "generic" and page.exit ~= nil) then
 		self:GoToPage(page.exit)
 	elseif (self.currentPage == "title") then
-		if (self.fromCyberspace) then
+		if (self.openTag == "cyberspace") then
 			self.passwordLevel = #self.passwords
 			self:GoToPage("main")
 		else
@@ -776,21 +778,23 @@ function Site:OnTextEntryComplete(text, tag)
 
 	if (tag == "password") then
 		self.passwordFailed = true
-		if (text == "1") then
-			self.passwordLevel = 1
-			self.passwordFailed = false
-		elseif (text == "2") then
-			self.passwordLevel = 2
-			self.passwordFailed = false
-		elseif (text == "3") then
-			self.passwordLevel = 3
-			self.passwordFailed = false
-		elseif (text == "4") then
-			self.passwordLevel = 4
-			self.passwordFailed = false
+		if (self.openTag == "debug") then
+			if (text == "1") then
+				self.passwordLevel = 1
+				self.passwordFailed = false
+			elseif (text == "2") then
+				self.passwordLevel = 2
+				self.passwordFailed = false
+			elseif (text == "3") then
+				self.passwordLevel = 3
+				self.passwordFailed = false
+			elseif (text == "4") then
+				self.passwordLevel = 4
+				self.passwordFailed = false
+			end
 		end
 		for i,v in ipairs(self.passwords) do
-			if (v == string.lower(text)) then
+			if (v:sub(1,1) ~= "<" and v == string.lower(text)) then
 				self.passwordLevel = i
 				self.passwordFailed = false
 			end
@@ -847,8 +851,13 @@ function Site:StartSequencing()
 	self.sequencing = true
 	self.blockInput = true
 
-	local time = 8
-	StartTimer(time, self, function() self.sequencing = false; self.blockInput = false; self.passwordLevel = 1; end)
+	local time = 7
+	local time2 = 3
+	StartTimer(time, self, function()
+		self.sequencing = false
+		self.blockInput = false
+		self.passwordLevel = 1
+	end)
 
 	UpdateBoxes()
 end

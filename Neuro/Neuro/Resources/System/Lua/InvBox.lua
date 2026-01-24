@@ -387,9 +387,26 @@ function InvBox_Site:HandleClickedExit()
 	self:Close()
 end
 
+------
+
+InvBox_Upload = InvBox_Site:new {
+	
+}
+
+function InvBox_Site:UseSoftware(softwareItem)
+print("using software ", softwareItem, s.software[softwareItem])
+	currentSite:UploadSoftware(s.software[softwareItem])
+	self:Close()
+end
+
+function InvBox_Site:HandleClickedExit()
+	currentSite:UploadSoftware(-1)
+	self:Close()
+end
 
 
 
+----------
 
 SkillBox = Gridbox:new {
 	x = 150,

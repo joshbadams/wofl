@@ -61,17 +61,17 @@ Gridbox::Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Col
 	: Ninebox(Ninebox::Basic, X, Y, SizeX, SizeY, Tag, Color)
 	, TextColor(Color)
 {
-	Init();
+	Init(nullptr);
 }
 
 Gridbox::Gridbox(int Tag, WColor Color)
 	: Ninebox(Ninebox::NoBorder, 0, 0, 0, 0, Tag, Color)
 	, TextColor(Color)
 {
-	Init();
+	Init(nullptr);
 }
 
-void Gridbox::Init()
+void Gridbox::Init(const char* Tag)
 {
 	TextEntryIndex = -1;
 	bIgnoreUntilNextUp = false;
@@ -98,13 +98,13 @@ void Gridbox::Init()
 	
 	if (LuaBox)
 	{
-		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnOpenBox", GridsX, GridsY, this);
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnOpenBox", GridsX, GridsY, this, Tag);
 	}
 
 	Update();
 }
 
-void Gridbox::Open(LuaRef InLuaBox, bool bOverlayDialog)
+void Gridbox::Open(LuaRef InLuaBox, const char* Tag, bool bOverlayDialog)
 {
 	LuaBox = InLuaBox;
 
@@ -127,7 +127,7 @@ void Gridbox::Open(LuaRef InLuaBox, bool bOverlayDialog)
 	// resize to match
 	Move(X, Y, W, H);
 
-	Init();
+	Init(Tag);
 }
 
 void Gridbox::RefreshUI()
@@ -215,7 +215,7 @@ void Gridbox::Tick(float DeltaTime)
 
 void Gridbox::OnInput(const Vector& ScreenLocation, int RepeatIndex)
 {
-	if (ActivatingClickId != 0)
+	if (ActivatingClickId != 0 || TextEntryIndex != -1)
 	{
 		return;
 	}
@@ -367,8 +367,11 @@ void Gridbox::OnTextEntryCancelled(const string& Tag)
 
 void Gridbox::OnGenericContinueInput()
 {
-	LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnGenericContinueInput");
-	Update();
+	if (TextEntryIndex == -1)
+	{
+		LuaBox->LuaSystem->CallFunction_NoReturn(LuaBox, "OnGenericContinueInput");
+		Update();
+	}
 }
 
 void Gridbox::MessageComplete()

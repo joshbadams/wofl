@@ -5,11 +5,20 @@ WorldChess = Site:new {
 	passwords = {
 		"novice",
 		"member",
-		"<cyberspace>"
+		"<cyberspace>",
+		-- done
 	},
 	baseX = 160,
 	baseY = 80,
-	
+	baseName = "World Chess",
+	baseLevel = 0,
+	iceStrength = 84,
+	ai = "Morphy",
+	aiMessage = "It's a Fool's Mate, my friend. Surrender while you still can.",
+	aiHurtMessage = "Good move.",
+	aiDeathMessage = "I surrender; the game is yours.",
+	aiWeakness = "logic",
+
 	pages = {
 		['title'] = {
 			type = "title",
@@ -27,6 +36,8 @@ WorldChess = Site:new {
 				{ key = '3', text = "Membership Application", target = "application" },
 				{ key = '4', text = "Enter Tournament", target = "tournament", level = 2 },
 				{ key = '5', text = "Challenge Morphy", target = "morphy", level = 2 },
+				{ key = '6', text = "Software Library", target = "softwarae", level = 3 },
+				{ key = '7', text = "AI Message Buffer", target = "aimessage", level = 3 },
 			}
 		},
 		['aboutsystem'] = {
@@ -58,6 +69,25 @@ WorldChess = Site:new {
 			message = "\nIf you think you're read for me, look for me in cyberspace... I'll be waiting.",
 			exit = "main"
 		},
+		['software'] = {
+			type = "download",
+			items = {
+				{ key = 'x', text = "Exit to Main", target = "main" },
+				{ key = '1', software = 213 }, -- BattleChess 4.0
+			}
+		},
+		['aimessage'] = {
+			type = "list",
+			title = "",
+			hasDetails = true,
+			columns = { { field = 'date', width = 8 }, { field = 'to', width = 15 }, { field = 'from', width = 0 } },
+			formatDetails = function(item) return string.format("TO: %s\nFROM: %s\n\n  %s", item.longfrom or item.from, item.longto or item.to, item.message) end,
+			items = {
+				{ date = 111658, to = "Morphy", from = "Greystoke", message = "The AI destruct program that Turing developed to destroy me is missing from their vault! I am unable to locate it! If you know where it is, inform me immediately! If it falls into the wrong hands, Neuromancer may win! This cannot happen!" },
+				{ date = 111658, to = "Morphy", from = "Hal", message = "I've intercepted an odd transmission on a frequency that isn't used much any more. It seems to be from an AI who's a chess master, so I thought I'd let you know there might be some decent competition out there. He calls himself the Phantom." },
+			}
+		},
+
 		['deducted'] = {
 			type = "generic",
 			showHeader = true,

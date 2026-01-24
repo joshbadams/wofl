@@ -16,9 +16,13 @@ Cheapo = Site:new {
 	passwords = {
 		"guest",
 		"cockroach",
+		-- done
 	},
 	baseX = 112,
 	baseY = 112,
+	baseName = "Cheap Hotel",
+	baseLevel = 0,
+	iceStrength = 84,
 
 	
 	pages = {
@@ -203,8 +207,6 @@ CheapHotel = Room:new {
 	
 	locX = 112,
 	locY = 96,
-	baseX = 112,
-	baseY = 112,
 
 	longDescription = "Cheap Hotel smells of cigarettes and cheap perfume. The roof is made of thin laminated matting that rattles in the wind. White fiberglass coffins serve as the rooms, stacked like surplus Godzilla teeth. Your coffin number is 92, three meters long with an oval hatch at the end. There is also a PAX booth here.",
 	description = "You're at the Cheap Hotel.",

@@ -7,8 +7,14 @@ IRS = Site:new {
 	passwords = {
 		"taxinfo",
 		"audit",
-		"<cyberspace>"
+		"<cyberspace>" -- done
 	},
+	
+	baseX = 272,
+	baseY = 64,
+	baseName = "I.R.S.",
+	baseLevel = 1,
+	iceStrength = 149,
 
 	pages = {
 		['title'] = {

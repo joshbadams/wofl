@@ -479,6 +479,22 @@ Items = {
 		name = "Recipt Forger",
 		version = 7,
 	},
+	[285] = FakeSoftware:new {
+		name = "Toxin",
+		version = 18,
+	},
+	[286] = FakeSoftware:new {
+		name = "MegaDeath",
+		version = 4,
+	},
+	[287] = FakeSoftware:new {
+		name = "Centurion",
+		version = 5,
+	},
+	[288] = FakeSoftware:new {
+		name = "SnailBait",
+		version = 14,
+	},
 
 	[300] = Organ:new { name = "Heart", sell=6000, buy=6600, hp = 200 },
 	[301] = Organ:new { name = "Eyes (2)", sell=5000, buy=6500, hp = 150 },
@@ -513,21 +529,28 @@ Items = {
 	[403] = Skill:new { name = "Icebreaking", cost = 1000, scope = "cyberspace" },
 	[404] = Skill:new { name = "Debug", cost = 1000, scope = "room" },
 	[405] = Skill:new { name = "Evasion", cost = 2000, scope = "cyberspace" },
-	[406] = Skill:new { name = "Bargaining", cost = 2000, scope = "???" },
-	[407] = Skill:new { name = "Psychoanalysis", cost = 2000, scope = "???" },
-	[408] = Skill:new { name = "Philosophy", cost = 2000, scope = "???" },
-	[409] = Skill:new { name = "Phenomenology", cost = 2000, scope = "???" },
-	[410] = Skill:new { name = "Logic", cost = 1000, scope = "???" },
-	[411] = Skill:new { name = "Warez Analysis", cost = 1000, scope = "???" },
-	[412] = Skill:new { name = "Musicianship", cost = 1000, scope = "???" },
-	[413] = Skill:new { name = "Zen", cost = 0, scope = "???" },
-	[414] = Skill:new { name = "Sophistry", cost = 0, scope = "???" },
+	[406] = Skill:new { name = "Bargaining", cost = 2000, scope = "room" },
+	[407] = Skill:new { name = "Psychoanalysis", cost = 2000, scope = "ai" },
+	[408] = Skill:new { name = "Philosophy", cost = 2000, scope = "ai" },
+	[409] = Skill:new { name = "Phenomenology", cost = 2000, scope = "ai" },
+	[410] = Skill:new { name = "Logic", cost = 1000, scope = "ai" },
+	[411] = Skill:new { name = "Warez Analysis", cost = 1000, scope = "anytime" },
+	[412] = Skill:new { name = "Musicianship", cost = 1000, scope = "room" },
+	[413] = Skill:new { name = "Zen", cost = 0, scope = "ai" },
+	[414] = Skill:new { name = "Sophistry", cost = 0, scope = "ai" },
 }
 
 CryptoDecode = {
 	['dumbo'] = { result = "ROMCARDS", level = 1 },
-	['vulcan'] = { result = "dunno", level = 2 },
-	
+	['vulcan'] = { result = "BIOSOFT", level = 3 },
+	['galileo'] = { result = "APOLLO", level = 3 },
+	['eggplant'] = { result = "LONGISLAND", level = 4 },
+	['turnip'] = { result = "LOSER", level = 4 },
+	['pleiades'] = { result = "SUBARU", level = 4 },
+	['smeegldipo'] = { result = "PERMAFROST", level = 2 },
+	['aburakkoi'] = { result = "UCHIKATSU", level = 2 },
+	['snorskee'] = { result = "SUPERTAC", level = 2 },
+	['pancake'] = { result = "VENDORS", level = 1 },
 }
 
 function GetItemDesc(itemId)

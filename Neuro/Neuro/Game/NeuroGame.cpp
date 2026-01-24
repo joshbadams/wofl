@@ -193,7 +193,7 @@ void NeuroGame::ResetLua()
 	BoxCache.clear();
 }
 
-LuaRef NeuroGame::OpenBoxByName(const char* Name)
+LuaRef NeuroGame::OpenBoxByName(const char* Name, const char* Tag)
 {
 	LuaRef NewBox;
 	State.Lua.GetTableValue("", Name, NewBox);
@@ -229,7 +229,7 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name)
 	{
 		//ThoughtBox->Text->AddChild(Box);
 		Background->AddChild(Box);
-		Box->Open(NewBox, bOverlayingDialog);
+		Box->Open(NewBox, Tag, bOverlayingDialog);
 		Vector Pos = Box->GetPosition();
 		Box->SetPosition(Pos + ThoughtBox->Text->GetPosition());
 	}
@@ -241,7 +241,7 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name)
 	{
 //		SiteInputSorter->AddChild(Box);
 		Background->AddChild(Box);
-		Box->Open(NewBox, bOverlayingDialog);
+		Box->Open(NewBox, Tag, bOverlayingDialog);
 	}
 
 

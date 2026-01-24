@@ -100,7 +100,10 @@ s = {
 	name = "Badams",
 	bamaid = "056306118",
 	gemeinSourceFunds = 30000,
-	gemeinAccount = 0,
+	berneSourceFunds = 500000,
+
+	-- -1 here means the account hasn't been opened
+	bozoAccount = -1,
 	
 	numTimesArrested = 0,
 	

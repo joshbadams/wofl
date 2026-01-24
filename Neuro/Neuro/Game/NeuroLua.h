@@ -140,6 +140,9 @@ public:
 	template<typename TableSpec, typename FuncSpec, typename P1Type, typename P2Type, typename P3Type>
 	bool CallFunction_NoReturn(TableSpec Table, FuncSpec Function, P1Type P1, P2Type P2, P3Type P3) const;
 
+	template<typename TableSpec, typename FuncSpec, typename P1Type, typename P2Type, typename P3Type, typename P4Type>
+	bool CallFunction_NoReturn(TableSpec Table, FuncSpec Function, P1Type P1, P2Type P2, P3Type P3, P4Type P4) const;
+
 	template<typename TableSpec, typename FuncSpec, typename ReturnType>
 	bool CallFunction_Return(TableSpec Table, FuncSpec Function, ReturnType& Result) const;
 
@@ -151,6 +154,9 @@ public:
 
 	template<typename TableSpec, typename FuncSpec, typename P1Type, typename P2Type, typename P3Type, typename ReturnType>
 	bool CallFunction_Return(TableSpec Table, FuncSpec Function, P1Type P1, P2Type P2, P3Type P3, ReturnType& Result) const;
+
+	template<typename TableSpec, typename FuncSpec, typename P1Type, typename P2Type, typename P3Type, typename P4Type, typename ReturnType>
+	bool CallFunction_Return(TableSpec Table, FuncSpec Function, P1Type P1, P2Type P2, P3Type P3, P4Type P4, ReturnType& Result) const;
 
 
 private:
@@ -445,6 +451,20 @@ bool Lua::CallFunction_NoReturn(TableSpec Table, FuncSpec Function, P1Type P1, P
 	return true;
 }
 
+template<typename TableSpec, typename FuncSpec, typename P1Type, typename P2Type, typename P3Type, typename P4Type>
+bool Lua::CallFunction_NoReturn(TableSpec Table, FuncSpec Function, P1Type P1, P2Type P2, P3Type P3, P4Type P4) const
+{
+	CALL_FUNCTION_PREAMBLE();
+	
+	PushParam(L, P1);
+	PushParam(L, P2);
+	PushParam(L, P3);
+	PushParam(L, P4);
+	CALL_FUNC(4, 0);
+	
+	return true;
+}
+
 template<typename TableSpec, typename FuncSpec, typename ReturnType>
 bool Lua::CallFunction_Return(TableSpec Table, FuncSpec Function, ReturnType& Result) const
 {
@@ -487,6 +507,20 @@ bool Lua::CallFunction_Return(TableSpec Table, FuncSpec Function, P1Type P1, P2T
 	PushParam(L, P2);
 	PushParam(L, P3);
 	CALL_FUNC(3, 1);
+
+	return GetReturn(L, Result);
+}
+
+template<typename TableSpec, typename FuncSpec, typename P1Type, typename P2Type, typename P3Type, typename P4Type, typename ReturnType>
+bool Lua::CallFunction_Return(TableSpec Table, FuncSpec Function, P1Type P1, P2Type P2, P3Type P3, P4Type P4, ReturnType& Result) const
+{
+	CALL_FUNCTION_PREAMBLE();
+	
+	PushParam(L, P1);
+	PushParam(L, P2);
+	PushParam(L, P3);
+	PushParam(L, P4);
+	CALL_FUNC(4, 1);
 
 	return GetReturn(L, Result);
 }

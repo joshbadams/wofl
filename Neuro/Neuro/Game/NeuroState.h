@@ -67,7 +67,7 @@ class IStateChangedDelegate
 {
 public:
 	virtual void Invalidate(ZoneType Zone) = 0;
-	virtual LuaRef OpenBoxByName(const char* Name) = 0;
+	virtual LuaRef OpenBoxByName(const char* Name, const char* Tag=nullptr) = 0;
 	virtual bool CloseBoxWithObj(LuaRef BoxObj) = 0;
 	virtual bool ReorderBoxWithObj(LuaRef BoxObj, int Mode) = 0;
 	virtual bool AreBoxesShowing() = 0;

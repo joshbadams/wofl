@@ -121,17 +121,8 @@ print("num items", #self.items)
 		local template = Items[id]
 
 		-- organs can only buy/sell one, so check inventory
-		local inactive = false
-		if (template.type == "organ") then
-			if (self.isBuying) then
-				inactive = table.containsArrayItem(s.organs, id)
-			else
-				inactive = not table.containsArrayItem(s.organs, id)
-			end
-		end
-
 		local prefix = " "
-		if (inactive) then
+		if (template.type == "organ" and not table.containsArrayItem(s.organs, id)) then
 			prefix = "-"
 		end
 

@@ -454,7 +454,7 @@ bool NeuroState::HandleSceneKey(KeyEvent Event)
 		if (Event.KeyCode == WoflKeys::F2)
 		{
 			CurrentState = State::InSite;
-			StateDelegate->OpenBoxByName("Cyberspace");
+			StateDelegate->OpenBoxByName("Cyberspace", "debug");
 			bWasHandled = true;
 		}
 		else if (Event.KeyCode == WoflKeys::F3)
@@ -462,7 +462,7 @@ bool NeuroState::HandleSceneKey(KeyEvent Event)
 			CurrentState = State::InSite;
 			std::string LastSite;
 			Lua.GetStringValue("s", "lastSite", LastSite);
-			StateDelegate->OpenBoxByName(LastSite.c_str());
+			StateDelegate->OpenBoxByName(LastSite.c_str(), "debug");
 			bWasHandled = true;
 		}
 	}
@@ -584,8 +584,14 @@ int NeuroState::Lua_OpenBox(lua_State* L)
 {
 	NeuroState* NS = State(L);
 
+	const char* Param1 = lua_tostring(L, -1);
+	const char* Param2 = lua_tostring(L, -2);
+	
+	const char* BoxName = Param2 ? Param2 : Param1;
+	const char* Tag = Param2 ? Param1 : nullptr;
+	
 	// stack has the box name to open
-	LuaRef Box = NS->StateDelegate->OpenBoxByName(lua_tostring(L, -1));
+	LuaRef Box = NS->StateDelegate->OpenBoxByName(BoxName, Tag);
 
 	if (Box == nullptr)
 	{

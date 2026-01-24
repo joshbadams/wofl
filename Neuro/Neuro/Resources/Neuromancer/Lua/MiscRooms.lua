@@ -653,8 +653,27 @@ MatrixChipShop = ShopBox:new {
 }
 
 -- TODO
-MatrixSkillShop = ShopBox:new {
-	
+MatrixSkillShop = UpgradeBox:new {
+	items = {
+		413,
+		405,
+		411,
+		402,
+		404 },
+	overridePrices = {
+		[413] = 100,
+		[405] = 100,
+		[411] = 100,
+		[402] = 100,
+		[404] = 100,
+	},
+	maxLevels = {
+		[413] = 2,
+		[405] = 2,
+		[411] = 2,
+		[402] = 2,
+		[404] = 4,
+	},
 }
 
 
@@ -731,6 +750,22 @@ Matrix = Room:new {
 			tags = { "_upgrade", "_upgrades" },
 			lines = { "Sure, we can raise a few of your skills to level 2, and Debug to level 4. $100 for each skill level." },
 			onEnd = function(self) OpenBox("MatrixSkillShop") end
+		},
+		{
+			tags = { "_password", "_passwords" },
+			lines = { "I know them for Loser, ESFA, and NASA. Which ones do you need?" },
+		},
+		{
+			tags = { "_nasa" },
+			lines = { "The password is \"GALILEO\". You can decode it yourself. It has the only AI I know of that never killed anyone." },
+		},
+		{
+			tags = { "_esfa" },
+			lines = { "The password is \"EGGPLANT\". You can decode it yourself" },
+		},
+		{
+			tags = { "_loser" },
+			lines = { "The password for level 2 is \"TURNIP\". You can decode it yourself." },
 		},
 	}
 }
@@ -1091,6 +1126,9 @@ s.paycheck = 0
 Hosaka = Room:new {
 	name = "hosaka",
 	hasJack = true,
+	
+	locX = 144,
+	locY = 144,
 
 	west = "streeteast1",
 	

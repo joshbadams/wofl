@@ -233,11 +233,14 @@ Loser = Site:new {
 	passwords = {
 		"wilson",
 		"loser",
-		"<cyberspace>"
+		"<cyberspace>" -- done
 	},
 	
 	baseX = 416,
 	baseY = 64,
+	baseName = "Gentleman Loser",
+	baseLevel = 1,
+	iceStrength = 150,
 
 	pages = {
 		['title'] = {
@@ -250,8 +253,8 @@ Loser = Site:new {
 			items = {
 				{ key = 'x', text = "Exit System", target = "exit" },
 				{ key = '1', text = "Loser BBS", target = "bbs" },
-				{ key = '2', text = "Sorceror BBS", target = "bbs2" },
-				{ key = '3', text = "Software Library", target = "software" },
+				{ key = '2', text = "Sorceror BBS", target = "bbs2", level = 2 },
+				{ key = '3', text = "Software Library", target = "software", level = 2 },
 			}
 		},
 		['bbs'] = {
@@ -293,6 +296,9 @@ Loser = Site:new {
 				{ key = '2', software = 215 }, -- BlowTorch 1.0
 				{ key = '3', software = 233 }, -- Hammer 1.0
 				{ key = '4', software = 254 }, -- Probe 3.0
+				{ key = '5', software = 263, condition = function(self) return self.level >= 3 end }, -- Slow 1.0
+				{ key = '6', software = 239, condition = function(self) return self.level >= 3 end  }, -- Injector 1.0
+				{ key = '7', software = 229, condition = function(self) return self.level >= 3 end  }, -- Drill 1.0
 			}
 		}
 	}

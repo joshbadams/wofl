@@ -17,7 +17,13 @@ Cyberspace = Gridbox:new {
 function Cyberspace:OpenBox()
 	self.bases = {}
 
-	if (s.savedLocX ~= nil) then
+	s.canCrossZones = false
+	if (self.openTag == "debug") then
+		self.curX = 10
+		self.curY = 10
+		s.canCrossZones = true
+
+	elseif (self.openTag == "exitsite") then
 		self.curX = s.savedLocX
 		self.curY = s.savedLocY
 		s.savedLocX = nil
@@ -31,7 +37,7 @@ function Cyberspace:OpenBox()
 		if (type(v) == 'table' and v.comLinkLevel ~= nil) then
 			if (v.baseX ~= nil and v.baseY ~= nil) then
 				local loc = math.floor(v.baseX / 16 * 512 + v.baseY / 16)
-				self.bases[loc] = string.lower(k)
+				self.bases[loc] = k
 			else
 				print("missing base loc for site", k)
 			end
@@ -120,8 +126,8 @@ function Cyberspace:HandleKeyInput(keyCode, type)
 		local base = self.bases[self.curX * 512 + self.curY]
 		if (base ~= nil) then
 			Gridbox.Close(self)
-			OpenBox(base)
-			currentSite.fromCyberspace = true
+print("Opening base", base)
+			OpenBox(base, "cyberspace")
 			s.savedLocX = self.curX
 			s.savedLocY = self.curY
 		end

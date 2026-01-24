@@ -44,7 +44,7 @@ public:
 	Gridbox(float X, float Y, float SizeX, float SizeY, int Tag, WColor Color=WColor::Black);
 	Gridbox(int Tag, WColor Color=WColor::Black);
 
-	void Open(LuaRef Box, bool bOverlayDialog);
+	void Open(LuaRef Box, const char* Tag, bool bOverlayDialog);
 	void RefreshUI();
 	bool MatchesLuaBox(LuaRef Box);
 
@@ -70,7 +70,7 @@ public:
 	}
 
 protected:
-	void Init();
+	void Init(const char* Tag);
 
 	virtual void OnGenericContinueInput();
 	virtual void OnTextEntryComplete(const std::string& Text, const std::string& Tag);

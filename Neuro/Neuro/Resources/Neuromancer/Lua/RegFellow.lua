@@ -1,23 +1,23 @@
 RegFellow = Site:new {
 	title = "* Regular Fellows *",
 	comLinkLevel = 1,
-	
-	
 	passwords = {
 		"visitor",
-		"<cyberspace>",
+		"<cyberspace>", -- done
 	},
+
+	baseX = 208,
+	baseY = 32,
+	baseName = "Regular Fellows",
+	baseLevel = 0,
+	iceStrength = 36,
 
 	pages = {
 		['title'] = {
+			type = "title",
 			message = "It's Showtime!\n\nWelcome to the Regular Fellows. We're a group of joeboys who consider themselves artists. If you think you're an artist as far as cranking warez are concerned, you're a Regular fellow. Just enter the password, \"VISITOR\". Have fun.",
-			type = "title"
 		},
-		
-		['password'] = {
-			type = "password",
-		},
-		
+		['password'] = { type = "password" },
 		['main'] = {
 			type = "menu",
 			items = {
@@ -54,14 +54,33 @@ RegFellow = Site:new {
 				{ key = 'x', text = "Exit to Main", target = "main" },
 				{ key = '1', software = 212 }, -- BATTELCHESS 2.0
 				{ key = '2', software = 261 }, -- SCOUT 1.0
-				{ key = '3', software = 254, condition = function(self) return self.level == 2 end }, -- PROBE 3.0
+				{ key = '3', software = 254, level = 2 }, -- PROBE 3.0
 			},
 		},
 		
-		['critic'] = {},
+		['critic'] = {
+			type = "menu",
+			title = "Critic's Corner",
+			entries = {
+				{ x = function(self) return self:CenteredX("We try it before you buy it") end, y = 4, text = "We try it before you buy it" }
+			},
+			items = {
+				{ key = 'x', text = "Exit System", target = "main" },
+				{ key = '1', text = "Scout 1.0", target = "critic_scount" },
+				{ key = '2', text = "BattleChess 2.0", target = "critic_battlechess" },
+			},
+		},
+		['critic_scout'] = {
+			type = "message",
+			exit = "critic",
+			message = "Scout 1.0\nrecon program\nReviewed by Zelig Dorn\n\nFloats like a butterfly and stings like a rail gun. This little program is the answer to your wildest dreams. Imagine you've just made contact with a new base. You want to know how many levels it has. Are there secret levels? Enter Scout 1.0. Using Scout after linking into a base, and while still on the intro screen, gives you an accurate reading of how many levels the base contains."
+		},
+		['critic_battlechess'] = {
+			type = "message",
+			exit = "critic",
+			message = "BattleChess 2.0\nchess program extraordinaire\nReviewed by Matt Shaw\n\nOkay, so fortet I did the mod on this puppy. I'll admit it's true that I took a Panter Modern's ear and made a sythesilk purse out of it, but then miracles just flow when these maagic fingers do their work. I doubled the depth of algorithms this warex handles, plus speeds it up and increased the history files it has to include even some of the games Morphy played near the end. Now this binary chess wiz has responsive reciprocal mobility and total transitional capability. Labor of love it was. Best of all, I left the initialization protocols all alone so the World Chess Confederation still thinks it's BattleChess 1.0. Check it out."
+		},
 	},
-	
-	-- Coord.--0-208/32  AI--none
 }
 -- lowercase
 regfellow=RegFellow

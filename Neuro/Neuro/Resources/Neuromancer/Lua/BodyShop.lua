@@ -28,6 +28,36 @@ function BodyShopBuy:OnBoughtSoldItem(itemIndex)
 	UpdateInfo()
 end
 
+function BodyShopBuy:IsPurchaseAllowed(itemIndex)
+	local id = self.items[itemIndex]
+	return not table.containsArrayItem(s.organs, id)
+end
+
+BodyShopBuyDiscounted = BodyShopBuy:new {
+	overridePrices = {
+		[300] = 100,
+		[301] = 100,
+		[302] = 100,
+		[303] = 100,
+		[304] = 100,
+		[305] = 100,
+		[306] = 100,
+		[307] = 100,
+		[308] = 100,
+		[309] = 100,
+		[310] = 100,
+		[311] = 100,
+		[312] = 100,
+		[313] = 100,
+		[314] = 100,
+		[315] = 100,
+		[316] = 100,
+		[317] = 100,
+		[318] = 100,
+		[319] = 100,
+	},
+}
+
 
 BodyShopSell = ShopBox:new {
 	isBuying = false,
@@ -50,6 +80,13 @@ function BodyShopSell:HandleClickedExit()
 	end
 
 	ShopBox.HandleClickedExit(self)
+end
+
+function BodyShopSell:IsPurchaseAllowed(itemIndex)
+	local id = self.items[itemIndex]
+print("trying to sell", itemIndex, id)
+print("currently have?", table.containsArrayItem(s.organs, id))
+	return table.containsArrayItem(s.organs, id)
 end
 
 function BodyShopSell:OnBoughtSoldItem(itemIndex)
@@ -77,7 +114,13 @@ BodyShop = Room:new {
 			lines = {
 				"Can I be of service? Would you like to sell a body part?"
 			},
-			onEnd = function() s.bodyshop = 1 end
+			onEnd = function(self) s.bodyshop = 1; s.usedBargaining = false; end
+		},
+
+		{
+			tag = "bargaining",
+			lines = { "I'll sell you your parts back at the discount price." },
+			onEnd = function(self) s.usedBargaining = true end
 		},
 
 		{
@@ -112,7 +155,7 @@ BodyShop = Room:new {
 				{
 					line = "Yes! I'd love to sell you a piece of my anatomy!",
 					response = "Wonderful! We currently have a need for the following parts:",
-					onEnd = function() print("About to open sell"); OpenBox("BodyShopSell") end,
+					onEnd = function() OpenBox("BodyShopSell") end,
 				},
 				{
 					line = "No thanks! Just browsing!",
@@ -121,7 +164,9 @@ BodyShop = Room:new {
 				{
 					line = "I feel a certain attachment to the body part I previously sold. I'd like to buy another.",
 					response = "Let's see if it's still in stock. Aha! Must be your lucky day! Here it is!",
-					onEnd = function() print("About to open sell"); OpenBox("BodyShopBuy") end,
+					onEnd = function() if (s.usedBargaining) then OpenBox("BodyShopBuyDiscounted" ) else
+						OpenBox("BodyShopBuy") end
+					end,
 				},
 				{
 					line = "Oh! Look at the time! I have an urgent dentist appointment! Excuse me!",
@@ -132,6 +177,13 @@ BodyShop = Room:new {
 		},
 	}
 }
-
 bodyshop = BodyShop
 
+function BodyShop:UseSkill(skill)
+print("using skill", skill, skill.name, s.hasTalkedInRoom)
+	if (skill.name == "Bargaining" and not s.hasTalkedInRoom) then
+		self:ActivateConversation("bargaining")
+	else
+		Room.UseSkill(self, skill)
+	end
+end

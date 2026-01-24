@@ -112,7 +112,7 @@ Zion = Room:new {
 			lines = { "Zion? Zion be home, mon." },
 		},
 		{
-			tags = { "_dub" },
+			tags = { "_dub", "_music" },
 			lines = { "Dub be the music, mon. I an' I have great respect for dub musicians, ya know?" },
 		},
 		{

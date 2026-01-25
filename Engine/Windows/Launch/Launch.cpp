@@ -11,7 +11,7 @@ using namespace std; // Uses the standard namespace
 // Unnamed namespace
 namespace
 {
-const char* const WINDOW_TITLE = "Tutorial 2.2"; // Macro for window title
+const char* const WINDOW_TITLE = "Neuro System"; // Macro for window title
 
 // Variables for window width and height
 const int WINDOW_WIDTH = 1280;
@@ -141,7 +141,10 @@ bool UInitialize(int argc, char* argv[], GLFWwindow** window)
 	{
 		Keys[K] = (WoflKeys)K;
 	}
-//	Keys[' '] = WoflKeys::Space;
+	for (int K = 0; K < 12; K++)
+	{
+		Keys[GLFW_KEY_F1 + K] = (WoflKeys)((int)WoflKeys::F1 + K);
+	}
 
 	return true;
 }
@@ -185,7 +188,7 @@ void UProcessInput(GLFWwindow* window)
 	{
 		if (!bButtonDown)
 		{
-			Utils::Input->AddTouch(0, PosX, PosY, TouchType::Begin);
+			Utils::Input->AddTouch(0, (float)PosX, (float)PosY, TouchType::Begin);
 			bButtonDown = true;
 		}
 	}
@@ -193,7 +196,7 @@ void UProcessInput(GLFWwindow* window)
 	{
 		if (bButtonDown)
 		{
-			Utils::Input->AddTouch(0, PosX, PosY, TouchType::End);
+			Utils::Input->AddTouch(0, (float)PosX, (float)PosY, TouchType::End);
 			bButtonDown = false;
 		}
 	}

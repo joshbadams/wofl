@@ -33,6 +33,12 @@
     <ClInclude Include="Game\WoflHud.h" />
     <ClInclude Include="Game\WoflInput.h" />
     <ClInclude Include="Game\WoflWorld.h" />
+    <None Include="iOS\iOSFile.h" />
+    <None Include="iOS\iOSGLSetup.h" />
+    <None Include="iOS\iOSInput.h" />
+    <None Include="iOS\iOSPlatform.h" />
+    <None Include="iOS\iOSRender.h" />
+    <None Include="iOS\ShaderTypes.h" />
     <ClInclude Include="json\json-forwards.h" />
     <ClInclude Include="json\json.h" />
     <ClInclude Include="Misc\WoflFile.h" />
@@ -60,6 +66,8 @@
     <ClCompile Include="Game\WoflHud.cpp" />
     <ClCompile Include="Game\WoflInput.cpp" />
     <ClCompile Include="Game\WoflWorld.cpp" />
+    <None Include="iOS\iOSRender.cpp" />
+    <None Include="iOS\iOSSupport.cpp" />
     <ClCompile Include="json\jsoncpp.cpp" />
     <ClCompile Include="Misc\WoflUtils.cpp" />
     <ClCompile Include="Rendering\WoflAtlases.cpp" />

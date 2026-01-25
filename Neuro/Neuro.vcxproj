@@ -52,102 +52,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Chatsubo.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Cheapo.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\IRS.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Items.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Neuro.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\PAX.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="Neuro\Resources\BottomCenter.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\BottomLeft.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\BottomRight.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Center.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\LeftCenter.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Neuro1.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\RightCenter.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\TopCenter.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\TopLeft.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\TopRight.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="Neuro\Resources\Neuro1.json">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\InvBox.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\RegFellow.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
+    <Content Include="Resources\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Resources\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="lua\lua54.dll">
@@ -155,50 +63,51 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\MiscBoxes.lua">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
+    <None Include="Neuro\Resources\Neuromancer\Lua\BodyShop.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\Chatsubo.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\Cheapo.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\DonutWorld.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\Game.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\IRS.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\Larrys.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\Loser.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\MiscRooms.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\MiscSites.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\RegFellow.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\SpaceRooms.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\Streets.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Lua\WorldChess.lua" />
+    <None Include="Neuro\Resources\Neuromancer\Neuro1.json" />
+    <None Include="Neuro\Resources\Neuromancer\Neuro2.json" />
+    <None Include="Neuro\Resources\Neuromancer\Neuro3.json" />
+    <None Include="Neuro\Resources\System\Lua\Cyberspace.lua" />
+    <None Include="Neuro\Resources\System\Lua\Gridbox.lua" />
+    <None Include="Neuro\Resources\System\Lua\InvBox.lua" />
+    <None Include="Neuro\Resources\System\Lua\Items.lua" />
+    <None Include="Neuro\Resources\System\Lua\MiscBoxes.lua" />
+    <None Include="Neuro\Resources\System\Lua\Neuro.lua" />
+    <None Include="Neuro\Resources\System\Lua\PAX.lua" />
+    <None Include="Neuro\Resources\System\Lua\Room.lua" />
+    <None Include="Neuro\Resources\System\Lua\Site.lua" />
+    <None Include="Neuro\Resources\System\System1.json" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Neuro\Resources\ThinkBC.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\ThinkTC.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\ThinkTL.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\BodyShop.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Gridbox.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\MiscRooms.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Room.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Site.lua">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Lua/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
+    <Image Include="Neuro\Resources\Neuromancer\Neuro1.png" />
+    <Image Include="Neuro\Resources\Neuromancer\Neuro2.png" />
+    <Image Include="Neuro\Resources\Neuromancer\Neuro3.png" />
+    <Image Include="Neuro\Resources\System\BottomCenter.png" />
+    <Image Include="Neuro\Resources\System\BottomLeft.png" />
+    <Image Include="Neuro\Resources\System\BottomRight.png" />
+    <Image Include="Neuro\Resources\System\Center.png" />
+    <Image Include="Neuro\Resources\System\LeftCenter.png" />
+    <Image Include="Neuro\Resources\System\RightCenter.png" />
+    <Image Include="Neuro\Resources\System\System1.png" />
+    <Image Include="Neuro\Resources\System\ThinkBC.png" />
+    <Image Include="Neuro\Resources\System\ThinkTC.png" />
+    <Image Include="Neuro\Resources\System\ThinkTL.png" />
+    <Image Include="Neuro\Resources\System\TopCenter.png" />
+    <Image Include="Neuro\Resources\System\TopLeft.png" />
+    <Image Include="Neuro\Resources\System\TopRight.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -271,6 +180,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)/Binaries</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)/Binaries</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

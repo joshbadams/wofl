@@ -15,6 +15,7 @@ enum FileDomain
 	System,
 	Game,
 	Absolute,
+	Engine,
 	
 	GameThenSystem,
 	SystemThenGame,
@@ -64,6 +65,7 @@ protected:
 			case FileDomain::System:
 			case FileDomain::Game:
 			case FileDomain::Absolute:
+			case FileDomain::Engine:
 			case FileDomain::Save: FullPath = GetFinalPath(Domain, Path); break;
 			case FileDomain::GameThenSystem: FullPath = GetFinalPath(FileDomain::Game, Path); break;
 			case FileDomain::SystemThenGame: FullPath = GetFinalPath(FileDomain::System, Path); break;
@@ -85,6 +87,7 @@ protected:
 				case FileDomain::System:
 				case FileDomain::Game:
 				case FileDomain::Absolute:
+				case FileDomain::Engine:
 				case FileDomain::Save: return ResultType();
 				case FileDomain::GameThenSystem: FullPath = GetFinalPath(FileDomain::System, Path); break;
 				case FileDomain::SystemThenGame: FullPath = GetFinalPath(FileDomain::Game, Path); break;

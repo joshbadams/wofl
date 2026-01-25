@@ -13,6 +13,7 @@
 #include "stb_image.h"
 #include <windows.h>
 #include <fileapi.h>
+#include <PathCch.h>
 
 
 class WindowsFile : public WoflFile
@@ -25,69 +26,120 @@ public:
 		Utils::File = this;
 	}
 	
-	virtual std::string GetResourcePath(const char* Filename) override
+
+	virtual std::string GetFinalPath(FileDomain Domain, const char* SubPath) override
 	{
-		return Filename;
+		if (Domain == FileDomain::Absolute)
+		{
+			return SubPath;
+		}
+
+		assert(Domain == FileDomain::Game || Domain == FileDomain::System || Domain == FileDomain::Save || Domain == FileDomain::Engine);
+
+		if (Domain == FileDomain::Save)
+		{
+			char HomeDir[1024];
+			GetEnvironmentVariableA("APPDATA", HomeDir, 1023);
+			std::string Path = std::string(HomeDir) + "/Wofl/";
+			if (GameDomain.length() > 0)
+			{
+				Path += "/";
+				Path += GameDomain;
+			}
+			// make sure the dir exists
+			CreateDirectoryA(Path.c_str(), nullptr);
+			if (SubPath)
+			{
+				Path += "/";
+				Path += SubPath;
+			}
+			return Path;
+		}
+		else if (Domain == FileDomain::Engine)
+		{
+			// Game and System are relative to the binary
+			std::string Path = "../../Engine/Rendering/Resources/";
+			Path += SubPath;
+			return Path;
+		}
+		else
+		{
+			// Game and System are relative to the binary
+			std::string Path = "../Neuro/Resources/";
+			if (Domain == FileDomain::Game)
+			{
+				Path += GameDomain;
+			}
+			else
+			{
+				Path += "System";
+			}
+			if (SubPath)
+			{
+				Path += "/";
+				Path += SubPath;
+			}
+			return Path;
+		}
+		return "";
 	}
-	
-	virtual std::string GetSavePath(const char* Filename) override
-	{
-		char HomeDir[1024];
-		GetEnvironmentVariableA("APPDATA", HomeDir, 1023);
-		std::string Path = std::string(HomeDir) + "/Wofl/";
-		CreateDirectoryA(Path.c_str(), nullptr);
-		return Path + Filename;
-	}
-	
-	virtual std::string LoadFileToString(const char* Path) override
+
+	virtual bool LoadFile(const std::string& Path, std::string& OutString) override
 	{
 		// @todo: move this to WoflFile, or a WoflStandardFile or something
 		FILE* File;
-		if (fopen_s(&File, Path, "r") != 0)
+		if (fopen_s(&File, Path.c_str(), "rb") != 0)
 		{
-			WLOG("Failed to load %s\n", Path);
-			return "";
+			WLOG("Failed to load %s\n", Path.c_str());
+			return false;
 		}
 		fseek(File, 0, SEEK_END);
 		size_t FileSize = ftell(File);
 		fseek(File, 0, SEEK_SET);
 		char* Buffer = (char*)malloc(FileSize + 1);
-		Buffer[FileSize] = 0;
 		fread(Buffer, FileSize, 1, File);
+		Buffer[FileSize] = 0;
 		fclose(File);
-		std::string Contents = Buffer;
+		OutString = Buffer;
 		free(Buffer);
-		return Contents;
+		return true;
 	}
 
-	virtual std::vector<unsigned char> LoadFileToArray(const char* Path) override
+	virtual bool LoadFile(const std::string& Path, std::vector<unsigned char>& OutArray) override
 	{
+		// @todo: move this to WoflFile, or a WoflStandardFile or something
 		FILE* File;
-		if (fopen_s(&File, Path, "rb") != 0)
+		if (fopen_s(&File, Path.c_str(), "rb") != 0)
 		{
-			WLOG("Failed to load %s\n", Path);
-			return std::vector<unsigned char>();
+			WLOG("Failed to load %s\n", Path.c_str());
+			return false;
 		}
 		fseek(File, 0, SEEK_END);
 		size_t FileSize = ftell(File);
 		fseek(File, 0, SEEK_SET);
 
-		std::vector<unsigned char> Buffer;
-		Buffer.resize(FileSize);
-		fread(&Buffer[0], FileSize, 1, File);
-		fclose(File);
-		return Buffer;
-	}
+		OutArray.resize(FileSize);
+		fread(OutArray.data(), FileSize, 1, File);
 
+		fclose(File);
+		return true;
+	}
 	
 	virtual void* LoadPNGToAllocatedBuffer(const char* ImageName, unsigned int& Width, unsigned int& Height) override
 	{
 		// load PNG file into buffer
-		std::string Filename = std::string(ImageName);
-		Filename = GetResourcePath(Filename.c_str());
+		std::vector<unsigned char> Bytes = LoadFileToArray(ImageName, FileDomain::GameThenSystem);
+		if (Bytes.size() == 0)
+		{
+			Bytes = LoadFileToArray(ImageName, FileDomain::Engine);
+			if (Bytes.size() == 0)
+			{
+				return nullptr;
+			}
+		}
 
 		int X, Y, N;
-		unsigned char* PNGData = stbi_load(Filename.c_str(), &X, &Y, &N, 4);
+		unsigned char* PNGData = stbi_load_from_memory(Bytes.data(), (int)Bytes.size(), &X, &Y, &N, 4);
 		Width = X;
 		Height = Y;
 
@@ -99,10 +151,12 @@ public:
 		return Texture;
 	}
 	
-	virtual bool SaveStringToFile(const std::string& String, const char* Path) override
+	virtual bool SaveStringToFile(const std::string& String, const char* Path, FileDomain Domain) override
 	{
+		std::string PathStr = GetFinalPath(Domain, Path);
+
 		FILE* File;
-		if (fopen_s(&File, Path, "w") != 0)
+		if (fopen_s(&File, PathStr.c_str(), "w") != 0)
 		{
 			WLOG("Failed to save %s\n", Path);
 			return "";
@@ -115,10 +169,12 @@ public:
 		return true;
 }
 
-	virtual bool SaveArrayToFile(const std::vector<unsigned char>& Array, const char* Path) override
+	virtual bool SaveArrayToFile(const std::vector<unsigned char>& Array, const char* Path, FileDomain Domain) override
 	{
+		std::string PathStr = GetFinalPath(Domain, Path);
+
 		FILE* File;
-		if (fopen_s(&File, Path, "w") != 0)
+		if (fopen_s(&File, PathStr.c_str(), "w") != 0)
 		{
 			WLOG("Failed to save %s\n", Path);
 			return "";
@@ -130,6 +186,58 @@ public:
 
 		return true;
 
+	}
+
+
+	virtual std::vector<std::string> FindFiles(FileDomain Domain, const char* InDirectory, const char* Ext, bool bIncludePath, bool bIncludeExtension) override
+	{
+		std::vector<std::string> Results;
+		std::string Directory = GetFinalPath(Domain, InDirectory);
+		if (!Directory.ends_with('/'))
+		{
+			Directory += '/';
+		}
+		Directory += "*";
+		if (Ext)
+		{
+			Directory += ".";
+			Directory += Ext;
+		}
+
+		WIN32_FIND_DATAA FindData;
+		HANDLE File = FindFirstFileA(Directory.c_str(), &FindData);
+		if (File != INVALID_HANDLE_VALUE)
+		{
+			do
+			{
+
+				if (_stricmp(FindData.cFileName, ".") != 0 && _stricmp(FindData.cFileName, "..") != 0)
+				{
+					if ((FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
+					{
+						std::string FullPath;
+						if (bIncludePath)
+						{
+							FullPath = InDirectory;
+							FullPath += "/";
+						}
+						if (!bIncludeExtension)
+						{
+							char* Dot = strrchr(FindData.cFileName, '.');
+							if (Dot)
+							{
+								*Dot = 0;
+							}
+						}
+						FullPath += FindData.cFileName;
+						Results.push_back(FullPath);
+					}
+				}
+			}
+			while (FindNextFileA(File, &FindData));
+		}
+
+		return Results;
 	}
 
 protected:

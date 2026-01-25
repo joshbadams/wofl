@@ -202,6 +202,10 @@ LuaRef NeuroGame::OpenBoxByName(const char* Name, const char* Tag)
 		return nullptr;
 	}
 	
+#ifdef _WIN32
+#define strcasecmp _stricmp
+#endif
+
 	bool bOverlayingDialog = strcasecmp(Name, "InlineTextEntry") == 0;
 
 	Gridbox* Box;
@@ -425,7 +429,7 @@ void NeuroGame::Invalidate(ZoneType Zone)
 	
 	if ((Zone & ZoneType::Message) != ZoneType::None)
 	{
-		bool bNeedsPause;		
+		bool bNeedsPause = false;
 		MessageBox->SetText(State.GetCurrentMessage(bNeedsPause), bNeedsPause);
 	}
 	

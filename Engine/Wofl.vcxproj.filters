@@ -31,6 +31,9 @@
     <Filter Include="Windows\DLLs">
       <UniqueIdentifier>{a0558c3c-165d-45f0-96b0-aa5914d56232}</UniqueIdentifier>
     </Filter>
+    <Filter Include="iOS">
+      <UniqueIdentifier>{024cfaaf-bbdd-4c11-b013-bf9f1cf1c533}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Misc\WoflFile.h">
@@ -181,5 +184,31 @@
     <CopyFileToFolders Include="Windows\lib\glfw\x64\glfw3.dll">
       <Filter>Windows\DLLs</Filter>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="iOS\iOSRender.cpp">
+      <Filter>iOS</Filter>
+    </None>
+    <None Include="iOS\iOSSupport.cpp">
+      <Filter>iOS</Filter>
+    </None>
+    <None Include="iOS\iOSFile.h">
+      <Filter>iOS</Filter>
+    </None>
+    <None Include="iOS\iOSGLSetup.h">
+      <Filter>iOS</Filter>
+    </None>
+    <None Include="iOS\iOSInput.h">
+      <Filter>iOS</Filter>
+    </None>
+    <None Include="iOS\iOSPlatform.h">
+      <Filter>iOS</Filter>
+    </None>
+    <None Include="iOS\iOSRender.h">
+      <Filter>iOS</Filter>
+    </None>
+    <None Include="iOS\ShaderTypes.h">
+      <Filter>iOS</Filter>
+    </None>
   </ItemGroup>
 </Project>

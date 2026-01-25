@@ -87,10 +87,9 @@ void WindowsRenderer::LoadShaders()
 GLuint WindowsRenderer::CompileShader(const char* ShaderName, GLenum ShaderType)
 {
 	// laod the file
-	std::string ShaderPath = Utils::File->GetResourcePath(ShaderName);
-	std::string ShaderContents = Utils::File->LoadFileToString(ShaderPath.c_str());
+	std::string ShaderContents = Utils::File->LoadFileToString((std::string("Shaders/") + ShaderName).c_str(), FileDomain::Engine);
 	
-	WLOG("Compile shader with %s\n", ShaderPath.c_str());
+	WLOG("Compile shader with %s\n", ShaderName);
 
 	// compile it
 	GLCHECK(GLuint Shader = glCreateShader(ShaderType));

@@ -14,11 +14,20 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{1412e0fc-1ce0-4b45-a955-25768ac31339}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources\Lua">
-      <UniqueIdentifier>{7f933be7-0be9-46c8-964a-61c97e64f4da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources\DLLs">
       <UniqueIdentifier>{2b156e98-2ac1-4f58-a950-3f6485ae13c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\System">
+      <UniqueIdentifier>{fddbd4b4-d0d2-444d-9c8c-cc7016b7563b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Neuromancer">
+      <UniqueIdentifier>{10caee51-bf44-42d6-bf9a-5ad493b3a113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Neuromancer\Lua">
+      <UniqueIdentifier>{efacf181-f21c-4ae3-a042-58b694ae891d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\System\Lua">
+      <UniqueIdentifier>{805f5f7e-a673-4ed8-97c4-6c2d822f34f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -74,92 +83,141 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Chatsubo.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Cheapo.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\IRS.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Items.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Neuro.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\PAX.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Neuro1.json">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\BottomCenter.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\BottomLeft.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\BottomRight.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Center.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\LeftCenter.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Neuro1.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\RightCenter.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\TopCenter.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\TopLeft.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\TopRight.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\InvBox.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\RegFellow.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="lua\lua54.dll">
       <Filter>Resources\DLLs</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\MiscBoxes.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\BodyShop.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Gridbox.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\MiscRooms.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Room.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\Lua\Site.lua">
-      <Filter>Resources\Lua</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\ThinkBC.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\ThinkTC.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Neuro\Resources\ThinkTL.png">
-      <Filter>Resources</Filter>
-    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Neuro\Resources\Neuromancer\Neuro1.json">
+      <Filter>Resources\Neuromancer</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Neuro2.json">
+      <Filter>Resources\Neuromancer</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Neuro3.json">
+      <Filter>Resources\Neuromancer</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\BodyShop.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\Chatsubo.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\Cheapo.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\DonutWorld.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\Game.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\IRS.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\Larrys.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\Loser.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\MiscRooms.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\MiscSites.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\RegFellow.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\SpaceRooms.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\Streets.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\Neuromancer\Lua\WorldChess.lua">
+      <Filter>Resources\Neuromancer\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\System1.json">
+      <Filter>Resources\System</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\Cyberspace.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\Gridbox.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\InvBox.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\Items.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\MiscBoxes.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\Neuro.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\PAX.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\Room.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+    <None Include="Neuro\Resources\System\Lua\Site.lua">
+      <Filter>Resources\System\Lua</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Neuro\Resources\Neuromancer\Neuro1.png">
+      <Filter>Resources\Neuromancer</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\Neuromancer\Neuro2.png">
+      <Filter>Resources\Neuromancer</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\Neuromancer\Neuro3.png">
+      <Filter>Resources\Neuromancer</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\BottomCenter.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\BottomLeft.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\BottomRight.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\Center.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\LeftCenter.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\RightCenter.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\System1.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\ThinkBC.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\ThinkTC.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\ThinkTL.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\TopCenter.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\TopLeft.png">
+      <Filter>Resources\System</Filter>
+    </Image>
+    <Image Include="Neuro\Resources\System\TopRight.png">
+      <Filter>Resources\System</Filter>
+    </Image>
   </ItemGroup>
 </Project>

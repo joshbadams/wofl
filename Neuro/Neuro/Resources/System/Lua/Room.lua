@@ -257,13 +257,17 @@ function Room:GetSprites()
 	return {}
 end
 
-function Room:AddAnimation(anim)
+function Room:AddAnimation(anim, oneShot)
 	if (type(anim) == 'string') then
 		for _,v in ipairs(self.namedAnims) do
 			if (v.name == anim) then
 				table.append(self.addedAnimations, v)
 print("---> Adding anim", v)
-				AddAnimation(v)
+				if (oneShot) then
+					PlayOneShotAnimation(v)
+				else
+					AddAnimation(v)
+				end
 			end
 		end
 	else
@@ -271,6 +275,10 @@ print("---> Adding anim", v)
 print("---> Adding premade anim", v)
 		AddAnimation(anim)
 	end
+end
+
+function Room:PlayOneShotAnimation(anim)
+	self:AddAnimation(anim, true)
 end
 
 function Room:RemoveAnimation(anim)
@@ -387,5 +395,9 @@ end
 function Room:GetConnectingRoom(direction)
 print("getting room for ", direction, self[direction], self.name, self["name"])
 	return _G[self[direction]];
+end
+
+function Room:HandleKeyInput(keyCode, type)
+	return false
 end
 

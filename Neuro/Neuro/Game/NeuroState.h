@@ -75,7 +75,7 @@ public:
 	virtual bool IsMessageActive() = 0;
 	virtual void RefreshUI() = 0;
 	virtual void ResetLua() = 0;
-	virtual void AddAnimation(LuaRef AnimAObj) = 0;
+	virtual void AddAnimation(LuaRef AnimAObj, bool bOneShot) = 0;
 	virtual void RemoveAnimation(LuaRef AnimObj) = 0;
 };
 
@@ -183,6 +183,7 @@ private:
 	static int Lua_ReorderBox(lua_State* L);
 	static int Lua_UpdateBoxes(lua_State* L);
 	static int Lua_AddAnimation(lua_State* L);
+	static int Lua_PlayOneShotAnimation(lua_State* L);
 	static int Lua_RemoveAnimation(lua_State* L);
 
 	void InitLua();

@@ -152,6 +152,11 @@ void WoflSprite::RemoveFromParent()
 	bIsAddedToWorld = false;
 }
 
+void WoflSprite::SafeDelete()
+{
+	WoflWorld::Get()->DeleteSprite(this);
+}
+
 void WoflSprite::RemoveFromWorld()
 {
 	if (!bIsAddedToWorld)
@@ -195,7 +200,20 @@ void WoflSprite::Tick(float DeltaTime)
 	float AnimLength = (Images.size() + 1) / FramesPerSecond;
 		
 	// update current time, and loop
-	AnimTime = fmodf(AnimTime + DeltaTime, AnimLength);
+	AnimTime += DeltaTime;
+	if (AnimTime >= AnimLength)
+	{
+		if (AnimLoopFunc)
+		{
+			// if this returns true, then the anim should be stopped
+			if (AnimLoopFunc(this))
+			{
+				// @todo - maybe make this a concept of OneShot sprites that can freeze last frame or first frame?
+//				SafeDelete();
+			}
+		}
+		AnimTime = fmodf(AnimTime, AnimLength);
+	}
 	
 	// calculate the frame within the animation
 	Frame = (int)(Images.size() * AnimTime / AnimLength);

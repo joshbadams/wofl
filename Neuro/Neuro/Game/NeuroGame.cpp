@@ -343,7 +343,7 @@ void NeuroGame::RefreshUI()
 	}
 }
 
-void NeuroGame::AddAnimation(LuaRef AnimObj)
+void NeuroGame::AddAnimation(LuaRef AnimObj, bool bOneShot)
 {
 	Lua* L = AnimObj->LuaSystem;
 	
@@ -358,16 +358,22 @@ void NeuroGame::AddAnimation(LuaRef AnimObj)
 	L->GetIntValue(AnimObj, "y", Y);
 	L->GetIntValue(AnimObj, "width", Width);
 	L->GetIntValue(AnimObj, "height", Height);
-	L->GetFloatValue(AnimObj, "framereate", FrameRate);
+	L->GetFloatValue(AnimObj, "framerate", FrameRate);
 
 	WoflSprite* Sprite = new WoflSprite(X, Y, Width, Height);
+	Sprite->SetFramesPerSecond(FrameRate);
 	for (std::string& Frame : Frames)
 	{
-//		std::string ImageName;
-//		L->GetStringValue(Frame, "image", ImageName);
-
 		WoflImage* Image = new WoflImage(Frame.c_str());
 		Sprite->AddImage(Image);
+	}
+	if (bOneShot)
+	{
+		Sprite->SetAnimLoopFunc([this, AnimObj](WoflSprite* Sprite)
+		{
+			RemoveAnimation(AnimObj);
+			return true;
+		});
 	}
 	Anims[AnimObj] = Sprite;
 	DialogInputSorter->AddChild(Sprite);
@@ -378,8 +384,9 @@ void NeuroGame::RemoveAnimation(LuaRef AnimObj)
 	auto It = Anims.find(AnimObj);
 	if (It != Anims.end())
 	{
-		It->second->RemoveFromWorld();
-		delete It->second;
+		It->second->SafeDelete();
+//		It->second->RemoveFromWorld();
+//		delete It->second;
 		Anims.erase(It);
 	}
 }

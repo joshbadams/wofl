@@ -62,6 +62,8 @@ public:
 	void AddChild(WoflSprite* NewSprite, bool bAddAsFirstChild=false);
 	void RemoveFromParent();
 	void RemoveFromWorld();
+	void SafeDelete();
+
 	
 	bool IsRooted();
 
@@ -140,7 +142,11 @@ public:
 	{
 		FramesPerSecond = InFramesPerSecond;
 	}
-	
+	void SetAnimLoopFunc(const std::function<bool (WoflSprite*)>& Func)
+	{
+		AnimLoopFunc = Func;
+	}
+
 	void SetColor(const WColor& InColor)
 	{
 		Color = InColor;
@@ -259,6 +265,7 @@ protected:
 
 	std::function<bool (WoflSprite*, const KeyEvent&)> KeyHandlerFunc;
 //	std::function<void (WoflSprite*, )> ClickHandlerFunc;
+	std::function<bool (WoflSprite*)> AnimLoopFunc;
 
 	
 	Vector Position;

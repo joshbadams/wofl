@@ -34,7 +34,7 @@ public:
 	virtual bool IsConversationShowing() override;
 	virtual bool IsMessageActive() override;
 	virtual void RefreshUI() override;
-	virtual void AddAnimation(LuaRef AnimObj) override;
+	virtual void AddAnimation(LuaRef AnimObj, bool bOneShot) override;
 	virtual void RemoveAnimation(LuaRef AnimObj) override;
 
 	virtual bool OnGlobalKey(const KeyEvent& Event) override;

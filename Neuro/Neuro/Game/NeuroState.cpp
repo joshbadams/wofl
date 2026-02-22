@@ -44,6 +44,7 @@ void NeuroState::InitLua()
 	Lua.RegisterFunction("ReorderBox", Lua_ReorderBox);
 	Lua.RegisterFunction("UpdateBoxes", Lua_UpdateBoxes);
 	Lua.RegisterFunction("AddAnimation", Lua_AddAnimation);
+	Lua.RegisterFunction("PlayOneShotAnimation", Lua_PlayOneShotAnimation);
 	Lua.RegisterFunction("RemoveAnimation", Lua_RemoveAnimation);
 
 	std::vector<string> SystemScripts;
@@ -421,6 +422,18 @@ bool NeuroState::HandleSceneKey(KeyEvent Event)
 	bool bWasHandled = false;
 	if (Event.Type == KeyType::Down)
 	{
+		bool bHandled = false;
+		Lua.CallFunction_Return(CurrentRoom, "HandleKeyInput", (int)Event.KeyCode, (int)Event.Type, bWasHandled);
+		if (bWasHandled)
+		{
+			return bWasHandled;
+		}
+
+//			if (Event.Type == KeyType::Down && (Event.KeyCode == WoflKeys::Enter || Event.KeyCode == WoflKeys::Space || Event.KeyCode == WoflKeys::Escape))
+		{
+			//			OnGenericContinueInput();
+		}
+
 		const char* Direction = nullptr;
 		if (Event.KeyCode == WoflKeys::UpArrow)
 		{
@@ -768,7 +781,19 @@ int NeuroState::Lua_AddAnimation(lua_State* L)
 	lua_pushvalue(L, -1);
 	LuaRef AnimRef = S->Lua.MakeRef();
 
-	S->StateDelegate->AddAnimation(AnimRef);
+	S->StateDelegate->AddAnimation(AnimRef, false);
+	
+	return 0;
+}
+
+int NeuroState::Lua_PlayOneShotAnimation(lua_State* L)
+{
+	NeuroState* S = State(L);
+
+	lua_pushvalue(L, -1);
+	LuaRef AnimRef = S->Lua.MakeRef();
+
+	S->StateDelegate->AddAnimation(AnimRef, true);
 	
 	return 0;
 }

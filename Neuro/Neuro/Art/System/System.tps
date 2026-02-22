@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.6.3</string>
+        <string>7.9.1</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -185,6 +185,27 @@
                 <rect>320,199,640,398</rect>
                 <key>scale9Paddings</key>
                 <rect>320,199,640,398</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">cybercenter.png</key>
+            <key type="filename">cyberhoriz1.png</key>
+            <key type="filename">cyberhoriz2.png</key>
+            <key type="filename">cyberhoriz3.png</key>
+            <key type="filename">cybervert1.png</key>
+            <key type="filename">cybervert2.png</key>
+            <key type="filename">cybervert3.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>321,120,641,240</rect>
+                <key>scale9Paddings</key>
+                <rect>321,120,641,240</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

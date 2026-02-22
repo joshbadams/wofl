@@ -11,6 +11,23 @@
 *.sln.docstates
 *.xcuserstate
 
+# Mac stuff
+.DS_Store
+__MACOSX/
+
+## User settings
+xcuserdata/
+XCBuildData/
+
+## Obj-C/Swift specific
+*.hmap
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

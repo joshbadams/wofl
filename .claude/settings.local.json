@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/joshb/Documents/Dev/Wofl -maxdepth 2 -name *.sln -o -name *.csproj -o -name *.json -o -name *.config -o -name README*)",
+      "Bash(grep:*)"
+    ]
+  }
+}

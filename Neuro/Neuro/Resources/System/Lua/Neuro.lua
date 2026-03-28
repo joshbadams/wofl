@@ -290,10 +290,38 @@ function string.SplitLines(s, width)
 end
 
 
+function m(name, ...)
+  local args = {...}
+  return function(self) return self[name](self, table.unpack(args)) end
+end
+
 LuaObj = { }
 function LuaObj:new (obj)
-  obk = obk or {}
-  setmetatable(obj, self)
-  self.__index = self
+  obj = obj or {}
+  local class = self
+  setmetatable(obj, class)
+  class.__index = function(instance, key)
+    if key == "parent" then
+      -- Return a proxy that calls class methods with 'instance' as self,
+      -- allowing  self.parent:Method()  instead of  Class.Method(self)
+      return setmetatable({}, {
+        __index = function(_, methodKey)
+          local fn = class[methodKey]
+          if type(fn) == "function" then
+            return function(_, ...) return fn(instance, ...) end
+          end
+          return fn
+        end
+      })
+    end
+    -- Normal prototype chain lookup
+    local current = class
+    while current ~= nil do
+      local v = rawget(current, key)
+      if v ~= nil then return v end
+      current = getmetatable(current)
+    end
+    return nil
+  end
   return obj
 end

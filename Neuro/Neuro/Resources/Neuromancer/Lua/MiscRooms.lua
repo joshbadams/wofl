@@ -1632,3 +1632,80 @@ function Pong:GiveItem(invIndex)
 		self:ActivateConversation("joystick")
 	end
 end
+
+
+
+
+
+CS = Room:new {
+	name = "cybercenter",
+		
+	longDescription = "Test.",
+	description = "Test.",
+	
+	north = "streetwest1",
+
+	namedAnims =
+	{
+		{
+			
+			name="right", x=32, y=32, width=1213, height=447, framerate = 15,    --x=0, y=0, width=136, height=266, framerate = 4,
+			frames = { "cyberhoriz1", "cyberhoriz2", "cyberhoriz3", },
+		},
+		{
+			
+			name="left", x=32, y=32, width=1213, height=447, framerate = 15,    --x=0, y=0, width=136, height=266, framerate = 4,
+			frames = { "cyberhoriz3", "cyberhoriz2", "cyberhoriz1" },
+		},
+		{
+			
+			name="up", x=32, y=32, width=1213, height=447, framerate = 15,    --x=0, y=0, width=136, height=266, framerate = 4,
+			frames = { "cybervert1", "cybervert2", "cybervert3", },
+		},
+		{
+			
+			name="down", x=32, y=32, width=1213, height=447, framerate = 15,    --x=0, y=0, width=136, height=266, framerate = 4,
+			frames = { "cybervert3", "cybervert2", "cybervert1" },
+		},
+	},
+}
+cs = CS
+
+
+function CS:OnEnterRoom()
+	Room.OnEnterRoom(self)
+
+--	self:AddAnimation("left")
+--	StartTimer(1, self, function(self) self:RemoveAnimation("left")	end)
+end
+
+function CS:HandleKeyInput(keyCode, type)
+	-- up
+	if (keyCode == 5) then
+print("GOING UP")
+		self:PlayOneShotAnimation("up")
+--		StartTimer(1, self, function(self) self:RemoveAnimation("up") end)
+print("WENT UP")
+		return true
+	-- down
+	elseif (keyCode == 6) then
+		self:PlayOneShotAnimation("down")
+--		StartTimer(1, self, function(self) self:RemoveAnimation("down") end)
+		return true
+	-- left
+	elseif (keyCode == 7) then
+		self:PlayOneShotAnimation("left")
+--		StartTimer(1, self, function(self) self:RemoveAnimation("left") end)
+		return true
+	-- right
+	elseif (keyCode == 8) then
+		self:PlayOneShotAnimation("right")
+--		StartTimer(1, self, function(self) self:RemoveAnimation("right") end)
+		return true
+	-- esc
+	elseif (keyCode == 1) then
+		GoToRoom(self.north)
+	end
+
+	return false
+end

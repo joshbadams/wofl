@@ -3,6 +3,7 @@ StreetWest1 = Room:new {
 	name = "streetwest1",
 	
 	east = "streetwest2",
+	south = "cs",
 }
 
 function StreetWest1:GetConnectingRoom(direction)

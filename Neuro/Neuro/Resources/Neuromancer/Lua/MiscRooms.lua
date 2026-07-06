@@ -92,7 +92,7 @@ massageparlor = MassageParlor
 
 function MassageParlor:OnEnterRoom()
 	self.stoptalking = false
-	Room.OnEnter(self)
+	Room.OnEnterRoom(self)
 end
 
 function MassageParlor:GetNextConversation(tag)

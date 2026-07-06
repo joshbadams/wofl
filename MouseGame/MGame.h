@@ -9,7 +9,7 @@
 #ifndef __Wofl__MGame__
 #define __Wofl__MGame__
 
-#include "WoflGame.h"
+#include <Wofl/Wofl.h>
 
 class MGame : public WoflGame
 {

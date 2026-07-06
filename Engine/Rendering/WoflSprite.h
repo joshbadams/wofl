@@ -172,6 +172,10 @@ public:
 	
 	// gets the current image to render
 	virtual WoflImage* GetImage() const;
+	int GetAnimFrame() const
+	{
+		return Frame;
+	}
 
 	// allow a subclass to perform any custom rendering before normal rendering
 	// return true if the sprite is rendered and default rendering should not occur

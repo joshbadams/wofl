@@ -257,6 +257,9 @@ function Room:GetSprites()
 	return {}
 end
 
+function Room:Tick(deltaTime)
+end
+
 function Room:AddAnimation(anim, oneShot)
 	if (type(anim) == 'string') then
 		for _,v in ipairs(self.namedAnims) do
@@ -300,6 +303,19 @@ print("---> REmoving anim", v, i)
 			return
 		end
 	end
+end
+
+function Room:GetAnimationInfo(anim)
+	if (type(anim) == 'string') then
+		for _,v in ipairs(self.namedAnims) do
+			if (v.name == anim) then
+				return GetAnimationInfo(v)
+			end
+		end
+		print("No animation found for " .. anim)
+	end
+	
+	return GetAnimationInfo(anim)
 end
 
 function Room:AddAnimations()

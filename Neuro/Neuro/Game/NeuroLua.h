@@ -183,12 +183,14 @@ int PushFuncSpec(lua_State* L, int TableStackLoc, const char* TableName);
 
 int PushParam(lua_State* L, LuaRef Param);
 int PushParam(lua_State* L, int Param);
+int PushParam(lua_State* L, float Param);
 int PushParam(lua_State* L, const char* Param);
 int PushParam(lua_State* L, bool Param);
 int PushParam(lua_State* L, void* Param);
 
 bool GetReturn(lua_State* L, LuaRef& Param);
 bool GetReturn(lua_State* L, int& Param);
+bool GetReturn(lua_State* L, float& Param);
 bool GetReturn(lua_State* L, std::string& Param);
 bool GetReturn(lua_State* L, bool& Param);
 

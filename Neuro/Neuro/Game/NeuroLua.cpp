@@ -529,6 +529,12 @@ int PushParam(lua_State* L, int Param)
 	return lua_gettop(L);
 }
 
+int PushParam(lua_State* L, float Param)
+{
+	lua_pushnumber(L, Param);
+	return lua_gettop(L);
+}
+
 int PushParam(lua_State* L, const char* Param)
 {
 	lua_pushstring(L, Param);
@@ -572,6 +578,18 @@ bool GetReturn(lua_State* L, int& Param)
 	}
 	
 	Param = (int)lua_tointeger(L, -1);
+	return true;
+}
+
+bool GetReturn(lua_State* L, float& Param)
+{
+	if (!lua_isnumber(L, -1) )
+	{
+		Param = 0;
+		return false;
+	}
+
+	Param = (float)lua_tonumber(L, -1);
 	return true;
 }
 

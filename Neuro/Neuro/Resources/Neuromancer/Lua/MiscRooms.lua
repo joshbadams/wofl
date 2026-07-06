@@ -1709,3 +1709,21 @@ print("WENT UP")
 
 	return false
 end
+
+function CS:Tick(deltaTime)
+	local upframe = self:GetAnimationInfo("up")
+	local downframe = self:GetAnimationInfo("down")
+	local leftframe = self:GetAnimationInfo("left")
+	local rightframe = self:GetAnimationInfo("right")
+
+	if (upframe ~= -1) then
+		print("up " .. upframe)
+	elseif (downframe ~= -1) then
+		print("down " .. downframe)
+	elseif (leftframe ~= -1) then
+		print("left " .. leftframe)
+	elseif (rightframe ~= -1) then
+		print("right " .. rightframe)
+	end
+--	if ()
+end

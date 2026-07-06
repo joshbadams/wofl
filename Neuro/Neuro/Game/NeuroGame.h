@@ -36,6 +36,7 @@ public:
 	virtual void RefreshUI() override;
 	virtual void AddAnimation(LuaRef AnimObj, bool bOneShot) override;
 	virtual void RemoveAnimation(LuaRef AnimObj) override;
+	virtual bool GetAnimInfo(LuaRef AnimObj, int& OutFrame) override;
 
 	virtual bool OnGlobalKey(const KeyEvent& Event) override;
 

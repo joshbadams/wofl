@@ -77,6 +77,7 @@ public:
 	virtual void ResetLua() = 0;
 	virtual void AddAnimation(LuaRef AnimAObj, bool bOneShot) = 0;
 	virtual void RemoveAnimation(LuaRef AnimObj) = 0;
+	virtual bool GetAnimInfo(LuaRef AnimObj, int& OutFrame) = 0;
 };
 
 class IInterfaceChangingStateDelegate
@@ -185,6 +186,7 @@ private:
 	static int Lua_AddAnimation(lua_State* L);
 	static int Lua_PlayOneShotAnimation(lua_State* L);
 	static int Lua_RemoveAnimation(lua_State* L);
+	static int Lua_GetAnimationInfo(lua_State* L);
 
 	void InitLua();
 

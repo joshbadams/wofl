@@ -46,6 +46,7 @@ void NeuroState::InitLua()
 	Lua.RegisterFunction("AddAnimation", Lua_AddAnimation);
 	Lua.RegisterFunction("PlayOneShotAnimation", Lua_PlayOneShotAnimation);
 	Lua.RegisterFunction("RemoveAnimation", Lua_RemoveAnimation);
+	Lua.RegisterFunction("GetAnimationInfo", Lua_GetAnimationInfo);
 
 	std::vector<string> SystemScripts;
 	Lua.GetStringValues("", "SystemScripts", SystemScripts);
@@ -233,6 +234,11 @@ void NeuroState::Tick(float DeltaTime)
 	{
 		Lua.CallFunction_NoReturn("", "IncrementTime");
 		TimeTimer += SecondsPerMinute;
+	}
+	
+	if (CurrentRoom)
+	{
+		Lua.CallFunction_NoReturn(CurrentRoom, "Tick", DeltaTime);
 	}
 }
 
@@ -422,7 +428,6 @@ bool NeuroState::HandleSceneKey(KeyEvent Event)
 	bool bWasHandled = false;
 	if (Event.Type == KeyType::Down)
 	{
-		bool bHandled = false;
 		Lua.CallFunction_Return(CurrentRoom, "HandleKeyInput", (int)Event.KeyCode, (int)Event.Type, bWasHandled);
 		if (bWasHandled)
 		{
@@ -809,6 +814,29 @@ int NeuroState::Lua_RemoveAnimation(lua_State* L)
 	
 	return 0;
 }
+
+int NeuroState::Lua_GetAnimationInfo(lua_State* L)
+{
+	NeuroState* S = State(L);
+
+	lua_pushvalue(L, -1);
+	LuaRef AnimRef = S->Lua.MakeRef();
+	
+	int Frame = -1;
+	S->StateDelegate->GetAnimInfo(AnimRef, Frame);
+	lua_pushinteger(L, Frame);
+	
+//	if (S->StateDelegate->GetAnimInfo(AnimRef, Frame))
+//	{
+//		lua_pushvalue(L, Frame);
+//	}
+//	else
+//	{
+//		
+//	}
+	return 1;
+}
+
 
 
 //std::vector<Message*> NeuroState::GetUnlockedMessages(std::string ID)

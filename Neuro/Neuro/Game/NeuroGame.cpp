@@ -391,6 +391,17 @@ void NeuroGame::RemoveAnimation(LuaRef AnimObj)
 	}
 }
 
+bool NeuroGame::GetAnimInfo(LuaRef AnimObj, int& OutFrame)
+{
+	auto It = Anims.find(AnimObj);
+	if (It != Anims.end())
+	{
+		OutFrame = It->second->GetAnimFrame();
+		return true;
+	}
+	return false;
+}
+
 
 bool NeuroGame::OnGlobalKey(const KeyEvent& Event)
 {

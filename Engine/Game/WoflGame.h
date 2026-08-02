@@ -7,9 +7,9 @@
 //
 
 #pragma once
-#include "json.h"
+#include <Wofl/json.h>
 #include <functional>
-#include "WoflFile.h"
+#include <Wofl/WoflFile.h>
 
 class IJsonObj
 {

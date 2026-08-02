@@ -66,7 +66,7 @@ private:
 	vector<class Gridbox*> Boxes;
 	vector<class Gridbox*> BoxCache;
 //	map<LuaRef, WoflSprite*, LuaRef_Less> Anims;
-	map<LuaRef, WoflSprite*> Anims;
+	map<std::string, WoflSprite*> Anims;
 
 	void LoadConfig();
 

@@ -42,9 +42,9 @@ end
 function Site:Close()
 	currentSite = nil
 	Gridbox.Close(self)
-	if (self.openTag == "cyberspace") then
-		OpenBox("cyberspace", "exitsite")
-	end
+--	if (self.openTag == "cyberspace") then
+--		OpenBox("cyberspace", "exitsite")
+--	end
 end
 
 

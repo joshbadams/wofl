@@ -2,15 +2,23 @@
 
 {
 	"filename": "berne.png",
-	"frame": {"x":2438,"y":456,"w":1216,"h":456},
+	"frame": {"x":1220,"y":912,"w":1216,"h":456},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1216,"h":456},
 	"sourceSize": {"w":1216,"h":456}
 },
 {
+	"filename": "bernemanager.png",
+	"frame": {"x":0,"y":0,"w":1210,"h":454},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1210,"h":454},
+	"sourceSize": {"w":1210,"h":454}
+},
+{
 	"filename": "crazyedos.png",
-	"frame": {"x":1220,"y":0,"w":1214,"h":454},
+	"frame": {"x":1212,"y":0,"w":1214,"h":454},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":454},
@@ -18,7 +26,7 @@
 },
 {
 	"filename": "freeside.png",
-	"frame": {"x":1220,"y":1834,"w":1220,"h":460},
+	"frame": {"x":2452,"y":1830,"w":1220,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1220,"h":460},
@@ -26,7 +34,7 @@
 },
 {
 	"filename": "freesidestreet1.png",
-	"frame": {"x":1230,"y":1372,"w":1216,"h":460},
+	"frame": {"x":0,"y":2292,"w":1216,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1216,"h":460},
@@ -34,7 +42,7 @@
 },
 {
 	"filename": "freesidestreet3.png",
-	"frame": {"x":0,"y":456,"w":1214,"h":456},
+	"frame": {"x":2438,"y":912,"w":1214,"h":456},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":456},
@@ -42,31 +50,15 @@
 },
 {
 	"filename": "freesidestreet4.png",
-	"frame": {"x":2456,"y":914,"w":1222,"h":456},
+	"frame": {"x":0,"y":1370,"w":1222,"h":456},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":456},
 	"sourceSize": {"w":1222,"h":456}
 },
 {
-	"filename": "gemeinschaft.png",
-	"frame": {"x":0,"y":0,"w":1218,"h":452},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":452},
-	"sourceSize": {"w":1218,"h":452}
-},
-{
-	"filename": "hitachi.png",
-	"frame": {"x":1236,"y":3222,"w":1214,"h":468},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":468},
-	"sourceSize": {"w":1214,"h":468}
-},
-{
 	"filename": "hosaka.png",
-	"frame": {"x":1216,"y":456,"w":1220,"h":454},
+	"frame": {"x":2428,"y":0,"w":1220,"h":454},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1220,"h":454},
@@ -74,7 +66,7 @@
 },
 {
 	"filename": "matrix.png",
-	"frame": {"x":0,"y":1372,"w":1228,"h":454},
+	"frame": {"x":0,"y":456,"w":1228,"h":454},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":454},
@@ -82,7 +74,7 @@
 },
 {
 	"filename": "metro.png",
-	"frame": {"x":2452,"y":2296,"w":1228,"h":458},
+	"frame": {"x":2448,"y":1370,"w":1228,"h":458},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":458},
@@ -90,7 +82,7 @@
 },
 {
 	"filename": "musabori.png",
-	"frame": {"x":1228,"y":2296,"w":1222,"h":460},
+	"frame": {"x":1218,"y":2292,"w":1222,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":460},
@@ -98,7 +90,7 @@
 },
 {
 	"filename": "panthermoderns.png",
-	"frame": {"x":0,"y":914,"w":1226,"h":454},
+	"frame": {"x":1230,"y":456,"w":1226,"h":454},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":454},
@@ -106,7 +98,7 @@
 },
 {
 	"filename": "pong.png",
-	"frame": {"x":0,"y":1834,"w":1218,"h":460},
+	"frame": {"x":2442,"y":2292,"w":1218,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":460},
@@ -114,7 +106,7 @@
 },
 {
 	"filename": "spaceport.png",
-	"frame": {"x":2442,"y":1834,"w":1220,"h":460},
+	"frame": {"x":0,"y":2754,"w":1220,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1220,"h":460},
@@ -122,7 +114,7 @@
 },
 {
 	"filename": "streeetcenter6.png",
-	"frame": {"x":2452,"y":3222,"w":1226,"h":464},
+	"frame": {"x":2464,"y":3216,"w":1226,"h":464},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":464},
@@ -130,7 +122,7 @@
 },
 {
 	"filename": "streetcenter5.png",
-	"frame": {"x":1228,"y":914,"w":1226,"h":454},
+	"frame": {"x":2458,"y":456,"w":1226,"h":454},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":454},
@@ -138,7 +130,7 @@
 },
 {
 	"filename": "streetcenter6.png",
-	"frame": {"x":0,"y":2758,"w":1228,"h":460},
+	"frame": {"x":1222,"y":2754,"w":1228,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":460},
@@ -146,7 +138,7 @@
 },
 {
 	"filename": "streeteast2.png",
-	"frame": {"x":2436,"y":0,"w":1218,"h":454},
+	"frame": {"x":0,"y":912,"w":1218,"h":454},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":454},
@@ -154,7 +146,7 @@
 },
 {
 	"filename": "streetmain4.png",
-	"frame": {"x":2448,"y":1372,"w":1222,"h":458},
+	"frame": {"x":0,"y":1830,"w":1222,"h":458},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":458},
@@ -162,7 +154,7 @@
 },
 {
 	"filename": "streetmain5.png",
-	"frame": {"x":1230,"y":2758,"w":1228,"h":460},
+	"frame": {"x":2452,"y":2754,"w":1228,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1228,"h":460},
@@ -170,7 +162,7 @@
 },
 {
 	"filename": "streetmain6.png",
-	"frame": {"x":2460,"y":2758,"w":1226,"h":462},
+	"frame": {"x":1236,"y":3216,"w":1226,"h":462},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":462},
@@ -178,7 +170,7 @@
 },
 {
 	"filename": "streetmid1.png",
-	"frame": {"x":0,"y":2296,"w":1226,"h":458},
+	"frame": {"x":1224,"y":1830,"w":1226,"h":458},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":458},
@@ -186,11 +178,19 @@
 },
 {
 	"filename": "streetmid2.png",
-	"frame": {"x":0,"y":3222,"w":1234,"h":460},
+	"frame": {"x":0,"y":3216,"w":1234,"h":460},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1234,"h":460},
 	"sourceSize": {"w":1234,"h":460}
+},
+{
+	"filename": "vault.png",
+	"frame": {"x":1224,"y":1370,"w":1222,"h":456},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":456},
+	"sourceSize": {"w":1222,"h":456}
 }],
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
@@ -200,6 +200,6 @@
 	"size": {"w":4096,"h":4096},
 	"scale": "1",
 	"related_multi_packs": [ "Neuro1.json", "Neuro3.json" ],
-	"smartupdate": "$TexturePacker:SmartUpdate:33f0474528645ec5722491d4268b1d6f:819a89490a77c81bcf4a52782d43ab7c:bb8f6b9217f8ce65c583f9898e1eda68$"
+	"smartupdate": "$TexturePacker:SmartUpdate:3c84e9774e7d5493449064afa26d8dd0:e02d0d9b5346d71628fa21bfb7b26155:bb8f6b9217f8ce65c583f9898e1eda68$"
 }
 }

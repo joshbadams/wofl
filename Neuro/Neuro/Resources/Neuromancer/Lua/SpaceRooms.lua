@@ -262,6 +262,9 @@ Straylight = Room:new {
 	onEnterConversation = "onEnter",
 	hasPerson = true,
 	hasJack = true,
+	
+	locX = 384,
+	locY = 400,
 
 	south = "freesidestreet1",
 	
@@ -400,6 +403,9 @@ BerneManager = Room:new {
 	name = "bernemanager",
 	hasJack = true,
 	
+	locX = 336,
+	locY = 144,
+	
 	
 	south = "berne",
 	
@@ -418,9 +424,10 @@ Gemeinschaft = Room:new {
 	onEnterConversation = "onEnter",
 
 	south = "freesidestreet4",
+	east = "vault",
 	
 	longDescription = "This is the fully automated Bank Gemeinschaft. There is a vault door on one wall. Upon entering, the computer is activated.",
-	description = "The bank Manager's office.",
+	description = "You're in Bank Gemeinschaft.",
 		
 	conversations = {
 		{
@@ -463,10 +470,23 @@ Gemeinschaft = Room:new {
 			end
 		},
 		{
-			tags = { "_0000" },
-			lines = { "I can upgrade you in Cryptology for $2500 per level if you already have the skill chip." },
-			onEnd = function() OpenBox("DeaneCryptoShop") end
+			tags = { "_BG1066" },
+			lines = { "Code verified. You mat enter the vault." },
+			onEnd = function() ShowMessage("The vault door opens. (ANIMATE DOOR)") end
 		},
 	}
 }
 gemeinschaft = Gemeinschaft
+
+Vault = Room:new {
+	name = "vault",
+	
+	hasJack = true,
+	
+	locX = 304,
+	locY = 304,
+	
+	longDescription = "This is the vault of Bank Gemeinschaft. There is a cyberspace jack on one wall.",
+	description = longDescription,
+}
+vault = Vault

@@ -9,6 +9,14 @@
 	"sourceSize": {"w":1216,"h":450}
 },
 {
+	"filename": "base.png",
+	"frame": {"x":526,"y":0,"w":193,"h":192},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":193,"h":192},
+	"sourceSize": {"w":193,"h":192}
+},
+{
 	"filename": "bernegirl.png",
 	"frame": {"x":0,"y":0,"w":108,"h":132},
 	"rotated": false,
@@ -17,16 +25,8 @@
 	"sourceSize": {"w":108,"h":132}
 },
 {
-	"filename": "bernemanager.png",
-	"frame": {"x":1216,"y":3600,"w":1210,"h":454},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1210,"h":454},
-	"sourceSize": {"w":1210,"h":454}
-},
-{
 	"filename": "bodyshop.png",
-	"frame": {"x":1934,"y":0,"w":1213,"h":447},
+	"frame": {"x":2129,"y":0,"w":1213,"h":447},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1213,"h":447},
@@ -58,7 +58,7 @@
 },
 {
 	"filename": "deane.png",
-	"frame": {"x":2428,"y":3600,"w":1218,"h":452},
+	"frame": {"x":1216,"y":3600,"w":1218,"h":452},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":452},
@@ -89,6 +89,14 @@
 	"sourceSize": {"w":1218,"h":450}
 },
 {
+	"filename": "gemeinschaft.png",
+	"frame": {"x":2436,"y":3600,"w":1218,"h":452},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1218,"h":452},
+	"sourceSize": {"w":1218,"h":452}
+},
+{
 	"filename": "gentlemanloser.png",
 	"frame": {"x":1215,"y":898,"w":1213,"h":447},
 	"rotated": false,
@@ -106,7 +114,7 @@
 },
 {
 	"filename": "larrydoor.png",
-	"frame": {"x":526,"y":0,"w":194,"h":318},
+	"frame": {"x":721,"y":0,"w":194,"h":318},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":194,"h":318},
@@ -162,7 +170,7 @@
 },
 {
 	"filename": "straylight.png",
-	"frame": {"x":722,"y":0,"w":1210,"h":444},
+	"frame": {"x":917,"y":0,"w":1210,"h":444},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1210,"h":444},
@@ -264,6 +272,6 @@
 	"size": {"w":4096,"h":4096},
 	"scale": "1",
 	"related_multi_packs": [ "Neuro2.json", "Neuro3.json" ],
-	"smartupdate": "$TexturePacker:SmartUpdate:33f0474528645ec5722491d4268b1d6f:819a89490a77c81bcf4a52782d43ab7c:bb8f6b9217f8ce65c583f9898e1eda68$"
+	"smartupdate": "$TexturePacker:SmartUpdate:3c84e9774e7d5493449064afa26d8dd0:e02d0d9b5346d71628fa21bfb7b26155:bb8f6b9217f8ce65c583f9898e1eda68$"
 }
 }

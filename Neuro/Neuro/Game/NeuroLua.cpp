@@ -76,6 +76,13 @@ LuaObjRef::~LuaObjRef()
 	}
 }
 
+std::string DescribeLuaObj(const LuaRef& Obj)
+{
+	std::string Res;
+	Obj->LuaSystem->CallFunction_Return("", "GetLuaDesc", Obj, Res);
+	return Res;
+}
+
 bool operator==(const LuaRef& A, const LuaRef& B)
 {
 	bool bResult;

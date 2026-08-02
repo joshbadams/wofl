@@ -186,10 +186,11 @@ void NeuroGame::ResetLua()
 		CloseBoxWithObj(Box->LuaBox);
 	}
 
-	while (Anims.size() > 0)
+	for (auto It : Anims)
 	{
-		RemoveAnimation(Anims.begin()->first);
+		It.second->SafeDelete();
 	}
+	Anims.clear();
 	BoxCache.clear();
 }
 
@@ -343,6 +344,26 @@ void NeuroGame::RefreshUI()
 	}
 }
 
+class LuaSprite : public WoflSprite
+{
+public:
+	LuaSprite(int X, int Y, int W, int H, LuaRef InObj)
+		: WoflSprite(X, Y, W, H)
+		, LuaObj(InObj)
+	{
+	}
+	
+	virtual std::string Describe() override
+	{
+		std::string Desc = WoflSprite::Describe();
+		std::string LuaDesc;
+		LuaObj->LuaSystem->CallFunction_Return("", "GetLuaDesc", LuaObj, LuaDesc);
+		
+		return Desc + " " + LuaDesc;
+	}
+	LuaRef LuaObj;
+};
+
 void NeuroGame::AddAnimation(LuaRef AnimObj, bool bOneShot)
 {
 	Lua* L = AnimObj->LuaSystem;
@@ -352,6 +373,14 @@ void NeuroGame::AddAnimation(LuaRef AnimObj, bool bOneShot)
 	float FrameRate;
 	std::vector<std::string> Frames;
 
+	std::string Key = DescribeLuaObj(AnimObj);
+	auto It = Anims.find(Key);
+	if (It != Anims.end())
+	{
+		WLOG("ALREADY HERE");
+		return;
+	}
+
 	L->GetStringValue(AnimObj, "name", Name);
 	L->GetStringValues(AnimObj, "frames", Frames);
 	L->GetIntValue(AnimObj, "x", X);
@@ -360,7 +389,7 @@ void NeuroGame::AddAnimation(LuaRef AnimObj, bool bOneShot)
 	L->GetIntValue(AnimObj, "height", Height);
 	L->GetFloatValue(AnimObj, "framerate", FrameRate);
 
-	WoflSprite* Sprite = new WoflSprite(X, Y, Width, Height);
+	WoflSprite* Sprite = new LuaSprite(X, Y, Width, Height, AnimObj);
 	Sprite->SetFramesPerSecond(FrameRate);
 	for (std::string& Frame : Frames)
 	{
@@ -375,25 +404,26 @@ void NeuroGame::AddAnimation(LuaRef AnimObj, bool bOneShot)
 			return true;
 		});
 	}
-	Anims[AnimObj] = Sprite;
+	Anims[Key] = Sprite;
 	DialogInputSorter->AddChild(Sprite);
 }
 
 void NeuroGame::RemoveAnimation(LuaRef AnimObj)
 {
-	auto It = Anims.find(AnimObj);
-	if (It != Anims.end())
+	std::string Key = DescribeLuaObj(AnimObj);
+	auto It = Anims.find(Key);
+	while (It != Anims.end())
 	{
 		It->second->SafeDelete();
-//		It->second->RemoveFromWorld();
-//		delete It->second;
 		Anims.erase(It);
+		It = Anims.find(Key);
 	}
 }
 
 bool NeuroGame::GetAnimInfo(LuaRef AnimObj, int& OutFrame)
 {
-	auto It = Anims.find(AnimObj);
+	std::string Key = DescribeLuaObj(AnimObj);
+	auto It = Anims.find(Key);
 	if (It != Anims.end())
 	{
 		OutFrame = It->second->GetAnimFrame();
@@ -413,7 +443,31 @@ bool NeuroGame::OnGlobalKey(const KeyEvent& Event)
 		}
 		return true;
 	}
-	
+	if (Event.KeyCode == WoflKeys::F2)
+	{
+		if (Event.Type == KeyType::Up)
+		{
+			OpenBoxByName("SetVarBox");
+		}                                 
+		return true;
+	}
+	if (Event.KeyCode == WoflKeys::F3)
+	{
+		if (Event.Type == KeyType::Up)
+		{
+			WoflWorld::Get()->DumpWorld();
+		}
+		return true;
+	}
+	if (Event.KeyCode == WoflKeys::F4)
+	{
+		if (Event.Type == KeyType::Up)
+		{
+			State.CurrentRoom->LuaSystem->CallFunction_NoReturn("", "GoToRoom", "CS");
+		}
+		return true;
+	}
+
 	return false;
 	
 	

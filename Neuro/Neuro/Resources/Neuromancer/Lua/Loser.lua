@@ -48,6 +48,7 @@ GentlemanLoser = Room:new {
 	hasPerson = true,
 	hasPax = true,
 	hasJack = true,
+	
 	locX = 416,
 	locY = 48,
 	

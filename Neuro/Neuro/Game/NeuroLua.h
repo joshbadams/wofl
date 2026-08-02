@@ -32,6 +32,7 @@ public:
 using LuaRef = shared_ptr<LuaObjRef>;
 bool operator==(const LuaRef& A, const LuaRef& B);
 bool operator<(const LuaRef& A, const LuaRef& B);
+std::string DescribeLuaObj(const LuaRef& Obj);
 
 
 struct LuaScope

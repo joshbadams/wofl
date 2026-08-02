@@ -405,3 +405,50 @@ end
 function DecodeBox:OnTextEntryCancelled()
 	self:Close()
 end
+
+-----------------------------------
+-- Set var box
+-----------------------------------
+
+s.lastSetVar = ""
+SetVarBox = Gridbox:new {
+	x = 250,
+	y = 430,
+	w = 520,
+	h = 250,
+}
+
+function SetVarBox:GetEntries()
+	local entries = {}
+	table.append(entries, {x = 0, y = 0, text = "Set A Table Var:"})
+	table.append(entries, {x = 0, y = 2, text = s.lastSetVar, entryTag = "input" })
+	return entries
+end
+
+function SetVarBox:OnTextEntryComplete(text, tag)
+	s.lastSetVar = text
+
+	local dotLoc = text:find(".", 1, true)
+	local spaceLoc = text:find(" ", dotLoc, true)
+	local table = text:sub(1, dotLoc - 1)
+	local var = text:sub(dotLoc + 1, spaceLoc - 1)
+	local val = text:sub(spaceLoc + 1)
+	
+	local t = _G[table]
+	if (t == nil) then
+		print("Unknown table", table)
+	elseif (type(t[var]) == "nil") then
+		print("Unknown field", name, "in table", table)
+	elseif (type(t[var]) == "number") then
+		t[var] = tonumber(val)
+		print("Setting num " .. table .. "." .. var .. "=" .. t[var])
+	elseif (type(t[var]) == "number") then
+		t[var] = val
+		print("Setting string " .. table .. "." .. var .. "=" .. t[var])
+	end
+	self:Close()
+end
+
+function SetVarBox:OnTextEntryCancelled()
+	self:Close()
+end

@@ -1,18 +1,19 @@
 InvPhase = {
-	List = {},
-	Software = {},
-	EraseSoftware = {},
-	Action = {},
-	Amount = {},
-	ConfirmDiscard = {},
-	ConfirmErase = {},
-	ConfirmGive = {},
-	Login = {},
-	LoginError = {},
-	Incompatible = {},
-	ShortMessage = {},
-	UsedSkill = {},
-	NothingHappens = {},
+	List = 1,--{},
+	Software = 2,--{},
+	EraseSoftware = 3,--{},
+	Action = 4,--{},
+	Amount = 5,--{},
+	ConfirmDiscard = 6,--{},
+	ConfirmErase = 7,--{},
+	ConfirmGive = 8,--{},
+	Login = 9,--{},
+	LoginError = 10,--{},
+	Incompatible = 11,--{},
+	ShortMessage = 12,--{},
+	ComLinkDest = 13,--{},
+	UsedSkill = 14,--{},
+	NothingHappens = 15,--{},
 }
 
 InvAction = {
@@ -23,6 +24,8 @@ InvAction = {
 	Erase = 5,
 	Yes = 6,
 	No = 7,
+	LinkCode = 8,
+	Cyberspace = 9,
 }
 
 InvBox = Gridbox:new {
@@ -66,6 +69,8 @@ function InvBox:GetEntries()
 		self:GetLoginErrorEntries(entries)
 	elseif (self.phase == InvPhase.Incompatible) then
 		self:GetIncompatibleEntries(entries)
+	elseif (self.phase == InvPhase.ComLinkDest) then
+		self:GetComLinkDestEntries(entries)
 	elseif (self.phase == InvPhase.ShortMessage) then
 		table.append(entries, { x = 0, y = 1, text = self.message })
 	elseif (self.phase == InvPhase.UsedSkill) then
@@ -168,6 +173,12 @@ function InvBox:GetIncompatibleEntries(entries)
 	table.append(entries, { x = 0, y = 1, text = "Incompatible link." })
 end
 
+function InvBox:GetComLinkDestEntries(entries)
+	table.append(entries, { x = 0, y = 0, text = "1. Enter link code.", clickId = InvAction.LinkCode, key = "1" })
+	table.append(entries, { x = 0, y = 1, text = "2. Enter cyberspace.", clickId = InvAction.Cyberspace, key = "2" })
+end
+
+
 
 
 
@@ -210,6 +221,14 @@ function InvBox:HandleClickedEntry(id)
 			table.removeArrayItem(s.software, self.invItemId)
 		end
 		self.phase = InvPhase.EraseSoftware
+	elseif (self.phase == InvPhase.ComLinkDest) then
+		print("action", id, InvAction.LinkCode, InvAction.Cyberspace)
+		if (id == InvAction.LinkCode) then
+			self.phase = InvPhase.Login
+		elseif (id == InvAction.Cyberspace) then
+			self:Close()
+			GoToRoom("CS")
+		end
 	end
 end
 
@@ -319,12 +338,17 @@ print("giving ", self.invItemId)
 end
 
 function InvBox:UseSoftware(softwareItem)
-	item = Items[s.software[softwareItem]]
+	local itemIndex = s.software[softwareItem]
+	item = Items[itemIndex]
 
 	if (item.scope == "jack") then
 		if (currentRoom.hasJack) then
 			self.activeSoftware = item
-			self.phase = InvPhase.Login
+			if (itemIndex == 204) then -- comlink 6.0
+				self.phase = InvPhase.ComLinkDest
+			else
+				self.phase = InvPhase.Login
+			end
 		else
 			self.phase = InvPhase.ShortMessage
 			self.message = "No jack here."

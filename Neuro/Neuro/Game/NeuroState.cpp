@@ -349,7 +349,7 @@ void NeuroState::ClickHealth()
 void NeuroState::ActivateRoom(LuaRef OldRoom, LuaRef NewRoom)
 {
 	CurrentRoom = NewRoom;
-		
+	
 	PendingInvalidation |= ZoneType::Room;
 
 //	string FirstVisitKey = string("__") + CurrentRoom->ID;
@@ -358,9 +358,9 @@ void NeuroState::ActivateRoom(LuaRef OldRoom, LuaRef NewRoom)
 	
 	if (OldRoom)
 	{
-		Lua.CallFunction_NoReturn(OldRoom, "OnExitRoom");
+		Lua.CallFunction_NoReturn(OldRoom, "__OnExitRoom");
 	}
-	Lua.CallFunction_NoReturn(NewRoom, "OnEnterRoom");
+	Lua.CallFunction_NoReturn(NewRoom, "__OnEnterRoom");
 }
 
 bool NeuroState::GetCurrentDialogLine(std::string& Line, int& Speaker, bool& bIsThought, bool& bHasTextEntry)

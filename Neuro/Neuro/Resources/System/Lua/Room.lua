@@ -264,18 +264,17 @@ function Room:AddAnimation(anim, oneShot)
 	if (type(anim) == 'string') then
 		for _,v in ipairs(self.namedAnims) do
 			if (v.name == anim) then
-				table.append(self.addedAnimations, v)
-print("---> Adding anim", v)
 				if (oneShot) then
 					PlayOneShotAnimation(v)
 				else
 					AddAnimation(v)
+					self.addedAnimations[v] = true
 				end
 			end
 		end
 	else
-		table.append(self.addedAnimations, anim)
-print("---> Adding premade anim", v)
+--print("--> adding ", anim.name, anim)
+		self.addedAnimations[anim] = true
 		AddAnimation(anim)
 	end
 end
@@ -285,24 +284,24 @@ function Room:PlayOneShotAnimation(anim)
 end
 
 function Room:RemoveAnimation(anim)
-print("---> REmoving anim?", anim)
-	for i,v in ipairs(self.addedAnimations) do
+	for k,v in pairs(self.addedAnimations) do
 		bMatches = false
-print("---> comparing to", v)
 
-		if (type(anim) == 'string' and v.name == anim) then
+		if (type(anim) == 'string' and k.name == anim) then
 			bMatches = true
-		elseif (type(anim) == 'table' and v == anim) then
+		elseif (type(anim) == 'table' and k == anim) then
 			bMatches = true
 		end
 
 		if (bMatches) then
-print("---> REmoving anim", v, i)
-			table.remove(self.addedAnimations, i)
-			RemoveAnimation(v)
+--print("--> removing ", k.name)
+			self.addedAnimations[k] = nil
+			RemoveAnimation(k)
 			return
 		end
 	end
+
+	print("failed to find ", anim.name, anim)
 end
 
 function Room:GetAnimationInfo(anim)
@@ -327,13 +326,15 @@ function Room:AddAnimations()
 end
 
 function Room:RemoveAnimations()
-	for _,v in ipairs(self.addedAnimations) do
-		RemoveAnimation(v)
+print("--> removing all anims:")
+	for k,v in pairs(self.addedAnimations) do
+print("   |--> removing", k.name, k)
+		RemoveAnimation(k)
 	end
 	self.addedAnimations = {}
 end
 
-function Room:OnEnterRoom()
+function Room:__OnEnterRoom()
 	s.hasTalkedInRoom = false
 	s.usingCopTalk = 0
 
@@ -350,6 +351,11 @@ print("entering room", self.name, s.hasTalkedInRoom)
 	end
 
 	currentRoom = self
+
+	self:OnEnterRoom()
+end
+
+function Room:OnEnterRoom()
 end
 
 function Room:GetOnEnterConversation(firstEnter)
@@ -381,8 +387,13 @@ function Room:OnEnter()
 	end
 end
 
-function Room:OnExitRoom()
+function Room:__OnExitRoom()
 	self:RemoveAnimations()
+	s.previousRoomName = currentRoom.name
+	self:OnExitRoom()
+end
+
+function Room:OnExitRoom()
 end
 
 function Room:GiveMoney(amount)

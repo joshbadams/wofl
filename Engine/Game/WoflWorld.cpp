@@ -247,8 +247,12 @@ void WoflWorld::DumpWorld()
 	Visit(true, true, false,
 		[](WoflSprite* Sprite)
 		{
-			printf("%s (parent = %s\n", Sprite->GetImage() ? Sprite->GetImage()->_Name.c_str() : "none",
-				   Sprite->GetParent() && Sprite->GetParent()->GetImage() ? Sprite->GetParent()->GetImage()->_Name.c_str() : "none");
+			int NumParents = 0;
+			for (WoflSprite* Parent = Sprite->GetParent(); Parent; Parent = Parent->GetParent())
+			{
+				NumParents++;
+			}
+			printf("%*s%s (parent = %s)\n", NumParents, "", Sprite->Describe().c_str(), Sprite->GetParent() ? Sprite->GetParent()->Describe().c_str() : "none");
 			return true;
 		});
 }

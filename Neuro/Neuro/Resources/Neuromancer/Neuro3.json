@@ -1,8 +1,16 @@
 {"frames": [
 
 {
+	"filename": "hitachi.png",
+	"frame": {"x":0,"y":0,"w":1214,"h":468},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1214,"h":468},
+	"sourceSize": {"w":1214,"h":468}
+},
+{
 	"filename": "sensenet.png",
-	"frame": {"x":0,"y":0,"w":1226,"h":468},
+	"frame": {"x":0,"y":470,"w":1226,"h":468},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1226,"h":468},
@@ -10,7 +18,7 @@
 },
 {
 	"filename": "shuttle.png",
-	"frame": {"x":0,"y":470,"w":1222,"h":470},
+	"frame": {"x":0,"y":940,"w":1222,"h":470},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1222,"h":470},
@@ -18,7 +26,7 @@
 },
 {
 	"filename": "Untitled 109.png",
-	"frame": {"x":0,"y":942,"w":1260,"h":568},
+	"frame": {"x":0,"y":1412,"w":1260,"h":568},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1260,"h":568},
@@ -32,6 +40,6 @@
 	"size": {"w":2048,"h":2048},
 	"scale": "1",
 	"related_multi_packs": [ "Neuro1.json", "Neuro2.json" ],
-	"smartupdate": "$TexturePacker:SmartUpdate:33f0474528645ec5722491d4268b1d6f:819a89490a77c81bcf4a52782d43ab7c:bb8f6b9217f8ce65c583f9898e1eda68$"
+	"smartupdate": "$TexturePacker:SmartUpdate:3c84e9774e7d5493449064afa26d8dd0:e02d0d9b5346d71628fa21bfb7b26155:bb8f6b9217f8ce65c583f9898e1eda68$"
 }
 }

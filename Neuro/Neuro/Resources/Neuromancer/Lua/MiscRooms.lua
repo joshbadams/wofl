@@ -923,11 +923,6 @@ CrazyEdos = Room:new {
 }
 crazyedos = CrazyEdos
 
-function CrazyEdos:OnEnterRoom()
-	Room.OnEnterRoom(self)
-
-end
-
 -------------------------------------------------------
 
 s.hitachi = 0
@@ -938,6 +933,10 @@ Hitachi = Room:new {
 	name = "hitachi",
 	onEnterConversation = "onEnter",
 	hasPerson = true,
+	hasJack = true,
+	
+	locX = 32,
+	locY = 176,
 
 	south = "streeteast1",
 	
@@ -1050,6 +1049,9 @@ SenseNet = Room:new {
 	longDescription = "Lobby of the Sense/Net headquearters building. There is a Librarian computer terminal on one wall. The security scanner activates at your arrival.",
 	description = "Lobby of the Sense/Net headquearters building.",
 	
+	locX = 48,
+	locY = 304,
+	
 	conversations = {
 		{
 			tag = "onEnter",
@@ -1104,6 +1106,9 @@ Musabori = Room:new {
 	name = "musabori",
 	hasJack = true,
 
+	locX = 208,
+	locY = 192,
+
 	west = "streeteast2",
 	
 	longDescription = "You're in the corporate headquarters of the Musabori zaibatsu. There is a cyberspace jack on one wall.",
@@ -1114,6 +1119,9 @@ musabori = Musabori
 FujiHQ = Room:new {
 	name = "fujihq",
 	hasJack = true,
+	
+	locX = 112,
+	locY = 224,
 
 	east = "streeteast1",
 	
@@ -1633,97 +1641,3 @@ function Pong:GiveItem(invIndex)
 	end
 end
 
-
-
-
-
-CS = Room:new {
-	name = "cybercenter",
-		
-	longDescription = "Test.",
-	description = "Test.",
-	
-	north = "streetwest1",
-
-	namedAnims =
-	{
-		{
-			
-			name="right", x=32, y=32, width=1213, height=447, framerate = 15,    --x=0, y=0, width=136, height=266, framerate = 4,
-			frames = { "cyberhoriz1", "cyberhoriz2", "cyberhoriz3", },
-		},
-		{
-			
-			name="left", x=32, y=32, width=1213, height=447, framerate = 15,    --x=0, y=0, width=136, height=266, framerate = 4,
-			frames = { "cyberhoriz3", "cyberhoriz2", "cyberhoriz1" },
-		},
-		{
-			
-			name="up", x=32, y=32, width=1213, height=447, framerate = 15,    --x=0, y=0, width=136, height=266, framerate = 4,
-			frames = { "cybervert1", "cybervert2", "cybervert3", },
-		},
-		{
-			
-			name="down", x=32, y=32, width=1213, height=447, framerate = 15,    --x=0, y=0, width=136, height=266, framerate = 4,
-			frames = { "cybervert3", "cybervert2", "cybervert1" },
-		},
-	},
-}
-cs = CS
-
-
-function CS:OnEnterRoom()
-	Room.OnEnterRoom(self)
-
---	self:AddAnimation("left")
---	StartTimer(1, self, function(self) self:RemoveAnimation("left")	end)
-end
-
-function CS:HandleKeyInput(keyCode, type)
-	-- up
-	if (keyCode == 5) then
-print("GOING UP")
-		self:PlayOneShotAnimation("up")
---		StartTimer(1, self, function(self) self:RemoveAnimation("up") end)
-print("WENT UP")
-		return true
-	-- down
-	elseif (keyCode == 6) then
-		self:PlayOneShotAnimation("down")
---		StartTimer(1, self, function(self) self:RemoveAnimation("down") end)
-		return true
-	-- left
-	elseif (keyCode == 7) then
-		self:PlayOneShotAnimation("left")
---		StartTimer(1, self, function(self) self:RemoveAnimation("left") end)
-		return true
-	-- right
-	elseif (keyCode == 8) then
-		self:PlayOneShotAnimation("right")
---		StartTimer(1, self, function(self) self:RemoveAnimation("right") end)
-		return true
-	-- esc
-	elseif (keyCode == 1) then
-		GoToRoom(self.north)
-	end
-
-	return false
-end
-
-function CS:Tick(deltaTime)
-	local upframe = self:GetAnimationInfo("up")
-	local downframe = self:GetAnimationInfo("down")
-	local leftframe = self:GetAnimationInfo("left")
-	local rightframe = self:GetAnimationInfo("right")
-
-	if (upframe ~= -1) then
-		print("up " .. upframe)
-	elseif (downframe ~= -1) then
-		print("down " .. downframe)
-	elseif (leftframe ~= -1) then
-		print("left " .. leftframe)
-	elseif (rightframe ~= -1) then
-		print("right " .. rightframe)
-	end
---	if ()
-end

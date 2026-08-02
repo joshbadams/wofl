@@ -29,7 +29,9 @@ end
 --debug.sethook(hook,"cr")
 level=0
 
-
+function GetLuaDesc(g, obj)
+	return tostring(obj)
+end
 
 
 
@@ -325,3 +327,6 @@ function LuaObj:new (obj)
   end
   return obj
 end
+
+
+
